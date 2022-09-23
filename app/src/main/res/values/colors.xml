@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--primary variants-->
+    <color name="primary_transparent">#6655CCD9</color>
+    <color name="primary_lighter">#55ccd9</color>
+    <color name="primary">#2ab7ca</color>
+    <color name="primary_darker">#24939e</color>
+
+    <!--secondary variants-->
+    <color name="secondary_transparent">#66FFE082</color>
+    <color name="secondary_lighter">#ffe082</color>
+    <color name="secondary">#ffc928</color>
+    <color name="secondary_darker">#ffb201</color>
+
+    <!--greyscale variants-->
+    <color name="grey100">#f8f9fa</color>
+    <color name="grey200">#f1f3f5</color>
+    <color name="grey300">#e9ecef</color>
+    <color name="grey400">#dee2e6</color>
+    <color name="grey700">#868e96</color>
+    <color name="grey900">#343a40</color>
+    <!--base-->
+    <color name="black">#FF000000</color>
+    <color name="black_transparent">#1A000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="white_ripple">#FFFFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="red">#FFDD2C00</color>
+    <color name="green">#00DA14</color>
+    <color name="yellow">#FFF200</color>
+</resources>

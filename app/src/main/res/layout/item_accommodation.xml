@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card"
+        style="@style/CardWhite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/marginMedium"
+        android:layout_marginVertical="@dimen/marginMedium">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/marginMedium"
+            android:layout_marginVertical="@dimen/marginMedium">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_image"
+                style="@style/CardLight"
+                android:layout_width="100dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/button_expand"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
+
+                <ImageView
+                    android:id="@+id/image_accommodation"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/img" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/text_name"
+                style="@style/TextMedium"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/marginMedium"
+                android:ellipsize="end"
+                android:maxLines="2"
+                app:layout_constraintEnd_toStartOf="@+id/button_vote"
+                app:layout_constraintStart_toEndOf="@+id/cardView_image"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Super hotel" />
+
+            <TextView
+                android:id="@+id/text_address"
+                style="@style/TextSmall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/marginMedium"
+                android:layout_marginTop="@dimen/marginSmall"
+                android:ellipsize="end"
+                android:maxLines="3"
+                app:layout_constraintEnd_toStartOf="@+id/text_price"
+                app:layout_constraintStart_toEndOf="@+id/cardView_image"
+                app:layout_constraintTop_toBottomOf="@id/text_name"
+                tools:text="Super city super street" />
+
+            <ImageButton
+                android:id="@+id/button_vote"
+                style="@style/IconButton.Secondary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/selector_thumb"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/text_votes"
+                style="@style/TextSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondary"
+                app:layout_constraintEnd_toEndOf="@+id/button_vote"
+                app:layout_constraintStart_toStartOf="@+id/button_vote"
+                app:layout_constraintTop_toBottomOf="@+id/button_vote"
+                tools:text="2" />
+
+
+            <TextView
+                android:id="@+id/text_price"
+                style="@style/TextBig"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/marginMedium"
+                android:textColor="@color/primary"
+                app:layout_constraintBottom_toTopOf="@+id/button_transport"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_votes"
+                app:layout_constraintVertical_bias="1.0"
+                tools:text="259 PLN" />
+
+
+            <Button
+                android:id="@+id/button_transport"
+                style="@style/Button.Outlined"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/marginSmall"
+                android:text="@string/text_transport"
+                app:icon="@drawable/ic_baseline_emoji_transportation_24"
+                app:layout_constraintBottom_toTopOf="@+id/button_expand"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_address"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <Button
+                android:id="@+id/button_link"
+                style="@style/Button.Outlined"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/marginMedium"
+                android:layout_marginVertical="@dimen/marginSmall"
+                android:text="@string/text_link"
+                app:icon="@drawable/ic_baseline_link_24"
+                app:layout_constraintBottom_toTopOf="@+id/button_expand"
+                app:layout_constraintEnd_toStartOf="@id/button_transport"
+                app:layout_constraintTop_toBottomOf="@+id/text_address"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <ImageButton
+                android:id="@+id/button_expand"
+                style="@style/IconButton.Primary"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_marginHorizontal="@dimen/marginSmall"
+                android:src="@drawable/selector_expand"
+                app:layout_constraintBottom_toTopOf="@id/extra_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/extra_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/text_description"
+                    style="@style/TextVerySmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/marginSmall"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem."/>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="cornerSize" type="dimen">20dp</item>
+    <item name="textVerySmall" type="dimen">12sp</item>
+    <item name="textSmall" type="dimen">14sp</item>
+    <item name="textMedium" type="dimen">16sp</item>
+    <item name="textBig" type="dimen">18sp</item>
+
+    <item name="marginVerySmall" type="dimen">2dp</item>
+    <item name="marginSmall" type="dimen">4dp</item>
+    <item name="marginMedium" type="dimen">8dp</item>
+    <item name="marginBig" type="dimen">12dp</item>
+    <item name="marginMega" type="dimen">16dp</item>
+</resources>

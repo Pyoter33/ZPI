@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/accept"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_check_24"
+        android:title="@string/text_accept" />
+    <item
+        android:id="@+id/edit"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_edit_24"
+        android:title="@string/text_edit"/>
+    <item
+        android:id="@+id/delete"
+        android:enabled="true"
+        android:iconTint="@color/red"
+        android:icon="@drawable/ic_baseline_delete_24"
+        android:title="@string/text_delete"/>
+</menu>

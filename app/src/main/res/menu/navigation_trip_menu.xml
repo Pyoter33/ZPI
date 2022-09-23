@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/dayPlansFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_travel_explore_24"
+        android:title="@string/text_plans"/>
+    <item
+        android:id="@+id/financesFragment"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_attach_money_24"
+        android:title="@string/text_finances"/>
+    <item
+        android:id="@+id/participantsFragmentTrip"
+        android:enabled="true"
+        android:icon="@drawable/ic_outline_people_alt_24"
+        android:title="@string/text_participants"/>
+</menu>
