@@ -80,7 +80,7 @@
     <navigation
         android:id="@+id/trip"
         android:label="trip"
-        app:startDestination="@id/dayPlansFragment">
+        app:startDestination="@id/attractionsFragment">
         <fragment
             android:id="@+id/dayPlansFragment"
             android:name="com.example.trip.views.fragments.DayPlansFragment"
@@ -96,5 +96,9 @@
             android:name="com.example.trip.views.fragments.FinancesFragment"
             android:label="fragment_finances"
             tools:layout="@layout/fragment_finances" />
+        <fragment
+            android:id="@+id/attractionsFragment"
+            android:name="com.example.trip.views.fragments.AttractionsFragment"
+            android:label="AttractionsFragment" />
     </navigation>
 </navigation>

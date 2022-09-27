@@ -3,6 +3,7 @@ package com.example.trip.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,26 +12,40 @@ import com.example.trip.databinding.ItemAccommodationBinding
 import com.example.trip.models.Accommodation
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
+import com.skydoves.balloon.Balloon
 import javax.inject.Inject
 
 
-class AccommodationListAdapter @Inject constructor(): ListAdapter<Accommodation, AccommodationListAdapter.AccommodationViewHolder>(AccommodationDiffUtil()) {
+class AccommodationListAdapter @Inject constructor() :
+    ListAdapter<Accommodation, AccommodationListAdapter.AccommodationViewHolder>(
+        AccommodationDiffUtil()
+    ) {
 
     private lateinit var accommodationClickListener: AccommodationClickListener
+
+    private lateinit var popupMenu: Balloon
 
     fun setAccommodationClickListener(accommodationClickListener: AccommodationClickListener) {
         this.accommodationClickListener = accommodationClickListener
     }
 
+    fun setPopupMenu(popupMenu: Balloon) {
+        this.popupMenu = popupMenu
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccommodationViewHolder {
-        return AccommodationViewHolder.create(parent, accommodationClickListener)
+        return AccommodationViewHolder.create(parent, accommodationClickListener, popupMenu)
     }
 
     override fun onBindViewHolder(holder: AccommodationViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    class AccommodationViewHolder(private val binding: ItemAccommodationBinding, private val accommodationClickListener: AccommodationClickListener): RecyclerView.ViewHolder(binding.root) {
+    class AccommodationViewHolder(
+        private val binding: ItemAccommodationBinding,
+        private val accommodationClickListener: AccommodationClickListener,
+        private val popupMenu: Balloon
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(accommodation: Accommodation) {
             with(binding) {
@@ -92,18 +107,33 @@ class AccommodationListAdapter @Inject constructor(): ListAdapter<Accommodation,
 
         private fun setOnLongClick(accommodation: Accommodation) {
             binding.root.setOnLongClickListener {
-                accommodationClickListener.onLongClick(accommodation, binding.root)
+                popupMenu.showAlignBottom(binding.card)
+                setOnPopupButtonClick(R.id.button_accept){accommodationClickListener.onMenuAcceptClick(accommodation)}
+                setOnPopupButtonClick(R.id.button_edit){accommodationClickListener.onMenuEditClick(accommodation)}
+                setOnPopupButtonClick(R.id.button_delete){accommodationClickListener.onMenuDeleteClick(accommodation)}
                 true
             }
         }
 
+        private fun setOnPopupButtonClick(id: Int, action: () -> Unit) {
+            popupMenu.getContentView().findViewById<Button>(id).setOnClickListener {
+                action()
+                popupMenu.dismiss()
+            }
+        }
+
         companion object {
-            fun create(parent: ViewGroup, accommodationClickListener: AccommodationClickListener): AccommodationViewHolder {
+            fun create(
+                parent: ViewGroup,
+                accommodationClickListener: AccommodationClickListener,
+                popupMenu: Balloon
+            ): AccommodationViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemAccommodationBinding.inflate(layoutInflater, parent, false)
                 return AccommodationViewHolder(
                     binding,
-                    accommodationClickListener
+                    accommodationClickListener,
+                    popupMenu
                 )
             }
         }
@@ -125,5 +155,7 @@ interface AccommodationClickListener {
     fun onVoteClick(position: Int, button: View)
     fun onLinkClick()
     fun onTransportClick()
-    fun onLongClick(accommodation: Accommodation, view: View)
+    fun onMenuAcceptClick(accommodation: Accommodation)
+    fun onMenuEditClick(accommodation: Accommodation)
+    fun onMenuDeleteClick(accommodation: Accommodation)
 }

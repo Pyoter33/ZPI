@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.skydoves:balloon:1.4.7@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/0b6b268321010867ded1cbeab72528b1/transformed/jetified-balloon-1.4.7/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0b6b268321010867ded1cbeab72528b1/transformed/jetified-balloon-1.4.7/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0b6b268321010867ded1cbeab72528b1/transformed/jetified-balloon-1.4.7/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.skydoves/balloon/1.4.7/66ab36edbd8d46673c5b4a2b71bcdb714ba0096b/balloon-1.4.7-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.skydoves/balloon/1.4.7/2057c24af959116d1c12a4a8287baf5a88316465/balloon-1.4.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,6 +1,5 @@
 package com.example.trip.views.fragments
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,13 +17,12 @@ import com.example.trip.models.Accommodation
 import com.example.trip.models.Resource
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.accommodation.AccommodationsListViewModel
-import com.example.trip.views.dialogs.AcceptAccommodationDialog
-import com.example.trip.views.dialogs.AcceptAccommodationDialogClickListener
-import com.example.trip.views.dialogs.DeleteAccommodationDialog
-import com.example.trip.views.dialogs.DeleteAccommodationDialogClickListener
-import com.skydoves.powermenu.MenuAnimation
-import com.skydoves.powermenu.PowerMenu
-import com.skydoves.powermenu.PowerMenuItem
+import com.example.trip.views.dialogs.MenuPopupAcceptFactory
+import com.example.trip.views.dialogs.accommodation.AcceptAccommodationDialog
+import com.example.trip.views.dialogs.accommodation.AcceptAccommodationDialogClickListener
+import com.example.trip.views.dialogs.accommodation.DeleteAccommodationDialog
+import com.example.trip.views.dialogs.accommodation.DeleteAccommodationDialogClickListener
+import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,6 +33,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
     AcceptAccommodationDialogClickListener, DeleteAccommodationDialogClickListener {
 
     private lateinit var binding: FragmentAccommodationListBinding
+    private val popupMenu by balloon<MenuPopupAcceptFactory>()
 
     @Inject
     lateinit var adapter: AccommodationListAdapter
@@ -47,6 +46,11 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
     ): View {
         binding = FragmentAccommodationListBinding.inflate(layoutInflater, container, false)
         return binding.root
+    }
+
+    override fun onStop() {
+        super.onStop()
+        popupMenu.dismiss()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -93,7 +97,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
 
     private fun setAdapter() {
         adapter.setAccommodationClickListener(this)
-        //binding.accommodationList.itemAnimator = null
+        adapter.setPopupMenu(popupMenu)
         binding.accommodationList.adapter = adapter
         binding.accommodationList.layoutManager = LinearLayoutManager(context)
     }
@@ -136,60 +140,6 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
         }
     }
 
-    private fun createPopupMenu(view: View, accommodation: Accommodation) {
-        val itemsCoordinator = listOf(
-            PowerMenuItem(TEXT_ACCEPT, R.drawable.ic_baseline_check_24).apply {
-                tag = R.id.accept;
-            },
-            PowerMenuItem(TEXT_EDIT, R.drawable.ic_baseline_edit_24).apply { tag = R.id.edit },
-            PowerMenuItem(TEXT_DELETE, R.drawable.ic_baseline_delete_24).apply { tag = R.id.delete }
-        )
-
-        val itemsCreator = listOf(
-            PowerMenuItem(TEXT_EDIT, R.drawable.ic_baseline_edit_24).apply { tag = R.id.edit },
-            PowerMenuItem(TEXT_DELETE, R.drawable.ic_baseline_delete_24).apply { tag = R.id.delete }
-        )
-
-        val powerMenu = PowerMenu.Builder(requireContext())
-            .addItemList(itemsCoordinator)
-            .setTextColor(resources.getColor(R.color.grey700, null))
-            .setIconColor(resources.getColor(R.color.primary, null))
-            .setAnimation(MenuAnimation.FADE)
-            .setMenuRadius(10f)
-            .setAutoDismiss(true)
-            .setMenuColor(Color.WHITE)
-            .setLifecycleOwner(viewLifecycleOwner)
-            .setOnMenuItemClickListener { _, item ->
-                when (item.tag) {
-                    R.id.accept -> showAcceptDialog(accommodation)
-                    R.id.edit -> onEditClick(accommodation)
-                    else -> showDeleteDialog(accommodation)
-                }
-            }
-            .build()
-        powerMenu.showAsAnchorRightTop(view)
-    }
-
-    private fun showAcceptDialog(accommodation: Accommodation) {
-        val acceptDialog = AcceptAccommodationDialog(this, accommodation)
-        acceptDialog.show(childFragmentManager, AcceptAccommodationDialog.TAG)
-    }
-
-    private fun onEditClick(accommodation: Accommodation) {
-        findNavController().navigate(
-            AccommodationListFragmentDirections.actionAccommodationListFragmentToCreateEditAccommodationFragment(
-                accommodation.id,
-                accommodation.sourceUrl,
-                accommodation.description
-            )
-        )
-    }
-
-    private fun showDeleteDialog(accommodation: Accommodation) {
-        val deleteDialog = DeleteAccommodationDialog(this, accommodation)
-        deleteDialog.show(childFragmentManager, DeleteAccommodationDialog.TAG)
-    }
-
     //list item
     override fun onVoteClick(position: Int, button: View) {
         viewModel.setVoted(position)
@@ -221,9 +171,24 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
 
     }
 
-    override fun onLongClick(accommodation: Accommodation, view: View) {
-        requireActivity()
-        createPopupMenu(view, accommodation)
+    override fun onMenuAcceptClick(accommodation: Accommodation) {
+        val acceptDialog = AcceptAccommodationDialog(this, accommodation)
+        acceptDialog.show(childFragmentManager, AcceptAccommodationDialog.TAG)
+    }
+
+    override fun onMenuEditClick(accommodation: Accommodation) {
+        findNavController().navigate(
+            AccommodationListFragmentDirections.actionAccommodationListFragmentToCreateEditAccommodationFragment(
+                accommodation.id,
+                accommodation.sourceUrl,
+                accommodation.description
+            )
+        )
+    }
+
+    override fun onMenuDeleteClick(accommodation: Accommodation) {
+        val deleteDialog = DeleteAccommodationDialog(this, accommodation)
+        deleteDialog.show(childFragmentManager, DeleteAccommodationDialog.TAG)
     }
 
     //dialogs
@@ -237,9 +202,6 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
 
     companion object {
         private const val PLACEHOLDER_USERID = 1
-        private const val TEXT_ACCEPT = "Accept"
-        private const val TEXT_EDIT = "Edit"
-        private const val TEXT_DELETE = "Delete"
     }
 
 }

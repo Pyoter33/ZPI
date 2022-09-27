@@ -6,13 +6,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/marginMedium"
-        android:layout_marginTop="@dimen/marginSmall"
         >
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card"
             style="@style/CardWhite"
+            android:layout_marginTop="@dimen/marginSmall"
+            android:layout_marginHorizontal="@dimen/marginMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -29,8 +29,9 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView_image"
                     style="@style/CardLight"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    app:cardElevation="4dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -49,9 +50,11 @@
                     style="@style/TextMedium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/marginMedium"
+                    android:layout_marginStart="@dimen/marginMedium"
                     android:ellipsize="end"
                     android:maxLines="2"
+                    app:layout_constraintEnd_toStartOf="@+id/cardView_image"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Super restaurant" />
@@ -65,9 +68,10 @@
                     android:layout_marginTop="@dimen/marginSmall"
                     android:ellipsize="end"
                     android:maxLines="3"
+                    app:layout_constraintEnd_toStartOf="@+id/cardView_image"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/text_name"
-                    tools:text="Super city super street" />
+                    tools:text="Super city super street lkewj;jg ;kjewg;k jw;kejg" />
 
 
                 <TextView
@@ -84,17 +88,21 @@
                     app:layout_constraintTop_toBottomOf="@+id/text_address"
                     tools:text="from 9:00 to 19:00" />
 
+
                 <Button
                     android:id="@+id/button_see_in_maps"
                     style="@style/Button.Outlined"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/marginMedium"
+                    android:layout_marginStart="@dimen/marginSmall"
+                    android:layout_marginTop="@dimen/marginSmall"
                     android:text="@string/text_see_in_maps"
                     app:icon="@drawable/ic_baseline_map_24"
-                    app:layout_constraintBottom_toBottomOf="@+id/cardView_image"
-                    app:layout_constraintStart_toStartOf="parent" />
-
+                    app:layout_constraintBottom_toTopOf="@+id/button_expand"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_opening_hours"
+                    app:layout_constraintVertical_bias="1.0" />
 
                 <ImageButton
                     android:id="@+id/button_expand"
@@ -141,7 +149,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="@dimen/marginSmall"
-            android:src="@drawable/ic_baseline_double_arrow_down_24"
+            android:src="@drawable/ic_baseline_journey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/card"

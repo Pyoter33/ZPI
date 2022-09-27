@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/dayPlansFragment"
+        android:id="@+id/attractionsFragment"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_travel_explore_24"
         android:title="@string/text_plans"/>

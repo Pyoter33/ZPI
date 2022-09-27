@@ -95,7 +95,7 @@ class AccommodationsListViewModel @Inject constructor(private val getAccommodati
 
     private fun getData(mutableLiveData: MutableLiveData<Resource<List<Accommodation>>>) {
         viewModelScope.launch {
-            getAccommodationsListUseCase().collect {
+            getAccommodationsListUseCase(1).collect { //from args
                 mutableLiveData.value = it
             }
         }

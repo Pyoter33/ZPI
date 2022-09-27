@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class AccommodationsRepository @Inject constructor() {
     //dao
-    fun getAccommodationsList(): Flow<Resource<List<Accommodation>>> {
+    fun getAccommodationsList(groupId: Int): Flow<Resource<List<Accommodation>>> {
         return flow {
             emit(Resource.Loading())
             emit(

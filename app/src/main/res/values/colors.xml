@@ -21,10 +21,12 @@
     <color name="grey900">#343a40</color>
     <!--base-->
     <color name="black">#FF000000</color>
+    <color name="black_semi_transparent">#80000000</color>
     <color name="black_transparent">#1A000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="white_ripple">#FFFFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="redRipple">#33DD2C00</color>
     <color name="red">#FFDD2C00</color>
     <color name="green">#00DA14</color>
     <color name="yellow">#FFF200</color>
