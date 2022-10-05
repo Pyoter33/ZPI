@@ -5,6 +5,7 @@
     <item name="textSmall" type="dimen">14sp</item>
     <item name="textMedium" type="dimen">16sp</item>
     <item name="textBig" type="dimen">18sp</item>
+    <item name="textMega" type="dimen">24sp</item>
 
     <item name="marginVerySmall" type="dimen">2dp</item>
     <item name="marginSmall" type="dimen">4dp</item>

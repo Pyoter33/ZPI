@@ -6,7 +6,6 @@ import com.example.trip.models.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
-import java.time.LocalTime
 import javax.inject.Inject
 
 class DayPlansRepository @Inject constructor() {
@@ -27,10 +26,9 @@ class DayPlansRepository @Inject constructor() {
                             "Attraction 1",
                             "Address 1",
                             "Desc",
-                            LocalTime.of(10, 0),
-                            LocalTime.of(19, 0),
                             "",
-                            ""
+                            "",
+                            10.0
                         ),
                         Attraction(
                             0,
@@ -39,10 +37,9 @@ class DayPlansRepository @Inject constructor() {
                             "Attraction 2",
                             "Address 2",
                             "Desc",
-                            LocalTime.of(11, 0),
-                            LocalTime.of(20, 0),
                             "",
-                            ""
+                            "",
+                            11.4
                         ),
                         Attraction(
                             0,
@@ -51,10 +48,9 @@ class DayPlansRepository @Inject constructor() {
                             "Attraction 3",
                             "Address 3",
                             "Desc",
-                            LocalTime.of(13, 0),
-                            LocalTime.of(22, 15),
                             "",
-                            ""
+                            "",
+                            0.5
                         ),
                         Attraction(
                             0,
@@ -63,10 +59,9 @@ class DayPlansRepository @Inject constructor() {
                             "Attraction 4",
                             "Address 4",
                             "Desc",
-                            LocalTime.of(7, 0),
-                            LocalTime.of(15, 0),
                             "",
-                            ""
+                            "",
+                            1.4
                         ),
                         Attraction(
                             0,
@@ -75,10 +70,9 @@ class DayPlansRepository @Inject constructor() {
                             "Attraction 5",
                             "Address 5",
                             "Desc",
-                            LocalTime.of(19, 0),
-                            LocalTime.of(3, 30),
                             "",
-                            ""
+                            "",
+                            8.3
                         )
                     )
                 )

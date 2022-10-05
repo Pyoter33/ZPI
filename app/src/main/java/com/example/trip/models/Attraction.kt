@@ -1,7 +1,5 @@
 package com.example.trip.models
 
-import java.time.LocalTime
-
 data class Attraction(
     val id: Int,
     val groupId: Int,
@@ -9,9 +7,8 @@ data class Attraction(
     val name: String,
     val address: String,
     val description: String,
-    val openingHour: LocalTime,
-    val closingHour: LocalTime,
     val imageUrl: String,
     val link: String,
+    val distanceToNext: Double,
     var isExpanded: Boolean = false
 )

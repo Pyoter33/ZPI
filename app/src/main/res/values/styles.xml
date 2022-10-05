@@ -86,6 +86,10 @@
         <item name="android:textSize">@dimen/textBig</item>
     </style>
 
+    <style name="TextMega">
+        <item name="android:textSize">@dimen/textMega</item>
+    </style>
+
     <style name="TextLabel" parent="android:TextAppearance">
         <item name="android:textSize">@dimen/textMedium</item>
     </style>

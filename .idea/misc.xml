@@ -44,15 +44,20 @@
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/menu/navigation_menu.xml" value="0.3162393162393162" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/menu/navigation_pre_trip_menu.xml" value="0.2171875" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/menu/navigation_trip_menu.xml" value="0.37083333333333335" />
+        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/drawable/background_calendar_bottom.xml" value="0.105" />
+        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/drawable/ic_baseline_arc.xml" value="0.14666666666666667" />
         <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/drawable/ic_baseline_highlight_off_24.xml" value="0.159" />
         <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/drawable/ic_baseline_journey.xml" value="0.159" />
+        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/drawable/selector_car_walk.xml" value="0.171" />
+        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/drawable/selector_expand.xml" value="0.171" />
         <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/layout/fragment_accommodation_list.xml" value="0.1" />
         <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/layout/fragment_attractions.xml" value="0.22" />
         <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/layout/fragment_create_edit_accommodation.xml" value="0.4466666666666667" />
         <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/layout/item_accommodation.xml" value="0.3333333333333333" />
-        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/layout/item_attraction.xml" value="0.22" />
+        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/layout/item_attraction.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/layout/item_attraction_mirror.xml" value="0.22" />
         <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/layout/layout_menu_popup.xml" value="0.22" />
-        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/menu/navigation_trip_menu.xml" value="0.13296280461735785" />
+        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/menu/navigation_trip_menu.xml" value="0.1" />
       </map>
     </option>
   </component>
