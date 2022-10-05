@@ -9,6 +9,7 @@
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable/backgrounf_primary_stroke.xml" value="0.348" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable/ic_baseline_check_24.xml" value="0.376" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.376" />
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable/ic_baseline_dotted_line.xml" value="0.319" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable/ic_baseline_edit_24.xml" value="0.376" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable/selector_chip.xml" value="0.2025" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable/selector_chip_color.xml" value="0.2035" />
@@ -23,6 +24,7 @@
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/dialog_date_picker.xml" value="0.264" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/fragment_accommodation_list.xml" value="0.264" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/fragment_accomodation_list.xml" value="0.38645833333333335" />
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/fragment_attractions.xml" value="0.3172295852928602" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/fragment_availability.xml" value="0.264" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/fragment_availability_pager.xml" value="0.38645833333333335" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/fragment_create_edit_accommodation.xml" value="0.264" />
@@ -32,36 +34,24 @@
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/fragment_optimal_dates.xml" value="0.3658269441401972" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/fragment_participants.xml" value="0.38645833333333335" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/item_accommodation.xml" value="0.2" />
-        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/item_attraction.xml" value="0.264" />
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/item_attraction.xml" value="0.4" />
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/item_attraction_add_more.xml" value="0.264" />
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/item_attraction_mirror.xml" value="0.3172295852928602" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/item_availability.xml" value="0.2" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/layout_calendar_day.xml" value="1.6" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/layout_calendar_header.xml" value="0.176" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/layout_date_picker_header.xml" value="0.3162393162393162" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/layout_day_calendar.xml" value="0.4" />
-        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/layout_mockup.xml" value="0.38645833333333335" />
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/layout_mockup.xml" value="0.264" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/menu/coordinator_options_menu.xml" value="0.21614583333333334" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/menu/creator_option_menu.xml" value="0.21614583333333334" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/menu/navigation_menu.xml" value="0.3162393162393162" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/menu/navigation_pre_trip_menu.xml" value="0.2171875" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/menu/navigation_trip_menu.xml" value="0.37083333333333335" />
-        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/drawable/background_calendar_bottom.xml" value="0.105" />
-        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/drawable/ic_baseline_arc.xml" value="0.14666666666666667" />
-        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/drawable/ic_baseline_highlight_off_24.xml" value="0.159" />
-        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/drawable/ic_baseline_journey.xml" value="0.159" />
-        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/drawable/selector_car_walk.xml" value="0.171" />
-        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/drawable/selector_expand.xml" value="0.171" />
-        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/layout/fragment_accommodation_list.xml" value="0.1" />
-        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/layout/fragment_attractions.xml" value="0.22" />
-        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/layout/fragment_create_edit_accommodation.xml" value="0.4466666666666667" />
-        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/layout/item_accommodation.xml" value="0.3333333333333333" />
-        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/layout/item_attraction.xml" value="0.16666666666666666" />
-        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/layout/item_attraction_mirror.xml" value="0.22" />
-        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/layout/layout_menu_popup.xml" value="0.22" />
-        <entry key="..\:/Users/piter/AndroidStudioProjects/ZPI/app/src/main/res/menu/navigation_trip_menu.xml" value="0.1" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

@@ -13,7 +13,7 @@
             style="@style/CardWhite"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/marginMedium"
+            android:layout_marginHorizontal="@dimen/marginBig"
             android:layout_marginTop="@dimen/marginSmall"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/text_item_number"
@@ -136,7 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/marginBig"
             android:textAlignment="center"
-            android:textColor="@color/secondary"
+            android:textColor="@color/primary"
             app:layout_constraintBottom_toBottomOf="@+id/card"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -146,7 +146,7 @@
             android:id="@+id/layout_next_attraction"
             android:layout_width="match_parent"
             android:background="@drawable/ic_baseline_dotted_line"
-            android:layout_height="80dp"
+            android:layout_height="60dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/card"
             app:layout_constraintStart_toEndOf="@+id/text_item_number"
@@ -161,7 +161,7 @@
                 android:src="@drawable/selector_car_walk"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.4"
+                app:layout_constraintHorizontal_bias="0.45"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/secondary" />
@@ -180,7 +180,7 @@
                 app:layout_constraintHorizontal_bias="0.63"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="1 km" />
+                tools:text="1.2 km" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

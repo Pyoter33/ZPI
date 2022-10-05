@@ -72,7 +72,7 @@ class DayPlansRepository @Inject constructor() {
                             "Desc",
                             "",
                             "",
-                            8.3
+                            null
                         )
                     )
                 )

@@ -57,7 +57,7 @@
     </style>
 
     <style name="CardLight" parent="CardView">
-        <item name="cardBackgroundColor">@color/grey200</item>
+        <item name="cardBackgroundColor">@color/grey100</item>
         <item name="cardCornerRadius">20dp</item>
     </style>
 

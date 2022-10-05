@@ -113,6 +113,10 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
         deleteDialog.show(childFragmentManager, DeleteAttractionDialog.TAG)
     }
 
+    override fun onAddMoreClick() {
+        requireContext().toast("add")
+    }
+
     //dialogs
     override fun onDeleteClick(attraction: Attraction) {
         requireContext().toast("delete")

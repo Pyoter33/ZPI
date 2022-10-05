@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trip.R
+import com.example.trip.databinding.ItemAttractionAddMoreBinding
 import com.example.trip.databinding.ItemAttractionBinding
-import com.example.trip.databinding.ItemAttractionMirrorBinding
 import com.example.trip.models.Attraction
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
@@ -18,6 +18,11 @@ import javax.inject.Inject
 
 class AttractionListAdapter @Inject constructor() :
     ListAdapter<Attraction, RecyclerView.ViewHolder>(AttractionDiffUtil()) {
+
+    companion object {
+        private const val ATTRACTION = 0
+        private const val ADD_MORE = 1
+    }
 
     private lateinit var attractionClickListener: AttractionClickListener
 
@@ -31,22 +36,25 @@ class AttractionListAdapter @Inject constructor() :
         this.popupMenu = popupMenu
     }
 
+    override fun getItemCount(): Int {
+        return super.getItemCount() + 1 //change according to user role
+    }
+
     override fun getItemViewType(position: Int): Int {
-        return position % 2
+        return if (position == itemCount - 1) ADD_MORE else ATTRACTION
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType) {
-            0 -> AttractionViewHolder.create(parent, attractionClickListener, popupMenu)
-            else -> AttractionMirrorViewHolder.create(parent, attractionClickListener, popupMenu)
+        return when (viewType) {
+            ATTRACTION -> AttractionViewHolder.create(parent, attractionClickListener, popupMenu)
+            else -> AddMoreViewHolder.create(parent, attractionClickListener)
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if(holder is AttractionViewHolder) {
-            holder.bind(getItem(position))
-        } else {
-            (holder as AttractionMirrorViewHolder).bind(getItem(position))
+        when (holder) {
+            is AttractionViewHolder -> holder.bind(getItem(position))
+            is AddMoreViewHolder -> holder.bind()
         }
     }
 
@@ -60,10 +68,19 @@ class AttractionListAdapter @Inject constructor() :
             with(binding) {
                 textName.text = attraction.name
                 textAddress.text = attraction.address
-                textItemNumber.text = itemView.resources.getString(R.string.format_dot, bindingAdapterPosition + 1)
-                textDistance.text = itemView.resources.getString(R.string.format_km, attraction.distanceToNext)
+                textItemNumber.text =
+                    itemView.resources.getString(R.string.format_dot, bindingAdapterPosition + 1)
+
+                if(attraction.distanceToNext != null) {
+                textDistance.text =
+                    itemView.resources.getString(R.string.format_km, attraction.distanceToNext)
 
                 imageTransport.isSelected = attraction.distanceToNext < 3
+                } else {//change depending on user role, add margin
+                    //layoutNextAttraction.setGone()
+                    imageTransport.setGone()
+                    textDistance.text = "? km"
+                }
 
                 if (attraction.isExpanded) {
                     buttonExpand.isSelected = true
@@ -71,12 +88,6 @@ class AttractionListAdapter @Inject constructor() :
                 } else {
                     buttonExpand.isSelected = false
                     extraLayout.setGone()
-                }
-
-                if (bindingAdapterPosition == bindingAdapter?.itemCount?.minus(1)) {
-                    layoutNextAttraction.setGone()
-                } else {
-                    layoutNextAttraction.setVisible()
                 }
             }
             setOnSeeMoreClick(attraction.link)
@@ -98,9 +109,17 @@ class AttractionListAdapter @Inject constructor() :
 
         private fun setOnLongClick(attraction: Attraction) {
             binding.card.setOnLongClickListener {
-                popupMenu.showAlignBottom(itemView)
-                setOnPopupButtonClick(R.id.button_edit){attractionClickListener.onMenuEditClick(attraction)}
-                setOnPopupButtonClick(R.id.button_delete){attractionClickListener.onMenuDeleteClick(attraction)}
+                popupMenu.showAlignBottom(binding.card)
+                setOnPopupButtonClick(R.id.button_edit) {
+                    attractionClickListener.onMenuEditClick(
+                        attraction
+                    )
+                }
+                setOnPopupButtonClick(R.id.button_delete) {
+                    attractionClickListener.onMenuDeleteClick(
+                        attraction
+                    )
+                }
                 true
             }
         }
@@ -118,7 +137,7 @@ class AttractionListAdapter @Inject constructor() :
                 parent: ViewGroup,
                 attractionClickListener: AttractionClickListener,
                 popupMenu: Balloon
-                ): AttractionViewHolder {
+            ): AttractionViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemAttractionBinding.inflate(layoutInflater, parent, false)
                 return AttractionViewHolder(
@@ -130,81 +149,27 @@ class AttractionListAdapter @Inject constructor() :
         }
     }
 
-    class AttractionMirrorViewHolder(
-        private val binding: ItemAttractionMirrorBinding,
-        private val attractionClickListener: AttractionClickListener,
-        private val popupMenu: Balloon
+    class AddMoreViewHolder(
+        private val binding: ItemAttractionAddMoreBinding,
+        private val attractionClickListener: AttractionClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(attraction: Attraction) {
-            with(binding) {
-                textName.text = attraction.name
-                textAddress.text = attraction.address
-                textItemNumber.text = itemView.resources.getString(R.string.format_dot, bindingAdapterPosition + 1)
-                textDistance.text = itemView.resources.getString(R.string.format_km, attraction.distanceToNext)
-
-                imageTransport.isSelected = attraction.distanceToNext < 3
-
-                if (attraction.isExpanded) {
-                    buttonExpand.isSelected = true
-                    extraLayout.setVisible()
-                } else {
-                    buttonExpand.isSelected = false
-                    extraLayout.setGone()
-                }
-
-                if (bindingAdapterPosition == bindingAdapter?.itemCount?.minus(1)) {
-                    layoutNextAttraction.setGone()
-                } else {
-                    layoutNextAttraction.setVisible()
-                }
-            }
-            setOnSeeMoreClick(attraction.link)
-            setOnExpandClick()
-            setOnLongClick(attraction)
-        }
-
-        private fun setOnSeeMoreClick(link: String) {
-            binding.buttonSeeInMaps.setOnClickListener {
-                attractionClickListener.onSeeMoreClick(link)
+        fun bind() {
+            binding.addMoreFab.setOnClickListener {
+                attractionClickListener.onAddMoreClick()
             }
         }
-
-        private fun setOnExpandClick() {
-            binding.buttonExpand.setOnClickListener {
-                attractionClickListener.onExpandClick(bindingAdapterPosition)
-            }
-        }
-
-        private fun setOnLongClick(attraction: Attraction) {
-            binding.card.setOnLongClickListener {
-                popupMenu.showAlignBottom(itemView)
-                setOnPopupButtonClick(R.id.button_edit){attractionClickListener.onMenuEditClick(attraction)}
-                setOnPopupButtonClick(R.id.button_delete){attractionClickListener.onMenuDeleteClick(attraction)}
-                true
-            }
-        }
-
-        private fun setOnPopupButtonClick(id: Int, action: () -> Unit) {
-            popupMenu.getContentView().findViewById<Button>(id).setOnClickListener {
-                action()
-                popupMenu.dismiss()
-            }
-        }
-
 
         companion object {
             fun create(
                 parent: ViewGroup,
-                attractionClickListener: AttractionClickListener,
-                popupMenu: Balloon
-            ): AttractionMirrorViewHolder {
+                attractionClickListener: AttractionClickListener
+            ): AddMoreViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ItemAttractionMirrorBinding.inflate(layoutInflater, parent, false)
-                return AttractionMirrorViewHolder(
+                val binding = ItemAttractionAddMoreBinding.inflate(layoutInflater, parent, false)
+                return AddMoreViewHolder(
                     binding,
                     attractionClickListener,
-                    popupMenu
                 )
             }
         }
@@ -226,4 +191,5 @@ interface AttractionClickListener {
     fun onSeeMoreClick(link: String)
     fun onMenuEditClick(attraction: Attraction)
     fun onMenuDeleteClick(attraction: Attraction)
+    fun onAddMoreClick()
 }
