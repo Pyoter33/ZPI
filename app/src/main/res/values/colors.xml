@@ -24,7 +24,7 @@
     <color name="black_semi_transparent">#80000000</color>
     <color name="black_transparent">#1A000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="white_ripple">#FFFFFFFF</color>
+    <color name="white_ripple">#33FFFFFF</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="redRipple">#33DD2C00</color>
     <color name="red">#FFDD2C00</color>

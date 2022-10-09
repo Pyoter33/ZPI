@@ -3,10 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable-v24/ic_login_bk.xml" value="0.2395" />
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable-v24/login_shape_bk.xml" value="0.2395" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable/background_bottom_menu.xml" value="0.319" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable/background_calendar_bottom.xml" value="0.3715" />
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable/background_gradient_button.xml" value="0.251" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable/background_primary_stroke.xml" value="0.3715" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable/backgrounf_primary_stroke.xml" value="0.348" />
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable/gradient_primarty.xml" value="0.251" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable/ic_baseline_check_24.xml" value="0.376" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.376" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/drawable/ic_baseline_dotted_line.xml" value="0.319" />
@@ -19,13 +23,15 @@
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/font/lato.xml" value="0.31171875" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/font/montserrat_bold.xml" value="0.4166666666666667" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/font/montserrat_extrabold.xml" value="0.4166666666666667" />
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.1499330655957162" />
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/activity_login.xml" value="0.264" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/calendar_day_legend.xml" value="0.264" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/dialog_date_picker.xml" value="0.264" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/fragment_accommodation_list.xml" value="0.264" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/fragment_accomodation_list.xml" value="0.38645833333333335" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/fragment_attractions.xml" value="0.3172295852928602" />
-        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/fragment_availability.xml" value="0.264" />
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/fragment_availability.xml" value="0.176" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/fragment_availability_pager.xml" value="0.38645833333333335" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/fragment_create_edit_accommodation.xml" value="0.264" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/fragment_day_plans.xml" value="0.37083333333333335" />
@@ -42,7 +48,11 @@
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/layout_calendar_header.xml" value="0.176" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/layout_date_picker_header.xml" value="0.3162393162393162" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/layout_day_calendar.xml" value="0.4" />
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/layout_login.xml" value="0.2013681060282172" />
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/layout_menu_popup.xml" value="0.20222317229585293" />
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/layout_menu_popup_accept.xml" value="0.20222317229585293" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/layout_mockup.xml" value="0.264" />
+        <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/layout/layout_register.xml" value="0.2013681060282172" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/menu/coordinator_options_menu.xml" value="0.21614583333333334" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/menu/creator_option_menu.xml" value="0.21614583333333334" />
         <entry key="..\:/Users/48794/AndroidStudioProjects/Trip/app/src/main/res/menu/navigation_menu.xml" value="0.3162393162393162" />

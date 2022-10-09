@@ -5,11 +5,18 @@
     <item name="textSmall" type="dimen">14sp</item>
     <item name="textMedium" type="dimen">16sp</item>
     <item name="textBig" type="dimen">18sp</item>
+    <item name="textBigger" type="dimen">20sp</item>
     <item name="textMega" type="dimen">24sp</item>
 
-    <item name="marginVerySmall" type="dimen">2dp</item>
-    <item name="marginSmall" type="dimen">4dp</item>
-    <item name="marginMedium" type="dimen">8dp</item>
-    <item name="marginBig" type="dimen">12dp</item>
-    <item name="marginMega" type="dimen">16dp</item>
+    <item name="marginXS" type="dimen">2dp</item>
+    <item name="marginS" type="dimen">4dp</item>
+    <item name="marginM" type="dimen">8dp</item>
+    <item name="marginL" type="dimen">12dp</item>
+    <item name="marginXL" type="dimen">16dp</item>
+    <item name="marginXXL" type="dimen">20dp</item>
+    <item name="marginXXXL" type="dimen">24dp</item>
+    <item name="marginXXXXL" type="dimen">28dp</item>
+
+    <item name="marginTopIntersect" type="dimen">-24dp</item>
+
 </resources>

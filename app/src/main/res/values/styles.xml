@@ -11,12 +11,20 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="Button.Contained.Gradient" parent="Widget.MaterialComponents.Button">
+        <item name="android:insetTop"> @dimen/marginS</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="backgroundTint">@null</item>
+        <item name="android:background">@drawable/background_gradient_button</item>
+    </style>
+
     <style name="Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="shapeAppearanceOverlay">@style/ShapeAppearance</item>
         <item name="android:textAllCaps">false</item>
     </style>
 
     <style name="Button.Text" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="rippleColor">@color/transparent</item>
         <item name="shapeAppearanceOverlay">@style/ShapeAppearance</item>
         <item name="android:textAllCaps">false</item>
     </style>
@@ -86,12 +94,17 @@
         <item name="android:textSize">@dimen/textBig</item>
     </style>
 
+    <style name="TextBigger">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/textBigger</item>
+    </style>
+
+
     <style name="TextMega">
         <item name="android:textSize">@dimen/textMega</item>
     </style>
 
     <style name="TextLabel" parent="android:TextAppearance">
-        <item name="android:textSize">@dimen/textMedium</item>
     </style>
 
     <style name="ShapeAppearance">

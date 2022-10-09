@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:elevation="@dimen/marginSmall"
+                android:elevation="@dimen/marginS"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -30,17 +30,17 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginVertical="@dimen/marginSmall"
-                    android:layout_marginStart="@dimen/marginSmall"
+                    android:layout_marginVertical="@dimen/marginS"
+                    android:layout_marginStart="@dimen/marginS"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <com.google.android.material.chip.Chip
                         android:id="@+id/chip_votes"
                         style="@style/Chip.Secondary"
-                        android:layout_marginVertical="@dimen/marginSmall"
+                        android:layout_marginVertical="@dimen/marginS"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/marginSmall"
+                        android:layout_marginStart="@dimen/marginS"
                         android:text="@string/text_my_votes" />
 
                     <com.google.android.material.chip.Chip
@@ -48,8 +48,8 @@
                         style="@style/Chip.Secondary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/marginSmall"
-                        android:layout_marginStart="@dimen/marginSmall"
+                        android:layout_marginVertical="@dimen/marginS"
+                        android:layout_marginStart="@dimen/marginS"
                         android:text="@string/text_my_accommodations" />
 
                 </com.google.android.material.chip.ChipGroup>
@@ -59,7 +59,7 @@
                     style="@style/Button.Contained"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/marginSmall"
+                    android:layout_marginEnd="@dimen/marginS"
                     android:text="@string/text_add"
                     app:icon="@drawable/ic_baseline_add_24"
                     app:iconGravity="end"
