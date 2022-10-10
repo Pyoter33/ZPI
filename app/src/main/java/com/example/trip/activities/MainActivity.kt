@@ -2,17 +2,15 @@ package com.example.trip.activities
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.Intent
 import android.os.Bundle
-import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.example.trip.R
+import com.example.trip.models.TripStatus
 import com.example.trip.utils.setAppLocale
-import com.example.trip.utils.setGone
-import com.example.trip.utils.setVisible
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,65 +23,58 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var bottomNavigationView: BottomNavigationView
-    private var previousDestinationParent: NavGraph? = null
+    private val rootDestinations =
+        listOf(
+            R.id.accommodationListFragment,
+            R.id.availabilityPager,
+            R.id.participantsFragmentPreTrip,
+            R.id.dayPlansFragment,
+            R.id.financesFragment,
+            R.id.participantsFragmentTrip
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        setBottomBarNavigation()
-        setOnDestinationChangedListener()
+        setNavigation()
     }
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(ContextWrapper(newBase.setAppLocale(APP_LOCALE)))
     }
 
-    private fun setBottomBarNavigation() {
+    override fun onBackPressed() {
+        if (navController.currentDestination?.id in rootDestinations) {
+            val activityIntent = Intent(this, HomeActivity::class.java)
+            startActivity(activityIntent)
+            finish()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    private fun setNavigation() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
         navController = navHostFragment.navController
         bottomNavigationView = findViewById(R.id.bottom_navigation_view)
-        navController.
         setupWithNavController(bottomNavigationView, navController)
-        bottomNavigationView.setOnItemSelectedListener { item ->
-            navController.navigate(item.itemId, Bundle())
-            true
-        }
-    }
 
-    private fun setOnDestinationChangedListener() {
-        navController.addOnDestinationChangedListener { _, destination, arguments ->
-            when (destination.parent?.id) {
-                R.id.pre_trip -> {
-                    changeBottomNavigationMenuIfDifferentParent(
-                        R.menu.navigation_pre_trip_menu,
-                        destination.parent
-                    )
-                }
-                R.id.trip -> {
-                    changeBottomNavigationMenuIfDifferentParent(
-                        R.menu.navigation_trip_menu,
-                        destination.parent
-                    )
-                }
-                else -> {
-                    bottomNavigationView.setGone()
-                    previousDestinationParent = null
-                }
+        val navGraph = when (intent.extras!!.getInt("status")) {
+            TripStatus.PRE_TRIP.code -> {
+                bottomNavigationView.menu.clear()
+                bottomNavigationView.inflateMenu(R.menu.navigation_pre_trip_menu)
+                navController.navInflater.inflate(R.navigation.pre_trip_graph)
             }
+            TripStatus.TRIP.code -> {
+                bottomNavigationView.menu.clear()
+                bottomNavigationView.inflateMenu(R.menu.navigation_trip_menu)
+                navController.navInflater.inflate(R.navigation.trip_graph)
+            }
+            else -> navController.navInflater.inflate(R.navigation.post_trip_graph) //
         }
+
+        navController.graph = navGraph
     }
 
-    private fun changeBottomNavigationMenuIfDifferentParent(
-        @MenuRes menuId: Int,
-        destinationParent: NavGraph?
-    ) {
-        if (previousDestinationParent?.id != destinationParent?.id) {
-            bottomNavigationView.menu.clear()
-            bottomNavigationView.inflateMenu(menuId)
-            previousDestinationParent = destinationParent
-            bottomNavigationView.setVisible()
-        }
-    }
 }

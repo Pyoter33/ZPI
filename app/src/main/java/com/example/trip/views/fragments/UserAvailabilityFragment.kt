@@ -27,6 +27,7 @@ import java.time.YearMonth
 import java.time.temporal.WeekFields
 import java.util.*
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 
 @AndroidEntryPoint
@@ -37,6 +38,8 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
     private lateinit var binding: FragmentAvailabilityBinding
 
     private lateinit var dateValidator: DateValidator
+
+    private var groupId by Delegates.notNull<Int>()
 
     @Inject
     lateinit var adapter: DatesListAdapter
@@ -52,6 +55,7 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        groupId = requireActivity().intent.extras!!.getInt(GROUP_ID_ARG)
         setAdapter()
         setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
         onAddClick()
@@ -218,6 +222,8 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
     }
 
     companion object {
+        private const val PLACEHOLDER_USERID = 1
+        private const val GROUP_ID_ARG = "groupId"
         private const val MONTH_RANGE = 1200L
         private const val ANIM_DURATION = 600L
     }

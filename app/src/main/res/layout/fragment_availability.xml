@@ -23,7 +23,7 @@
                     android:id="@+id/layout_top_background"
                     android:layout_width="match_parent"
                     android:layout_height="120dp"
-                    android:background="@drawable/login_shape_bk"
+                    android:background="@drawable/background_top_primary"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" >

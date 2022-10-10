@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.R
 import com.example.trip.adapters.AccommodationClickListener
@@ -27,6 +26,7 @@ import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class AccommodationListFragment @Inject constructor() : Fragment(), AccommodationClickListener,
@@ -34,7 +34,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
 
     private lateinit var binding: FragmentAccommodationListBinding
     private val popupMenu by balloon<MenuPopupAcceptFactory>()
-    private val args: AccommodationListFragmentArgs by navArgs()
+    private var groupId by Delegates.notNull<Int>()
 
     @Inject
     lateinit var adapter: AccommodationListAdapter
@@ -57,6 +57,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        groupId = requireActivity().intent.extras!!.getInt(GROUP_ID_ARG)
         setAdapter()
         observeAccommodationsList()
         setOnCheckedChipsListener()
@@ -75,7 +76,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
         binding.buttonAdd.setOnClickListener {
             findNavController().navigate(
                 AccommodationListFragmentDirections.actionAccommodationListFragmentToCreateEditAccommodationFragment(
-                    args.groupId
+                    groupId
                 )
             )
         }
@@ -184,7 +185,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
     override fun onMenuEditClick(accommodation: Accommodation) {
         findNavController().navigate(
             AccommodationListFragmentDirections.actionAccommodationListFragmentToCreateEditAccommodationFragment(
-                args.groupId,
+                groupId,
                 accommodation.id,
                 accommodation.sourceUrl,
                 accommodation.description
@@ -208,6 +209,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
 
     companion object {
         private const val PLACEHOLDER_USERID = 1
+        private const val GROUP_ID_ARG = "groupId"
     }
 
 }

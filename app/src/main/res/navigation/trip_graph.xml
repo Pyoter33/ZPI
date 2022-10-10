@@ -4,9 +4,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <argument
-        android:name="groupId"
-        app:argType="integer" />
     <fragment
         android:id="@+id/dayPlansFragment"
         android:name="com.example.trip.views.fragments.DayPlansFragment"
@@ -17,7 +14,8 @@
             app:destination="@id/attractionsFragment" />
         <argument
             android:name="groupId"
-            app:argType="integer" />
+            app:argType="integer"
+            />
     </fragment>
     <fragment
         android:id="@+id/participantsFragmentTrip"
@@ -28,7 +26,11 @@
         android:id="@+id/financesFragment"
         android:name="com.example.trip.views.fragments.FinancesFragment"
         android:label="fragment_finances"
-        tools:layout="@layout/fragment_finances" />
+        tools:layout="@layout/fragment_finances">
+        <argument
+            android:name="groupId"
+            app:argType="integer" />
+    </fragment>
     <fragment
         android:id="@+id/attractionsFragment"
         android:name="com.example.trip.views.fragments.AttractionsFragment"

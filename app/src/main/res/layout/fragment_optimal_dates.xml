@@ -17,6 +17,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <FrameLayout
+                    android:id="@+id/layout_top_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:background="@drawable/background_top_secondary"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
                 <Button
                     android:id="@+id/button_switch_to_my_dates"
                     style="@style/Button.Text"
@@ -33,14 +42,13 @@
 
                 <TextView
                     android:id="@+id/text_best_date"
-                    style="@style/TextBig"
+                    style="@style/TextBigger"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/marginM"
+                    android:layout_marginStart="@dimen/marginL"
                     android:layout_marginTop="@dimen/marginL"
                     android:text="@string/text_most_optimal_dates"
-                    android:textColor="@color/secondary"
-                    android:textSize="20sp"
+                    android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,7 +56,7 @@
                     android:id="@+id/constraintLayout"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/marginM"
+                    android:layout_marginHorizontal="@dimen/marginL"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +70,7 @@
                         android:src="@drawable/ic_outline_calendar_month_24"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/secondary" />
+                        app:tint="@color/black" />
 
                     <TextView
                         android:id="@+id/text_date_start"
@@ -72,7 +80,7 @@
                         android:layout_marginHorizontal="@dimen/marginM"
                         android:layout_marginStart="@dimen/marginM"
                         android:layout_marginTop="@dimen/marginS"
-                        android:textColor="@color/grey900"
+                        android:textColor="@color/black"
                         app:layout_constraintStart_toEndOf="@+id/image_calendar"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -84,7 +92,7 @@
                         android:layout_marginHorizontal="@dimen/marginM"
                         android:layout_marginTop="@dimen/marginS"
                         android:text="@string/text_dash"
-                        android:textColor="@color/grey900"
+                        android:textColor="@color/black"
                         app:layout_constraintStart_toEndOf="@id/text_date_start"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -95,7 +103,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/marginM"
                         android:layout_marginTop="@dimen/marginS"
-                        android:textColor="@color/grey900"
+                        android:textColor="@color/black"
                         app:layout_constraintStart_toEndOf="@id/text_separator"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -108,7 +116,7 @@
                         android:src="@drawable/ic_outline_people_alt_24"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/image_calendar"
-                        app:tint="@color/secondary" />
+                        app:tint="@color/black" />
 
                     <TextView
                         android:id="@+id/text_participants_no"
@@ -116,18 +124,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/marginM"
-                        android:textColor="@color/grey900"
+                        android:textColor="@color/black"
                         app:layout_constraintStart_toEndOf="@+id/image_participants"
                         app:layout_constraintTop_toBottomOf="@+id/text_separator" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
+
                 <androidx.cardview.widget.CardView
                     style="@style/CardWhite"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/marginM"
-                    android:layout_marginTop="@dimen/marginXL"
+                    android:layout_marginHorizontal="@dimen/marginL"
+                    android:layout_marginTop="@dimen/marginL"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
