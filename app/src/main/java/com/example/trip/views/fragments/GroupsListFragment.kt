@@ -43,7 +43,7 @@ class GroupsListFragment @Inject constructor() : Fragment() {
 
     private fun onButtonTripClick() {
         binding.buttonTrip.setOnClickListener {
-            findNavController().navigate(GroupsListFragmentDirections.actionGroupsListFragmentToTrip())
+            findNavController().navigate(GroupsListFragmentDirections.actionGroupsListFragmentToTrip(-1))
         }
 
     }

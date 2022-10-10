@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.R
 import com.example.trip.adapters.AccommodationClickListener
@@ -27,13 +28,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
 class AccommodationListFragment @Inject constructor() : Fragment(), AccommodationClickListener,
     AcceptAccommodationDialogClickListener, DeleteAccommodationDialogClickListener {
 
     private lateinit var binding: FragmentAccommodationListBinding
     private val popupMenu by balloon<MenuPopupAcceptFactory>()
+    private val args: AccommodationListFragmentArgs by navArgs()
 
     @Inject
     lateinit var adapter: AccommodationListAdapter
@@ -72,7 +73,11 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
 
     private fun onAddClick() {
         binding.buttonAdd.setOnClickListener {
-            findNavController().navigate(AccommodationListFragmentDirections.actionAccommodationListFragmentToCreateEditAccommodationFragment())
+            findNavController().navigate(
+                AccommodationListFragmentDirections.actionAccommodationListFragmentToCreateEditAccommodationFragment(
+                    args.groupId
+                )
+            )
         }
     }
 
@@ -179,6 +184,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
     override fun onMenuEditClick(accommodation: Accommodation) {
         findNavController().navigate(
             AccommodationListFragmentDirections.actionAccommodationListFragmentToCreateEditAccommodationFragment(
+                args.groupId,
                 accommodation.id,
                 accommodation.sourceUrl,
                 accommodation.description

@@ -1,5 +1,4 @@
 package com.example.trip.views.fragments
-
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,30 +11,30 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.trip.R
-import com.example.trip.databinding.FragmentCreateEditAccommodationBinding
+import com.example.trip.databinding.FragmentCreateEditAttractionBinding
 import com.example.trip.models.Resource
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
 import com.example.trip.utils.toast
-import com.example.trip.viewmodels.accommodation.CreateEditAccommodationViewModel
+import com.example.trip.viewmodels.dayplan.CreateEditAttractionViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateEditAccommodationFragment @Inject constructor() : Fragment() {
+class CreateEditAttractionFragment @Inject constructor() : Fragment() {
 
-    private val viewModel: CreateEditAccommodationViewModel by viewModels()
+    private val viewModel: CreateEditAttractionViewModel by viewModels()
 
-    private val args: CreateEditAccommodationFragmentArgs by navArgs()
+    private val args: CreateEditAttractionFragmentArgs by navArgs()
 
-    private lateinit var binding: FragmentCreateEditAccommodationBinding
+    private lateinit var binding: FragmentCreateEditAttractionBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCreateEditAccommodationBinding.inflate(layoutInflater, container, false)
+        binding = FragmentCreateEditAttractionBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -94,7 +93,7 @@ class CreateEditAccommodationFragment @Inject constructor() : Fragment() {
 
             enableLoading()
             lifecycleScope.launch {
-                when (viewModel.postAccommodation()) {
+                when (viewModel.postAttractionAsync().await()) {
                     is Resource.Success -> {
                         disableLoading()
                         findNavController().popBackStack()

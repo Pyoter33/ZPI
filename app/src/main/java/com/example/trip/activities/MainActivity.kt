@@ -44,11 +44,16 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
         navController = navHostFragment.navController
         bottomNavigationView = findViewById(R.id.bottom_navigation_view)
+        navController.
         setupWithNavController(bottomNavigationView, navController)
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            navController.navigate(item.itemId, Bundle())
+            true
+        }
     }
 
     private fun setOnDestinationChangedListener() {
-        navController.addOnDestinationChangedListener { _, destination, _ ->
+        navController.addOnDestinationChangedListener { _, destination, arguments ->
             when (destination.parent?.id) {
                 R.id.pre_trip -> {
                     changeBottomNavigationMenuIfDifferentParent(

@@ -89,7 +89,7 @@ class AccommodationsRepository @Inject constructor() {
         }.flowOn(Dispatchers.IO)
     }
 
-    suspend fun postAccommodation(accommodationBase: Pair<String, String?>): Resource<Unit> {
+    suspend fun postAccommodation(groupId: Int, accommodationBase: Pair<String, String?>): Resource<Unit> {
         return Resource.Failure()
     }
 

@@ -109,7 +109,7 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
                 if (it.isSelected) {
                     listAvailabilitiesBackground.animateSlideTransition(
                         Gravity.TOP,
-                        cardCalendar,
+                        layoutTopBackground,
                         ANIM_DURATION
                     )
                     listAvailabilitiesBackground.setVisible()
@@ -118,7 +118,7 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
                 } else {
                     listAvailabilitiesBackground.animateSlideTransition(
                         Gravity.TOP,
-                        cardCalendar,
+                        layoutTopBackground,
                         ANIM_DURATION
                     )
                     binding.listAvailabilitiesBackground.setGone()

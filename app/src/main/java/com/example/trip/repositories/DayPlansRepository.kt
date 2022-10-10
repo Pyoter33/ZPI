@@ -14,6 +14,10 @@ class DayPlansRepository @Inject constructor() {
         return emptyFlow()
     }
 
+    suspend fun postAttraction(groupId: Int, dayPlanId: Int, attractionBase: Pair<String, String?>): Resource<Unit> {
+        return Resource.Failure()
+    }
+
     fun getAttractionsForDayPlan(groupId: Int, dayPlanId: Int): Flow<Resource<List<Attraction>>> {
         return flow {
             emit(

@@ -23,8 +23,10 @@
     <string name="text_no">No</string>
     <string name="text_description">Description</string>
     <string name="text_description_placeholder">This hotel is very close to the beach…</string>
+    <string name="text_description_attraction_placeholder">This attraction offers an unique experience…</string>
     <string name="text_link_placeholder">www.booking.com/Share</string>
-    <string name="text_link_helper">Make sure you are using the short booking.com link!</string>
+    <string name="text_link_google_placeholder">https://goo.gl/maps/xAhqpKVUXiQbHbBH7</string>
+    <string name="text_link_helper">Make sure you are using a shortened link!</string>
     <string name="text_text_empty">This field cannot be empty!</string>
     <string name="text_plans">Plans</string>
     <string name="text_finances">Finances</string>
@@ -64,4 +66,6 @@
     <string name="sign_up">Sign up</string>
     <string name="text_already_have_an_account_sign_in">Already have an account? Sign in!</string>
     <string name="text_submit">Submit</string>
+    <string name="text_new_accommodation">New accommodation</string>
+    <string name="text_new_attraction">New attraction</string>
 </resources>

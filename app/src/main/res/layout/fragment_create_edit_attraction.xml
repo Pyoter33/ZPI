@@ -47,12 +47,12 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/text_new_accommodation"
+                    android:id="@+id/text_new_attraction"
                     style="@style/TextBigger"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/marginL"
-                    android:text="@string/text_new_accommodation"
+                    android:text="@string/text_new_attraction"
                     android:textColor="@color/primary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -73,8 +73,8 @@
                     app:helperTextEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/text_new_accommodation"
-                    app:placeholderText="@string/text_link_placeholder"
+                    app:layout_constraintTop_toBottomOf="@id/text_new_attraction"
+                    app:placeholderText="@string/text_link_google_placeholder"
                     app:startIconDrawable="@drawable/ic_baseline_link_24"
                     app:startIconTint="@color/primary">
 
@@ -101,7 +101,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textField_link"
-                    app:placeholderText="@string/text_description_placeholder">
+                    app:placeholderText="@string/text_description_attraction_placeholder">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"

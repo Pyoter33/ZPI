@@ -1,0 +1,73 @@
+<navigation android:id="@+id/trip"
+    android:label="trip"
+    app:startDestination="@id/dayPlansFragment"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <argument
+        android:name="groupId"
+        app:argType="integer" />
+    <fragment
+        android:id="@+id/dayPlansFragment"
+        android:name="com.example.trip.views.fragments.DayPlansFragment"
+        android:label="fragment_day_plans"
+        tools:layout="@layout/fragment_day_plans">
+        <action
+            android:id="@+id/action_dayPlansFragment_to_attractionsFragment"
+            app:destination="@id/attractionsFragment" />
+        <argument
+            android:name="groupId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/participantsFragmentTrip"
+        android:name="com.example.trip.views.fragments.ParticipantsFragment"
+        android:label="fragment_participants"
+        tools:layout="@layout/fragment_participants" />
+    <fragment
+        android:id="@+id/financesFragment"
+        android:name="com.example.trip.views.fragments.FinancesFragment"
+        android:label="fragment_finances"
+        tools:layout="@layout/fragment_finances" />
+    <fragment
+        android:id="@+id/attractionsFragment"
+        android:name="com.example.trip.views.fragments.AttractionsFragment"
+        android:label="AttractionsFragment"
+        tools:layout="@layout/fragment_attractions">
+        <action
+            android:id="@+id/action_attractionsFragment_to_createEditAttractionFragment"
+            app:destination="@id/createEditAttractionFragment" />
+        <argument
+            android:name="groupId"
+            app:argType="integer" />
+        <argument
+            android:name="dayPlanId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/createEditAttractionFragment"
+        android:name="com.example.trip.views.fragments.CreateEditAttractionFragment"
+        android:label="CreateEditAttractionFragment"
+        tools:layout="@layout/fragment_create_edit_attraction">
+        <argument
+            android:name="groupId"
+            app:argType="integer" />
+        <argument
+            android:name="dayPlanId"
+            app:argType="integer" />
+        <argument
+            android:name="id"
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <argument
+            android:name="link"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="description"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+</navigation>

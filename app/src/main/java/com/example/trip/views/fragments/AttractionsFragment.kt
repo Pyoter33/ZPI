@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.R
 import com.example.trip.adapters.AttractionClickListener
@@ -24,10 +26,13 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickListener, DeleteAttractionDialogClickListener {
+class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickListener,
+    DeleteAttractionDialogClickListener {
 
     private lateinit var binding: FragmentAttractionsBinding
     private val popupMenu by balloon<MenuPopupFactory>()
+
+    private val args: AttractionsFragmentArgs by navArgs()
 
     @Inject
     lateinit var adapter: AttractionListAdapter
@@ -53,7 +58,6 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
         setAdapter()
         observeAccommodationsList()
         setSwipeRefreshLayout()
-        onAddClick()
     }
 
     private fun setSwipeRefreshLayout() {
@@ -61,12 +65,6 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
         binding.layoutRefresh.setOnRefreshListener {
             viewModel.refreshData()
         }
-    }
-
-    private fun onAddClick() {
-//        binding.buttonAdd.setOnClickListener {
-//            findNavController().navigate(AccommodationListFragmentDirections.actionAccommodationListFragmentToCreateEditAccommodationFragment())
-//        }
     }
 
     private fun observeAccommodationsList() {
@@ -114,7 +112,12 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
     }
 
     override fun onAddMoreClick() {
-        requireContext().toast("add")
+        findNavController().navigate(
+            AttractionsFragmentDirections.actionAttractionsFragmentToCreateEditAttractionFragment(
+                args.groupId,
+                args.dayPlanId
+            )
+        )
     }
 
     //dialogs
