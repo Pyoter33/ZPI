@@ -24,7 +24,6 @@ import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
 class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickListener,
     DeleteAttractionDialogClickListener {
@@ -68,7 +67,7 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
     }
 
     private fun observeAccommodationsList() {
-        viewModel.accommodationsList.observe(viewLifecycleOwner) {
+        viewModel.attractionsList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
                     adapter.submitList(it.data)
@@ -113,7 +112,7 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
 
     override fun onAddMoreClick() {
         findNavController().navigate(
-            AttractionsFragmentDirections.actionAttractionsFragmentToCreateEditAttractionFragment(
+            AttractionsFragmentDirections.actionAttractionsFragmentToFindAttractionFragment(
                 args.groupId,
                 args.dayPlanId
             )

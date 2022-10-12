@@ -36,15 +36,18 @@
         android:name="com.example.trip.views.fragments.AttractionsFragment"
         android:label="AttractionsFragment"
         tools:layout="@layout/fragment_attractions">
-        <action
-            android:id="@+id/action_attractionsFragment_to_createEditAttractionFragment"
-            app:destination="@id/createEditAttractionFragment" />
         <argument
             android:name="groupId"
             app:argType="integer" />
         <argument
             android:name="dayPlanId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_attractionsFragment_to_findAttractionFragment"
+            app:destination="@id/findAttractionFragment" />
+        <action
+            android:id="@+id/action_attractionsFragment_to_createEditAttractionFragment"
+            app:destination="@id/createEditAttractionFragment" />
     </fragment>
     <fragment
         android:id="@+id/createEditAttractionFragment"
@@ -58,18 +61,20 @@
             android:name="dayPlanId"
             app:argType="integer" />
         <argument
-            android:name="id"
-            android:defaultValue="-1"
+            android:name="attraction"
+            app:argType="com.example.trip.models.Attraction" />
+    </fragment>
+    <fragment
+        android:id="@+id/findAttractionFragment"
+        android:name="com.example.trip.views.fragments.FindAttractionFragment"
+        android:label="FindAttractionFragment" >
+        <action
+            android:id="@+id/action_findAttractionFragment_to_createEditAttractionFragment"
+            app:destination="@id/createEditAttractionFragment" />
+        <argument
+            android:name="groupId"
             app:argType="integer" />
-        <argument
-            android:name="link"
-            android:defaultValue="@null"
-            app:argType="string"
-            app:nullable="true" />
-        <argument
-            android:name="description"
-            android:defaultValue="@null"
-            app:argType="string"
-            app:nullable="true" />
+        <argument android:name="dayPlanId"
+            app:argType="integer" />
     </fragment>
 </navigation>

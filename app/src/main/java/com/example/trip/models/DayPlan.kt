@@ -1,3 +1,11 @@
 package com.example.trip.models
 
-data class DayPlan(val id: Int, val groupId: Int)
+import java.time.LocalDate
+
+data class DayPlan(
+    val id: Int,
+    val groupId: Int,
+    val name: String,
+    val date: LocalDate,
+    val attractions: List<Attraction>
+)

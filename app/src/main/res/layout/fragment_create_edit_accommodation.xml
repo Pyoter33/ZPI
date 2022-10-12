@@ -20,7 +20,7 @@
         </FrameLayout>
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/button_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/marginL"
@@ -32,7 +32,6 @@
 
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView4"
             style="@style/CardWhite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,7 +39,7 @@
             android:layout_marginHorizontal="@dimen/marginL"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageButton">
+            app:layout_constraintTop_toBottomOf="@+id/button_back">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

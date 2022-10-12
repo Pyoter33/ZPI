@@ -5,19 +5,38 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.trip.R
+import androidx.navigation.fragment.findNavController
+import com.example.trip.databinding.FragmentDayPlansBinding
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlin.properties.Delegates
 
-class DayPlansFragment : Fragment() {
+@AndroidEntryPoint
+class DayPlansFragment @Inject constructor() : Fragment() {
 
     private var groupId by Delegates.notNull<Int>()
+
+    private lateinit var binding: FragmentDayPlansBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_day_plans, container, false)
+    ): View {
+        binding = FragmentDayPlansBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        groupId = requireActivity().intent.extras!!.getInt("groupId")
+        binding.button.setOnClickListener {
+            findNavController().navigate(
+                DayPlansFragmentDirections.actionDayPlansFragmentToAttractionsFragment(
+                    groupId,
+                    -1
+                )
+            )
+        }
     }
 
     companion object {

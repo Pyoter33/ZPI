@@ -1,6 +1,7 @@
 package com.example.trip.repositories
 
 import com.example.trip.models.Attraction
+import com.example.trip.models.AttractionPreview
 import com.example.trip.models.DayPlan
 import com.example.trip.models.Resource
 import kotlinx.coroutines.flow.Flow
@@ -17,6 +18,53 @@ class DayPlansRepository @Inject constructor() {
     suspend fun postAttraction(groupId: Int, dayPlanId: Int, attractionBase: Pair<String, String?>): Resource<Unit> {
         return Resource.Failure()
     }
+
+    fun getAttractionsForQuery(query: String): Flow<Resource<List<AttractionPreview>>> {
+        return flow {
+            emit(
+                Resource.Success(
+                    listOf(
+                        AttractionPreview(
+                            0,
+                            "Attraction 1",
+                            "Address 1",
+                            "Desc",
+                            ""
+                        ),
+                        AttractionPreview(
+                            0,
+                            "Attraction 2",
+                            "Address 2",
+                            "Desc",
+                            ""
+                        ),
+                        AttractionPreview(
+                            0,
+                            "Attraction 3",
+                            "Address 3",
+                            "Desc",
+                            ""
+                        ),
+                        AttractionPreview(
+                            0,
+                            "Attraction 4",
+                            "Address 4",
+                            "Desc",
+                            ""
+                        ),
+                        AttractionPreview(
+                            0,
+                            "Attraction 5",
+                            "Address 5",
+                            "Desc",
+                            "",
+                        )
+                    )
+                )
+            )
+        }
+    }
+
 
     fun getAttractionsForDayPlan(groupId: Int, dayPlanId: Int): Flow<Resource<List<Attraction>>> {
         return flow {

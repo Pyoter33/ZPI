@@ -45,17 +45,17 @@ class CreateEditAttractionFragment @Inject constructor() : Fragment() {
         setupOnDescriptionTextChangeListener()
         setupOnLinkTextChangeListener()
         onSubmitClick()
+        onBackArrowClick()
+    }
+
+    private fun onBackArrowClick() {
+        binding.buttonBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun setupArgs() {
-        args.link?.let {
-            binding.textFieldLink.editText!!.setText(it)
-            viewModel.linkText = it
-        }
-        args.description?.let {
-            binding.textFieldDescription.editText!!.setText(it)
-            viewModel.descriptionText = it
-        }
+
     }
 
     private fun setupOnLinkTextChangeListener() {

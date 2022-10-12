@@ -46,75 +46,58 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/text_new_attraction"
+                    android:id="@+id/text_search_attraction"
                     style="@style/TextBigger"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/marginL"
-                    android:text="@string/text_new_attraction"
+                    android:text="Search attraction"
                     android:textColor="@color/primary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textField_link"
+                    android:id="@+id/textField_search"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/marginM"
-                    android:layout_marginTop="@dimen/marginL"
-                    app:helperTextEnabled="true"
+                    android:layout_marginHorizontal="@dimen/marginL"
+                    android:layout_marginTop="@dimen/marginM"
+                    app:endIconDrawable="@drawable/ic_baseline_highlight_off_24"
+                    app:endIconMode="none"
+                    app:hintEnabled="false"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/text_new_attraction">
+                    app:layout_constraintTop_toBottomOf="@+id/text_search_attraction"
+                    app:placeholderText="Local monument..."
+                    app:startIconDrawable="@drawable/ic_baseline_search_24"
+                    app:startIconTint="@color/primary">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editText_query"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:inputType="none" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textField_description"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/marginM"
-                    android:layout_marginTop="@dimen/marginXL"
-                    android:hint="@string/text_description"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="255"
-                    app:counterOverflowTextColor="@color/red"
-                    app:errorEnabled="true"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textField_link"
-                    app:placeholderText="@string/text_description_attraction_placeholder">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="180dp"
-                        android:gravity="start"
-                        android:inputType="text"
+                        android:imeOptions="actionSearch"
+                        android:inputType="textFilter"
                         android:maxLength="255" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <Button
-                    android:id="@+id/button_submit"
-                    style="@style/Button.Contained.Gradient"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="@dimen/marginL"
-                    android:text="@string/text_submit"
-                    android:textAllCaps="true"
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list_attractions_previews"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="600dp"
+                    tools:listitem="@layout/item_attraction_preview"
+                    android:layout_marginHorizontal="@dimen/marginM"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textField_description" />
+                    app:layout_constraintTop_toBottomOf="@+id/textField_search" />
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
-
 
         <FrameLayout
             android:id="@+id/layout_loading"

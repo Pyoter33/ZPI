@@ -46,6 +46,13 @@ class CreateEditAccommodationFragment @Inject constructor() : Fragment() {
         setupOnDescriptionTextChangeListener()
         setupOnLinkTextChangeListener()
         onSubmitClick()
+        onBackArrowClick()
+    }
+
+    private fun onBackArrowClick() {
+        binding.buttonBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun setupArgs() {

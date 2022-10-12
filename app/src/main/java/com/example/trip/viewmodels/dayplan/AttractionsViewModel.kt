@@ -16,22 +16,22 @@ import javax.inject.Inject
 @HiltViewModel
 class AttractionsViewModel @Inject constructor(private val getAttractionsUseCase: GetAttractionsUseCase): ViewModel() {
 
-    private val _accommodationsList by lazy {
+    private val _attractionsList by lazy {
         val mutableLiveData = MutableLiveData<Resource<List<Attraction>>>()
         getData(mutableLiveData)
         return@lazy mutableLiveData
     }
-    val accommodationsList: LiveData<Resource<List<Attraction>>> = _accommodationsList
+    val attractionsList: LiveData<Resource<List<Attraction>>> = _attractionsList
 
     fun setExpanded(position: Int) {
-        if (accommodationsList.value is Resource.Success) {
-            val accommodation = (accommodationsList.value!! as Resource.Success).data[position]
+        if (attractionsList.value is Resource.Success) {
+            val accommodation = (attractionsList.value!! as Resource.Success).data[position]
             accommodation.isExpanded = !accommodation.isExpanded
         }
     }
 
     fun refreshData() {
-        getData(_accommodationsList)
+        getData(_attractionsList)
     }
 
     suspend fun waitForDelay(): Resource<Unit> {
