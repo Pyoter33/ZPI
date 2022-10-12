@@ -41,9 +41,8 @@ class CreateEditAttractionFragment @Inject constructor() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupArgs()
+        setupFields()
         setupOnDescriptionTextChangeListener()
-        setupOnLinkTextChangeListener()
         onSubmitClick()
         onBackArrowClick()
     }
@@ -54,23 +53,14 @@ class CreateEditAttractionFragment @Inject constructor() : Fragment() {
         }
     }
 
-    private fun setupArgs() {
-
-    }
-
-    private fun setupOnLinkTextChangeListener() {
-        binding.textFieldLink.editText?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun afterTextChanged(editable: Editable?) {
-                viewModel.linkText = editable?.toString()
-                binding.textFieldLink.startIconDrawable?.setTint(resources.getColor(R.color.primary, null))
-                binding.textFieldLink.error = null
-            }
-
-        })
+    private fun setupFields() {
+        viewModel.toPost = args.attraction.id == 0
+        if(!viewModel.toPost) {
+            binding.textNewAttraction.text = getString(R.string.text_edit_attraction)
+        }
+        binding.editTextName.setText(args.attraction.name)
+        binding.editTextName.isEnabled = false
+        binding.editTextDescription.setText(args.attraction.description)
     }
 
     private fun setupOnDescriptionTextChangeListener() {
@@ -83,49 +73,34 @@ class CreateEditAttractionFragment @Inject constructor() : Fragment() {
                 viewModel.descriptionText = editable?.toString()
                 binding.textFieldDescription.error = null
             }
-
         })
     }
 
     private fun onSubmitClick() {
         binding.buttonSubmit.setOnClickListener {
-            if (isSubmitNotPermitted()) return@setOnClickListener
+            val operation = if(viewModel.toPost) viewModel.postAttractionAsync() else viewModel.updateAttractionAsync()
 
             enableLoading()
             lifecycleScope.launch {
-                when (viewModel.postAttractionAsync().await()) {
+                when (operation.await()) {
                     is Resource.Success -> {
                         disableLoading()
-                        findNavController().popBackStack()
+                        findNavController().popBackStack(R.id.attractionsFragment, false)
                     }
                     is Resource.Failure -> {
                         disableLoading()
                         requireContext().toast(R.string.text_accommodation_post_failure)
                     }
-                    else -> {}
-
+                    else -> {
+                        //NO-OP
+                    }
                 }
-
             }
         }
     }
 
-    private fun isSubmitNotPermitted(): Boolean {
-        val textLink = binding.textFieldLink
-        var showError = false
-
-        if (textLink.editText?.text.isNullOrEmpty()) {
-            textLink.error = getString(R.string.text_text_empty)
-            textLink.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
-            showError = true
-        }
-
-        return showError
-    }
-
     private fun enableLoading() {
         with(binding) {
-            textFieldLink.isEnabled = false
             textFieldDescription.isEnabled = false
             buttonSubmit.isEnabled = false
             layoutLoading.setVisible()
@@ -134,7 +109,6 @@ class CreateEditAttractionFragment @Inject constructor() : Fragment() {
 
     private fun disableLoading() {
         with(binding) {
-            textFieldLink.isEnabled = true
             textFieldDescription.isEnabled = true
             buttonSubmit.isEnabled = true
             layoutLoading.setGone()

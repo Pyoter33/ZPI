@@ -17,6 +17,7 @@ import com.example.trip.adapters.AttractionPreviewClickListener
 import com.example.trip.databinding.FragmentFindAttractionBinding
 import com.example.trip.models.AttractionPreview
 import com.example.trip.models.Resource
+import com.example.trip.utils.toAttraction
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.dayplan.FindAttractionViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +29,8 @@ class FindAttractionFragment @Inject constructor() : Fragment(), AttractionPrevi
 
     private lateinit var binding: FragmentFindAttractionBinding
 
-    @Inject lateinit var adapter: AttractionPreviewAdapter
+    @Inject
+    lateinit var adapter: AttractionPreviewAdapter
 
     private val args: FindAttractionFragmentArgs by navArgs()
 
@@ -79,7 +81,8 @@ class FindAttractionFragment @Inject constructor() : Fragment(), AttractionPrevi
         binding.editTextQuery.setOnEditorActionListener { view, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 viewModel.getData(view.text.toString())
-                val imm= requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                val imm =
+                    requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
                 true
             } else {
@@ -88,7 +91,11 @@ class FindAttractionFragment @Inject constructor() : Fragment(), AttractionPrevi
         }
     }
 
-    override fun onClick(attraction: AttractionPreview) {
-        requireContext().toast("onClick")
+    override fun onClick(attractionPreview: AttractionPreview) {
+        findNavController().navigate(
+            FindAttractionFragmentDirections.actionFindAttractionFragmentToCreateEditAttractionFragment(
+                attractionPreview.toAttraction(args.groupId, args.dayPlanId)
+            )
+        )
     }
 }

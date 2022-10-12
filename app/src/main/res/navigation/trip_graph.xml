@@ -55,12 +55,6 @@
         android:label="CreateEditAttractionFragment"
         tools:layout="@layout/fragment_create_edit_attraction">
         <argument
-            android:name="groupId"
-            app:argType="integer" />
-        <argument
-            android:name="dayPlanId"
-            app:argType="integer" />
-        <argument
             android:name="attraction"
             app:argType="com.example.trip.models.Attraction" />
     </fragment>

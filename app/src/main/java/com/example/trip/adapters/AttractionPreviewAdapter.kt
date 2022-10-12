@@ -77,5 +77,5 @@ class AttractionPreviewDiffUtil : DiffUtil.ItemCallback<AttractionPreview>() {
 }
 
 interface AttractionPreviewClickListener {
-    fun onClick(attraction: AttractionPreview)
+    fun onClick(attractionPreview: AttractionPreview)
 }

@@ -69,7 +69,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/text_search_attraction"
-                    app:placeholderText="Local monument..."
+                    app:placeholderText="Museum in Barcelona..."
                     app:startIconDrawable="@drawable/ic_baseline_search_24"
                     app:startIconTint="@color/primary">
 

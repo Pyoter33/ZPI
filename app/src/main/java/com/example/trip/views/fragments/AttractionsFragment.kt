@@ -57,12 +57,19 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
         setAdapter()
         observeAccommodationsList()
         setSwipeRefreshLayout()
+        onBackArrowClick()
     }
 
     private fun setSwipeRefreshLayout() {
         binding.layoutRefresh.setColorSchemeResources(R.color.primary)
         binding.layoutRefresh.setOnRefreshListener {
             viewModel.refreshData()
+        }
+    }
+
+    private fun onBackArrowClick() {
+        binding.buttonBack.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
@@ -102,7 +109,7 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
     }
 
     override fun onMenuEditClick(attraction: Attraction) {
-
+        findNavController().navigate(AttractionsFragmentDirections.actionAttractionsFragmentToCreateEditAttractionFragment(attraction))
     }
 
     override fun onMenuDeleteClick(attraction: Attraction) {

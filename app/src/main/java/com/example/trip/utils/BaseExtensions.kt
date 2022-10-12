@@ -16,6 +16,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.trip.R
+import com.example.trip.models.Attraction
+import com.example.trip.models.AttractionPreview
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -103,3 +105,15 @@ fun DialogFragment.setDeleteDialog(action: () -> Unit): Dialog {
         .setNegativeButton(getString(R.string.text_cancel)) { _, _ -> dismiss() }
         .create()
 }
+
+fun AttractionPreview.toAttraction(groupId: Int, dayPlanId: Int) = Attraction(
+    0,
+    groupId,
+    dayPlanId,
+    name,
+    address,
+    "",
+    imageUrl,
+    link,
+    null
+)

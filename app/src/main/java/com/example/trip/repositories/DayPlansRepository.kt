@@ -15,7 +15,11 @@ class DayPlansRepository @Inject constructor() {
         return emptyFlow()
     }
 
-    suspend fun postAttraction(groupId: Int, dayPlanId: Int, attractionBase: Pair<String, String?>): Resource<Unit> {
+    suspend fun postAttraction(attraction: Attraction): Resource<Unit> {
+        return Resource.Failure()
+    }
+
+    suspend fun updateAttraction(attraction: Attraction): Resource<Unit> {
         return Resource.Failure()
     }
 
@@ -72,7 +76,7 @@ class DayPlansRepository @Inject constructor() {
                 Resource.Success(
                     listOf(
                         Attraction(
-                            0,
+                            1,
                             0,
                             0,
                             "Attraction 1",
@@ -83,7 +87,7 @@ class DayPlansRepository @Inject constructor() {
                             10.0
                         ),
                         Attraction(
-                            0,
+                            2,
                             0,
                             0,
                             "Attraction 2",
@@ -94,7 +98,7 @@ class DayPlansRepository @Inject constructor() {
                             11.4
                         ),
                         Attraction(
-                            0,
+                            3,
                             0,
                             0,
                             "Attraction 3",
@@ -105,7 +109,7 @@ class DayPlansRepository @Inject constructor() {
                             0.5
                         ),
                         Attraction(
-                            0,
+                            4,
                             0,
                             0,
                             "Attraction 4",
@@ -116,7 +120,7 @@ class DayPlansRepository @Inject constructor() {
                             1.4
                         ),
                         Attraction(
-                            0,
+                            5,
                             0,
                             0,
                             "Attraction 5",

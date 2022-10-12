@@ -1,4 +1,14 @@
 package com.example.trip.usecases.dayplan
 
-class UpdateAttractionUseCase {
+import com.example.trip.models.Attraction
+import com.example.trip.models.Resource
+import com.example.trip.repositories.DayPlansRepository
+import javax.inject.Inject
+
+class UpdateAttractionUseCase @Inject constructor(private val dayPlansRepository: DayPlansRepository) {
+
+    suspend operator fun invoke(attraction: Attraction): Resource<Unit> {
+        return dayPlansRepository.updateAttraction(attraction)
+    }
+
 }
