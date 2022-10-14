@@ -16,6 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-        <include layout="@layout/layout_register"/>
+        <include layout="@layout/layout_login"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

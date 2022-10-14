@@ -68,8 +68,7 @@ class AttractionListAdapter @Inject constructor() :
             with(binding) {
                 textName.text = attraction.name
                 textAddress.text = attraction.address
-                textItemNumber.text =
-                    itemView.resources.getString(R.string.format_dot, bindingAdapterPosition + 1)
+                textDescription.text = attraction.description
 
                 if(attraction.distanceToNext != null) {
                 textDistance.text =
