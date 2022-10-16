@@ -16,8 +16,8 @@ class DatesListAdapter @Inject constructor() :
 
     private lateinit var datesClickListener: DatesClickListener
 
-    fun setDatesClickListener(accommodationClickListener: DatesClickListener) {
-        this.datesClickListener = accommodationClickListener
+    fun setDatesClickListener(datesClickListener: DatesClickListener) {
+        this.datesClickListener = datesClickListener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DatesViewHolder {

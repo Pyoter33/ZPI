@@ -89,7 +89,7 @@ class CreateEditAttractionFragment @Inject constructor() : Fragment() {
                     }
                     is Resource.Failure -> {
                         disableLoading()
-                        requireContext().toast(R.string.text_accommodation_post_failure)
+                        requireContext().toast(getString(R.string.text_item_post_failure, "attraction"))
                     }
                     else -> {
                         //NO-OP

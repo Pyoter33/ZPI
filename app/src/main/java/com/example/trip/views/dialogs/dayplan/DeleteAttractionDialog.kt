@@ -1,4 +1,4 @@
-package com.example.trip.views.dialogs.attraction
+package com.example.trip.views.dialogs.dayplan
 
 import android.app.Dialog
 import android.os.Bundle

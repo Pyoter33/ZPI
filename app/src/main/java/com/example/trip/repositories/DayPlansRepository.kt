@@ -5,14 +5,34 @@ import com.example.trip.models.AttractionPreview
 import com.example.trip.models.DayPlan
 import com.example.trip.models.Resource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flow
+import java.time.LocalDate
 import javax.inject.Inject
 
 class DayPlansRepository @Inject constructor() {
 
     fun getDayPlans(groupId: Int): Flow<Resource<List<DayPlan>>> {
-        return emptyFlow()
+        return flow {
+            emit(
+                Resource.Success(
+                    listOf(
+                        DayPlan(0, 0, "Day plan 1", LocalDate.of(2022, 10, 11), 5, 3),
+                        DayPlan(0, 0, "Day plan 2", LocalDate.of(2022, 10, 12), 5, 4),
+                        DayPlan(0, 0, "Day plan 3", LocalDate.of(2022, 10, 13), 14, 6),
+                        DayPlan(0, 0, "Day plan 4", LocalDate.of(2022, 10, 14), 5, 2),
+                        DayPlan(0, 0, "Day plan 5", LocalDate.of(2022, 10, 15), 5, 3),
+                    )
+                )
+            )
+        }
+    }
+
+    suspend fun postDayPlan(dayPlan: DayPlan): Resource<Unit> {
+        return Resource.Failure()
+    }
+
+    suspend fun updateDayPlan(dayPlan: DayPlan): Resource<Unit> {
+        return Resource.Failure()
     }
 
     suspend fun postAttraction(attraction: Attraction): Resource<Unit> {

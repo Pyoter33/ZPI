@@ -5,42 +5,136 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.trip.R
+import com.example.trip.adapters.DayPlansAdapter
+import com.example.trip.adapters.DayPlansClickListener
 import com.example.trip.databinding.FragmentDayPlansBinding
+import com.example.trip.models.DayPlan
+import com.example.trip.models.Resource
+import com.example.trip.utils.toast
+import com.example.trip.viewmodels.dayplan.DayPlansViewModel
+import com.example.trip.views.dialogs.MenuPopupFactory
+import com.example.trip.views.dialogs.dayplan.DeleteAttractionDialog
+import com.example.trip.views.dialogs.dayplan.DeleteDayPlanDialog
+import com.example.trip.views.dialogs.dayplan.DeleteDayPlanDialogClickListener
+import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 @AndroidEntryPoint
-class DayPlansFragment @Inject constructor() : Fragment() {
-
-    private var groupId by Delegates.notNull<Int>()
+class DayPlansFragment @Inject constructor() : Fragment(), DayPlansClickListener,
+    DeleteDayPlanDialogClickListener {
 
     private lateinit var binding: FragmentDayPlansBinding
+    private val popupMenu by balloon<MenuPopupFactory>()
+
+    @Inject
+    lateinit var adapter: DayPlansAdapter
+
+    private val viewModel: DayPlansViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentDayPlansBinding.inflate(inflater, container, false)
+        binding = FragmentDayPlansBinding.inflate(layoutInflater, container, false)
         return binding.root
+    }
+
+    override fun onStop() {
+        super.onStop()
+        popupMenu.dismiss()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        groupId = requireActivity().intent.extras!!.getInt("groupId")
-        binding.button.setOnClickListener {
+
+        setAdapter()
+        observeDayPlansList()
+        setSwipeRefreshLayout()
+        onBackArrowClick()
+        onAddClick()
+    }
+
+    private fun setSwipeRefreshLayout() {
+        binding.layoutRefresh.setColorSchemeResources(R.color.primary)
+        binding.layoutRefresh.setOnRefreshListener {
+            viewModel.refreshData()
+        }
+    }
+
+    private fun onBackArrowClick() {
+        binding.buttonBack.setOnClickListener {
+
+        }
+    }
+
+    private fun onAddClick() {
+        binding.buttonAdd.setOnClickListener {
             findNavController().navigate(
-                DayPlansFragmentDirections.actionDayPlansFragmentToAttractionsFragment(
-                    groupId,
-                    -1
+                DayPlansFragmentDirections.actionDayPlansFragmentToCreateEditDayPlanFragment(
+                    0
                 )
             )
         }
     }
 
+    private fun observeDayPlansList() {
+        viewModel.dayPlans.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    adapter.submitList(it.data)
+                    binding.layoutRefresh.isRefreshing = false
+                }
+                is Resource.Loading -> {
+                    binding.layoutRefresh.isRefreshing = true
+                }
+                is Resource.Failure -> {
+                    requireContext().toast(R.string.text_fetch_failure)
+                    binding.layoutRefresh.isRefreshing = false
+                }
+            }
+        }
+    }
+
+    private fun setAdapter() {
+        adapter.setDayPlansClickListener(this)
+        adapter.setPopupMenu(popupMenu)
+        binding.attractionsList.adapter = adapter
+    }
+
+    //list item
+    override fun onClick(id: Int) {
+        findNavController().navigate(
+            DayPlansFragmentDirections.actionDayPlansFragmentToAttractionsFragment(
+                0,
+                id
+            )
+        )
+    }
+
+    override fun onMenuEditClick(dayPlan: DayPlan) {
+        findNavController().navigate(
+            DayPlansFragmentDirections.actionDayPlansFragmentToCreateEditDayPlanFragment(
+                0, dayPlan
+            )
+        )
+    }
+
+    override fun onMenuDeleteClick(dayPlan: DayPlan) {
+        val deleteDialog = DeleteDayPlanDialog(this, dayPlan)
+        deleteDialog.show(childFragmentManager, DeleteAttractionDialog.TAG)
+    }
+
+
+    //dialogs
+    override fun onDeleteClick(dayPlan: DayPlan) {
+        requireContext().toast("delete")
+    }
+
     companion object {
         private const val PLACEHOLDER_USERID = 1
-        private const val GROUP_ID_ARG = "groupId"
     }
 }

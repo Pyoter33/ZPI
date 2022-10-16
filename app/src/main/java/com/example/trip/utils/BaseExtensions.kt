@@ -3,12 +3,14 @@ package com.example.trip.utils
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Point
 import android.transition.Fade
 import android.transition.Slide
 import android.transition.Transition
 import android.transition.TransitionManager
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
@@ -28,6 +30,10 @@ fun View.setVisible() {
     this.visibility = View.VISIBLE
 }
 
+fun View.setInvisible() {
+    this.visibility = View.INVISIBLE
+}
+
 fun View.setGone() {
     this.visibility = View.GONE
 }
@@ -37,6 +43,14 @@ fun Context.toast(message: CharSequence) =
 
 fun Context.toast(@StringRes messageId: Int) =
     Toast.makeText(this, messageId, Toast.LENGTH_SHORT).show()
+
+internal fun Context.displaySize(): Point {
+    val wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    val display = wm.defaultDisplay
+    val size = Point()
+    display.getSize(size)
+    return size
+}
 
 fun Context.setAppLocale(language: String): Context {
     val locale = Locale(language)

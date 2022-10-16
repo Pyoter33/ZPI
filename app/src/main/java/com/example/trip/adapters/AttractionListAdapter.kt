@@ -11,6 +11,7 @@ import com.example.trip.databinding.ItemAttractionAddMoreBinding
 import com.example.trip.databinding.ItemAttractionBinding
 import com.example.trip.models.Attraction
 import com.example.trip.utils.setGone
+import com.example.trip.utils.setInvisible
 import com.example.trip.utils.setVisible
 import com.skydoves.balloon.Balloon
 import javax.inject.Inject
@@ -70,15 +71,13 @@ class AttractionListAdapter @Inject constructor() :
                 textAddress.text = attraction.address
                 textDescription.text = attraction.description
 
-                if(attraction.distanceToNext != null) {
-                textDistance.text =
-                    itemView.resources.getString(R.string.format_km, attraction.distanceToNext)
-
-                imageTransport.isSelected = attraction.distanceToNext < 3
-                } else {//change depending on user role, add margin
-                    //layoutNextAttraction.setGone()
-                    imageTransport.setGone()
-                    textDistance.text = "? km"
+                if (attraction.distanceToNext != null) {
+                    textDistance.text =
+                        itemView.resources.getString(R.string.format_km, attraction.distanceToNext)
+                    imageLine.setVisible()
+                } else {
+                    textDistance.text = ""
+                    imageLine.setInvisible()
                 }
 
                 if (attraction.isExpanded) {

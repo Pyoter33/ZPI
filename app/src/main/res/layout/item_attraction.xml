@@ -117,7 +117,7 @@
                         style="@style/TextVerySmall"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginVertical="@dimen/marginS"
+                        android:layout_margin="@dimen/marginM"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -139,8 +139,9 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:layout_margin="@dimen/marginM"
-                android:id="@+id/imageView"
+                android:layout_marginTop="@dimen/marginM"
+                android:layout_marginEnd="@dimen/marginS"
+                android:id="@+id/image_circle"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:scaleType="fitXY"
@@ -149,56 +150,31 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="20dp"
-                android:layout_height="60dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_baseline_dotted_line"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/imageView"
-                app:layout_constraintStart_toStartOf="@+id/imageView"/>
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="20dp"
+                android:id="@+id/image_line"
+                android:layout_width="10dp"
                 android:layout_height="0dp"
-                android:scaleType="center"
-                android:layout_marginBottom="@dimen/marginS"
-                android:src="@drawable/ic_baseline_dotted_line"
-                app:layout_constraintBottom_toTopOf="@+id/text_distance"
-                app:layout_constraintEnd_toEndOf="@+id/imageView"
-                app:layout_constraintHorizontal_bias="0.516"
-                app:layout_constraintStart_toStartOf="@+id/imageView"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-            <ImageView
-                android:id="@+id/image_transport"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                tools:visibility="gone"
-                android:elevation="1dp"
-                android:src="@drawable/selector_car_walk"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_baseline_line"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.45"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/secondary" />
+                app:layout_constraintEnd_toEndOf="@+id/image_circle"
+                app:layout_constraintStart_toStartOf="@+id/image_circle"
+                app:layout_constraintTop_toBottomOf="@+id/image_circle" />
 
-            <TextView
+            <com.example.trip.utils.VerticalTextView
                 android:id="@+id/text_distance"
                 style="@style/TextVerySmall"
-                android:layout_marginVertical="@dimen/marginS"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/marginS"
+                android:layout_marginStart="@dimen/marginS"
+                android:gravity="bottom|end"
                 android:textColor="@color/secondary"
                 android:textSize="11sp"
-                app:layout_constraintBottom_toTopOf="@+id/imageView2"
-                app:layout_constraintEnd_toEndOf="@+id/imageView2"
-                app:layout_constraintEnd_toStartOf="@+id/imageView2"
-                app:layout_constraintStart_toEndOf="parent"
-                tools:text="1000.5 km" />
+                app:layout_constraintBottom_toBottomOf="@+id/image_line"
+                app:layout_constraintEnd_toStartOf="@+id/image_line"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/image_circle"
+                tools:text="0.5 km" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

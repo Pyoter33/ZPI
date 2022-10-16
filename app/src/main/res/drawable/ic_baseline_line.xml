@@ -12,8 +12,7 @@
 <size android:height="100dp" android:width="100dp" />
         <stroke
             android:width="2dp"
-            android:color="@color/secondary"
-            android:dashWidth="8dp"
-            android:dashGap="8dp" />
+            android:color="@color/secondary_lighter"
+            />
     </shape>
 </rotate>

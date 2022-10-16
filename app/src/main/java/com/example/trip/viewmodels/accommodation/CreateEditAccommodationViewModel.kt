@@ -1,6 +1,5 @@
 package com.example.trip.viewmodels.accommodation
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,7 +22,6 @@ class CreateEditAccommodationViewModel @Inject constructor(
 
     suspend fun postAccommodation(): Resource<Unit> {
         val deferred = viewModelScope.async(Dispatchers.IO) {
-            Log.i("tak", "groupId $groupId")
             groupId?.let {
                 postAccommodationUseCase(groupId, Pair(linkText!!, descriptionText))
             }?: Resource.Failure()

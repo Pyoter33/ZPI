@@ -18,8 +18,8 @@ import com.example.trip.models.Resource
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.dayplan.AttractionsViewModel
 import com.example.trip.views.dialogs.MenuPopupFactory
-import com.example.trip.views.dialogs.attraction.DeleteAttractionDialog
-import com.example.trip.views.dialogs.attraction.DeleteAttractionDialogClickListener
+import com.example.trip.views.dialogs.dayplan.DeleteAttractionDialog
+import com.example.trip.views.dialogs.dayplan.DeleteAttractionDialogClickListener
 import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
