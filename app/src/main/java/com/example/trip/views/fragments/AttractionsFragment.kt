@@ -22,6 +22,7 @@ import com.example.trip.views.dialogs.dayplan.DeleteAttractionDialog
 import com.example.trip.views.dialogs.dayplan.DeleteAttractionDialogClickListener
 import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -55,9 +56,15 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
         super.onViewCreated(view, savedInstanceState)
 
         setAdapter()
+        setupArgs()
         observeAccommodationsList()
         setSwipeRefreshLayout()
         onBackArrowClick()
+    }
+
+    private fun setupArgs() {
+        val formatter = DateTimeFormatter.ofPattern(("dd.MM.yyyy"))
+        binding.textPlanFor.text = "${args.dayPlan.name} for ${args.dayPlan.date.format(formatter)}" //
     }
 
     private fun setSwipeRefreshLayout() {
@@ -121,7 +128,7 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
         findNavController().navigate(
             AttractionsFragmentDirections.actionAttractionsFragmentToFindAttractionFragment(
                 args.groupId,
-                args.dayPlanId
+                args.dayPlan.id
             )
         )
     }

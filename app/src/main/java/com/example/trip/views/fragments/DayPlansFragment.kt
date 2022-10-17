@@ -106,11 +106,11 @@ class DayPlansFragment @Inject constructor() : Fragment(), DayPlansClickListener
     }
 
     //list item
-    override fun onClick(id: Int) {
+    override fun onClick(dayPlan: DayPlan) {
         findNavController().navigate(
             DayPlansFragmentDirections.actionDayPlansFragmentToAttractionsFragment(
                 0,
-                id
+                dayPlan
             )
         )
     }

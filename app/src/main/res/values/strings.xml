@@ -73,4 +73,10 @@
     <string name="text_edit_day_plan">Edit day plan</string>
     <string name="text_name">Name</string>
     <string name="text_date">Date</string>
+    <string name="text_first_name">First name</string>
+    <string name="text_last_name">Last name</string>
+    <string name="text_birthday">Birthday</string>
+    <string name="text_full_name">Full name</string>
+    <string name="text_invite">Invite</string>
+    <string name="text_set_coordinator">Set coordinator</string>
 </resources>

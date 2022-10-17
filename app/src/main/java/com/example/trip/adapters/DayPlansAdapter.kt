@@ -70,7 +70,7 @@ class DayPlansAdapter @Inject constructor() :
 
         private fun setOnClickListener(dayPlan: DayPlan) {
             binding.card.setOnClickListener {
-                dayPlansClickListener.onClick(dayPlan.id)
+                dayPlansClickListener.onClick(dayPlan)
             }
         }
 
@@ -129,7 +129,7 @@ class DayPlansDiffUtil : DiffUtil.ItemCallback<DayPlan>() {
 }
 
 interface DayPlansClickListener {
-    fun onClick(id: Int)
+    fun onClick(dayPlan: DayPlan)
     fun onMenuEditClick(dayPlan: DayPlan)
     fun onMenuDeleteClick(dayPlan: DayPlan)
 }

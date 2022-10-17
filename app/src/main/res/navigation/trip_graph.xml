@@ -42,15 +42,15 @@
         <argument
             android:name="groupId"
             app:argType="integer" />
-        <argument
-            android:name="dayPlanId"
-            app:argType="integer" />
         <action
             android:id="@+id/action_attractionsFragment_to_findAttractionFragment"
             app:destination="@id/findAttractionFragment" />
         <action
             android:id="@+id/action_attractionsFragment_to_createEditAttractionFragment"
             app:destination="@id/createEditAttractionFragment" />
+        <argument
+            android:name="dayPlan"
+            app:argType="com.example.trip.models.DayPlan" />
     </fragment>
     <fragment
         android:id="@+id/createEditAttractionFragment"
