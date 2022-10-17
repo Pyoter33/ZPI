@@ -3,13 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <androidx.cardview.widget.CardView
         android:id="@+id/card"
         style="@style/CardWhite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/marginL"
+        android:layout_marginHorizontal="@dimen/marginS"
         android:layout_marginVertical="@dimen/marginM">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,9 +19,8 @@
                 android:id="@+id/layout_full_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/marginM"
+                android:layout_marginHorizontal="@dimen/marginL"
                 android:layout_marginTop="@dimen/marginM"
-                app:layout_constraintEnd_toStartOf="@+id/image_attractions"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -43,15 +41,14 @@
                     android:id="@+id/image_coordinator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:layout_marginHorizontal="@dimen/marginL"
+                    android:layout_marginHorizontal="@dimen/marginS"
                     android:src="@drawable/ic_baseline_star_24"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/text_full_name"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/text_full_name"
                     app:layout_constraintTop_toTopOf="@+id/text_full_name"
-                    app:tint="@color/secondary" />
+                    app:tint="@color/secondary"
+                    tools:visibility="visible" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
@@ -59,13 +56,12 @@
                 style="@style/TextSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/marginM"
+                android:layout_marginHorizontal="@dimen/marginL"
                 android:layout_marginBottom="@dimen/marginM"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/layout_full_name"
                 tools:text="dorian.olisadebe@gmail.com" />
-
 
             <ImageButton
                 android:id="@+id/button_availability"
@@ -82,5 +78,4 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-
 </layout>

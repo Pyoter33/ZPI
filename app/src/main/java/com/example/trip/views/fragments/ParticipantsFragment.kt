@@ -1,35 +1,38 @@
 package com.example.trip.views.fragments
 
-import android.app.Activity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.trip.R
 import com.example.trip.adapters.ParticipantsAdapter
+import com.example.trip.adapters.ParticipantsClickListener
 import com.example.trip.databinding.FragmentParticipantsBinding
-import com.example.trip.models.AttractionPreview
+import com.example.trip.models.Participant
 import com.example.trip.models.Resource
-import com.example.trip.utils.toAttraction
 import com.example.trip.utils.toast
-import com.example.trip.viewmodels.dayplan.FindAttractionViewModel
+import com.example.trip.viewmodels.participants.ParticipantsViewModel
+import com.example.trip.views.dialogs.MenuPopupCoordinateFactory
+import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ParticipantsFragment @Inject constructor() : Fragment() {
+class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClickListener {
 
     private lateinit var binding: FragmentParticipantsBinding
 
     @Inject
     lateinit var adapter: ParticipantsAdapter
 
-    private val viewModel: FindAttractionViewModel by viewModels()
+    private val popupMenu by balloon<MenuPopupCoordinateFactory>()
+
+    private val viewModel: ParticipantsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,13 +46,24 @@ class ParticipantsFragment @Inject constructor() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
         observeAccommodationPreviews()
+        setSwipeRefreshLayout()
         setOnSearchClickListener()
         onBackArrowClick()
     }
 
+    private fun setSwipeRefreshLayout() {
+        binding.layoutRefresh.setColorSchemeResources(R.color.primary)
+        binding.layoutRefresh.setOnRefreshListener {
+            viewModel.refreshData()
+            binding.editTextQuery.setText("")
+            binding.editTextQuery.clearFocus()
+        }
+    }
+
     private fun setAdapter() {
         binding.listAttractionsPreviews.adapter = adapter
-        adapter.setAttractionClickListener(this)
+        adapter.setPopupMenu(popupMenu)
+        adapter.setParticipantsClickListener(this)
     }
 
     private fun onBackArrowClick() {
@@ -59,38 +73,47 @@ class ParticipantsFragment @Inject constructor() : Fragment() {
     }
 
     private fun observeAccommodationPreviews() {
-        viewModel.attractionsList.observe(viewLifecycleOwner) {
+        viewModel.participantsList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
                     adapter.submitList(it.data)
+                    binding.layoutRefresh.isRefreshing = false
                 }
-                is Resource.Loading -> {}
+                is Resource.Loading -> {
+                    binding.layoutRefresh.isRefreshing = true
+                }
                 is Resource.Failure -> {
                     requireContext().toast(R.string.text_fetch_failure)
+                    binding.layoutRefresh.isRefreshing = false
                 }
             }
         }
     }
 
     private fun setOnSearchClickListener() {
-        binding.editTextQuery.setOnEditorActionListener { view, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                viewModel.getData(view.text.toString())
-                val imm =
-                    requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(view.windowToken, 0)
-                true
-            } else {
-                false
+        binding.editTextQuery.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(editable: Editable?) {
             }
-        }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(text: CharSequence?, start: Int, before: Int, count: Int) {
+                if (count == 0) adapter.submitList(viewModel.filterParticipants(""))
+                if (count > 2) adapter.submitList(viewModel.filterParticipants(text.toString()))
+            }
+        })
     }
 
-    override fun onClick(attractionPreview: AttractionPreview) {
-        findNavController().navigate(
-            FindAttractionFragmentDirections.actionFindAttractionFragmentToCreateEditAttractionFragment(
-                attractionPreview.toAttraction(args.groupId, args.dayPlanId)
-            )
-        )
+    override fun onCalendarClick(participant: Participant) {
+
+    }
+
+    override fun onMenuCoordinateClick(participant: Participant) {
+
+    }
+
+    override fun onMenuDeleteClick(participant: Participant) {
+
     }
 }

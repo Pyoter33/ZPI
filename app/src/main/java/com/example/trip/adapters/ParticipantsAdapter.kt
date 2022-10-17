@@ -23,7 +23,7 @@ class ParticipantsAdapter @Inject constructor() :
 
     private lateinit var popupMenu: Balloon
 
-    fun setDayPlansClickListener(participantsClickListener: ParticipantsClickListener) {
+    fun setParticipantsClickListener(participantsClickListener: ParticipantsClickListener) {
         this.participantsClickListener = participantsClickListener
     }
 

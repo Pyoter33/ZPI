@@ -56,6 +56,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="0dp"
+                        android:clickable="true"
+                        android:focusableInTouchMode="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
@@ -111,6 +113,7 @@
                                 android:layout_marginTop="@dimen/marginM"
                                 android:layout_marginBottom="@dimen/marginS"
                                 app:endIconDrawable="@drawable/ic_baseline_highlight_off_24"
+                                app:endIconTint="@color/primary"
                                 app:endIconMode="clear_text"
                                 app:hintEnabled="false"
                                 app:layout_constraintBottom_toBottomOf="parent"
