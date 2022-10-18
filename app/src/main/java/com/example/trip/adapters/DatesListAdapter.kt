@@ -2,26 +2,19 @@ package com.example.trip.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trip.databinding.ItemAvailabilityBinding
 import com.example.trip.models.Availability
+import com.example.trip.utils.setGone
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
-
 
 class DatesListAdapter @Inject constructor() :
     ListAdapter<Availability, DatesListAdapter.DatesViewHolder>(DatesDiffUtil()) {
 
-    private lateinit var datesClickListener: DatesClickListener
-
-    fun setDatesClickListener(datesClickListener: DatesClickListener) {
-        this.datesClickListener = datesClickListener
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DatesViewHolder {
-        return DatesViewHolder.create(parent, datesClickListener)
+        return DatesViewHolder.create(parent)
     }
 
     override fun onBindViewHolder(holder: DatesViewHolder, position: Int) {
@@ -29,8 +22,7 @@ class DatesListAdapter @Inject constructor() :
     }
 
     class DatesViewHolder(
-        private val binding: ItemAvailabilityBinding,
-        private val datesClickListener: DatesClickListener
+        private val binding: ItemAvailabilityBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(availability: Availability) {
@@ -39,44 +31,21 @@ class DatesListAdapter @Inject constructor() :
             with(availability) {
                 binding.textDateStart.text = startDate.format(formatter)
                 binding.textDateEnd.text = endDate.format(formatter)
-            }
-            setOnDeleteClick(availability.id)
-        }
-
-        private fun setOnDeleteClick(id: Int) {
-            binding.buttonDeleteDates.setOnClickListener {
-                datesClickListener.onDeleteClick(id)
+                binding.buttonDeleteDates.setGone()
             }
         }
 
         companion object {
             fun create(
-                parent: ViewGroup,
-                datesClickListener: DatesClickListener
+                parent: ViewGroup
             ): DatesViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemAvailabilityBinding.inflate(layoutInflater, parent, false)
                 return DatesViewHolder(
-                    binding,
-                    datesClickListener
+                    binding
                 )
             }
         }
 
     }
-
-}
-
-class DatesDiffUtil : DiffUtil.ItemCallback<Availability>() {
-    override fun areItemsTheSame(oldItem: Availability, newItem: Availability): Boolean {
-        return oldItem === newItem
-    }
-
-    override fun areContentsTheSame(oldItem: Availability, newItem: Availability): Boolean {
-        return oldItem.id == newItem.id && oldItem.userId == newItem.userId
-    }
-}
-
-interface DatesClickListener {
-    fun onDeleteClick(id: Int)
 }
