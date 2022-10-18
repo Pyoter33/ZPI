@@ -8,6 +8,7 @@ import javax.inject.Inject
 
 class GetUserAvailabilitiesUseCase @Inject constructor(private val availabilityRepository: AvailabilityRepository) {
 
-    operator fun invoke(userId: Int): Flow<Resource<List<Availability>>> = availabilityRepository.getUserAvailabilities(userId)
+    operator fun invoke(userId: Int, groupId: Int): Flow<Resource<List<Availability>>> =
+        availabilityRepository.getUserAvailabilities(userId, groupId)
 
 }

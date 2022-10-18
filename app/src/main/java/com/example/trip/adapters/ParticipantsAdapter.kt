@@ -61,7 +61,7 @@ class ParticipantsAdapter @Inject constructor() :
         }
 
         private fun setOnCalendarClickListener(participant: Participant) {
-            binding.card.setOnClickListener {
+            binding.buttonAvailability.setOnClickListener {
                 participantsClickListener.onCalendarClick(participant)
             }
         }

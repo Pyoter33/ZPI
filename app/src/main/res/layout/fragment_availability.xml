@@ -164,6 +164,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/marginXXL"
                         android:layout_marginTop="22dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHeight_max="170dp"

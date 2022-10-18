@@ -16,7 +16,6 @@ import com.example.trip.models.Resource
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.dayplan.DayPlansViewModel
 import com.example.trip.views.dialogs.MenuPopupFactory
-import com.example.trip.views.dialogs.dayplan.DeleteAttractionDialog
 import com.example.trip.views.dialogs.dayplan.DeleteDayPlanDialog
 import com.example.trip.views.dialogs.dayplan.DeleteDayPlanDialogClickListener
 import com.skydoves.balloon.balloon
@@ -125,7 +124,7 @@ class DayPlansFragment @Inject constructor() : Fragment(), DayPlansClickListener
 
     override fun onMenuDeleteClick(dayPlan: DayPlan) {
         val deleteDialog = DeleteDayPlanDialog(this, dayPlan)
-        deleteDialog.show(childFragmentManager, DeleteAttractionDialog.TAG)
+        deleteDialog.show(childFragmentManager, DeleteDayPlanDialog.TAG)
     }
 
 

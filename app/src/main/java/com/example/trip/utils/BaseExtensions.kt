@@ -16,6 +16,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.trip.R
 import com.example.trip.models.Attraction
@@ -79,6 +80,18 @@ fun Fragment.setSwipeRefreshLayout(
     layoutRefresh.setColorSchemeResources(color)
     layoutRefresh.setOnRefreshListener {
         action()
+    }
+}
+
+fun Fragment.getIntFromBundle(
+    key: String
+): Int {
+    return requireActivity().intent.getIntExtra(key, -1)
+}
+
+fun Fragment.onBackArrowClick(view: View) {
+    view.setOnClickListener {
+        findNavController().popBackStack()
     }
 }
 

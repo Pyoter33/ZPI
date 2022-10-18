@@ -7,38 +7,34 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.R
 import com.example.trip.adapters.DatesListAdapter
-import com.example.trip.databinding.FragmentAvailabilityBinding
+import com.example.trip.databinding.FragmentParticipantsAvailabilityBinding
 import com.example.trip.models.Availability
 import com.example.trip.models.Resource
 import com.example.trip.utils.*
-import com.example.trip.viewmodels.availability.UserAvailabilityViewModel
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.MaterialDatePicker
+import com.example.trip.viewmodels.participants.ParticipantsAvailabilityViewModel
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.kizitonwose.calendarview.utils.yearMonth
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import java.time.YearMonth
 import java.time.temporal.WeekFields
 import java.util.*
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 
 @AndroidEntryPoint
-class UserAvailabilityFragment @Inject constructor() : Fragment() {
+class ParticipantsAvailabilityFragment @Inject constructor() : Fragment() {
 
-    private val viewModel: UserAvailabilityViewModel by viewModels()
+    private val viewModel: ParticipantsAvailabilityViewModel by viewModels()
 
-    private lateinit var binding: FragmentAvailabilityBinding
+    private lateinit var binding: FragmentParticipantsAvailabilityBinding
 
     private lateinit var dateValidator: DateValidator
 
-    private var groupId by Delegates.notNull<Int>()
+    private val args: ParticipantsAvailabilityFragmentArgs by navArgs()
 
     @Inject
     lateinit var adapter: DatesListAdapter
@@ -47,20 +43,23 @@ class UserAvailabilityFragment @Inject constructor() : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentAvailabilityBinding.inflate(inflater, container, false)
+        binding = FragmentParticipantsAvailabilityBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        groupId = getIntFromBundle("groupId")
-        setAdapter()
-        setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
-        onAddClick()
-        onOptimalDatesClick()
-        onExpandClick()
         setCalendar()
+        onBackArrowClick(binding.buttonBack)
+        setAdapter()
+        setupArgs()
+        setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
+        onExpandClick()
+    }
+
+    private fun setupArgs() {
+        binding.textParticipantName.text = args.participant.fullName
     }
 
     private fun setCalendar() {
@@ -81,8 +80,8 @@ class UserAvailabilityFragment @Inject constructor() : Fragment() {
             calendar.setMonthScrollListener(textCurrentMonth)
             calendar.setDayBinder(
                 dateValidator,
-                R.color.secondary,
-                R.color.secondary_transparent
+                R.color.primary,
+                R.color.primary_transparent
             )
         }
     }
@@ -115,8 +114,6 @@ class UserAvailabilityFragment @Inject constructor() : Fragment() {
                         ANIM_DURATION
                     )
                     listAvailabilitiesBackground.setVisible()
-                    buttonAdd.animateFadeTransition(main, ANIM_DURATION)
-                    buttonAdd.setGone()
                 } else {
                     listAvailabilitiesBackground.animateSlideTransition(
                         Gravity.TOP,
@@ -124,22 +121,8 @@ class UserAvailabilityFragment @Inject constructor() : Fragment() {
                         ANIM_DURATION
                     )
                     binding.listAvailabilitiesBackground.setGone()
-                    buttonAdd.animateFadeTransition(main, ANIM_DURATION)
-                    binding.buttonAdd.setVisible()
                 }
             }
-        }
-    }
-
-    private fun onAddClick() {
-        binding.buttonAdd.setOnClickListener {
-            setAndShowCalendar()
-        }
-    }
-
-    private fun onOptimalDatesClick() {
-        binding.buttonSwitchToOptimalDates.setOnClickListener {
-            (requireParentFragment() as AvailabilityPager).switchToOptimalDatesFragment()
         }
     }
 
@@ -174,44 +157,6 @@ class UserAvailabilityFragment @Inject constructor() : Fragment() {
                 R.color.primary,
                 R.color.primary_transparent
             )
-        }
-    }
-
-    private fun setAndShowCalendar() {
-        val calendarConstraints = CalendarConstraints.Builder().setValidator(dateValidator).build()
-        val calendar =
-            MaterialDatePicker.Builder.dateRangePicker().setCalendarConstraints(calendarConstraints)
-                .setTheme(R.style.ThemeOverlay_App_DatePicker).build()
-
-        calendar.addOnPositiveButtonClickListener {
-            addDatesIfCorrect(it.first, it.second)
-        }
-        calendar.show(childFragmentManager, "DatePicker")
-    }
-
-    private fun addDatesIfCorrect(startDate: Long, endDate: Long) {
-        if (dateValidator.areDatesCorrect(startDate, endDate)) {
-            addDates(startDate, endDate)
-        } else {
-            requireContext().toast(R.string.text_dates_overlapping)
-        }
-    }
-
-    private fun addDates(startDate: Long, endDate: Long) {
-        val availability = Availability(
-            0,
-            1,
-            startDate.toLocalDate(),
-            endDate.toLocalDate()
-        )
-
-        lifecycleScope.launch {
-            when (viewModel.postAvailability(availability)) { //wait for response from backend
-                is Resource.Failure -> {
-                    requireContext().toast(R.string.text_post_failure)
-                }
-                else -> {}
-            }
         }
     }
 

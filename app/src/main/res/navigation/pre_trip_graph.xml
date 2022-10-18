@@ -23,7 +23,11 @@
         android:id="@+id/participantsFragmentPreTrip"
         android:name="com.example.trip.views.fragments.ParticipantsFragment"
         android:label="fragment_participants"
-        tools:layout="@layout/fragment_participants" />
+        tools:layout="@layout/fragment_participants" >
+        <action
+            android:id="@+id/action_participantsFragmentPreTrip_to_participantsAvailabilityFragment"
+            app:destination="@id/participantsAvailabilityFragment" />
+    </fragment>
     <fragment
         android:id="@+id/createEditAccommodationFragment"
         android:name="com.example.trip.views.fragments.CreateEditAccommodationFragment"
@@ -61,4 +65,16 @@
         android:id="@+id/availabilityPager"
         android:name="com.example.trip.views.fragments.AvailabilityPager"
         android:label="AvailabilityPager" />
+    <fragment
+        android:id="@+id/participantsAvailabilityFragment"
+        android:name="com.example.trip.views.fragments.ParticipantsAvailabilityFragment"
+        android:label="ParticipantsAvailabilityFragment"
+        tools:layout="@layout/fragment_participants_availability">
+        <argument
+            android:name="groupId"
+            app:argType="integer" />
+        <argument
+            android:name="participant"
+            app:argType="com.example.trip.models.Participant" />
+    </fragment>
 </navigation>

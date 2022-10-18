@@ -8,6 +8,7 @@ import javax.inject.Inject
 
 class GetOptimalDatesUseCase @Inject constructor(private val availabilityRepository: AvailabilityRepository) {
 
-    operator fun invoke(): Flow<Resource<Pair<Availability, Int>>> = availabilityRepository.getOptimalDates()
+    operator fun invoke(groupId: Int): Flow<Resource<Pair<Availability, Int>>> =
+        availabilityRepository.getOptimalDates(groupId)
 
 }

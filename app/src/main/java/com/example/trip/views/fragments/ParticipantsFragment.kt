@@ -15,15 +15,20 @@ import com.example.trip.adapters.ParticipantsClickListener
 import com.example.trip.databinding.FragmentParticipantsBinding
 import com.example.trip.models.Participant
 import com.example.trip.models.Resource
+import com.example.trip.utils.getIntFromBundle
+import com.example.trip.utils.setSwipeRefreshLayout
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.participants.ParticipantsViewModel
 import com.example.trip.views.dialogs.MenuPopupCoordinateFactory
+import com.example.trip.views.dialogs.participants.DeleteParticipantDialog
+import com.example.trip.views.dialogs.participants.DeleteParticipantDialogClickListener
 import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
-class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClickListener {
+class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClickListener, DeleteParticipantDialogClickListener {
 
     private lateinit var binding: FragmentParticipantsBinding
 
@@ -33,6 +38,8 @@ class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClick
     private val popupMenu by balloon<MenuPopupCoordinateFactory>()
 
     private val viewModel: ParticipantsViewModel by viewModels()
+
+    private var groupId by Delegates.notNull<Int>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,21 +51,15 @@ class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClick
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        groupId = getIntFromBundle("groupId")
         setAdapter()
         observeAccommodationPreviews()
-        setSwipeRefreshLayout()
+        setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
         setOnSearchClickListener()
         onBackArrowClick()
     }
 
-    private fun setSwipeRefreshLayout() {
-        binding.layoutRefresh.setColorSchemeResources(R.color.primary)
-        binding.layoutRefresh.setOnRefreshListener {
-            viewModel.refreshData()
-            binding.editTextQuery.setText("")
-            binding.editTextQuery.clearFocus()
-        }
-    }
 
     private fun setAdapter() {
         binding.listAttractionsPreviews.adapter = adapter
@@ -106,7 +107,12 @@ class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClick
     }
 
     override fun onCalendarClick(participant: Participant) {
-
+        findNavController().navigate(
+            ParticipantsFragmentDirections.actionParticipantsFragmentPreTripToParticipantsAvailabilityFragment(
+                groupId,
+                participant
+            )
+        )
     }
 
     override fun onMenuCoordinateClick(participant: Participant) {
@@ -114,6 +120,11 @@ class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClick
     }
 
     override fun onMenuDeleteClick(participant: Participant) {
+        val deleteDialog = DeleteParticipantDialog(this, participant)
+        deleteDialog.show(childFragmentManager, DeleteParticipantDialog.TAG)
+    }
+
+    override fun onDeleteClick(participant: Participant) {
 
     }
 }

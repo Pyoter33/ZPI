@@ -15,6 +15,7 @@ import com.example.trip.adapters.AttractionListAdapter
 import com.example.trip.databinding.FragmentAttractionsBinding
 import com.example.trip.models.Attraction
 import com.example.trip.models.Resource
+import com.example.trip.utils.onBackArrowClick
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.dayplan.AttractionsViewModel
 import com.example.trip.views.dialogs.MenuPopupFactory
@@ -59,7 +60,7 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
         setupArgs()
         observeAccommodationsList()
         setSwipeRefreshLayout()
-        onBackArrowClick()
+        onBackArrowClick(binding.buttonBack)
     }
 
     private fun setupArgs() {
@@ -71,12 +72,6 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
         binding.layoutRefresh.setColorSchemeResources(R.color.primary)
         binding.layoutRefresh.setOnRefreshListener {
             viewModel.refreshData()
-        }
-    }
-
-    private fun onBackArrowClick() {
-        binding.buttonBack.setOnClickListener {
-            findNavController().popBackStack()
         }
     }
 
