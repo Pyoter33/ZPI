@@ -9,6 +9,16 @@ import javax.inject.Inject
 
 class ParticipantsRepository @Inject constructor() {
 
+    fun getInviteLink(groupId: Int): Flow<Resource<String>> {
+        return flow {
+            emit(
+                Resource.Success(
+                    "https://medium.com/codex/create-custom-dialogs-with-dialogfragment-in-android-5cf39c5ccb72"
+                )
+            )
+        }
+    }
+
     fun getParticipantsForGroup(groupId: Int): Flow<Resource<List<Participant>>> {
         return flow {
             emit(

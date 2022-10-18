@@ -1,12 +1,10 @@
 package com.example.trip.viewmodels.participants
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.trip.models.Participant
 import com.example.trip.models.Resource
 import com.example.trip.usecases.participants.DeleteParticipantsUseCase
+import com.example.trip.usecases.participants.GetInviteLinkUseCase
 import com.example.trip.usecases.participants.GetParticipantsUseCase
 import com.example.trip.usecases.participants.UpdateParticipantUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ParticipantsViewModel @Inject constructor(
     private val getParticipantsUseCase: GetParticipantsUseCase,
+    private val getInviteLinkUseCase: GetInviteLinkUseCase,
     private val updateParticipantUseCase: UpdateParticipantUseCase,
     private val deleteParticipantsUseCase: DeleteParticipantsUseCase
 ) : ViewModel() {
@@ -26,6 +25,11 @@ class ParticipantsViewModel @Inject constructor(
         return@lazy mutableLiveData
     }
     val participantsList: LiveData<Resource<List<Participant>>> = _participantsList
+
+    private val _inviteLink by lazy {
+        return@lazy getInviteLinkUseCase(0).asLiveData()
+    }
+    val inviteLink: LiveData<Resource<String>> = _inviteLink
 
     fun refreshData() {
         getData(_participantsList)

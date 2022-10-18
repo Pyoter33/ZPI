@@ -79,4 +79,5 @@
     <string name="text_full_name">Full name</string>
     <string name="text_invite">Invite</string>
     <string name="text_set_coordinator">Set coordinator</string>
+    <string name="text_link_copied">Link copied to clipboard</string>
 </resources>

@@ -10,7 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.R
-import com.example.trip.adapters.DatesListAdapter
+import com.example.trip.adapters.DatesClickListener
+import com.example.trip.adapters.DatesExtendedListAdapter
 import com.example.trip.databinding.FragmentAvailabilityBinding
 import com.example.trip.models.Availability
 import com.example.trip.models.Resource
@@ -30,7 +31,7 @@ import kotlin.properties.Delegates
 
 
 @AndroidEntryPoint
-class UserAvailabilityFragment @Inject constructor() : Fragment() {
+class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickListener {
 
     private val viewModel: UserAvailabilityViewModel by viewModels()
 
@@ -41,7 +42,7 @@ class UserAvailabilityFragment @Inject constructor() : Fragment() {
     private var groupId by Delegates.notNull<Int>()
 
     @Inject
-    lateinit var adapter: DatesListAdapter
+    lateinit var adapter: DatesExtendedListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,6 +90,7 @@ class UserAvailabilityFragment @Inject constructor() : Fragment() {
 
     private fun setAdapter() {
         val layoutManager = LinearLayoutManager(context)
+        adapter.setDatesClickListener(this)
         with(binding) {
             listAvailabilities.adapter = adapter
             listAvailabilities.layoutManager = layoutManager
@@ -220,6 +222,10 @@ class UserAvailabilityFragment @Inject constructor() : Fragment() {
         private const val GROUP_ID_ARG = "groupId"
         private const val MONTH_RANGE = 1200L
         private const val ANIM_DURATION = 600L
+    }
+
+    override fun onDeleteClick(id: Int) {
+
     }
 
 }

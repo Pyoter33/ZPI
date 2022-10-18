@@ -15,6 +15,7 @@ import com.example.trip.adapters.ParticipantsClickListener
 import com.example.trip.databinding.FragmentParticipantsBinding
 import com.example.trip.models.Participant
 import com.example.trip.models.Resource
+import com.example.trip.utils.copyToClipboard
 import com.example.trip.utils.getIntFromBundle
 import com.example.trip.utils.setSwipeRefreshLayout
 import com.example.trip.utils.toast
@@ -22,13 +23,17 @@ import com.example.trip.viewmodels.participants.ParticipantsViewModel
 import com.example.trip.views.dialogs.MenuPopupCoordinateFactory
 import com.example.trip.views.dialogs.participants.DeleteParticipantDialog
 import com.example.trip.views.dialogs.participants.DeleteParticipantDialogClickListener
+import com.example.trip.views.dialogs.participants.GetInviteLinkDialog
+import com.example.trip.views.dialogs.participants.GetInviteLinkDialogClickListener
 import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.properties.Delegates
 
+
 @AndroidEntryPoint
-class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClickListener, DeleteParticipantDialogClickListener {
+class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClickListener,
+    DeleteParticipantDialogClickListener, GetInviteLinkDialogClickListener {
 
     private lateinit var binding: FragmentParticipantsBinding
 
@@ -55,11 +60,18 @@ class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClick
         groupId = getIntFromBundle("groupId")
         setAdapter()
         observeAccommodationPreviews()
+        onInviteClick()
         setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
         setOnSearchClickListener()
         onBackArrowClick()
     }
 
+    private fun onInviteClick() {
+        binding.buttonInvite.setOnClickListener {
+            val inviteDialog = GetInviteLinkDialog(viewModel, this)
+            inviteDialog.show(childFragmentManager, GetInviteLinkDialog.TAG)
+        }
+    }
 
     private fun setAdapter() {
         binding.listAttractionsPreviews.adapter = adapter
@@ -126,5 +138,10 @@ class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClick
 
     override fun onDeleteClick(participant: Participant) {
 
+    }
+
+    override fun onCopyClick(link: String) {
+        requireContext().copyToClipboard(link)
+        requireContext().toast(R.string.text_link_copied)
     }
 }

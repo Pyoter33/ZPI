@@ -1,45 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content"
+    android:padding="@dimen/marginM"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textField_name"
+        android:id="@+id/textField_link"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/marginM"
         android:layout_marginTop="@dimen/marginL"
-        app:layout_constraintEnd_toStartOf="@+id/button_invite"
+        android:layout_marginHorizontal="@dimen/marginM"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:placeholderText="Day plan">
+        app:startIconDrawable="@drawable/ic_baseline_link_24"
+        app:startIconTint="@color/primary">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/editText_name"
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/editText_link"
+            android:textSize="@dimen/textMedium"
+            android:paddingHorizontal="@dimen/marginXS"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:inputType="none" />
+            android:layout_marginEnd="@dimen/marginXS"
+            android:inputType="none"
+            android:textIsSelectable="true"
+            android:singleLine="true"
+            android:textColor="@color/grey700"
+            tools:text="https://www.linkedin.com/in/piotr-martin-145a51231/" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/button_invite"
-        style="Widget.MaterialComponents.Button"
-        android:paddingVertical="0dp"
+        android:id="@+id/button_copy"
+        style="@style/Button.Text"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginEnd="@dimen/marginM"
-        android:backgroundTint="@color/primary"
-        android:textAllCaps="false"
-        android:text="Copy"
-        android:textAlignment="viewStart"
-        app:icon="@drawable/ic_baseline_content_copy_24"
-        app:layout_constraintBottom_toBottomOf="@+id/textField_name"
+        android:layout_height="wrap_content"
+        android:text="COPY"
+        android:layout_marginTop="@dimen/marginS"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textField_name" />
+        app:layout_constraintTop_toBottomOf="@+id/textField_link" />
 
-
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/circularProgressIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

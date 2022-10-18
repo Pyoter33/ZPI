@@ -2,6 +2,8 @@ package com.example.trip.utils
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Point
 import android.transition.Fade
@@ -62,6 +64,12 @@ fun Context.setAppLocale(language: String): Context {
     config.setLayoutDirection(locale)
 
     return createConfigurationContext(config)
+}
+
+fun Context.copyToClipboard(text: CharSequence){
+    val clipboard = getSystemService(ClipboardManager::class.java) as ClipboardManager
+    val clip = ClipData.newPlainText("label", text)
+    clipboard.setPrimaryClip(clip)
 }
 
 fun LocalDate.toMillis(): Long {
