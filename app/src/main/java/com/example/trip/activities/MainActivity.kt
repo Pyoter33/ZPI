@@ -9,7 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.example.trip.R
-import com.example.trip.models.TripStatus
+import com.example.trip.models.GroupStatus
 import com.example.trip.utils.setAppLocale
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -61,12 +61,12 @@ class MainActivity : AppCompatActivity() {
         setupWithNavController(bottomNavigationView, navController)
 
         val navGraph = when (intent.extras!!.getInt("status")) {
-            TripStatus.PRE_TRIP.code -> {
+            GroupStatus.PLANNING.code -> {
                 bottomNavigationView.menu.clear()
                 bottomNavigationView.inflateMenu(R.menu.navigation_pre_trip_menu)
                 navController.navInflater.inflate(R.navigation.pre_trip_graph)
             }
-            TripStatus.TRIP.code -> {
+            GroupStatus.ONGOING.code -> {
                 bottomNavigationView.menu.clear()
                 bottomNavigationView.inflateMenu(R.menu.navigation_trip_menu)
                 navController.navInflater.inflate(R.navigation.trip_graph)

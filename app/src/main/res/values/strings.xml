@@ -43,6 +43,7 @@
     <string name="text_participants_no">%1$d participants</string>
     <string name="text_see_in_maps">See in maps</string>
     <string name="text_from_to">From %1$s to %2$s</string>
+    <string name="text_from">from %1$s</string>
     <string name="format_dot">%1$d.</string>
     <string name="format_km">%1$.1f km</string>
     <string name="text_questionmark">\?</string>
@@ -80,4 +81,7 @@
     <string name="text_invite">Invite</string>
     <string name="text_set_coordinator">Set coordinator</string>
     <string name="text_link_copied">Link copied to clipboard</string>
+    <string name="text_planning">Planning</string>
+    <string name="text_ongoing">Ongoing</string>
+    <string name="text_finished">Finished</string>
 </resources>
