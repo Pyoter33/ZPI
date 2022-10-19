@@ -71,7 +71,6 @@
                 android:layout_marginHorizontal="@dimen/marginL"
                 android:layout_marginVertical="@dimen/marginM"
                 android:scaleType="fitXY"
-
                 android:src="@drawable/ic_outline_calendar_month_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
