@@ -122,7 +122,7 @@ class CreateEditAccommodationFragment @Inject constructor() : Fragment() {
         val textLink = binding.textFieldLink
         var showError = false
 
-        if (textLink.editText?.text.isNullOrEmpty()) {
+        if (viewModel.linkText.isNullOrEmpty()) {
             textLink.error = getString(R.string.text_text_empty)
             textLink.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
             showError = true

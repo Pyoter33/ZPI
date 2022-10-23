@@ -56,7 +56,12 @@ class CreateEditGroupFragment @Inject constructor() : Fragment() {
     private fun setupArgs() {
         args.group?.let {
             viewModel.toPost = true
+            binding.textNewGroup.text = getString(R.string.text_edit_group)
             with(binding) {
+                viewModel.name = it.name
+                viewModel.currency = it.currency
+                viewModel.startingCity = it.startCity
+                viewModel.descriptionText = it.description
                 editTextName.setText(it.name)
                 editTextStartingCity.setText(it.startCity)
                 spinnerCurrency.setText(it.currency)
@@ -100,7 +105,7 @@ class CreateEditGroupFragment @Inject constructor() : Fragment() {
         val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, items)
         binding.spinnerCurrency.setAdapter(adapter)
 
-        binding.spinnerCurrency.setOnItemClickListener { parent, view, position, id ->
+        binding.spinnerCurrency.setOnItemClickListener { _, _, _, _ ->
             viewModel.currency = binding.spinnerCurrency.text.toString()
             binding.textFieldCurrency.startIconDrawable?.setTint(resources.getColor(R.color.primary, null))
             binding.textFieldCurrency.error = null

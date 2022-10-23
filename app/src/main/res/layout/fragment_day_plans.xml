@@ -87,7 +87,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginVertical="@dimen/marginM"
                                 android:layout_marginStart="@dimen/marginS"
-                                android:text="Day plans"
+                                android:text="@string/text_day_plans"
                                 android:textColor="@color/primary"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/image_attractions"

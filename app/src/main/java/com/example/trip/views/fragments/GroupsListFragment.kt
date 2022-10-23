@@ -21,6 +21,7 @@ import com.example.trip.models.Resource
 import com.example.trip.utils.setSwipeRefreshLayout
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.GroupsListViewModel
+import com.example.trip.views.dialogs.MenuPopupFactory
 import com.skydoves.balloon.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -29,6 +30,8 @@ import javax.inject.Inject
 class GroupsListFragment @Inject constructor() : Fragment(), GroupsClickListener {
 
     private lateinit var binding: FragmentGroupsListBinding
+
+    private val popupMenu by balloon<MenuPopupFactory>()
 
     private val viewModel: GroupsListViewModel by viewModels()
 
@@ -78,6 +81,7 @@ class GroupsListFragment @Inject constructor() : Fragment(), GroupsClickListener
 
     private fun setAdapter() {
         adapter.setGroupsClickListener(this)
+        adapter.setPopupMenu(popupMenu)
         binding.attractionsList.adapter = adapter
         binding.attractionsList.layoutManager = LinearLayoutManager(context)
     }
@@ -102,13 +106,21 @@ class GroupsListFragment @Inject constructor() : Fragment(), GroupsClickListener
         requireActivity().finish()
     }
 
+    override fun onMenuEditClick(group: Group) {
+        findNavController().navigate(GroupsListFragmentDirections.actionGroupsListFragmentToCreateEditGroupFragment(group))
+    }
+
+    override fun onMenuDeleteClick(group: Group) {
+        //check if finances are completed
+    }
+
     override fun onInfoClick(group: Group, view: View) {
-        val popupMenu = createPopup(group)
+        val popupMenu = createInfoPopup(group)
 
         popupMenu.showAlignBottom(view)
     }
 
-    private fun createPopup(group: Group): Balloon {
+    private fun createInfoPopup(group: Group): Balloon {
         return Balloon.Builder(requireContext())
             .setWidthRatio(0.9f)
             .setHeight(BalloonSizeSpec.WRAP)

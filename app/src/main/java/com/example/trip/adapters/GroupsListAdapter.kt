@@ -3,6 +3,7 @@ package com.example.trip.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,7 @@ import com.example.trip.databinding.ItemGroupBinding
 import com.example.trip.models.Group
 import com.example.trip.models.GroupStatus
 import com.example.trip.utils.setGone
+import com.skydoves.balloon.Balloon
 import javax.inject.Inject
 
 
@@ -19,12 +21,18 @@ class GroupsListAdapter @Inject constructor() :
 
     private lateinit var groupsClickListener: GroupsClickListener
 
+    private lateinit var popupMenu: Balloon
+
     fun setGroupsClickListener(groupsClickListener: GroupsClickListener) {
         this.groupsClickListener = groupsClickListener
     }
 
+    fun setPopupMenu(popupMenu: Balloon) {
+        this.popupMenu = popupMenu
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupsViewHolder {
-        return GroupsViewHolder.create(parent, groupsClickListener)
+        return GroupsViewHolder.create(parent, groupsClickListener, popupMenu)
     }
 
     override fun onBindViewHolder(holder: GroupsViewHolder, position: Int) {
@@ -33,7 +41,8 @@ class GroupsListAdapter @Inject constructor() :
 
     class GroupsViewHolder(
         private val binding: ItemGroupBinding,
-        private val groupsClickListener: GroupsClickListener
+        private val groupsClickListener: GroupsClickListener,
+        private val popupMenu: Balloon
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(group: Group) {
@@ -53,6 +62,7 @@ class GroupsListAdapter @Inject constructor() :
             }
             onClick(group)
             onInfoClick(group)
+            setOnLongClick(group)
         }
 
         private fun onClick(group: Group) {
@@ -67,16 +77,43 @@ class GroupsListAdapter @Inject constructor() :
             }
         }
 
+        private fun setOnLongClick(group: Group) {
+            binding.card.setOnLongClickListener {
+                popupMenu.showAlignBottom(binding.card)
+                setOnPopupButtonClick(R.id.button_edit) {
+                    groupsClickListener.onMenuEditClick(
+                        group
+                    )
+                }
+                setOnPopupButtonClick(R.id.button_delete) {
+                    groupsClickListener.onMenuDeleteClick(
+                        group
+                    )
+                }
+                true
+            }
+        }
+
+        private fun setOnPopupButtonClick(id: Int, action: () -> Unit) {
+            popupMenu.getContentView().findViewById<Button>(id).setOnClickListener {
+                action()
+                popupMenu.dismiss()
+            }
+        }
+
+
         companion object {
             fun create(
                 parent: ViewGroup,
-                groupsClickListener: GroupsClickListener
+                groupsClickListener: GroupsClickListener,
+                popupMenu: Balloon
             ): GroupsViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemGroupBinding.inflate(layoutInflater, parent, false)
                 return GroupsViewHolder(
                     binding,
-                    groupsClickListener
+                    groupsClickListener,
+                    popupMenu
                 )
             }
         }
@@ -96,5 +133,7 @@ class GroupsDiffUtil : DiffUtil.ItemCallback<Group>() {
 
 interface GroupsClickListener {
     fun onClick(group: Group)
+    fun onMenuEditClick(group: Group)
+    fun onMenuDeleteClick(group: Group)
     fun onInfoClick(group: Group, view: View)
 }

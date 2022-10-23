@@ -86,4 +86,7 @@
     <string name="text_finished">Finished</string>
     <string name="text_starting_city">Starting city</string>
     <string name="text_currency">Currency</string>
+    <string name="text_new_group">New group</string>
+    <string name="text_edit_group">Edit group</string>
+    <string name="text_day_plans">Day plans</string>
 </resources>
