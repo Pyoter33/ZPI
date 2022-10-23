@@ -7,13 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.trip.models.Group
 import com.example.trip.models.Resource
 import com.example.trip.usecases.group.GetGroupsUseCase
-import com.example.trip.usecases.group.PostGroupUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GroupsListViewModel @Inject constructor(private val getGroupsUseCase: GetGroupsUseCase, private val postGroupUseCase: PostGroupUseCase): ViewModel() {
+class GroupsListViewModel @Inject constructor(private val getGroupsUseCase: GetGroupsUseCase): ViewModel() {
 
     private val _groupsList by lazy {
         val mutableLiveData = MutableLiveData<Resource<List<Group>>>()

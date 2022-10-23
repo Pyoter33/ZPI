@@ -1,12 +1,15 @@
 package com.example.trip.models
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Group(
     val id: Int,
     val name: String,
     val groupStatus: GroupStatus,
-    val startLocation: String,
+    val startCity: String,
     val currency: String,
-    val maxVotes: Int,
-    val description: String,
+    val description: String?,
     val participantsNo: Int
-)
+): Parcelable

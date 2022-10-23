@@ -84,4 +84,6 @@
     <string name="text_planning">Planning</string>
     <string name="text_ongoing">Ongoing</string>
     <string name="text_finished">Finished</string>
+    <string name="text_starting_city">Starting city</string>
+    <string name="text_currency">Currency</string>
 </resources>

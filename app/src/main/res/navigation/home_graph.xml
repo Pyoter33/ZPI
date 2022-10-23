@@ -7,5 +7,19 @@
     <fragment
         android:id="@+id/groupsListFragment"
         android:name="com.example.trip.views.fragments.GroupsListFragment"
-        android:label="GroupsListFragment" />
+        android:label="GroupsListFragment" >
+        <action
+            android:id="@+id/action_groupsListFragment_to_createEditGroupFragment"
+            app:destination="@id/createEditGroupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createEditGroupFragment"
+        android:name="com.example.trip.views.fragments.CreateEditGroupFragment"
+        android:label="CreateEditGroupFragment" >
+        <argument
+            android:name="group"
+            app:argType="com.example.trip.models.Group"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
 </navigation>

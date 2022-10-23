@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
@@ -20,10 +21,7 @@ import com.example.trip.models.Resource
 import com.example.trip.utils.setSwipeRefreshLayout
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.GroupsListViewModel
-import com.skydoves.balloon.ArrowOrientation
-import com.skydoves.balloon.ArrowPositionRules
-import com.skydoves.balloon.Balloon
-import com.skydoves.balloon.BalloonAnimation
+import com.skydoves.balloon.*
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -49,8 +47,15 @@ class GroupsListFragment @Inject constructor() : Fragment(), GroupsClickListener
         super.onViewCreated(view, savedInstanceState)
 
         setAdapter()
+        onCreateClick()
         observeAccommodationsList()
         setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
+    }
+
+    private fun onCreateClick() {
+        binding.buttonAdd.setOnClickListener {
+            findNavController().navigate(GroupsListFragmentDirections.actionGroupsListFragmentToCreateEditGroupFragment())
+        }
     }
 
     private fun observeAccommodationsList() {
@@ -88,7 +93,7 @@ class GroupsListFragment @Inject constructor() : Fragment(), GroupsClickListener
                 activityIntent.putExtra("status", GroupStatus.ONGOING.code)
             }
             else -> {
-               return
+                return
             }
 
         }
@@ -106,7 +111,7 @@ class GroupsListFragment @Inject constructor() : Fragment(), GroupsClickListener
     private fun createPopup(group: Group): Balloon {
         return Balloon.Builder(requireContext())
             .setWidthRatio(0.9f)
-            .setHeight(200)
+            .setHeight(BalloonSizeSpec.WRAP)
             .setArrowSize(20)
             .setCornerRadius(20f)
             .setIconSpace(0)
@@ -115,7 +120,7 @@ class GroupsListFragment @Inject constructor() : Fragment(), GroupsClickListener
             .setArrowPositionRules(ArrowPositionRules.ALIGN_ANCHOR)
             .setElevation(3)
             .setArrowOrientation(ArrowOrientation.TOP)
-            .setText(group.description)
+            .setText(group.description!!)
             .setTextGravity(Gravity.START)
             .setPaddingResource(R.dimen.marginM)
             .setMarginHorizontalResource(R.dimen.marginL)

@@ -15,7 +15,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/text_new_accommodation"
+            android:id="@+id/text_sign_up"
             style="@style/TextMega"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
             app:errorEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_new_accommodation"
+            app:layout_constraintTop_toBottomOf="@+id/text_sign_up"
             app:placeholderText="example@email.com"
             app:startIconDrawable="@drawable/ic_baseline_mail_outline_24"
             app:startIconTint="@color/primary">
@@ -57,7 +57,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/marginM"
+            android:layout_marginHorizontal="@dimen/marginL"
             android:layout_marginTop="@dimen/marginS"
             android:hint="@string/text_full_name"
             app:errorEnabled="true"
@@ -81,7 +81,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/marginM"
+            android:layout_marginHorizontal="@dimen/marginL"
             android:layout_marginTop="@dimen/marginS"
             android:hint="@string/text_birthday"
             app:startIconDrawable="@drawable/ic_baseline_cake_24"
