@@ -1,4 +1,4 @@
-package com.example.trip.viewmodels
+package com.example.trip.viewmodels.groups
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

@@ -11,6 +11,21 @@ import javax.inject.Inject
 
 class AvailabilityRepository @Inject constructor() {
 
+    fun getAcceptedAvailability(groupId: Int): Flow<Resource<Availability?>> {
+        return flow {
+            emit(
+                Resource.Success(
+                    Availability(
+                        1,
+                        -1,
+                        LocalDate.of(2022, 10, 10),
+                        LocalDate.of(2022, 10, 14)
+                    )
+                )
+            )
+        }
+    }
+
     fun getUserAvailabilities(userId: Int, groupId: Int): Flow<Resource<List<Availability>>> {
         return flow {
             emit(
@@ -41,6 +56,10 @@ class AvailabilityRepository @Inject constructor() {
     }
 
     suspend fun postAvailability(availability: Availability): Resource<Unit> {
+        return Resource.Failure()
+    }
+
+    suspend fun postAcceptedAvailability(availability: Availability): Resource<Unit> {
         return Resource.Failure()
     }
 

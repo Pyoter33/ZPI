@@ -20,7 +20,7 @@ import com.example.trip.models.GroupStatus
 import com.example.trip.models.Resource
 import com.example.trip.utils.setSwipeRefreshLayout
 import com.example.trip.utils.toast
-import com.example.trip.viewmodels.GroupsListViewModel
+import com.example.trip.viewmodels.groups.GroupsListViewModel
 import com.example.trip.views.dialogs.MenuPopupFactory
 import com.skydoves.balloon.*
 import dagger.hilt.android.AndroidEntryPoint

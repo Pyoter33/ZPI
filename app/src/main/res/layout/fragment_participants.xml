@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".views.fragments.CreateEditAccommodationFragment">
+    tools:context=".views.fragments.ParticipantsFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/layout_refresh"
@@ -138,7 +138,7 @@
 
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/list_attractions_previews"
+                        android:id="@+id/list_participants"
                         android:layout_width="match_parent"
                         android:layout_height="600dp"
                         android:layout_marginHorizontal="@dimen/marginM"

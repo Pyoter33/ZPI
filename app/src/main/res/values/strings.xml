@@ -31,6 +31,7 @@
     <string name="text_plans">Plans</string>
     <string name="text_finances">Finances</string>
     <string name="text_dash">-</string>
+    <string name="format_dash">%1$s - %2$s</string>
     <string name="text_my_dates">My dates</string>
     <string name="format_date">%1$d.%2$d.%3$d</string>
     <string name="text_dates_overlapping">Chosen range overlaps existing range. Choose different dates!</string>

@@ -11,7 +11,30 @@ import javax.inject.Inject
 
 
 class AccommodationsRepository @Inject constructor() {
-    //dao
+
+    fun getAcceptedAccommodation(groupId: Int): Flow<Resource<Accommodation?>> {
+        return flow {
+            emit(
+                Resource.Success(
+                    Accommodation(
+                        2,
+                        0,
+                        1,
+                        "Marsala Flexyrent apartment exclusive",
+                        "7 Via Marsala, Centrum Mediolanu, 20121 Mediolan, Włochy",
+                        "Description",
+                        "",
+                        "id2",
+                        4,
+                        BigDecimal(1200),
+                        true
+                    )
+                )
+            )
+        }
+    }
+
+
     fun getAccommodationsList(groupId: Int): Flow<Resource<List<Accommodation>>> {
         return flow {
             emit(Resource.Loading())
@@ -93,7 +116,15 @@ class AccommodationsRepository @Inject constructor() {
         return Resource.Failure()
     }
 
-    suspend fun updateAccommodation(id: Int, accommodationBase: Pair<String, String?>): Resource<Unit> {
+    suspend fun postAcceptedAccommodation(
+        accommodation: Accommodation
+    ): Resource<Unit> {
+        return Resource.Failure()
+    }
+
+    suspend fun updateAccommodation(
+        accommodation: Accommodation
+    ): Resource<Unit> {
         return Resource.Failure()
     }
 

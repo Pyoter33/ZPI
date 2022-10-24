@@ -74,7 +74,7 @@ class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClick
     }
 
     private fun setAdapter() {
-        binding.listAttractionsPreviews.adapter = adapter
+        binding.listParticipants.adapter = adapter
         adapter.setPopupMenu(popupMenu)
         adapter.setParticipantsClickListener(this)
     }

@@ -19,7 +19,7 @@ import com.example.trip.utils.onBackArrowClick
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
 import com.example.trip.utils.toast
-import com.example.trip.viewmodels.CreateEditGroupViewModel
+import com.example.trip.viewmodels.groups.CreateEditGroupViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject

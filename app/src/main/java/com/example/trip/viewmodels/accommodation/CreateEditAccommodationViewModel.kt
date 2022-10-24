@@ -23,7 +23,7 @@ class CreateEditAccommodationViewModel @Inject constructor(
     suspend fun postAccommodation(): Resource<Unit> {
         val deferred = viewModelScope.async(Dispatchers.IO) {
             groupId?.let {
-                postAccommodationUseCase(groupId, Pair(linkText!!, descriptionText))
+                postAccommodationUseCase(groupId, Pair(linkText!!, descriptionText)) //CHANGE
             }?: Resource.Failure()
         }
         return deferred.await()
