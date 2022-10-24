@@ -77,4 +77,8 @@
             android:name="participant"
             app:argType="com.example.trip.models.Participant" />
     </fragment>
+    <fragment
+        android:id="@+id/summaryFragment2"
+        android:name="com.example.trip.views.fragments.SummaryFragment"
+        android:label="SummaryFragment" />
 </navigation>

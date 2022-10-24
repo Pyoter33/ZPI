@@ -30,7 +30,8 @@ class MainActivity : AppCompatActivity() {
             R.id.participantsFragmentPreTrip,
             R.id.dayPlansFragment,
             R.id.financesFragment,
-            R.id.participantsFragmentTrip
+            R.id.participantsFragmentTrip,
+            R.id.summaryFragment
         )
 
     override fun onCreate(savedInstanceState: Bundle?) {
