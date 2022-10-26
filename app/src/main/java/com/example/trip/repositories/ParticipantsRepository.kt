@@ -30,6 +30,12 @@ class ParticipantsRepository @Inject constructor() {
                         Participant(4, 0, "Piotr Marian", "participant@example.com", UserRole.BASIC_USER),
                         Participant(5, 0, "Participant 1", "participant@example.com", UserRole.BASIC_USER),
                         Participant(6, 0, "Participant 2", "participant@example.com", UserRole.BASIC_USER),
+                        Participant(7, 0, "Dorian Olisadebe", "participant@example.com", UserRole.BASIC_USER),
+                        Participant(8, 0, "Krzysztof Siedem", "participant@example.com", UserRole.BASIC_USER),
+                        Participant(9, 0, "Kajetan Boba", "participant@example.com", UserRole.COORDINATOR),
+                        Participant(10, 0, "Piotr Marian", "participant@example.com", UserRole.BASIC_USER),
+                        Participant(11, 0, "Participant 1", "participant@example.com", UserRole.BASIC_USER),
+                        Participant(12, 0, "Participant 2", "participant@example.com", UserRole.BASIC_USER),
                     )
                 )
             )

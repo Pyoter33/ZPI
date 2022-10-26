@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/image_calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginXS"
+            android:layout_marginHorizontal="@dimen/marginL"
+            android:src="@drawable/ic_outline_calendar_month_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/secondary" />
+
+        <TextView
+            android:id="@+id/text_dates"
+            style="@style/TextMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginM"
+            android:layout_marginStart="@dimen/marginM"
+            app:layout_constraintBottom_toBottomOf="@+id/image_calendar"
+            app:layout_constraintStart_toEndOf="@+id/image_calendar"
+            app:layout_constraintTop_toTopOf="@+id/image_calendar"
+            tools:text="20.10.2022 - 11.11.2022" />
+
+        <ImageView
+            android:id="@+id/image_participants"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginS"
+            android:layout_marginHorizontal="@dimen/marginL"
+            android:src="@drawable/ic_baseline_person_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_calendar"
+            app:tint="@color/secondary" />
+
+        <TextView
+            android:id="@+id/text_participants_no"
+            style="@style/TextMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginM"
+            app:layout_constraintBottom_toBottomOf="@+id/image_participants"
+            app:layout_constraintStart_toEndOf="@+id/image_participants"
+            app:layout_constraintTop_toTopOf="@+id/image_participants"
+            tools:text="5" />
+
+        <Button
+            android:id="@+id/button_accept_dates"
+            style="@style/Button.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/marginL"
+            android:text="Accept"
+            android:textColor="@color/secondary"
+            app:icon="@drawable/ic_baseline_check_24"
+            app:iconTint="@color/secondary"
+            app:layout_constraintBottom_toBottomOf="@+id/image_participants"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

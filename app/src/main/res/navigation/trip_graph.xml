@@ -1,25 +1,9 @@
 <navigation android:id="@+id/trip"
     android:label="trip"
-    app:startDestination="@id/dayPlansFragment"
+    app:startDestination="@id/dayPlan"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <fragment
-        android:id="@+id/dayPlansFragment"
-        android:name="com.example.trip.views.fragments.DayPlansFragment"
-        android:label="fragment_day_plans"
-        tools:layout="@layout/fragment_day_plans">
-        <action
-            android:id="@+id/action_dayPlansFragment_to_attractionsFragment"
-            app:destination="@id/attractionsFragment" />
-        <argument
-            android:name="groupId"
-            app:argType="integer"
-            />
-        <action
-            android:id="@+id/action_dayPlansFragment_to_createEditDayPlanFragment"
-            app:destination="@id/createEditDayPlanFragment" />
-    </fragment>
     <fragment
         android:id="@+id/participantsFragmentTrip"
         android:name="com.example.trip.views.fragments.ParticipantsFragment"
@@ -34,57 +18,78 @@
             android:name="groupId"
             app:argType="integer" />
     </fragment>
-    <fragment
-        android:id="@+id/attractionsFragment"
-        android:name="com.example.trip.views.fragments.AttractionsFragment"
-        android:label="AttractionsFragment"
-        tools:layout="@layout/fragment_attractions">
-        <argument
-            android:name="groupId"
-            app:argType="integer" />
-        <action
-            android:id="@+id/action_attractionsFragment_to_findAttractionFragment"
-            app:destination="@id/findAttractionFragment" />
-        <action
-            android:id="@+id/action_attractionsFragment_to_createEditAttractionFragment"
-            app:destination="@id/createEditAttractionFragment" />
-        <argument
-            android:name="dayPlan"
-            app:argType="com.example.trip.models.DayPlan" />
-    </fragment>
-    <fragment
-        android:id="@+id/createEditAttractionFragment"
-        android:name="com.example.trip.views.fragments.CreateEditAttractionFragment"
-        android:label="CreateEditAttractionFragment"
-        tools:layout="@layout/fragment_create_edit_attraction">
-        <argument
-            android:name="attraction"
-            app:argType="com.example.trip.models.Attraction" />
-    </fragment>
-    <fragment
-        android:id="@+id/findAttractionFragment"
-        android:name="com.example.trip.views.fragments.FindAttractionFragment"
-        android:label="FindAttractionFragment" >
-        <action
-            android:id="@+id/action_findAttractionFragment_to_createEditAttractionFragment"
-            app:destination="@id/createEditAttractionFragment" />
-        <argument
-            android:name="groupId"
-            app:argType="integer" />
-        <argument android:name="dayPlanId"
-            app:argType="integer" />
-    </fragment>
-    <fragment
-        android:id="@+id/createEditDayPlanFragment"
-        android:name="com.example.trip.views.fragments.CreateEditDayPlanFragment"
-        android:label="CreateEditDayPlanFragment" >
-        <argument
-            android:name="groupId"
-            app:argType="integer" />
-        <argument
-            android:name="dayPlan"
-            app:argType="com.example.trip.models.DayPlan"
-            app:nullable="true"
-            android:defaultValue="@null" />
-    </fragment>
+    <navigation
+        android:id="@+id/dayPlan"
+        android:label="dayPlan"
+        app:startDestination="@id/dayPlansFragment">
+        <fragment
+            android:id="@+id/createEditDayPlanFragment"
+            android:name="com.example.trip.views.fragments.CreateEditDayPlanFragment"
+            android:label="CreateEditDayPlanFragment">
+            <argument
+                android:name="groupId"
+                app:argType="integer" />
+            <argument
+                android:name="dayPlan"
+                android:defaultValue="@null"
+                app:argType="com.example.trip.models.DayPlan"
+                app:nullable="true" />
+        </fragment>
+        <fragment
+            android:id="@+id/attractionsFragment"
+            android:name="com.example.trip.views.fragments.AttractionsFragment"
+            android:label="AttractionsFragment"
+            tools:layout="@layout/fragment_attractions">
+            <argument
+                android:name="groupId"
+                app:argType="integer" />
+            <action
+                android:id="@+id/action_attractionsFragment_to_findAttractionFragment"
+                app:destination="@id/findAttractionFragment" />
+            <action
+                android:id="@+id/action_attractionsFragment_to_createEditAttractionFragment"
+                app:destination="@id/createEditAttractionFragment" />
+            <argument
+                android:name="dayPlan"
+                app:argType="com.example.trip.models.DayPlan" />
+        </fragment>
+        <fragment
+            android:id="@+id/findAttractionFragment"
+            android:name="com.example.trip.views.fragments.FindAttractionFragment"
+            android:label="FindAttractionFragment">
+            <action
+                android:id="@+id/action_findAttractionFragment_to_createEditAttractionFragment"
+                app:destination="@id/createEditAttractionFragment" />
+            <argument
+                android:name="groupId"
+                app:argType="integer" />
+            <argument
+                android:name="dayPlanId"
+                app:argType="integer" />
+        </fragment>
+        <fragment
+            android:id="@+id/dayPlansFragment"
+            android:name="com.example.trip.views.fragments.DayPlansFragment"
+            android:label="fragment_day_plans"
+            tools:layout="@layout/fragment_day_plans">
+            <action
+                android:id="@+id/action_dayPlansFragment_to_attractionsFragment"
+                app:destination="@id/attractionsFragment" />
+            <argument
+                android:name="groupId"
+                app:argType="integer" />
+            <action
+                android:id="@+id/action_dayPlansFragment_to_createEditDayPlanFragment"
+                app:destination="@id/createEditDayPlanFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/createEditAttractionFragment"
+            android:name="com.example.trip.views.fragments.CreateEditAttractionFragment"
+            android:label="CreateEditAttractionFragment"
+            tools:layout="@layout/fragment_create_edit_attraction">
+            <argument
+                android:name="attraction"
+                app:argType="com.example.trip.models.Attraction" />
+        </fragment>
+    </navigation>
 </navigation>

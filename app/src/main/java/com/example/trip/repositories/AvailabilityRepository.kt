@@ -60,19 +60,50 @@ class AvailabilityRepository @Inject constructor() {
     }
 
     suspend fun postAcceptedAvailability(availability: Availability): Resource<Unit> {
-        return Resource.Failure()
+        return Resource.Success(Unit)
     }
 
     suspend fun deleteAvailability(id: Int): Resource<Unit> {
         return Resource.Failure()
     }
 
-    fun getOptimalDates(groupId: Int): Flow<Resource<Pair<Availability, Int>>> {
+    fun getOptimalDates(groupId: Int): Flow<Resource<List<Pair<Availability, Int>>>> {
         return flow {
             emit(
                 Resource.Success(
-                    Pair(
-                        Availability(1, -1, LocalDate.of(2022, 12, 2), LocalDate.of(2022, 12, 11)), 8
+                    listOf(
+                        Pair(
+                            Availability(
+                                1,
+                                -1,
+                                LocalDate.of(2022, 12, 2),
+                                LocalDate.of(2022, 12, 11)
+                            ), 8
+                        ),
+                        Pair(
+                            Availability(
+                                2,
+                                -1,
+                                LocalDate.of(2022, 12, 2),
+                                LocalDate.of(2022, 12, 10)
+                            ), 9
+                        ),
+                        Pair(
+                            Availability(
+                                3,
+                                -1,
+                                LocalDate.of(2022, 12, 2),
+                                LocalDate.of(2022, 12, 17)
+                            ), 7
+                        ),
+                        Pair(
+                            Availability(
+                                4,
+                                -1,
+                                LocalDate.of(2022, 12, 2),
+                                LocalDate.of(2022, 12, 15)
+                            ), 9
+                        )
                     )
                 )
             )

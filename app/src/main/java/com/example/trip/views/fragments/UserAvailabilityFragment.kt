@@ -57,7 +57,6 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
 
         groupId = getIntFromBundle("groupId")
         setAdapter()
-        setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
         onAddClick()
         onOptimalDatesClick()
         onExpandClick()
@@ -153,15 +152,13 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
                     adapter.submitList(it.data)
                     dateValidator = DateValidator(it.data)
                     updateView(it.data.first())
-                    binding.layoutRefresh.isRefreshing = false
                     binding.layoutLoading.setGone()
                 }
                 is Resource.Loading -> {
-                    binding.layoutRefresh.isRefreshing = true
+                    binding.layoutLoading.setVisible()
                 }
                 is Resource.Failure -> {
                     requireContext().toast(R.string.text_fetch_failure)
-                    binding.layoutRefresh.isRefreshing = false
                     binding.layoutLoading.setGone()
                 }
             }

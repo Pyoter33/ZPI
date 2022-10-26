@@ -120,7 +120,6 @@ fun View.animateFadeTransition(parent: ViewGroup, duration: Long) {
 fun DialogFragment.setAcceptDialog(action: () -> Unit): Dialog {
     return AlertDialog.Builder(requireContext())
         .setTitle(R.string.text_title_accept_dialog)
-        .setMessage(getString(R.string.text_message_cannot_undo))
         .setPositiveButton(getString(R.string.text_accept)) { _, _ ->
             action()
             dismiss()

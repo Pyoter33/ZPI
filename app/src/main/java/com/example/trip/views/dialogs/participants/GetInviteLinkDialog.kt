@@ -27,6 +27,7 @@ class GetInviteLinkDialog(
         val inflater = requireActivity().layoutInflater
         val dialogLayout = inflater.inflate(R.layout.layout_dialog_copy, null)
         val dialog = AlertDialog.Builder(requireContext())
+            .setTitle("Get invite link")
             .setView(dialogLayout)
             .create()
 

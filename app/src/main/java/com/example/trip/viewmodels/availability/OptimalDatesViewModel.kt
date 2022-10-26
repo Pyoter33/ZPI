@@ -15,17 +15,13 @@ import javax.inject.Inject
 class OptimalDatesViewModel @Inject constructor(private val getOptimalDatesUseCase: GetOptimalDatesUseCase): ViewModel() {
 
     private val _availability by lazy {
-        val mutableLiveData = MutableLiveData<Resource<Pair<Availability, Int>>>()
+        val mutableLiveData = MutableLiveData<Resource<List<Pair<Availability, Int>>>>()
         getData(mutableLiveData)
         return@lazy mutableLiveData
     }
-    val availability: LiveData<Resource<Pair<Availability, Int>>> = _availability
+    val availability: LiveData<Resource<List<Pair<Availability, Int>>>> = _availability
 
-    fun refreshData() {
-        getData(_availability)
-    }
-
-    private fun getData(mutableLiveData: MutableLiveData<Resource<Pair<Availability, Int>>>) {
+    private fun getData(mutableLiveData: MutableLiveData<Resource<List<Pair<Availability, Int>>>>) {
         viewModelScope.launch {
             getOptimalDatesUseCase(1).collect {
                 mutableLiveData.value = it

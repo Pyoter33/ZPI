@@ -5,15 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.trip.R
 import com.example.trip.adapters.ParticipantsSummaryAdapter
 import com.example.trip.databinding.FragmentSummaryBinding
 import com.example.trip.models.Accommodation
 import com.example.trip.models.Availability
-import com.example.trip.utils.getIntFromBundle
-import com.example.trip.utils.setGone
-import com.example.trip.utils.setVisible
+import com.example.trip.models.Resource
+import com.example.trip.utils.*
+import com.example.trip.viewmodels.SummaryViewModel
+import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import kotlin.properties.Delegates
@@ -26,7 +30,7 @@ class SummaryFragment @Inject constructor() : Fragment() {
     @Inject
     lateinit var adapter: ParticipantsSummaryAdapter
 
-    //private val viewModel: SummaryViewModel by viewModels()
+    private val viewModel: SummaryViewModel by viewModels()
 
     private var groupId by Delegates.notNull<Int>()
 
@@ -43,10 +47,15 @@ class SummaryFragment @Inject constructor() : Fragment() {
 
         groupId = getIntFromBundle("groupId")
         setAdapter()
-        observeSummary()
+        observeAccommodation()
+        observeAvailability()
+        observeParticipants()
         onBackArrowClick()
+        onUncheckDateClick()
+        observeButtonLock()
+        onUncheckAccommodationClick()
+        setupOnDateTextChangeListener()
     }
-
 
     private fun setAdapter() {
         binding.listParticipants.adapter = adapter
@@ -58,35 +67,126 @@ class SummaryFragment @Inject constructor() : Fragment() {
         }
     }
 
-    private fun observeSummary() {
-//        viewModel.summary.observe(viewLifecycleOwner) {
-//            when (it) {
-//                is Resource.Success -> {
-//                    adapter.submitList(it.data.participants)
-//                    it.data.availability?.let { availability ->
-//                        setDate(availability)
-//                    } ?: hideDate()
-//
-//                    it.data.accommodation?.let { accommodation ->
-//                        setAccommodation(accommodation)
-//                    } ?: hideAccommodation()
-//
-//                }
-//                is Resource.Loading -> {
-//
-//                }
-//                is Resource.Failure -> {
-//                    requireContext().toast(R.string.text_fetch_failure)
-//                }
-//            }
-//        }
+    private fun onUncheckAccommodationClick() {
+        binding.buttonUncheckAccommodation.setOnClickListener {
+            hideAccommodation()
+            viewModel.updateButtonLock(accommodationAdded = false)
+        }
+    }
+
+    private fun onUncheckDateClick() {
+        binding.buttonUncheckDates.setOnClickListener {
+            hideDate()
+            viewModel.updateButtonLock(dateAdded = false)
+        }
+    }
+
+    private fun setupOnDateTextChangeListener() {
+        binding.editTextDate.setOnClickListener {
+            setAndShowCalendar()
+        }
+    }
+
+    private fun observeButtonLock() {
+        viewModel.isButtonUnlocked.observe(viewLifecycleOwner) {
+            binding.buttonStartTrip.isEnabled = it
+        }
+    }
+
+    private fun setAndShowCalendar() {
+        val calendar =
+            MaterialDatePicker.Builder.dateRangePicker()
+                .setTheme(R.style.ThemeOverlay_App_DatePicker).build()
+
+        calendar.addOnPositiveButtonClickListener {
+            addDates(it.first, it.second)
+        }
+        calendar.show(childFragmentManager, "DatePicker")
+    }
+
+    private fun addDates(startDate: Long, endDate: Long) {
+        val availability = Availability(
+            0,
+            1,
+            startDate.toLocalDate(),
+            endDate.toLocalDate()
+        )
+
+        lifecycleScope.launch {
+            when (viewModel.setNewAcceptedAvailabilityAsync(availability).await()) {
+                is Resource.Success -> {
+                    setDate(availability)
+                }
+                is Resource.Loading -> {}
+                is Resource.Failure -> {
+                    requireContext().toast(R.string.text_fetch_failure)
+                }
+
+            }
+        }
+    }
+
+    private fun observeAccommodation() {
+        viewModel.acceptedAccommodation.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    it.data?.let { accommodation ->
+                        setAccommodation(accommodation)
+                        viewModel.updateButtonLock(accommodationAdded = true)
+                    } ?: hideAccommodation()
+
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Failure -> {
+                    requireContext().toast(R.string.text_fetch_failure)
+                }
+            }
+        }
+    }
+
+    private fun observeAvailability() {
+        viewModel.acceptedAvailability.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    it.data?.let { availability ->
+                        setDate(availability)
+                        viewModel.updateButtonLock(dateAdded = true)
+                    } ?: hideDate()
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Failure -> {
+                    requireContext().toast(R.string.text_fetch_failure)
+                }
+            }
+        }
+    }
+
+    private fun observeParticipants() {
+        viewModel.participants.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    adapter.submitList(it.data)
+                    binding.textParticipantsNo.text = it.data.size.toString()
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Failure -> {
+                    requireContext().toast(R.string.text_fetch_failure)
+                }
+            }
+        }
     }
 
     private fun setAccommodation(accommodation: Accommodation) {
         with(binding) {
             textAccommodationNotAccepted.setGone()
             cardAccommodation.setVisible()
-            imageAccommodationStatus.isActivated = true
+            imageAccommodationStatus.isSelected = true
             buttonUncheckAccommodation.setVisible()
 
             textName.text = accommodation.name
@@ -109,8 +209,9 @@ class SummaryFragment @Inject constructor() : Fragment() {
         with(binding) {
             textAccommodationNotAccepted.setVisible()
             cardAccommodation.setGone()
-            imageAccommodationStatus.isActivated = false
+            imageAccommodationStatus.isSelected = false
             buttonUncheckAccommodation.setGone()
+            binding.buttonStartTrip.isEnabled = false
         }
     }
 
@@ -118,7 +219,7 @@ class SummaryFragment @Inject constructor() : Fragment() {
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         with(binding) {
             textDatesNotAccepted.setGone()
-            imageDatesStatus.isActivated = true
+            imageDatesStatus.isSelected = true
             buttonUncheckDates.setVisible()
             editTextDate.setText(
                 getString(
@@ -128,13 +229,16 @@ class SummaryFragment @Inject constructor() : Fragment() {
                 )
             )
         }
+        viewModel.updateButtonLock(dateAdded = true)
     }
 
     private fun hideDate() {
         with(binding) {
             textDatesNotAccepted.setVisible()
-            imageDatesStatus.isActivated = false
+            imageDatesStatus.isSelected = false
             buttonUncheckDates.setGone()
+            editTextDate.setText("")
+            binding.buttonStartTrip.isEnabled = false
         }
     }
 

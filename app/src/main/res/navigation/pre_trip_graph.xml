@@ -1,56 +1,10 @@
 <navigation android:id="@+id/pre_trip"
     android:label="pre_trip"
-    app:startDestination="@id/accommodationListFragment"
+    app:startDestination="@id/accommodation"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-<!--    <argument-->
-<!--        android:name="groupId"-->
-<!--        app:argType="integer" />-->
-    <fragment
-        android:id="@+id/accommodationListFragment"
-        android:name="com.example.trip.views.fragments.AccommodationListFragment"
-        android:label="fragment_accomodation_list"
-        tools:layout="@layout/fragment_accommodation_list">
-        <action
-            android:id="@+id/action_accommodationListFragment_to_createEditAccommodationFragment"
-            app:destination="@id/createEditAccommodationFragment" />
-<!--        <argument-->
-<!--            android:name="groupId"-->
-<!--            app:argType="integer" />-->
-    </fragment>
-    <fragment
-        android:id="@+id/participantsFragmentPreTrip"
-        android:name="com.example.trip.views.fragments.ParticipantsFragment"
-        android:label="fragment_participants"
-        tools:layout="@layout/fragment_participants" >
-        <action
-            android:id="@+id/action_participantsFragmentPreTrip_to_participantsAvailabilityFragment"
-            app:destination="@id/participantsAvailabilityFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/createEditAccommodationFragment"
-        android:name="com.example.trip.views.fragments.CreateEditAccommodationFragment"
-        android:label="fragment_create_edit_accommodation"
-        tools:layout="@layout/fragment_create_edit_accommodation">
-        <argument
-            android:name="groupId"
-            app:argType="integer" />
-        <argument
-            android:name="id"
-            android:defaultValue="-1"
-            app:argType="integer" />
-        <argument
-            android:name="link"
-            android:defaultValue="@null"
-            app:argType="string"
-            app:nullable="true" />
-        <argument
-            android:name="description"
-            android:defaultValue="@null"
-            app:argType="string"
-            app:nullable="true" />
-    </fragment>
+
     <fragment
         android:id="@+id/availabilityFragment"
         android:name="com.example.trip.views.fragments.UserAvailabilityFragment"
@@ -66,19 +20,73 @@
         android:name="com.example.trip.views.fragments.AvailabilityPager"
         android:label="AvailabilityPager" />
     <fragment
-        android:id="@+id/participantsAvailabilityFragment"
-        android:name="com.example.trip.views.fragments.ParticipantsAvailabilityFragment"
-        android:label="ParticipantsAvailabilityFragment"
-        tools:layout="@layout/fragment_participants_availability">
-        <argument
-            android:name="groupId"
-            app:argType="integer" />
-        <argument
-            android:name="participant"
-            app:argType="com.example.trip.models.Participant" />
-    </fragment>
-    <fragment
         android:id="@+id/summaryFragment"
         android:name="com.example.trip.views.fragments.SummaryFragment"
         android:label="SummaryFragment" />
+    <navigation
+        android:id="@+id/accommodation"
+        android:label="accommodation"
+        app:startDestination="@id/accommodationListFragment">
+        <fragment
+            android:id="@+id/accommodationListFragment"
+            android:name="com.example.trip.views.fragments.AccommodationListFragment"
+            android:label="fragment_accomodation_list"
+            tools:layout="@layout/fragment_accommodation_list">
+            <action
+                android:id="@+id/action_accommodationListFragment_to_createEditAccommodationFragment"
+                app:destination="@id/createEditAccommodationFragment" />
+            <!--        <argument-->
+            <!--            android:name="groupId"-->
+            <!--            app:argType="integer" />-->
+        </fragment>
+        <fragment
+            android:id="@+id/createEditAccommodationFragment"
+            android:name="com.example.trip.views.fragments.CreateEditAccommodationFragment"
+            android:label="fragment_create_edit_accommodation"
+            tools:layout="@layout/fragment_create_edit_accommodation">
+            <argument
+                android:name="groupId"
+                app:argType="integer" />
+            <argument
+                android:name="id"
+                android:defaultValue="-1"
+                app:argType="integer" />
+            <argument
+                android:name="link"
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
+            <argument
+                android:name="description"
+                android:defaultValue="@null"
+                app:argType="string"
+                app:nullable="true" />
+        </fragment>
+    </navigation>
+    <navigation
+        android:id="@+id/participants"
+        android:label="participants"
+        app:startDestination="@id/participantsFragmentPreTrip">
+        <fragment
+            android:id="@+id/participantsFragmentPreTrip"
+            android:name="com.example.trip.views.fragments.ParticipantsFragment"
+            android:label="fragment_participants"
+            tools:layout="@layout/fragment_participants">
+            <action
+                android:id="@+id/action_participantsFragmentPreTrip_to_participantsAvailabilityFragment"
+                app:destination="@id/participantsAvailabilityFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/participantsAvailabilityFragment"
+            android:name="com.example.trip.views.fragments.ParticipantsAvailabilityFragment"
+            android:label="ParticipantsAvailabilityFragment"
+            tools:layout="@layout/fragment_participants_availability">
+            <argument
+                android:name="groupId"
+                app:argType="integer" />
+            <argument
+                android:name="participant"
+                app:argType="com.example.trip.models.Participant" />
+        </fragment>
+    </navigation>
 </navigation>

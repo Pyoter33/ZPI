@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/accommodationListFragment"
+        android:id="@+id/accommodation"
         android:enabled="true"
         android:icon="@drawable/ic_outline_hotel_24"
         android:title="@string/text_accommodation"/>
@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_outline_calendar_month_24"
         android:title="@string/text_availability"/>
     <item
-        android:id="@+id/participantsFragmentPreTrip"
+        android:id="@+id/participants"
         android:enabled="true"
         android:icon="@drawable/ic_outline_people_alt_24"
         android:title="@string/text_participants"/>
