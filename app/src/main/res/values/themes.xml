@@ -1,6 +1,8 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Theme.Trip" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorOnSurface">@color/grey900</item>
+        <item name="colorSurface">#FCFFFFFF</item>
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryVariant">@color/primary_darker</item>

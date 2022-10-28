@@ -12,13 +12,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.trip.R
+import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.AttractionPreviewAdapter
 import com.example.trip.adapters.AttractionPreviewClickListener
 import com.example.trip.databinding.FragmentFindAttractionBinding
 import com.example.trip.models.AttractionPreview
 import com.example.trip.models.Resource
 import com.example.trip.utils.toAttraction
-import com.example.trip.utils.toast
 import com.example.trip.viewmodels.dayplan.FindAttractionViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -71,7 +71,13 @@ class FindAttractionFragment @Inject constructor() : Fragment(), AttractionPrevi
                 }
                 is Resource.Loading -> {}
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry
+                    ) {
+                        viewModel.getData(binding.editTextQuery.text.toString())
+                    }
                 }
             }
         }

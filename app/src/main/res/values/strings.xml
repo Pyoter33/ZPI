@@ -8,6 +8,7 @@
     <string name="text_pln">%1$sPLN</string>
     <string name="text_fetch_failure">"Couldn't fetch the data, try again!</string>
     <string name="text_post_failure">"Couldn't post the data, try again!</string>
+    <string name="text_delete_failure">"Couldn't delete the data, try again!</string>
     <string name="text_item_post_failure">"Couldn't post the %1$s, check the data and try again!</string>
     <string name="text_my_votes">My votes</string>
     <string name="text_my_accommodations">My accommodations</string>
@@ -48,7 +49,6 @@
     <string name="format_dot">%1$d.</string>
     <string name="format_km">%1$.1f km</string>
     <string name="text_questionmark">\?</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="text_add_more">Add more</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -92,4 +92,5 @@
     <string name="text_day_plans">Day plans</string>
     <string name="text_summary">Summary</string>
     <string name="text_no_accommodation_chosen">No accommodation chosen yet!</string>
+    <string name="text_retry">Retry</string>
 </resources>

@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.R
+import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.AccommodationClickListener
 import com.example.trip.adapters.AccommodationListAdapter
 import com.example.trip.databinding.FragmentAccommodationListBinding
@@ -94,7 +95,13 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
                     binding.layoutRefresh.isRefreshing = true
                 }
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry
+                    ) {
+                        viewModel.refreshData()
+                    }
                     binding.layoutRefresh.isRefreshing = false
                 }
             }

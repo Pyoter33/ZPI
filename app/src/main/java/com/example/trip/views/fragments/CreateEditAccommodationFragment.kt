@@ -12,11 +12,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.trip.R
+import com.example.trip.activities.MainActivity
 import com.example.trip.databinding.FragmentCreateEditAccommodationBinding
 import com.example.trip.models.Resource
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
-import com.example.trip.utils.toast
 import com.example.trip.viewmodels.accommodation.CreateEditAccommodationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -97,24 +97,35 @@ class CreateEditAccommodationFragment @Inject constructor() : Fragment() {
 
     private fun onSubmitClick() {
         binding.buttonSubmit.setOnClickListener {
-            if (isSubmitNotPermitted()) return@setOnClickListener
+            submit()
+        }
+    }
 
-            enableLoading()
-            lifecycleScope.launch {
-                when (viewModel.postAccommodation()) {
-                    is Resource.Success -> {
-                        disableLoading()
-                        findNavController().popBackStack()
-                    }
-                    is Resource.Failure -> {
-                        disableLoading()
-                        requireContext().toast(getString(R.string.text_item_post_failure, "accommodation"))
-                    }
-                    else -> {}
+    private fun submit() {
+        if (isSubmitNotPermitted()) return
+
+        enableLoading()
+        lifecycleScope.launch {
+            when (viewModel.postAccommodation()) {
+                is Resource.Success -> {
+                    disableLoading()
+                    findNavController().popBackStack()
+                }
+                is Resource.Loading -> {
 
                 }
-
+                is Resource.Failure -> {
+                    disableLoading()
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_post_failure,
+                        R.string.text_retry
+                    ) {
+                        submit()
+                    }
+                }
             }
+
         }
     }
 

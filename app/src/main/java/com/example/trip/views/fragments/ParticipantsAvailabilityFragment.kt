@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.R
+import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.DatesListAdapter
 import com.example.trip.databinding.FragmentParticipantsAvailabilityBinding
 import com.example.trip.models.Availability
@@ -141,7 +142,13 @@ class ParticipantsAvailabilityFragment @Inject constructor() : Fragment() {
                     binding.layoutRefresh.isRefreshing = true
                 }
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry
+                    ) {
+                        viewModel.refreshData()
+                    }
                     binding.layoutRefresh.isRefreshing = false
                     binding.layoutLoading.setGone()
                 }

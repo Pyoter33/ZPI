@@ -21,6 +21,10 @@ class OptimalDatesViewModel @Inject constructor(private val getOptimalDatesUseCa
     }
     val availability: LiveData<Resource<List<Pair<Availability, Int>>>> = _availability
 
+    fun refreshData() {
+        getData(_availability)
+    }
+
     private fun getData(mutableLiveData: MutableLiveData<Resource<List<Pair<Availability, Int>>>>) {
         viewModelScope.launch {
             getOptimalDatesUseCase(1).collect {

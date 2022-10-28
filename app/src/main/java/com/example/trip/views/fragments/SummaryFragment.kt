@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.trip.R
+import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.ParticipantsSummaryAdapter
 import com.example.trip.databinding.FragmentSummaryBinding
 import com.example.trip.models.Accommodation
@@ -15,6 +16,10 @@ import com.example.trip.models.Availability
 import com.example.trip.models.Resource
 import com.example.trip.utils.*
 import com.example.trip.viewmodels.SummaryViewModel
+import com.example.trip.views.dialogs.accommodation.DeleteAccommodationDialogClickListener
+import com.example.trip.views.dialogs.availability.DeleteAvailabilityDialogClickListener
+import com.example.trip.views.dialogs.summary.DeleteAcceptedAccommodationDialog
+import com.example.trip.views.dialogs.summary.DeleteAcceptedAvailabilityDialog
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -23,9 +28,13 @@ import javax.inject.Inject
 import kotlin.properties.Delegates
 
 @AndroidEntryPoint
-class SummaryFragment @Inject constructor() : Fragment() {
+class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDialogClickListener,
+    DeleteAvailabilityDialogClickListener {
 
     private lateinit var binding: FragmentSummaryBinding
+
+    private lateinit var accommodationDialog: DeleteAcceptedAccommodationDialog
+    private lateinit var availabilityDialog: DeleteAcceptedAvailabilityDialog
 
     @Inject
     lateinit var adapter: ParticipantsSummaryAdapter
@@ -51,6 +60,7 @@ class SummaryFragment @Inject constructor() : Fragment() {
         observeAvailability()
         observeParticipants()
         onBackArrowClick()
+        onListLockClick()
         onUncheckDateClick()
         observeButtonLock()
         onUncheckAccommodationClick()
@@ -67,17 +77,22 @@ class SummaryFragment @Inject constructor() : Fragment() {
         }
     }
 
+    private fun onListLockClick() {
+        binding.buttonLock.setOnClickListener {
+            it.isSelected = !it.isSelected
+            binding.listParticipants.isNestedScrollingEnabled = it.isSelected
+        }
+    }
+
     private fun onUncheckAccommodationClick() {
         binding.buttonUncheckAccommodation.setOnClickListener {
-            hideAccommodation()
-            viewModel.updateButtonLock(accommodationAdded = false)
+            accommodationDialog.show(childFragmentManager, DeleteAcceptedAccommodationDialog.TAG)
         }
     }
 
     private fun onUncheckDateClick() {
         binding.buttonUncheckDates.setOnClickListener {
-            hideDate()
-            viewModel.updateButtonLock(dateAdded = false)
+            availabilityDialog.show(childFragmentManager, DeleteAcceptedAvailabilityDialog.TAG)
         }
     }
 
@@ -133,6 +148,7 @@ class SummaryFragment @Inject constructor() : Fragment() {
                     it.data?.let { accommodation ->
                         setAccommodation(accommodation)
                         viewModel.updateButtonLock(accommodationAdded = true)
+                        accommodationDialog = DeleteAcceptedAccommodationDialog(this, accommodation)
                     } ?: hideAccommodation()
 
                 }
@@ -153,6 +169,7 @@ class SummaryFragment @Inject constructor() : Fragment() {
                     it.data?.let { availability ->
                         setDate(availability)
                         viewModel.updateButtonLock(dateAdded = true)
+                        availabilityDialog = DeleteAcceptedAvailabilityDialog(this, availability)
                     } ?: hideDate()
                 }
                 is Resource.Loading -> {
@@ -239,6 +256,49 @@ class SummaryFragment @Inject constructor() : Fragment() {
             buttonUncheckDates.setGone()
             editTextDate.setText("")
             binding.buttonStartTrip.isEnabled = false
+        }
+    }
+
+    override fun onDeleteClick(accommodation: Accommodation) {
+        lifecycleScope.launch {
+            when (viewModel.deleteAcceptedAccommodationAsync(accommodation).await()) {
+                is Resource.Success -> {
+                    hideAccommodation()
+                    viewModel.updateButtonLock(accommodationAdded = false)
+                }
+                is Resource.Loading -> {}
+                is Resource.Failure -> {
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onDeleteClick(accommodation)
+                    }
+                }
+
+            }
+        }
+    }
+
+    override fun onDeleteClick(availability: Availability) {
+        lifecycleScope.launch {
+            when (viewModel.deleteAcceptedAvailabilityAsync(availability).await()) {
+                is Resource.Success -> {
+                    hideDate()
+                    viewModel.updateButtonLock(dateAdded = false)
+                }
+                is Resource.Loading -> {}
+                is Resource.Failure -> {
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onDeleteClick(availability)
+                    }
+                }
+            }
         }
     }
 

@@ -13,12 +13,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.trip.R
+import com.example.trip.activities.MainActivity
 import com.example.trip.databinding.FragmentCreateEditGroupBinding
 import com.example.trip.models.Resource
 import com.example.trip.utils.onBackArrowClick
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
-import com.example.trip.utils.toast
 import com.example.trip.viewmodels.groups.CreateEditGroupViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -78,7 +78,12 @@ class CreateEditGroupFragment @Inject constructor() : Fragment() {
 
             override fun afterTextChanged(editable: Editable?) {
                 viewModel.name = editable?.toString()
-                binding.textFieldName.startIconDrawable?.setTint(resources.getColor(R.color.primary, null))
+                binding.textFieldName.startIconDrawable?.setTint(
+                    resources.getColor(
+                        R.color.primary,
+                        null
+                    )
+                )
                 binding.textFieldName.error = null
             }
 
@@ -93,7 +98,12 @@ class CreateEditGroupFragment @Inject constructor() : Fragment() {
 
             override fun afterTextChanged(editable: Editable?) {
                 viewModel.startingCity = editable?.toString()
-                binding.textFieldCity.startIconDrawable?.setTint(resources.getColor(R.color.primary, null))
+                binding.textFieldCity.startIconDrawable?.setTint(
+                    resources.getColor(
+                        R.color.primary,
+                        null
+                    )
+                )
                 binding.textFieldCity.error = null
             }
 
@@ -107,7 +117,12 @@ class CreateEditGroupFragment @Inject constructor() : Fragment() {
 
         binding.spinnerCurrency.setOnItemClickListener { _, _, _, _ ->
             viewModel.currency = binding.spinnerCurrency.text.toString()
-            binding.textFieldCurrency.startIconDrawable?.setTint(resources.getColor(R.color.primary, null))
+            binding.textFieldCurrency.startIconDrawable?.setTint(
+                resources.getColor(
+                    R.color.primary,
+                    null
+                )
+            )
             binding.textFieldCurrency.error = null
         }
     }
@@ -128,21 +143,34 @@ class CreateEditGroupFragment @Inject constructor() : Fragment() {
 
     private fun onSubmitClick() {
         binding.buttonSubmit.setOnClickListener {
-            if (isSubmitNotPermitted()) return@setOnClickListener
-            val operation = if(viewModel.toPost) viewModel.postGroupAsync() else viewModel.updateGroupAsync()
+            submit()
+        }
+    }
 
-            enableLoading()
-            lifecycleScope.launch {
-                when (operation.await()) {
-                    is Resource.Success -> {
-                        disableLoading()
-                        findNavController().popBackStack()
+    private fun submit() {
+        if (isSubmitNotPermitted()) return
+        val operation =
+            if (viewModel.toPost) viewModel.postGroupAsync() else viewModel.updateGroupAsync()
+
+        enableLoading()
+        lifecycleScope.launch {
+            when (operation.await()) {
+                is Resource.Success -> {
+                    disableLoading()
+                    findNavController().popBackStack()
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Failure -> {
+                    disableLoading()
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_post_failure,
+                        R.string.text_retry
+                    ) {
+                        submit()
                     }
-                    is Resource.Failure -> {
-                        disableLoading()
-                        requireContext().toast(getString(R.string.text_item_post_failure, "group"))
-                    }
-                    else -> {}
                 }
             }
         }

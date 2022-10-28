@@ -6,9 +6,7 @@ import com.example.trip.models.Availability
 import com.example.trip.models.Participant
 import com.example.trip.models.Resource
 import com.example.trip.usecases.participants.GetParticipantsUseCase
-import com.example.trip.usecases.summary.GetAcceptedAccommodationUseCase
-import com.example.trip.usecases.summary.GetAcceptedAvailabilityUseCase
-import com.example.trip.usecases.summary.PostAcceptedAvailabilityUseCase
+import com.example.trip.usecases.summary.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -19,6 +17,8 @@ class SummaryViewModel @Inject constructor(
     private val getAcceptedAccommodationUseCase: GetAcceptedAccommodationUseCase,
     private val getAcceptedAvailabilityUseCase: GetAcceptedAvailabilityUseCase,
     private val getParticipantsUseCase: GetParticipantsUseCase,
+    private val deleteAcceptedAccommodationUseCase: DeleteAcceptedAccommodationUseCase,
+    private val deleteAcceptedAvailabilityUseCase: DeleteAcceptedAvailabilityUseCase,
     private val postAcceptedAvailabilityUseCase: PostAcceptedAvailabilityUseCase,
     state: SavedStateHandle
 ) : ViewModel() {
@@ -43,6 +43,20 @@ class SummaryViewModel @Inject constructor(
     fun setNewAcceptedAvailabilityAsync(availability: Availability): Deferred<Resource<Unit>> {
         val deferred = viewModelScope.async {
             postAcceptedAvailabilityUseCase(availability)
+        }
+        return deferred
+    }
+
+    fun deleteAcceptedAvailabilityAsync(availability: Availability): Deferred<Resource<Unit>> {
+        val deferred = viewModelScope.async {
+            deleteAcceptedAvailabilityUseCase(availability)
+        }
+        return deferred
+    }
+
+    fun deleteAcceptedAccommodationAsync(accommodation: Accommodation): Deferred<Resource<Unit>> {
+        val deferred = viewModelScope.async {
+            deleteAcceptedAccommodationUseCase(accommodation)
         }
         return deferred
     }

@@ -397,6 +397,16 @@
                         app:tint="@color/primary" />
 
 
+                    <ImageButton
+                        android:id="@+id/button_lock"
+                        style="@style/IconButton.Primary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/selector_lock"
+                        app:layout_constraintEnd_toEndOf="@+id/image_participants"
+                        app:layout_constraintTop_toBottomOf="@+id/list_participants"
+                        app:tint="@color/grey700" />
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/list_participants"
                         android:layout_width="match_parent"
@@ -406,6 +416,7 @@
                         android:layout_marginHorizontal="@dimen/marginM"
                         android:layout_marginTop="@dimen/marginS"
                         android:paddingTop="@dimen/marginS"
+                        android:nestedScrollingEnabled="false"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -418,15 +429,15 @@
                         style="@style/Button.Contained.Gradient"
                         android:layout_width="250dp"
                         android:layout_height="50dp"
-                        android:enabled="false"
                         android:layout_marginHorizontal="@dimen/marginXXXXL"
                         android:layout_marginVertical="@dimen/marginXXL"
+                        android:enabled="false"
                         android:text="Start trip!"
                         android:textAllCaps="true"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/list_participants" />
+                        app:layout_constraintTop_toBottomOf="@+id/button_lock" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -34,6 +34,9 @@ class AccommodationsRepository @Inject constructor() {
         }
     }
 
+    suspend fun deleteAcceptedAccommodation(accommodation: Accommodation): Resource<Unit> {
+        return Resource.Failure()
+    }
 
     fun getAccommodationsList(groupId: Int): Flow<Resource<List<Accommodation>>> {
         return flow {

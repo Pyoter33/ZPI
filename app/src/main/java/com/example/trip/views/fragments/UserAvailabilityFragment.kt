@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.R
+import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.DatesClickListener
 import com.example.trip.adapters.DatesExtendedListAdapter
 import com.example.trip.databinding.FragmentAvailabilityBinding
@@ -158,7 +159,13 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
                     binding.layoutLoading.setVisible()
                 }
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry
+                    ) {
+                        viewModel.refreshData()
+                    }
                     binding.layoutLoading.setGone()
                 }
             }
@@ -205,11 +212,22 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
         )
 
         lifecycleScope.launch {
-            when (viewModel.postAvailability(availability)) { //wait for response from backend
-                is Resource.Failure -> {
-                    requireContext().toast(R.string.text_post_failure)
+            when (viewModel.postAvailability(availability)) {
+                is Resource.Success -> {
+                    viewModel.refreshData()
                 }
-                else -> {}
+                is Resource.Loading -> {
+
+                }
+                is Resource.Failure -> {
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_post_failure,
+                        R.string.text_retry
+                    ) {
+                        addDates(startDate, endDate)
+                    }
+                }
             }
         }
     }

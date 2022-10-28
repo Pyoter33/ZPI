@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.trip.R
+import com.example.trip.activities.MainActivity
 import com.example.trip.databinding.FragmentCreateEditDayPlanBinding
 import com.example.trip.models.DayPlanIcon
 import com.example.trip.models.Resource
@@ -185,31 +186,35 @@ class CreateEditDayPlanFragment @Inject constructor() : Fragment() {
 
     private fun onSubmitClick() {
         binding.buttonSubmit.setOnClickListener {
-            if (isSubmitNotPermitted()) return@setOnClickListener
-            enableLoading()
+            submit()
+        }
+    }
 
-            val operation =
-                if (viewModel.toPost) viewModel.postDayPlanAsync() else viewModel.updateDayPlanAsync()
-            lifecycleScope.launch {
-                when (operation.await()) {
-                    is Resource.Success -> {
-                        disableLoading()
-                        findNavController().popBackStack()
-                    }
-                    is Resource.Failure -> {
-                        disableLoading()
-                        requireContext().toast(
-                            getString(
-                                R.string.text_item_post_failure,
-                                "day plan"
-                            )
-                        )
-                    }
-                    else -> {}
+    private fun submit() {
+        if (isSubmitNotPermitted()) return
+        enableLoading()
 
+        val operation =
+            if (viewModel.toPost) viewModel.postDayPlanAsync() else viewModel.updateDayPlanAsync()
+        lifecycleScope.launch {
+            when (operation.await()) {
+                is Resource.Success -> {
+                    disableLoading()
+                    findNavController().popBackStack()
                 }
-
+                is Resource.Loading -> {}
+                is Resource.Failure -> {
+                    disableLoading()
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_post_failure,
+                        R.string.text_retry
+                    ) {
+                        submit()
+                    }
+                }
             }
+
         }
     }
 

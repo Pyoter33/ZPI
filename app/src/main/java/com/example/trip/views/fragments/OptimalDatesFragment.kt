@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.trip.R
+import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.DatesPagerAdapter
 import com.example.trip.adapters.DatesPagerClickListener
 import com.example.trip.databinding.FragmentOptimalDatesBinding
@@ -15,6 +16,7 @@ import com.example.trip.models.Availability
 import com.example.trip.models.Resource
 import com.example.trip.utils.*
 import com.example.trip.viewmodels.availability.OptimalDatesViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kizitonwose.calendarview.utils.yearMonth
 import dagger.hilt.android.AndroidEntryPoint
@@ -102,7 +104,14 @@ class OptimalDatesFragment @Inject constructor() : Fragment(), DatesPagerClickLi
                     binding.layoutLoading.setVisible()
                 }
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry,
+                        Snackbar.LENGTH_INDEFINITE
+                    ) {
+                        viewModel.refreshData()
+                    }
                     binding.layoutLoading.setGone()
                 }
             }

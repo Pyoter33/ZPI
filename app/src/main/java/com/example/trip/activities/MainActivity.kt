@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -12,6 +14,7 @@ import com.example.trip.R
 import com.example.trip.models.GroupStatus
 import com.example.trip.utils.setAppLocale
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -76,6 +79,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         navController.graph = navGraph
+    }
+
+    fun showSnackbar(view: View, @StringRes messageResId: Int, @StringRes actionResId: Int, length: Int = Snackbar.LENGTH_LONG, action: () -> Unit) {
+        Snackbar.make(view, messageResId, length)
+            .setAction(actionResId) {
+                action()
+            }
+            .setAnchorView(bottomNavigationView)
+            .setBackgroundTint(resources.getColor(R.color.grey400, null))
+            .setTextColor(resources.getColor(R.color.black, null))
+            .setActionTextColor(resources.getColor(R.color.primary, null))
+            .show()
     }
 
 }

@@ -19,7 +19,6 @@ import com.example.trip.models.Group
 import com.example.trip.models.GroupStatus
 import com.example.trip.models.Resource
 import com.example.trip.utils.setSwipeRefreshLayout
-import com.example.trip.utils.toast
 import com.example.trip.viewmodels.groups.GroupsListViewModel
 import com.example.trip.views.dialogs.MenuPopupFactory
 import com.skydoves.balloon.*
@@ -72,7 +71,13 @@ class GroupsListFragment @Inject constructor() : Fragment(), GroupsClickListener
                     binding.layoutRefresh.isRefreshing = true
                 }
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry
+                    ) {
+                        viewModel.refreshData()
+                    }
                     binding.layoutRefresh.isRefreshing = false
                 }
             }

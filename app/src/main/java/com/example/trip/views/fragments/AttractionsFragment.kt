@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.R
+import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.AttractionClickListener
 import com.example.trip.adapters.AttractionListAdapter
 import com.example.trip.databinding.FragmentAttractionsBinding
@@ -86,7 +87,13 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
                     binding.layoutRefresh.isRefreshing = true
                 }
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry
+                    ) {
+                        viewModel.refreshData()
+                    }
                     binding.layoutRefresh.isRefreshing = false
                 }
             }

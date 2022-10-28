@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.trip.R
+import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.ParticipantsAdapter
 import com.example.trip.adapters.ParticipantsClickListener
 import com.example.trip.databinding.FragmentParticipantsBinding
@@ -96,7 +97,13 @@ class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClick
                     binding.layoutRefresh.isRefreshing = true
                 }
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry
+                    ) {
+                        viewModel.refreshData()
+                    }
                     binding.layoutRefresh.isRefreshing = false
                 }
             }

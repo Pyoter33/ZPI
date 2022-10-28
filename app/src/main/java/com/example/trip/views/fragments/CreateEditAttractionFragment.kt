@@ -11,11 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.trip.R
+import com.example.trip.activities.MainActivity
 import com.example.trip.databinding.FragmentCreateEditAttractionBinding
 import com.example.trip.models.Resource
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
-import com.example.trip.utils.toast
 import com.example.trip.viewmodels.dayplan.CreateEditAttractionViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -78,21 +78,31 @@ class CreateEditAttractionFragment @Inject constructor() : Fragment() {
 
     private fun onSubmitClick() {
         binding.buttonSubmit.setOnClickListener {
-            val operation = if(viewModel.toPost) viewModel.postAttractionAsync() else viewModel.updateAttractionAsync()
+           submit()
+        }
+    }
 
-            enableLoading()
-            lifecycleScope.launch {
-                when (operation.await()) {
-                    is Resource.Success -> {
-                        disableLoading()
-                        findNavController().popBackStack(R.id.attractionsFragment, false)
-                    }
-                    is Resource.Failure -> {
-                        disableLoading()
-                        requireContext().toast(getString(R.string.text_item_post_failure, "attraction"))
-                    }
-                    else -> {
-                        //NO-OP
+    private fun submit() {
+        val operation = if(viewModel.toPost) viewModel.postAttractionAsync() else viewModel.updateAttractionAsync()
+
+        enableLoading()
+        lifecycleScope.launch {
+            when (operation.await()) {
+                is Resource.Success -> {
+                    disableLoading()
+                    findNavController().popBackStack(R.id.attractionsFragment, false)
+                }
+                is Resource.Loading -> {
+
+                }
+                is Resource.Failure -> {
+                    disableLoading()
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_post_failure,
+                        R.string.text_retry
+                    ) {
+                        submit()
                     }
                 }
             }

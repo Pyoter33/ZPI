@@ -26,6 +26,10 @@ class AvailabilityRepository @Inject constructor() {
         }
     }
 
+    suspend fun deleteAcceptedAvailability(availability: Availability): Resource<Unit> {
+        return Resource.Failure()
+    }
+
     fun getUserAvailabilities(userId: Int, groupId: Int): Flow<Resource<List<Availability>>> {
         return flow {
             emit(
