@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class AccommodationsRepository @Inject constructor() {
 
-    fun getAcceptedAccommodation(groupId: Int): Flow<Resource<Accommodation?>> {
+    fun getAcceptedAccommodation(groupId: Long): Flow<Resource<Accommodation?>> {
         return flow {
             emit(
                 Resource.Success(
@@ -38,7 +38,7 @@ class AccommodationsRepository @Inject constructor() {
         return Resource.Failure()
     }
 
-    fun getAccommodationsList(groupId: Int): Flow<Resource<List<Accommodation>>> {
+    fun getAccommodationsList(groupId: Long): Flow<Resource<List<Accommodation>>> {
         return flow {
             emit(Resource.Loading())
             emit(
@@ -115,7 +115,7 @@ class AccommodationsRepository @Inject constructor() {
         }.flowOn(Dispatchers.IO)
     }
 
-    suspend fun postAccommodation(groupId: Int, accommodationBase: Pair<String, String?>): Resource<Unit> {
+    suspend fun postAccommodation(groupId: Long, accommodationBase: Pair<String, String?>): Resource<Unit> {
         return Resource.Failure()
     }
 

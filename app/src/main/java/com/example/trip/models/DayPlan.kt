@@ -6,8 +6,8 @@ import java.time.LocalDate
 
 @Parcelize
 data class DayPlan(
-    val id: Int,
-    val groupId: Int,
+    val id: Long,
+    val groupId: Long,
     val name: String,
     val date: LocalDate,
     val attractionsNumber: Int,

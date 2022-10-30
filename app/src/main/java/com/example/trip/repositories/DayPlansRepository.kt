@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class DayPlansRepository @Inject constructor() {
 
-    fun getDayPlans(groupId: Int): Flow<Resource<List<DayPlan>>> {
+    fun getDayPlans(groupId: Long): Flow<Resource<List<DayPlan>>> {
         return flow {
             emit(
                 Resource.Success(
@@ -40,6 +40,10 @@ class DayPlansRepository @Inject constructor() {
     }
 
     suspend fun updateAttraction(attraction: Attraction): Resource<Unit> {
+        return Resource.Failure()
+    }
+
+    suspend fun deleteAttraction(id: Long, groupId: Long): Resource<Unit> {
         return Resource.Failure()
     }
 
@@ -90,7 +94,7 @@ class DayPlansRepository @Inject constructor() {
     }
 
 
-    fun getAttractionsForDayPlan(groupId: Int, dayPlanId: Int): Flow<Resource<List<Attraction>>> {
+    fun getAttractionsForDayPlan(groupId: Long, dayPlanId: Long): Flow<Resource<List<Attraction>>> {
         return flow {
             emit(
                 Resource.Success(

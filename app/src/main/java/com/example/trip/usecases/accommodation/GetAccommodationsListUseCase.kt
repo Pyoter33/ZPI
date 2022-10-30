@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class GetAccommodationsListUseCase @Inject constructor(private val repository: AccommodationsRepository) {
 
-    operator fun invoke(groupId: Int): Flow<Resource<List<Accommodation>>> {
+    operator fun invoke(groupId: Long): Flow<Resource<List<Accommodation>>> {
         return repository.getAccommodationsList(groupId)
     }
 }

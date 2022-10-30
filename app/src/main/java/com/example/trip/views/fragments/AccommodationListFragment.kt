@@ -16,6 +16,7 @@ import com.example.trip.adapters.AccommodationListAdapter
 import com.example.trip.databinding.FragmentAccommodationListBinding
 import com.example.trip.models.Accommodation
 import com.example.trip.models.Resource
+import com.example.trip.utils.getLongFromBundle
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.accommodation.AccommodationsListViewModel
 import com.example.trip.views.dialogs.MenuPopupAcceptFactory
@@ -35,7 +36,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
 
     private lateinit var binding: FragmentAccommodationListBinding
     private val popupMenu by balloon<MenuPopupAcceptFactory>()
-    private var groupId by Delegates.notNull<Int>()
+    private var groupId by Delegates.notNull<Long>()
 
     @Inject
     lateinit var adapter: AccommodationListAdapter
@@ -58,7 +59,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        groupId = requireActivity().intent.extras!!.getInt(GROUP_ID_ARG)
+        groupId = getLongFromBundle(GROUP_ID_ARG)
         setAdapter()
         observeAccommodationsList()
         setOnCheckedChipsListener()
@@ -215,7 +216,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
     }
 
     companion object {
-        private const val PLACEHOLDER_USERID = 1
+        private const val PLACEHOLDER_USERID = 1L
         private const val GROUP_ID_ARG = "groupId"
     }
 

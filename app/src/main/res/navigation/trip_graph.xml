@@ -28,7 +28,7 @@
             android:label="CreateEditDayPlanFragment">
             <argument
                 android:name="groupId"
-                app:argType="integer" />
+                app:argType="long" />
             <argument
                 android:name="dayPlan"
                 android:defaultValue="@null"
@@ -42,7 +42,7 @@
             tools:layout="@layout/fragment_attractions">
             <argument
                 android:name="groupId"
-                app:argType="integer" />
+                app:argType="long" />
             <action
                 android:id="@+id/action_attractionsFragment_to_findAttractionFragment"
                 app:destination="@id/findAttractionFragment" />
@@ -62,10 +62,10 @@
                 app:destination="@id/createEditAttractionFragment" />
             <argument
                 android:name="groupId"
-                app:argType="integer" />
+                app:argType="long" />
             <argument
                 android:name="dayPlanId"
-                app:argType="integer" />
+                app:argType="long" />
         </fragment>
         <fragment
             android:id="@+id/dayPlansFragment"
@@ -77,7 +77,7 @@
                 app:destination="@id/attractionsFragment" />
             <argument
                 android:name="groupId"
-                app:argType="integer" />
+                app:argType="long" />
             <action
                 android:id="@+id/action_dayPlansFragment_to_createEditDayPlanFragment"
                 app:destination="@id/createEditDayPlanFragment" />

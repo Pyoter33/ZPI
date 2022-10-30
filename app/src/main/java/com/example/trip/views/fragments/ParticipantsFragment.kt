@@ -17,7 +17,7 @@ import com.example.trip.databinding.FragmentParticipantsBinding
 import com.example.trip.models.Participant
 import com.example.trip.models.Resource
 import com.example.trip.utils.copyToClipboard
-import com.example.trip.utils.getIntFromBundle
+import com.example.trip.utils.getLongFromBundle
 import com.example.trip.utils.setSwipeRefreshLayout
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.participants.ParticipantsViewModel
@@ -45,7 +45,7 @@ class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClick
 
     private val viewModel: ParticipantsViewModel by viewModels()
 
-    private var groupId by Delegates.notNull<Int>()
+    private var groupId by Delegates.notNull<Long>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,7 +58,7 @@ class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClick
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        groupId = getIntFromBundle("groupId")
+        groupId = getLongFromBundle("groupId")
         setAdapter()
         observeAccommodationPreviews()
         onInviteClick()

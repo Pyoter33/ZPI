@@ -15,7 +15,7 @@ class GetSummaryUseCase @Inject constructor(
     private val participantsRepository: ParticipantsRepository
 ) {
 
-    operator fun invoke(groupId: Int): Flow<Resource<Summary>> {
+    operator fun invoke(groupId: Long): Flow<Resource<Summary>> {
         return combine(
             accommodationsRepository.getAcceptedAccommodation(groupId),
             availabilityRepository.getAcceptedAvailability(groupId),

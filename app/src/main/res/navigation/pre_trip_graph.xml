@@ -35,9 +35,6 @@
             <action
                 android:id="@+id/action_accommodationListFragment_to_createEditAccommodationFragment"
                 app:destination="@id/createEditAccommodationFragment" />
-            <!--        <argument-->
-            <!--            android:name="groupId"-->
-            <!--            app:argType="integer" />-->
         </fragment>
         <fragment
             android:id="@+id/createEditAccommodationFragment"
@@ -46,11 +43,11 @@
             tools:layout="@layout/fragment_create_edit_accommodation">
             <argument
                 android:name="groupId"
-                app:argType="integer" />
+                app:argType="long" />
             <argument
                 android:name="id"
-                android:defaultValue="-1"
-                app:argType="integer" />
+                app:argType="long"
+                android:defaultValue="-1L" />
             <argument
                 android:name="link"
                 android:defaultValue="@null"
@@ -83,7 +80,7 @@
             tools:layout="@layout/fragment_participants_availability">
             <argument
                 android:name="groupId"
-                app:argType="integer" />
+                app:argType="long" />
             <argument
                 android:name="participant"
                 app:argType="com.example.trip.models.Participant" />

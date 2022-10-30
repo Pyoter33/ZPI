@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class AvailabilityRepository @Inject constructor() {
 
-    fun getAcceptedAvailability(groupId: Int): Flow<Resource<Availability?>> {
+    fun getAcceptedAvailability(groupId: Long): Flow<Resource<Availability?>> {
         return flow {
             emit(
                 Resource.Success(
@@ -30,7 +30,7 @@ class AvailabilityRepository @Inject constructor() {
         return Resource.Failure()
     }
 
-    fun getUserAvailabilities(userId: Int, groupId: Int): Flow<Resource<List<Availability>>> {
+    fun getUserAvailabilities(userId: Long, groupId: Long): Flow<Resource<List<Availability>>> {
         return flow {
             emit(
                 Resource.Success(
@@ -67,11 +67,11 @@ class AvailabilityRepository @Inject constructor() {
         return Resource.Success(Unit)
     }
 
-    suspend fun deleteAvailability(id: Int): Resource<Unit> {
+    suspend fun deleteAvailability(id: Long): Resource<Unit> {
         return Resource.Failure()
     }
 
-    fun getOptimalDates(groupId: Int): Flow<Resource<List<Pair<Availability, Int>>>> {
+    fun getOptimalDates(groupId: Long): Flow<Resource<List<Pair<Availability, Int>>>> {
         return flow {
             emit(
                 Resource.Success(

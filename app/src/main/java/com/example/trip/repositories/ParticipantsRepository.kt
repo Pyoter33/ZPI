@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class ParticipantsRepository @Inject constructor() {
 
-    fun getInviteLink(groupId: Int): Flow<Resource<String>> {
+    fun getInviteLink(groupId: Long): Flow<Resource<String>> {
         return flow {
             emit(
                 Resource.Success(
@@ -19,7 +19,7 @@ class ParticipantsRepository @Inject constructor() {
         }
     }
 
-    fun getParticipantsForGroup(groupId: Int): Flow<Resource<List<Participant>>> {
+    fun getParticipantsForGroup(groupId: Long): Flow<Resource<List<Participant>>> {
         return flow {
             emit(
                 Resource.Success(
@@ -46,7 +46,7 @@ class ParticipantsRepository @Inject constructor() {
         return Resource.Failure()
     }
 
-    suspend fun deleteParticipant(groupId: Int, id: Int): Resource<Unit> {
+    suspend fun deleteParticipant(id: Long, groupId: Long): Resource<Unit> {
         return Resource.Failure()
     }
 

@@ -155,7 +155,7 @@
                 android:layout_width="10dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_baseline_line"
+                android:src="@drawable/ic_baseline_line_vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/image_circle"
                 app:layout_constraintStart_toStartOf="@+id/image_circle"

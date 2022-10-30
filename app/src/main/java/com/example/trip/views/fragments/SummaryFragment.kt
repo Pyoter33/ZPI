@@ -41,7 +41,7 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
 
     private val viewModel: SummaryViewModel by viewModels()
 
-    private var groupId by Delegates.notNull<Int>()
+    private var groupId by Delegates.notNull<Long>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +54,7 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        groupId = getIntFromBundle("groupId")
+        groupId = getLongFromBundle("groupId")
         setAdapter()
         observeAccommodation()
         observeAvailability()

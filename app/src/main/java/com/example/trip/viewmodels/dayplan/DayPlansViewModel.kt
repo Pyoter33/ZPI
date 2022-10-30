@@ -8,8 +8,6 @@ import com.example.trip.models.DayPlan
 import com.example.trip.models.Resource
 import com.example.trip.usecases.dayplan.GetDayPlansUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,14 +23,6 @@ class DayPlansViewModel @Inject constructor(private val getDayPlansUseCase: GetD
 
     fun refreshData() {
         getData(_dayPlans)
-    }
-
-    suspend fun waitForDelay(): Resource<Unit> {
-        val job = viewModelScope.async {
-            delay(1000)
-            Resource.Success(Unit)
-        }
-        return job.await()
     }
 
     private fun getData(mutableLiveData: MutableLiveData<Resource<List<DayPlan>>>) {

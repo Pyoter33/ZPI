@@ -54,7 +54,7 @@ class CreateEditAttractionFragment @Inject constructor() : Fragment() {
     }
 
     private fun setupFields() {
-        viewModel.toPost = args.attraction.id == 0
+        viewModel.toPost = args.attraction.id == 0L
         if(!viewModel.toPost) {
             binding.textNewAttraction.text = getString(R.string.text_edit_attraction)
         }

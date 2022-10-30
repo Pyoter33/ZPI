@@ -91,10 +91,10 @@ fun Fragment.setSwipeRefreshLayout(
     }
 }
 
-fun Fragment.getIntFromBundle(
+fun Fragment.getLongFromBundle(
     key: String
-): Int {
-    return requireActivity().intent.getIntExtra(key, -1)
+): Long {
+    return requireActivity().intent.getLongExtra(key, -1L)
 }
 
 fun Fragment.onBackArrowClick(view: View) {
@@ -140,7 +140,7 @@ fun DialogFragment.setDeleteDialog(action: () -> Unit): Dialog {
         .create()
 }
 
-fun AttractionPreview.toAttraction(groupId: Int, dayPlanId: Int) = Attraction(
+fun AttractionPreview.toAttraction(groupId: Long, dayPlanId: Long) = Attraction(
     0,
     groupId,
     dayPlanId,

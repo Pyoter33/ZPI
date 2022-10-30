@@ -26,7 +26,7 @@ class CreateEditDayPlanViewModel @Inject constructor(
     var date: LocalDate? = null
     var icon: Int = R.drawable.ic_baseline_church_24
 
-    val groupId = state.get<Int>("groupId")
+    val groupId = state.get<Long>("groupId")
     val dayPlan = state.get<DayPlan>("dayPlan")
     var toPost = true
 

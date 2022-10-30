@@ -16,7 +16,7 @@ class CreateEditAccommodationViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    val groupId = state.get<Int>("groupId")
+    val groupId = state.get<Long>("groupId")
     var linkText: String? = null
     var descriptionText: String? = null
 

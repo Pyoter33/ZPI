@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetAcceptedAccommodationUseCase @Inject constructor(private val accommodationsRepository: AccommodationsRepository) {
-    operator fun invoke(groupId: Int): Flow<Resource<Accommodation?>> {
+    operator fun invoke(groupId: Long): Flow<Resource<Accommodation?>> {
         return accommodationsRepository.getAcceptedAccommodation(groupId)
     }
 

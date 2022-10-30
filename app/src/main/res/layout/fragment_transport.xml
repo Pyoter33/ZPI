@@ -118,7 +118,7 @@
                                     android:layout_height="20dp"
                                     android:layout_marginVertical="@dimen/marginXS"
                                     android:scaleType="centerCrop"
-                                    android:src="@drawable/ic_baseline_line"
+                                    android:src="@drawable/ic_baseline_line_vertical"
                                     app:layout_constraintBottom_toTopOf="@+id/image_destination"
                                     app:layout_constraintEnd_toEndOf="@+id/image_circle"
                                     app:layout_constraintStart_toStartOf="@+id/image_circle"

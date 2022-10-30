@@ -5,8 +5,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Participant(
-    val id: Int,
-    val groupId: Int,
+    val id: Long,
+    val groupId: Long,
     val fullName: String,
     val email: String,
     val role: UserRole

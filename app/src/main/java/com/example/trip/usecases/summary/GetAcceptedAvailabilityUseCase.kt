@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetAcceptedAvailabilityUseCase @Inject constructor(private val availabilityRepository: AvailabilityRepository) {
-    operator fun invoke(groupId: Int): Flow<Resource<Availability?>> {
+    operator fun invoke(groupId: Long): Flow<Resource<Availability?>> {
         return availabilityRepository.getAcceptedAvailability(groupId)
     }
 

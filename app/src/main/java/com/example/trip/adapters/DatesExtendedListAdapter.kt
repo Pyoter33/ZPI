@@ -43,7 +43,7 @@ class DatesExtendedListAdapter @Inject constructor() :
             setOnDeleteClick(availability.id)
         }
 
-        private fun setOnDeleteClick(id: Int) {
+        private fun setOnDeleteClick(id: Long) {
             binding.buttonDeleteDates.setOnClickListener {
                 datesClickListener.onDeleteClick(id)
             }
@@ -78,5 +78,5 @@ class DatesDiffUtil : DiffUtil.ItemCallback<Availability>() {
 }
 
 interface DatesClickListener {
-    fun onDeleteClick(id: Int)
+    fun onDeleteClick(id: Long)
 }

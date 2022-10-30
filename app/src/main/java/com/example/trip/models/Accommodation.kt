@@ -3,9 +3,9 @@ package com.example.trip.models
 import java.math.BigDecimal
 
 data class Accommodation(
-    val id: Int,
-    val groupId: Int,
-    val creatorId: Int,
+    val id: Long,
+    val groupId: Long,
+    val creatorId: Long,
     val name: String,
     val address: String,
     val description: String?,

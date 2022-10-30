@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class PostGroupUseCase @Inject constructor(private val groupsRepository: GroupsRepository) {
 
-    suspend operator fun invoke(userId: Int, group: Group): Resource<Unit> {
+    suspend operator fun invoke(userId: Long, group: Group): Resource<Unit> {
         return groupsRepository.postGroup(userId, group)
     }
 

@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class GetInviteLinkUseCase @Inject constructor(private val participantsRepository: ParticipantsRepository) {
 
-    operator fun invoke(groupId: Int): Flow<Resource<String>> {
+    operator fun invoke(groupId: Long): Flow<Resource<String>> {
         return participantsRepository.getInviteLink(groupId)
     }
 

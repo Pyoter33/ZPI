@@ -52,7 +52,7 @@ class AccommodationsListViewModel @Inject constructor(private val getAccommodati
         }
     }
 
-    fun filterAccommodations(userId: Int): Resource<List<Accommodation>> {
+    fun filterAccommodations(userId: Long): Resource<List<Accommodation>> {
         return when (accommodationsList.value) {
             is Resource.Success -> {
                 Resource.Success((accommodationsList.value!! as Resource.Success).data.filter {
@@ -74,7 +74,7 @@ class AccommodationsListViewModel @Inject constructor(private val getAccommodati
         }
     }
 
-    fun filterVotedAccommodations(userId: Int): Resource<List<Accommodation>> {
+    fun filterVotedAccommodations(userId: Long): Resource<List<Accommodation>> {
         return when (accommodationsList.value) {
             is Resource.Success -> {
                 Resource.Success((accommodationsList.value!! as Resource.Success).data.filter {

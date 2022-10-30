@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class GetParticipantsUseCase @Inject constructor(private val participantsRepository: ParticipantsRepository) {
 
-    operator fun invoke(groupId: Int): Flow<Resource<List<Participant>>> {
+    operator fun invoke(groupId: Long): Flow<Resource<List<Participant>>> {
         return participantsRepository.getParticipantsForGroup(groupId)
     }
 

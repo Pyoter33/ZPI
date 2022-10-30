@@ -40,7 +40,7 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
 
     private lateinit var dateValidator: DateValidator
 
-    private var groupId by Delegates.notNull<Int>()
+    private var groupId by Delegates.notNull<Long>()
 
     @Inject
     lateinit var adapter: DatesExtendedListAdapter
@@ -56,7 +56,7 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        groupId = getIntFromBundle("groupId")
+        groupId = getLongFromBundle("groupId")
         setAdapter()
         onAddClick()
         onOptimalDatesClick()
@@ -239,7 +239,7 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
         private const val ANIM_DURATION = 600L
     }
 
-    override fun onDeleteClick(id: Int) {
+    override fun onDeleteClick(id: Long) {
 
     }
 

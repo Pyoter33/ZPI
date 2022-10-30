@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class GroupsRepository @Inject constructor() {
 
-    fun getGroups(userId: Int): Flow<Resource<List<Group>>> {
+    fun getGroups(userId: Long): Flow<Resource<List<Group>>> {
         return flow {
             emit(
                 Resource.Success(
@@ -65,7 +65,7 @@ class GroupsRepository @Inject constructor() {
         }
     }
 
-    suspend fun postGroup(userId: Int, group: Group): Resource<Unit> {
+    suspend fun postGroup(userId: Long, group: Group): Resource<Unit> {
         return Resource.Failure()
     }
 

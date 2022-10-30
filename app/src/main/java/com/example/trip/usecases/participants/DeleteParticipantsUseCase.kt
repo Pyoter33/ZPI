@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class DeleteParticipantsUseCase @Inject constructor(private val participantsRepository: ParticipantsRepository) {
 
-    suspend operator fun invoke(groupId: Int, id: Int): Resource<Unit> {
+    suspend operator fun invoke(id: Long, groupId: Long): Resource<Unit> {
         return participantsRepository.deleteParticipant(groupId, id)
     }
 

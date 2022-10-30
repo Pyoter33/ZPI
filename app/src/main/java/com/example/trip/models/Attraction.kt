@@ -5,9 +5,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Attraction(
-    val id: Int,
-    val groupId: Int,
-    val dayPlanId: Int,
+    val id: Long,
+    val groupId: Long,
+    val dayPlanId: Long,
     val name: String,
     val address: String,
     var description: String,
