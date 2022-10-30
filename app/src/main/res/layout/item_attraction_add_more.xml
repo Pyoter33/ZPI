@@ -102,7 +102,7 @@
             <ImageView
                 android:layout_marginTop="@dimen/marginM"
                 android:layout_marginEnd="@dimen/marginS"
-                android:id="@+id/image_circle"
+                android:id="@+id/image_circle_plane"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:scaleType="fitXY"
@@ -111,15 +111,15 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/image_line"
+                android:id="@+id/image_line_plane"
                 android:layout_width="10dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_baseline_line_vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/image_circle"
-                app:layout_constraintStart_toStartOf="@+id/image_circle"
-                app:layout_constraintTop_toBottomOf="@+id/image_circle" />
+                app:layout_constraintEnd_toEndOf="@+id/image_circle_plane"
+                app:layout_constraintStart_toStartOf="@+id/image_circle_plane"
+                app:layout_constraintTop_toBottomOf="@+id/image_circle_plane" />
 
             <com.example.trip.utils.VerticalTextView
                 android:id="@+id/text_distance"
@@ -131,10 +131,10 @@
                 android:gravity="bottom|end"
                 android:textColor="@color/secondary"
                 android:textSize="11sp"
-                app:layout_constraintBottom_toBottomOf="@+id/image_line"
-                app:layout_constraintEnd_toStartOf="@+id/image_line"
+                app:layout_constraintBottom_toBottomOf="@+id/image_line_plane"
+                app:layout_constraintEnd_toStartOf="@+id/image_line_plane"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/image_circle"
+                app:layout_constraintTop_toTopOf="@+id/image_circle_plane"
                 tools:text="0.5 km" />
 
 

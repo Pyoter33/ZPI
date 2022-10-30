@@ -8,26 +8,38 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/image_lufthansa"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="@dimen/marginXL"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/icon_lufthansa"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
         <TextView
             android:id="@+id/flight_id"
             style="@style/TextBigger"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginS"
             android:text="FV3513"
-            android:layout_margin="@dimen/marginL"
             android:textColor="@color/secondary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@+id/image_lufthansa"
+            app:layout_constraintStart_toEndOf="@id/image_lufthansa"
+            app:layout_constraintTop_toTopOf="@+id/image_lufthansa" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/marginS"
             android:layout_marginHorizontal="@dimen/marginL"
+            android:layout_marginTop="@dimen/marginS"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/flight_id">
+            app:layout_constraintTop_toBottomOf="@+id/image_lufthansa">
 
             <TextView
                 android:id="@+id/text_source"
@@ -67,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_baseline_flight_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/text_destination"
+                app:layout_constraintEnd_toStartOf="@+id/text_destination_plane"
                 app:layout_constraintStart_toEndOf="@+id/text_source"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/secondary" />
@@ -86,17 +98,18 @@
 
 
             <FrameLayout
+                android:id="@+id/frameLayout2"
                 android:layout_width="0dp"
                 android:layout_height="2dp"
+                android:layout_marginHorizontal="@dimen/marginM"
                 android:background="@color/secondary_lighter"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginHorizontal="@dimen/marginM"
-                app:layout_constraintEnd_toStartOf="@+id/text_destination"
+                app:layout_constraintEnd_toStartOf="@+id/text_destination_plane"
                 app:layout_constraintStart_toEndOf="@+id/image_flight"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/text_destination"
+                android:id="@+id/text_destination_plane"
                 style="@style/TextBigger"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -112,7 +125,7 @@
                 android:layout_marginHorizontal="@dimen/marginM"
                 android:textColor="@color/grey700"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_destination"
+                app:layout_constraintTop_toBottomOf="@+id/text_destination_plane"
                 tools:text="15:32" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

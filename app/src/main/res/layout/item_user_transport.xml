@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/marginM">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_transportations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:itemCount="3"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/image_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginL"
+            android:src="@drawable/ic_baseline_circle_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/list_transportations"
+            app:tint="@color/primary"
+            />
+
+        <TextView
+            android:id="@+id/text_start"
+            style="@style/TextSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginS"
+            android:ellipsize="end"
+            android:maxLines="2"
+            app:layout_constraintBottom_toBottomOf="@+id/image_start"
+            app:layout_constraintStart_toEndOf="@+id/image_start"
+            app:layout_constraintTop_toTopOf="@+id/image_start"
+            tools:text="Main railway station Wroclaw" />
+
+
+        <ImageView
+            android:id="@+id/image_destination"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginM"
+            android:src="@drawable/ic_baseline_place_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_start"
+            app:tint="@color/primary" />
+
+        <TextView
+            android:id="@+id/text_destination"
+            style="@style/TextSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginS"
+            android:ellipsize="end"
+            android:maxLines="2"
+            app:layout_constraintBottom_toBottomOf="@+id/image_destination"
+            app:layout_constraintStart_toEndOf="@+id/image_destination"
+            app:layout_constraintTop_toTopOf="@+id/image_destination"
+            tools:text="Zamosc city centre" />
+
+        <ImageView
+            android:id="@+id/image_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginM"
+            android:src="@drawable/ic_baseline_access_time_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_destination"
+            app:tint="@color/primary"
+            tools:text="2h 15 min"
+            />
+
+        <TextView
+            android:id="@+id/text_duration"
+            style="@style/TextSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginS"
+            android:ellipsize="end"
+            android:maxLines="2"
+            app:layout_constraintBottom_toBottomOf="@+id/image_duration"
+            app:layout_constraintStart_toEndOf="@+id/image_duration"
+            app:layout_constraintTop_toTopOf="@+id/image_duration"
+            tools:text="2h 15 min" />
+
+        <ImageView
+            android:id="@+id/image_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginM"
+            android:src="@drawable/ic_outline_calendar_month_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_duration"
+            app:tint="@color/primary"
+            tools:text="2h 15 min"
+            />
+
+        <TextView
+            android:id="@+id/text_date"
+            style="@style/TextSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginS"
+            android:ellipsize="end"
+            android:maxLines="2"
+            app:layout_constraintBottom_toBottomOf="@+id/image_date"
+            app:layout_constraintStart_toEndOf="@+id/image_date"
+            app:layout_constraintTop_toTopOf="@+id/image_date"
+            tools:text="20.06.2023" />
+
+
+        <ImageView
+            android:id="@+id/image_meeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginXS"
+            android:layout_marginStart="@dimen/marginM"
+            android:src="@drawable/ic_baseline_subdirectory_arrow_right_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_date"
+            app:tint="@color/grey600" />
+
+        <TextView
+            android:id="@+id/text_meeting"
+            style="@style/TextSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginS"
+            android:layout_marginTop="2dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            app:layout_constraintBottom_toBottomOf="@+id/image_meeting"
+            app:layout_constraintStart_toEndOf="@+id/image_meeting"
+            app:layout_constraintTop_toTopOf="@+id/image_meeting"
+            tools:text="meeting at: 12:35" />
+
+        <ImageView
+            android:id="@+id/image_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginM"
+            android:src="@drawable/ic_baseline_attach_money_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_meeting"
+            app:tint="@color/primary"
+            tools:text="2h 15 min"
+            />
+
+        <TextView
+            android:id="@+id/text_price"
+            style="@style/TextSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginS"
+            android:ellipsize="end"
+            android:maxLines="2"
+            app:layout_constraintBottom_toBottomOf="@+id/image_money"
+            app:layout_constraintStart_toEndOf="@+id/image_money"
+            app:layout_constraintTop_toTopOf="@+id/image_money"
+            tools:text="150 PLN" />
+
+        <TextView
+            android:id="@+id/text_description"
+            style="@style/TextVerySmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginS"
+            android:layout_marginVertical="@dimen/marginL"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_money"
+            tools:text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem." />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
