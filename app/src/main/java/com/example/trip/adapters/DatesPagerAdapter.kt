@@ -34,7 +34,7 @@ class DatesPagerAdapter @Inject constructor() :
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(availability: Pair<Availability, Int>) {
-            val formatter = DateTimeFormatter.ofPattern(("dd.MM.yyyy"))
+            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
             with(binding) {
                 textDates.text = itemView.resources.getString(

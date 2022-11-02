@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="cornerSize" type="dimen">20dp</item>
+    <item name="cornerSizeHalf" type="dimen">10dp</item>
     <item name="textVerySmall" type="dimen">12sp</item>
     <item name="textSmall" type="dimen">14sp</item>
     <item name="textMedium" type="dimen">16sp</item>

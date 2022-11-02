@@ -19,10 +19,6 @@
         android:id="@+id/availabilityPager"
         android:name="com.example.trip.views.fragments.AvailabilityPager"
         android:label="AvailabilityPager" />
-    <fragment
-        android:id="@+id/summaryFragment"
-        android:name="com.example.trip.views.fragments.SummaryFragment"
-        android:label="SummaryFragment" />
     <navigation
         android:id="@+id/accommodation"
         android:label="accommodation"
@@ -35,6 +31,9 @@
             <action
                 android:id="@+id/action_accommodationListFragment_to_createEditAccommodationFragment"
                 app:destination="@id/createEditAccommodationFragment" />
+            <action
+                android:id="@+id/action_accommodationListFragment_to_transportFragment"
+                app:destination="@id/transportFragment" />
         </fragment>
         <fragment
             android:id="@+id/createEditAccommodationFragment"
@@ -58,6 +57,23 @@
                 android:defaultValue="@null"
                 app:argType="string"
                 app:nullable="true" />
+        </fragment>
+        <fragment
+            android:id="@+id/transportFragment"
+            android:name="com.example.trip.views.fragments.TransportFragment"
+            android:label="TransportFragment" >
+            <argument
+                android:name="groupId"
+                app:argType="long" />
+            <argument
+                android:name="accommodationId"
+                app:argType="long" />
+            <argument
+                android:name="destination"
+                app:argType="string" />
+            <argument
+                android:name="startCity"
+                app:argType="string" />
         </fragment>
     </navigation>
     <navigation
@@ -84,6 +100,36 @@
             <argument
                 android:name="participant"
                 app:argType="com.example.trip.models.Participant" />
+        </fragment>
+    </navigation>
+    <navigation
+        android:id="@+id/summary"
+        android:label="summary"
+        app:startDestination="@id/summaryFragment">
+        <fragment
+            android:id="@+id/fragmentTransport2"
+            android:name="com.example.trip.views.fragments.TransportFragment"
+            android:label="fragment_transport">
+            <argument
+                android:name="groupId"
+                app:argType="long" />
+            <argument
+                android:name="accommodationId"
+                app:argType="long" />
+            <argument
+                android:name="destination"
+                app:argType="string" />
+            <argument
+                android:name="startCity"
+                app:argType="string" />
+        </fragment>
+        <fragment
+            android:id="@+id/summaryFragment"
+            android:name="com.example.trip.views.fragments.SummaryFragment"
+            android:label="SummaryFragment">
+            <action
+                android:id="@+id/action_summaryFragment_to_fragmentTransport2"
+                app:destination="@id/fragmentTransport2" />
         </fragment>
     </navigation>
 </navigation>

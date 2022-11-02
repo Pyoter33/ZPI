@@ -6,6 +6,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/card"
         style="@style/CardWhite"
+        app:cardCornerRadius="@dimen/cornerSizeHalf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/marginM"
@@ -31,7 +32,7 @@
                     tools:text="Trip to Barcelona" />
 
             <TextView
-                android:id="@+id/text_start_location_plane"
+                android:id="@+id/text_start_location"
                 style="@style/TextMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,7 +55,7 @@
                 android:layout_marginBottom="@dimen/marginM"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_start_location_plane"
+                app:layout_constraintTop_toBottomOf="@+id/text_start_location"
                 tools:text="planning" />
 
             <TextView

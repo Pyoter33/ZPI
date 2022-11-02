@@ -44,7 +44,7 @@
                     style="@style/CardWhite"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/marginL"
+                    android:layout_marginHorizontal="@dimen/marginM"
                     android:layout_marginVertical="@dimen/marginXL"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

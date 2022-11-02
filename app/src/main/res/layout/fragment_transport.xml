@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".views.fragments.CreateEditAccommodationFragment">
+    tools:context=".views.fragments.TransportFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
             style="@style/CardWhite"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginHorizontal="@dimen/marginL"
+            android:layout_marginHorizontal="@dimen/marginM"
             android:layout_marginVertical="@dimen/marginL"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,6 +41,7 @@
             app:layout_constraintTop_toBottomOf="@+id/button_back">
 
             <ScrollView
+                android:id="@+id/scrollView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -50,7 +51,7 @@
 
                     <TextView
                         android:id="@+id/text_header"
-                        style="@style/TextBigger"
+                        style="@style/TextMega"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/marginL"
@@ -61,7 +62,7 @@
 
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/layout_route_car"
+                        android:id="@+id/layout_route"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/marginM"
@@ -69,7 +70,7 @@
                         app:layout_constraintTop_toBottomOf="@id/text_header">
 
                         <ImageView
-                            android:id="@+id/image_circle_car"
+                            android:id="@+id/image_circle"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_marginTop="@dimen/marginM"
@@ -81,21 +82,21 @@
                             app:tint="@color/primary" />
 
                         <ImageView
-                            android:id="@+id/image_line_car"
+                            android:id="@+id/image_line"
                             android:layout_width="0dp"
                             android:layout_height="20dp"
                             android:layout_marginVertical="@dimen/marginXS"
                             android:scaleType="centerCrop"
                             android:src="@drawable/ic_baseline_line_vertical"
-                            app:layout_constraintBottom_toTopOf="@+id/image_destination_car"
-                            app:layout_constraintEnd_toEndOf="@+id/image_circle_car"
-                            app:layout_constraintStart_toStartOf="@+id/image_circle_car"
-                            app:layout_constraintTop_toBottomOf="@+id/image_circle_car"
+                            app:layout_constraintBottom_toTopOf="@+id/image_destination"
+                            app:layout_constraintEnd_toEndOf="@+id/image_circle"
+                            app:layout_constraintStart_toStartOf="@+id/image_circle"
+                            app:layout_constraintTop_toBottomOf="@+id/image_circle"
                             app:tint="@color/primary" />
 
 
                         <ImageView
-                            android:id="@+id/image_destination_car"
+                            android:id="@+id/image_destination"
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:scaleType="fitXY"
@@ -110,45 +111,47 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
-                        android:id="@+id/text_start_location_car"
+                        android:id="@+id/text_start_location"
                         style="@style/TextSmall"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/marginS"
+                        android:layout_marginEnd="@dimen/marginL"
                         android:layout_marginTop="@dimen/marginM"
                         android:ellipsize="end"
                         android:maxLines="2"
-                        app:layout_constraintStart_toEndOf="@+id/layout_route_car"
-                        app:layout_constraintTop_toTopOf="@+id/layout_route_car"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/layout_route"
+                        app:layout_constraintTop_toTopOf="@+id/layout_route"
                         tools:text="Start location" />
 
 
                     <TextView
-                        android:id="@+id/text_destination_car"
+                        android:id="@+id/text_destination"
                         style="@style/TextSmall"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/marginS"
+                        android:layout_marginEnd="@dimen/marginL"
                         android:layout_marginTop="@dimen/marginXXXXL"
                         android:ellipsize="end"
                         android:maxLines="2"
-                        app:layout_constraintStart_toEndOf="@+id/layout_route_car"
-                        app:layout_constraintTop_toBottomOf="@+id/text_start_location_car"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/layout_route"
+                        app:layout_constraintTop_toBottomOf="@+id/text_start_location"
                         tools:text="Destination" />
 
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/card_other"
-                        style="@style/CardLight"
+                        style="@style/CardWhite"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/marginM"
                         android:layout_marginTop="@dimen/marginL"
-                        app:cardCornerRadius="40dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/text_destination_car">
+                        app:layout_constraintTop_toBottomOf="@+id/text_destination">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -157,10 +160,9 @@
 
                             <androidx.cardview.widget.CardView
                                 android:id="@+id/card_plane"
-                                style="@style/CardLight"
+                                style="@style/CardWhite"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:cardCornerRadius="40dp"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent">
@@ -171,15 +173,13 @@
 
                                     <androidx.cardview.widget.CardView
                                         android:id="@+id/card_car"
-                                        style="@style/CardLight"
+                                        style="@style/CardWhite"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        app:cardCornerRadius="40dp"
                                         app:cardElevation="3dp"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toTopOf="parent">
-
 
                                         <androidx.constraintlayout.widget.ConstraintLayout
                                             android:layout_width="match_parent"
@@ -187,39 +187,45 @@
 
                                             <TextView
                                                 android:id="@+id/text_car"
-                                                style="@style/TextBig"
+                                                style="@style/TextBigger"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_margin="@dimen/marginXL"
+                                                android:layout_margin="@dimen/marginM"
                                                 android:text="Car"
                                                 android:textColor="@color/primary"
                                                 app:layout_constraintStart_toStartOf="parent"
                                                 app:layout_constraintTop_toTopOf="parent" />
 
-                                            <com.google.android.gms.maps.MapView
-                                                android:id="@+id/mapView"
+                                            <androidx.cardview.widget.CardView
+                                                android:id="@+id/card_map"
+                                                style="@style/CardWhite"
                                                 android:layout_width="0dp"
-                                                android:layout_height="300dp"
-                                                android:layout_marginHorizontal="@dimen/marginXL"
-                                                android:layout_marginTop="@dimen/marginS"
-                                                android:layout_marginBottom="@dimen/marginXXXL"
-                                                app:layout_constraintBottom_toBottomOf="parent"
+                                                android:layout_height="400dp"
+                                                android:layout_marginHorizontal="@dimen/marginM"
+                                                android:layout_marginTop="@dimen/marginL"
+                                                app:cardCornerRadius="10dp"
+                                                app:cardElevation="3dp"
                                                 app:layout_constraintEnd_toEndOf="parent"
                                                 app:layout_constraintStart_toStartOf="parent"
-                                                app:layout_constraintTop_toBottomOf="@+id/image_duration_car" />
+                                                app:layout_constraintTop_toBottomOf="@+id/text_car">
 
+                                                <fragment
+                                                    android:id="@+id/mapView"
+                                                    android:name="com.example.trip.utils.SupportMapFragmentWrapper"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="match_parent" />
+                                            </androidx.cardview.widget.CardView>
 
                                             <ImageView
                                                 android:id="@+id/image_distance"
                                                 android:layout_width="24dp"
                                                 android:layout_height="24dp"
                                                 android:layout_marginStart="@dimen/marginXL"
-                                                android:layout_marginTop="@dimen/marginS"
+                                                android:layout_marginTop="@dimen/marginXL"
                                                 android:scaleType="fitXY"
                                                 android:src="@drawable/ic_baseline_fork_right_24"
-                                                app:layout_constraintHorizontal_bias="0.0"
                                                 app:layout_constraintStart_toStartOf="parent"
-                                                app:layout_constraintTop_toBottomOf="@id/text_car"
+                                                app:layout_constraintTop_toBottomOf="@+id/card_map"
                                                 app:tint="@color/primary" />
 
                                             <TextView
@@ -259,6 +265,18 @@
                                                 app:layout_constraintTop_toTopOf="@+id/image_duration_car"
                                                 tools:text="2h 15 min" />
 
+                                            <Button
+                                                android:id="@+id/button_see_in_maps"
+                                                style="@style/Button.Outlined"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_margin="@dimen/marginXL"
+                                                android:text="@string/text_see_in_maps"
+                                                app:icon="@drawable/ic_baseline_map_24"
+                                                app:layout_constraintBottom_toBottomOf="parent"
+                                                app:layout_constraintEnd_toEndOf="parent"
+                                                app:layout_constraintTop_toBottomOf="@+id/card_map" />
+
 
                                         </androidx.constraintlayout.widget.ConstraintLayout>
                                     </androidx.cardview.widget.CardView>
@@ -266,10 +284,11 @@
 
                                     <TextView
                                         android:id="@+id/text_plane"
-                                        style="@style/TextBig"
+                                        style="@style/TextBigger"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_margin="@dimen/marginXL"
+                                        android:layout_marginHorizontal="@dimen/marginM"
+                                        android:layout_marginTop="@dimen/marginXL"
                                         android:text="Plane"
                                         android:textColor="@color/secondary"
                                         app:layout_constraintStart_toStartOf="parent"
@@ -279,8 +298,7 @@
                                         android:id="@+id/pager_flights"
                                         android:layout_width="match_parent"
                                         android:layout_height="100dp"
-                                        android:layout_marginHorizontal="@dimen/marginM"
-                                        android:layout_marginTop="@dimen/marginXXXL"
+                                        android:layout_marginTop="@dimen/marginS"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toBottomOf="@id/text_plane">
@@ -292,7 +310,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="10dp"
                                         android:layout_marginHorizontal="@dimen/marginL"
-                                        android:backgroundTint="@color/grey100"
+                                        android:layout_marginTop="@dimen/marginM"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
                                         app:layout_constraintTop_toBottomOf="@+id/pager_flights"
@@ -332,7 +350,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginStart="@dimen/marginXL"
-                                        android:layout_marginTop="@dimen/marginXS"
+                                        android:layout_marginTop="@dimen/marginM"
                                         android:scaleType="fitXY"
                                         android:src="@drawable/ic_baseline_access_time_24"
                                         app:layout_constraintStart_toStartOf="parent"
@@ -353,7 +371,7 @@
                                         app:layout_constraintTop_toTopOf="@+id/image_duration_plane" />
 
                                     <TextView
-                                        android:id="@+id/text_duration_to_air_port"
+                                        android:id="@+id/text_duration_to_airport"
                                         style="@style/TextSmall"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
@@ -427,14 +445,14 @@
                                     <Button
                                         android:id="@+id/button_link"
                                         style="@style/Button.Outlined"
-                                        android:textColor="@color/secondary"
-                                        app:iconTint="@color/secondary"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginHorizontal="@dimen/marginXXL"
                                         android:layout_marginVertical="@dimen/marginXL"
                                         android:text="@string/text_link"
+                                        android:textColor="@color/secondary"
                                         app:icon="@drawable/ic_baseline_link_24"
+                                        app:iconTint="@color/secondary"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintTop_toBottomOf="@+id/text_label_duration_total"
@@ -445,10 +463,11 @@
 
                             <TextView
                                 android:id="@+id/text_other"
-                                style="@style/TextBig"
+                                style="@style/TextBigger"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/marginXL"
+                                android:layout_marginHorizontal="@dimen/marginM"
+                                android:layout_marginTop="@dimen/marginXL"
                                 android:text="Other"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/card_plane" />
@@ -471,16 +490,14 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/marginXL"
-                                android:layout_marginVertical="@dimen/marginL"
+                                android:layout_marginVertical="@dimen/marginS"
                                 android:nestedScrollingEnabled="false"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/button_add"
                                 tools:itemCount="3"
                                 tools:listitem="@layout/item_user_transport" />
-
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
@@ -495,9 +512,10 @@
             android:id="@+id/layout_loading"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/black_transparent"
+            android:background="@color/white"
             android:elevation="@dimen/marginS"
-            android:visibility="gone">
+            tools:visibility="gone"
+            >
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/circularProgressIndicator"

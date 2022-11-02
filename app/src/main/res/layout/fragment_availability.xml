@@ -38,7 +38,7 @@
                 style="@style/CardWhite"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginHorizontal="@dimen/marginL"
+                android:layout_marginHorizontal="@dimen/marginM"
                 android:layout_marginTop="@dimen/marginL"
                 android:layout_marginBottom="@dimen/marginM"
                 app:layout_constraintBottom_toTopOf="@+id/button_switch_to_optimal_dates"

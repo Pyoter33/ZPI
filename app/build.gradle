@@ -4,6 +4,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-parcelize'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 apply plugin: 'kotlin-kapt'
@@ -54,6 +55,8 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.annotation:annotation:1.4.0'
+    implementation 'com.google.maps:google-maps-services:2.1.0'
+    implementation 'org.slf4j:slf4j-simple:1.7.25'
 
     //tests
     testImplementation 'junit:junit:4.13.2'
@@ -73,12 +76,15 @@ dependencies {
 
     //retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
 
     //ui
     implementation "com.github.skydoves:powermenu:2.2.0"
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation 'com.github.kizitonwose:CalendarView:1.1.0'
     implementation "com.github.skydoves:balloon:1.4.7"
+    implementation 'com.google.maps.android:maps-utils-ktx:3.4.0'
 }
 
 kapt {

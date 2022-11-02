@@ -8,30 +8,42 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/marginM">
 
+
+        <ImageView
+            android:id="@+id/image_transportations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_commute_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/primary" />
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_transportations"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginXS"
             android:orientation="horizontal"
-            tools:itemCount="3"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="@+id/image_transportations"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/image_transportations"
+            app:layout_constraintTop_toTopOf="@+id/image_transportations"
+            tools:itemCount="3" />
 
         <ImageView
             android:id="@+id/image_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/marginL"
+            android:layout_marginTop="@dimen/marginM"
             android:src="@drawable/ic_baseline_circle_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/list_transportations"
-            app:tint="@color/primary"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/image_transportations"
+            app:tint="@color/primary" />
 
         <TextView
-            android:id="@+id/text_start"
+            android:id="@+id/text_source"
             style="@style/TextSmall"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

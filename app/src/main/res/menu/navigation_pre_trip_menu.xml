@@ -15,7 +15,7 @@
         android:icon="@drawable/ic_outline_people_alt_24"
         android:title="@string/text_participants"/>
     <item
-        android:id="@+id/summaryFragment"
+        android:id="@+id/summary"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_checklist_24"
         android:title="@string/text_summary"/>

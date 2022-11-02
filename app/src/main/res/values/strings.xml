@@ -33,6 +33,7 @@
     <string name="text_finances">Finances</string>
     <string name="text_dash">-</string>
     <string name="format_dash">%1$s - %2$s</string>
+    <string name="format_time">%1$dh %2$dmin</string>
     <string name="text_my_dates">My dates</string>
     <string name="format_date">%1$d.%2$d.%3$d</string>
     <string name="text_dates_overlapping">Chosen range overlaps existing range. Choose different dates!</string>
@@ -93,4 +94,5 @@
     <string name="text_summary">Summary</string>
     <string name="text_no_accommodation_chosen">No accommodation chosen yet!</string>
     <string name="text_retry">Retry</string>
+    <string name="text_meeting_at">meeting at: %1$s</string>
 </resources>

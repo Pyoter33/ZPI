@@ -8,7 +8,7 @@
         style="@style/CardWhite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="30dp"
+        app:cardCornerRadius="@dimen/cornerSizeHalf"
         android:layout_marginHorizontal="@dimen/marginM"
         android:layout_marginVertical="@dimen/marginM">
 
@@ -24,6 +24,7 @@
                 style="@style/CardLight"
                 android:layout_width="100dp"
                 android:layout_height="0dp"
+                app:cardCornerRadius="@dimen/cornerSizeHalf"
                 app:layout_constraintBottom_toTopOf="@+id/button_expand"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

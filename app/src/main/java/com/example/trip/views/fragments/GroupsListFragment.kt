@@ -97,6 +97,7 @@ class GroupsListFragment @Inject constructor() : Fragment(), GroupsClickListener
         when (group.groupStatus) {
             GroupStatus.PLANNING -> {
                 activityIntent.putExtra("status", GroupStatus.PLANNING.code)
+                activityIntent.putExtra("startCity", group.startCity)
             }
             GroupStatus.ONGOING -> {
                 activityIntent.putExtra("status", GroupStatus.ONGOING.code)

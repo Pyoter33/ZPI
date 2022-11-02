@@ -23,10 +23,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.trip.R
 import com.example.trip.models.Attraction
 import com.example.trip.models.AttractionPreview
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.ZoneOffset
+import java.time.*
 import java.util.*
 
 fun View.setVisible() {
@@ -97,6 +94,12 @@ fun Fragment.getLongFromBundle(
     return requireActivity().intent.getLongExtra(key, -1L)
 }
 
+fun Fragment.getStringFromBundle(
+    key: String
+): String {
+    return requireActivity().intent.getStringExtra(key) ?: "?"
+}
+
 fun Fragment.onBackArrowClick(view: View) {
     view.setOnClickListener {
         findNavController().popBackStack()
@@ -151,3 +154,7 @@ fun AttractionPreview.toAttraction(groupId: Long, dayPlanId: Long) = Attraction(
     link,
     null
 )
+
+fun Duration.toStringTime(): String {
+    return "${toHours()}h ${toMinutesPart()}min"
+}

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.ParticipantsSummaryAdapter
@@ -35,6 +36,8 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
 
     private lateinit var accommodationDialog: DeleteAcceptedAccommodationDialog
     private lateinit var availabilityDialog: DeleteAcceptedAvailabilityDialog
+    private lateinit var startCity: String
+
 
     @Inject
     lateinit var adapter: ParticipantsSummaryAdapter
@@ -54,7 +57,9 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        groupId = getLongFromBundle("groupId")
+        groupId = getLongFromBundle(GROUP_ID_ARG)
+        startCity = getStringFromBundle(START_CITY_ARG)
+
         setAdapter()
         observeAccommodation()
         observeAvailability()
@@ -217,7 +222,7 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
             }
 
             buttonTransport.setOnClickListener {
-
+                findNavController().navigate(SummaryFragmentDirections.actionSummaryFragmentToFragmentTransport2(groupId, accommodation.id, accommodation.address, startCity))
             }
         }
     }
@@ -300,6 +305,11 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
                 }
             }
         }
+    }
+
+    companion object {
+        private const val GROUP_ID_ARG = "groupId"
+        private const val START_CITY_ARG = "startCity"
     }
 
 }

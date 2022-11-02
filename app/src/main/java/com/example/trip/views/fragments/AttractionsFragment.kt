@@ -65,7 +65,7 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
     }
 
     private fun setupArgs() {
-        val formatter = DateTimeFormatter.ofPattern(("dd.MM.yyyy"))
+        val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         binding.textPlanFor.text = "${args.dayPlan.name} for ${args.dayPlan.date.format(formatter)}" //
     }
 

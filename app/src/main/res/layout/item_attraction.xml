@@ -15,6 +15,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/marginL"
+            app:cardCornerRadius="@dimen/cornerSizeHalf"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginVertical="@dimen/marginS"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,6 +32,7 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView_image"
                     style="@style/CardLight"
+                    app:cardCornerRadius="@dimen/cornerSizeHalf"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     app:cardElevation="4dp"
@@ -151,7 +153,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/image_line_plane"
+                android:id="@+id/image_line"
                 android:layout_width="10dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
@@ -171,8 +173,8 @@
                 android:gravity="bottom|end"
                 android:textColor="@color/secondary"
                 android:textSize="11sp"
-                app:layout_constraintBottom_toBottomOf="@+id/image_line_plane"
-                app:layout_constraintEnd_toStartOf="@+id/image_line_plane"
+                app:layout_constraintBottom_toBottomOf="@+id/image_line"
+                app:layout_constraintEnd_toStartOf="@+id/image_line"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/image_circle_plane"
                 tools:text="0.5 km" />

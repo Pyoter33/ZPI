@@ -17,6 +17,7 @@ import com.example.trip.databinding.FragmentAccommodationListBinding
 import com.example.trip.models.Accommodation
 import com.example.trip.models.Resource
 import com.example.trip.utils.getLongFromBundle
+import com.example.trip.utils.getStringFromBundle
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.accommodation.AccommodationsListViewModel
 import com.example.trip.views.dialogs.MenuPopupAcceptFactory
@@ -36,7 +37,10 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
 
     private lateinit var binding: FragmentAccommodationListBinding
     private val popupMenu by balloon<MenuPopupAcceptFactory>()
+
     private var groupId by Delegates.notNull<Long>()
+
+    private lateinit var startCity: String
 
     @Inject
     lateinit var adapter: AccommodationListAdapter
@@ -60,6 +64,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
         super.onViewCreated(view, savedInstanceState)
 
         groupId = getLongFromBundle(GROUP_ID_ARG)
+        startCity = getStringFromBundle(START_CITY_ARG)
         setAdapter()
         observeAccommodationsList()
         setOnCheckedChipsListener()
@@ -177,12 +182,12 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
         adapter.notifyItemChanged(position)
     }
 
-    override fun onLinkClick() {
+    override fun onLinkClick(accommodation: Accommodation) {
 
     }
 
-    override fun onTransportClick() {
-
+    override fun onTransportClick(accommodation: Accommodation) {
+        findNavController().navigate(AccommodationListFragmentDirections.actionAccommodationListFragmentToTransportFragment(accommodation.groupId, accommodation.id, accommodation.address, startCity))
     }
 
     override fun onMenuAcceptClick(accommodation: Accommodation) {
@@ -218,6 +223,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
     companion object {
         private const val PLACEHOLDER_USERID = 1L
         private const val GROUP_ID_ARG = "groupId"
+        private const val START_CITY_ARG = "startCity"
     }
 
 }
