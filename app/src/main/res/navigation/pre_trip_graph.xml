@@ -74,6 +74,25 @@
             <argument
                 android:name="startCity"
                 app:argType="string" />
+            <action
+                android:id="@+id/action_transportFragment_to_createEditTransportFragment"
+                app:destination="@id/createEditTransportFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/createEditTransportFragment"
+            android:name="com.example.trip.views.fragments.CreateEditTransportFragment"
+            android:label="CreateEditTransportFragment" >
+            <argument
+                android:name="groupId"
+                app:argType="long" />
+            <argument
+                android:name="accommodationId"
+                app:argType="long" />
+            <argument
+                android:name="userTransport"
+                app:argType="com.example.trip.models.UserTransport"
+                app:nullable="true"
+                android:defaultValue="@null" />
         </fragment>
     </navigation>
     <navigation
@@ -122,6 +141,9 @@
             <argument
                 android:name="startCity"
                 app:argType="string" />
+            <action
+                android:id="@+id/action_fragmentTransport2_to_createEditTransportFragment2"
+                app:destination="@id/createEditTransportFragment2" />
         </fragment>
         <fragment
             android:id="@+id/summaryFragment"
@@ -131,5 +153,22 @@
                 android:id="@+id/action_summaryFragment_to_fragmentTransport2"
                 app:destination="@id/fragmentTransport2" />
         </fragment>
+        <fragment
+            android:id="@+id/createEditTransportFragment2"
+            android:name="com.example.trip.views.fragments.CreateEditTransportFragment"
+            android:label="CreateEditTransportFragment" >
+            <argument
+                android:name="groupId"
+                app:argType="long" />
+            <argument
+                android:name="accommodationId"
+                app:argType="long" />
+            <argument
+                android:name="userTransport"
+                app:argType="com.example.trip.models.UserTransport"
+                app:nullable="true"
+                android:defaultValue="@null" />
+        </fragment>
+
     </navigation>
 </navigation>

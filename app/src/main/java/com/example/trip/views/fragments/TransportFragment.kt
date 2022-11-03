@@ -150,7 +150,8 @@ class TransportFragment @Inject constructor() : Fragment(), OnMapReadyCallback,
                     (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
-                        R.string.text_retry
+                        R.string.text_retry,
+                        Snackbar.LENGTH_INDEFINITE
                     ) {
                         viewModel.refreshData()
                     }

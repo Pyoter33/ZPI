@@ -190,7 +190,8 @@
                                                 style="@style/TextBigger"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_margin="@dimen/marginM"
+                                                android:layout_marginTop="@dimen/marginXL"
+                                                android:layout_marginHorizontal="@dimen/marginM"
                                                 android:text="Car"
                                                 android:textColor="@color/primary"
                                                 app:layout_constraintStart_toStartOf="parent"
@@ -281,14 +282,13 @@
                                         </androidx.constraintlayout.widget.ConstraintLayout>
                                     </androidx.cardview.widget.CardView>
 
-
                                     <TextView
                                         android:id="@+id/text_plane"
                                         style="@style/TextBigger"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginHorizontal="@dimen/marginM"
-                                        android:layout_marginTop="@dimen/marginXL"
+                                        android:layout_marginTop="@dimen/marginXXXL"
                                         android:text="Plane"
                                         android:textColor="@color/secondary"
                                         app:layout_constraintStart_toStartOf="parent"
@@ -467,7 +467,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/marginM"
-                                android:layout_marginTop="@dimen/marginXL"
+                                android:layout_marginTop="@dimen/marginXXXL"
                                 android:text="Other"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@id/card_plane" />

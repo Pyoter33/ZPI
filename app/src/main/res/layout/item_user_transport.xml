@@ -8,7 +8,6 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/marginM">
 
-
         <ImageView
             android:id="@+id/image_transportations"
             android:layout_width="wrap_content"
