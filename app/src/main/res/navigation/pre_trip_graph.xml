@@ -100,15 +100,10 @@
                 app:argType="long"
                 android:defaultValue="-1L" />
             <argument
-                android:name="link"
-                android:defaultValue="@null"
-                app:argType="string"
-                app:nullable="true" />
-            <argument
-                android:name="description"
-                android:defaultValue="@null"
-                app:argType="string"
-                app:nullable="true" />
+                android:name="accommodation"
+                app:argType="com.example.trip.models.Accommodation"
+                app:nullable="true"
+                android:defaultValue="@null" />
         </fragment>
     </navigation>
     <navigation

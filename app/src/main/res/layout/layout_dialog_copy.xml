@@ -15,14 +15,13 @@
         android:layout_marginHorizontal="@dimen/marginXL"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:startIconDrawable="@drawable/ic_baseline_link_24"
-        app:startIconTint="@color/primary">
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.MaterialAutoCompleteTextView
             android:id="@+id/editText_link"
             android:textSize="@dimen/textMedium"
             android:paddingHorizontal="@dimen/marginXS"
+            android:paddingVertical="@dimen/marginXL"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/marginXS"
@@ -39,7 +38,8 @@
         style="@style/Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="COPY"
+        android:textAllCaps="true"
+        android:text="@string/text_copy"
         android:layout_marginTop="@dimen/marginS"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

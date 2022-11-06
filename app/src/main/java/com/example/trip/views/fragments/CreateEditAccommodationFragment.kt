@@ -45,6 +45,7 @@ class CreateEditAccommodationFragment @Inject constructor() : Fragment() {
         setupArgs()
         setupOnDescriptionTextChangeListener()
         setupOnLinkTextChangeListener()
+        setupOnPriceTextChangeListener()
         onSubmitClick()
         onBackArrowClick()
     }
@@ -56,14 +57,15 @@ class CreateEditAccommodationFragment @Inject constructor() : Fragment() {
     }
 
     private fun setupArgs() {
-        args.link?.let {
-            binding.textFieldLink.editText!!.setText(it)
-            viewModel.linkText = it
+        args.accommodation?.let {
+            binding.textFieldLink.editText!!.setText(it.sourceUrl)
+            binding.textFieldPrice.editText!!.setText(it.price.toString())
+            binding.textFieldDescription.editText!!.setText(it.description)
+            viewModel.descriptionText = it.description
+            viewModel.linkText = it.sourceUrl
+            viewModel.price = it.price.toString()
         }
-        args.description?.let {
-            binding.textFieldDescription.editText!!.setText(it)
-            viewModel.descriptionText = it
-        }
+
     }
 
     private fun setupOnLinkTextChangeListener() {

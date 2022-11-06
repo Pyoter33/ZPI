@@ -107,4 +107,8 @@
     <string name="text_edit_transport">Edit transport</string>
     <string name="text_minimal_number_of_participants">Minimal number of participants</string>
     <string name="text_minimal_duration">Minimal duration</string>
+    <string name="text_copy">Copy</string>
+    <string name="text_expenses">Expenses</string>
+    <string name="text_my_expenses">My expenses</string>
+    <string name="text_my_contributions">My contributions</string>
 </resources>

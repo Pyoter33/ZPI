@@ -141,6 +141,12 @@ class CreateEditDayPlanFragment @Inject constructor() : Fragment() {
 
             override fun afterTextChanged(editable: Editable?) {
                 viewModel.name = editable?.toString()
+                binding.textFieldName.startIconDrawable?.setTint(
+                    resources.getColor(
+                        R.color.primary,
+                        null
+                    )
+                )
                 binding.textFieldName.error = null
             }
         })
@@ -162,7 +168,7 @@ class CreateEditDayPlanFragment @Inject constructor() : Fragment() {
             viewModel.date = date
             binding.editTextDate.setText(date.format(formatter))
             binding.textFieldDate.error = null
-            binding.textFieldDate.endIconDrawable?.setTint(
+            binding.textFieldDate.startIconDrawable?.setTint(
                 resources.getColor(
                     R.color.primary,
                     null
@@ -224,11 +230,12 @@ class CreateEditDayPlanFragment @Inject constructor() : Fragment() {
         with(binding) {
             if (textFieldName.editText?.text.isNullOrEmpty()) {
                 textFieldName.error = getString(R.string.text_text_empty)
+                textFieldName.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
             }
             if (textFieldDate.editText?.text.isNullOrEmpty()) {
                 textFieldDate.error = getString(R.string.text_text_empty)
-                textFieldDate.endIconDrawable?.setTint(resources.getColor(R.color.red, null))
+                textFieldDate.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
             }
         }

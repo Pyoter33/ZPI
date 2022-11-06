@@ -1,7 +1,10 @@
 package com.example.trip.models
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.math.BigDecimal
 
+@Parcelize
 data class Accommodation(
     val id: Long,
     val groupId: Long,
@@ -15,4 +18,4 @@ data class Accommodation(
     val price: BigDecimal,
     var isVoted: Boolean,
     var isExpanded: Boolean = false
-)
+): Parcelable

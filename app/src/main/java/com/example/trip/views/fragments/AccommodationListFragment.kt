@@ -216,8 +216,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
             AccommodationListFragmentDirections.actionAccommodationListFragmentToCreateEditAccommodationFragment(
                 groupId,
                 accommodation.id,
-                accommodation.sourceUrl,
-                accommodation.description
+                accommodation
             )
         )
     }
