@@ -10,7 +10,7 @@ data class Attraction(
     val dayPlanId: Long,
     val name: String,
     val address: String,
-    var description: String,
+    var description: String?,
     val imageUrl: String,
     val link: String,
     val distanceToNext: Double?,

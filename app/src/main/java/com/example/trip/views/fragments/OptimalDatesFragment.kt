@@ -55,6 +55,7 @@ class OptimalDatesFragment @Inject constructor() : Fragment(), DatesPagerClickLi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requireActivity().onBackArrowClick(binding.buttonBack)
         onMyDatesClick()
         setCalendar()
         setPager()

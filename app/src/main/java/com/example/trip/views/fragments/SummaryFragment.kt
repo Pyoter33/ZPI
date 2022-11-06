@@ -1,5 +1,7 @@
 package com.example.trip.views.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.example.trip.PreTripDirections
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.ParticipantsSummaryAdapter
@@ -38,7 +42,6 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
     private lateinit var availabilityDialog: DeleteAcceptedAvailabilityDialog
     private lateinit var startCity: String
 
-
     @Inject
     lateinit var adapter: ParticipantsSummaryAdapter
 
@@ -64,7 +67,7 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
         observeAccommodation()
         observeAvailability()
         observeParticipants()
-        onBackArrowClick()
+        requireActivity().onBackArrowClick(binding.buttonBack)
         onListLockClick()
         onUncheckDateClick()
         observeButtonLock()
@@ -74,12 +77,6 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
 
     private fun setAdapter() {
         binding.listParticipants.adapter = adapter
-    }
-
-    private fun onBackArrowClick() {
-        binding.buttonBack.setOnClickListener {
-
-        }
     }
 
     private fun onListLockClick() {
@@ -217,12 +214,18 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
             textPrice.text = getString(R.string.text_pln, accommodation.price.toString())
             textDescription.text = accommodation.description
 
-            buttonLink.setOnClickListener {
+            Glide.with(this@SummaryFragment).load(accommodation.imageUrl).centerCrop().into(binding.imageAccommodation)
 
+            buttonLink.setOnClickListener {
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(accommodation.sourceUrl)
+                )
+                startActivity(intent)
             }
 
             buttonTransport.setOnClickListener {
-                findNavController().navigate(SummaryFragmentDirections.actionSummaryFragmentToFragmentTransport2(groupId, accommodation.id, accommodation.address, startCity))
+                findNavController().navigate(PreTripDirections.actionToTransport(groupId, accommodation.id, accommodation.address, startCity))
             }
         }
     }

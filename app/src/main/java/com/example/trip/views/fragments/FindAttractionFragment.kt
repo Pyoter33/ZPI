@@ -1,6 +1,8 @@
 package com.example.trip.views.fragments
 
 import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -103,5 +105,13 @@ class FindAttractionFragment @Inject constructor() : Fragment(), AttractionPrevi
                 attractionPreview.toAttraction(args.groupId, args.dayPlanId)
             )
         )
+    }
+
+    override fun onSeeMoreClick(attraction: AttractionPreview) {
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(attraction.link)
+        )
+        startActivity(intent)
     }
 }

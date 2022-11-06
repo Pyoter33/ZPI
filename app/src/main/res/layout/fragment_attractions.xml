@@ -68,18 +68,45 @@
                             android:shadowColor="@color/primary">
 
                             <TextView
-                                android:id="@+id/text_plan_for"
+                                android:id="@+id/text_header"
                                 style="@style/TextBigger"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="@dimen/marginM"
                                 android:layout_marginVertical="@dimen/marginL"
-                                android:text="Barcelona excursion 20.09.2021"
+                                android:text="Barcelona excursion"
                                 android:textColor="@color/primary"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/button_add"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/text_header_date"
+                                style="@style/TextMedium"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/marginM"
+                                android:layout_marginBottom="@dimen/marginM"
+                                android:text="20.09.2021"
+                                android:textColor="@color/grey700"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/button_add"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/text_header" />
+
+                            <Button
+                                android:id="@+id/button_add"
+                                style="@style/Button.Contained"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/marginS"
+                                android:text="@string/text_add"
+                                app:icon="@drawable/ic_baseline_add_24"
+                                app:iconGravity="end"
+                                app:layout_constraintBottom_toBottomOf="@+id/text_header_date"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/text_header" />
+
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -90,6 +117,7 @@
                         android:layout_height="0dp"
                         android:scrollbars="horizontal"
                         tools:listitem="@layout/item_attraction"
+                        android:paddingTop="@dimen/marginS"
                         android:paddingBottom="@dimen/marginM"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

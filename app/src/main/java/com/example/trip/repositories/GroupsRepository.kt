@@ -16,49 +16,37 @@ class GroupsRepository @Inject constructor() {
                     listOf(
                         Group(
                             1,
-                            "Group 1",
+                            "Weekend trip to Prague",
                             GroupStatus.PLANNING,
-                            "Location 1",
+                            "Wroclaw",
                             "PLN",
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras efficitur consequat mollis. Proin aliquet turpis eu interdum consequat. Vestibulum id ex molestie, pharetra tellus sit amet, elementum odio. In hac habitasse platea dictumst. Cras porta tortor.",
-                            6
+                            3,
+                            2,
+                            "Weekend in Prague, sightseeing, knedlicky eating, beer drinking and chill!",
+                            4
                         ),
                         Group(
                             2,
-                            "Group 2",
+                            "Holidays in Spain",
                             GroupStatus.ONGOING,
-                            "Location 2",
+                            "Warsaw",
                             "PLN",
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras efficitur consequat mollis. Proin aliquet turpis eu interdum consequat. Vestibulum id ex molestie, pharetra tellus sit amet, elementum odio. In hac habitasse platea dictumst. Cras porta tortor.",
-                            16
+                            6,
+                            7,
+                            "We start in Madrid, than Barcelona, Valencia, Malaga. A lot of sightseeing and lying on the beach. Bring your suncream!",
+                            10
                         ),
                         Group(
                             3,
-                            "Group 3",
+                            "Excursion to Dresden",
                             GroupStatus.FINISHED,
-                            "Location 3",
+                            "Wroclaw",
                             "PLN",
-                            "Description",
-                            11
-                        ),
-                        Group(
-                            4,
-                            "Group 4",
-                            GroupStatus.PLANNING,
-                            "Location 4",
-                            "PLN",
-                            "Description",
+                            3,
+                            2,
+                            "Let's see all the museums!!!",
                             3
-                        ),
-                        Group(
-                            5,
-                            "Group 5",
-                            GroupStatus.PLANNING,
-                            "Location 5",
-                            "PLN",
-                            "Description",
-                            5
-                        ),
+                        )
                     )
                 )
             )

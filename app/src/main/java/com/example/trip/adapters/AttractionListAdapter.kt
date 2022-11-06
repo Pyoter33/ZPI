@@ -6,6 +6,7 @@ import android.widget.Button
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.trip.R
 import com.example.trip.databinding.ItemAttractionAddMoreBinding
 import com.example.trip.databinding.ItemAttractionBinding
@@ -37,19 +38,9 @@ class AttractionListAdapter @Inject constructor() :
         this.popupMenu = popupMenu
     }
 
-    override fun getItemCount(): Int {
-        return super.getItemCount() + 1 //change according to user role
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return if (position == itemCount - 1) ADD_MORE else ATTRACTION
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            ATTRACTION -> AttractionViewHolder.create(parent, attractionClickListener, popupMenu)
-            else -> AddMoreViewHolder.create(parent, attractionClickListener)
-        }
+        return AttractionViewHolder.create(parent, attractionClickListener, popupMenu)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -78,6 +69,14 @@ class AttractionListAdapter @Inject constructor() :
                 } else {
                     textDistance.text = ""
                     imageLine.setInvisible()
+                }
+
+                Glide.with(itemView).load(attraction.imageUrl).centerCrop().into(binding.imageAttraction)
+
+                if (attraction.description.isNullOrEmpty()) {
+                    buttonExpand.setInvisible()
+                } else {
+                    buttonExpand.setVisible()
                 }
 
                 if (attraction.isExpanded) {

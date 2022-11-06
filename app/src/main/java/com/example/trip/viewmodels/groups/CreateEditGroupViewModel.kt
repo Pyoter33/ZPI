@@ -24,6 +24,8 @@ class CreateEditGroupViewModel @Inject constructor(
     var name: String? = null
     var startingCity: String? = null
     var currency: String? = null
+    var participants: String? = null
+    var days: String? = null
     var descriptionText: String? = null
     var toPost = false
     private val groupToUpdate = state.get<Group>("group")
@@ -38,6 +40,8 @@ class CreateEditGroupViewModel @Inject constructor(
                     GroupStatus.PLANNING,
                     startingCity!!,
                     currency!!,
+                    participants!!.toInt(),
+                    days!!.toInt(),
                     descriptionText,
                     0
                 )
@@ -49,14 +53,15 @@ class CreateEditGroupViewModel @Inject constructor(
     fun updateGroupAsync(): Deferred<Resource<Unit>> {
         val deferred = viewModelScope.async(Dispatchers.IO) {
             groupToUpdate?.let {
-                postGroupUseCase(
-                    0,
+                updateGroupUseCase(
                     Group(
                         it.id,
                         name!!,
                         it.groupStatus,
                         startingCity!!,
                         currency!!,
+                        participants!!.toInt(),
+                        days!!.toInt(),
                         descriptionText,
                         it.participantsNo
                     )

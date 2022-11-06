@@ -61,6 +61,7 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
         onAddClick()
         onOptimalDatesClick()
         onExpandClick()
+        requireActivity().onBackArrowClick(binding.buttonBack)
         setCalendar()
     }
 

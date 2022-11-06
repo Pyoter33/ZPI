@@ -21,42 +21,41 @@ class TransportRepository @Inject constructor(private val geoApiContext: GeoApiC
                     Transport(
                         carTransport = CarTransport(
                             0,
-                            Duration.between(LocalTime.of(16, 30), LocalTime.of(18, 55)),
-                            "51.06546,16.9834855",
-                            "54.406386,18.555113",//"41.3926467,2.0701498",
-                            1500
+                            Duration.ofMinutes(235),
+                            "51.1058831,17.0271114",
+                            "50.0896109,14.4236038",
+                            286
                         ),
                         airTransport = AirTransport(
                             1,
-                            Duration.between(LocalTime.of(16, 0), LocalTime.of(22, 55)),
+                            Duration.between(LocalTime.of(10, 20), LocalTime.of(15, 15)),
                             "Wrocław Airport",
-                            "Barcelona Airport",
+                            "Prague Airport",
                             "",
                             listOf(
                                 Flight(
                                     0,
-                                    "FV12345",
+                                    "LH1359",
                                     "WRO",
-                                    "MUN",
-                                    LocalTime.of(16, 30),
-                                    LocalTime.of(18, 30),
-                                    Duration.between(LocalTime.of(16, 30), LocalTime.of(18, 30)),
-                                    Duration.between(LocalTime.of(16, 0), LocalTime.of(16, 30)),
+                                    "FRA",
+                                    LocalTime.of(10, 50),
+                                    LocalTime.of(12, 15),
+                                    Duration.ofMinutes(85),
+                                    Duration.ofMinutes(30),
                                     null
                                 ),
                                 Flight(
                                     1,
-                                    "FV62346",
-                                    "MUN",
-                                    "BAR",
-                                    LocalTime.of(20, 0),
-                                    LocalTime.of(21, 55),
-                                    Duration.between(LocalTime.of(20, 0), LocalTime.of(21, 55)),
-                                    Duration.between(LocalTime.of(21, 55), LocalTime.of(22, 55)),
-                                    null
+                                    "LH1400",
+                                    "FRA",
+                                    "PRG",
+                                    LocalTime.of(13, 15),
+                                    LocalTime.of(14, 15),
+                                    Duration.ofMinutes(60),
+                                    null,
+                                    Duration.ofMinutes(60)
                                 ),
-
-                                )
+                            )
                         ),
                         userTransport =
                         listOf(
@@ -64,26 +63,26 @@ class TransportRepository @Inject constructor(private val geoApiContext: GeoApiC
                                 1,
                                 1,
                                 1,
-                                listOf("Bus", "Train"),
-                                Duration.between(LocalTime.of(6, 30), LocalTime.of(22, 30)),
-                                LocalDate.of(2022, 10, 11),
-                                LocalTime.of(6, 30),
-                                BigDecimal.valueOf(200),
+                                listOf("Train"),
+                                Duration.between(LocalTime.of(8, 30), LocalTime.of(14, 0)),
+                                LocalDate.of(2022, 10, 17),
+                                LocalTime.of(8, 15),
+                                BigDecimal.valueOf(100),
                                 "Wroclaw main railway station",
-                                "Barcelona main bus station",
-                                "We start with the bus from Wroclaw to Berlin and than directly to Barcelona by train."
+                                "Prague Sucha station",
+                                "We have a direct connection to Prague by train. It is cheaper than other options!"
                             ),
                             UserTransport(
                                 2,
                                 1,
                                 1,
-                                listOf("Bus"),
-                                Duration.between(LocalTime.of(3, 30), LocalTime.of(22, 30)),
-                                LocalDate.of(2022, 10, 17),
-                                LocalTime.of(3, 30),
-                                BigDecimal.valueOf(300),
+                                listOf("FlixBus"),
+                                Duration.between(LocalTime.of(6, 30), LocalTime.of(12, 30)),
+                                LocalDate.of(2022, 10, 24),
+                                LocalTime.of(6, 0),
+                                BigDecimal.valueOf(120),
                                 "Wroclaw Wroclavia shopping centre",
-                                "Barcelona city centre",
+                                "Prague main bus station",
                                 null
                             )
                         )

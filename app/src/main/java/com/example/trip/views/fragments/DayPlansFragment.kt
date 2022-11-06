@@ -14,6 +14,7 @@ import com.example.trip.adapters.DayPlansClickListener
 import com.example.trip.databinding.FragmentDayPlansBinding
 import com.example.trip.models.DayPlan
 import com.example.trip.models.Resource
+import com.example.trip.utils.onBackArrowClick
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.dayplan.DayPlansViewModel
 import com.example.trip.views.dialogs.MenuPopupFactory
@@ -51,10 +52,10 @@ class DayPlansFragment @Inject constructor() : Fragment(), DayPlansClickListener
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requireActivity().onBackArrowClick(binding.buttonBack)
         setAdapter()
         observeDayPlansList()
         setSwipeRefreshLayout()
-        onBackArrowClick()
         onAddClick()
     }
 
@@ -62,12 +63,6 @@ class DayPlansFragment @Inject constructor() : Fragment(), DayPlansClickListener
         binding.layoutRefresh.setColorSchemeResources(R.color.primary)
         binding.layoutRefresh.setOnRefreshListener {
             viewModel.refreshData()
-        }
-    }
-
-    private fun onBackArrowClick() {
-        binding.buttonBack.setOnClickListener {
-
         }
     }
 

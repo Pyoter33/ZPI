@@ -34,9 +34,11 @@
         <androidx.cardview.widget.CardView
             style="@style/CardWhite"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginHorizontal="@dimen/marginM"
             android:layout_marginTop="@dimen/marginL"
+            android:layout_marginBottom="@dimen/marginXXXL"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button_back">
@@ -140,7 +142,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/marginM"
-                        android:hint="Minimal number of participants"
+                        android:hint="@string/text_minimal_number_of_participants"
                         app:errorEnabled="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -163,7 +165,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/marginM"
-                        android:hint="Minimal duration"
+                        android:hint="@string/text_minimal_duration"
                         app:errorEnabled="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -171,14 +173,13 @@
                         app:placeholderText="4"
                         app:startIconDrawable="@drawable/ic_baseline_access_time_24"
                         app:startIconTint="@color/primary"
-                        app:suffixText=" days">
+                        app:suffixText="days">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editText_min_days"
-                            android:layout_width="300dp"
+                            android:layout_width="220dp"
                             android:layout_height="match_parent"
-                            android:inputType="number"
-                            />
+                            android:inputType="number" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 

@@ -7,6 +7,7 @@ import android.widget.Button
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.trip.R
 import com.example.trip.databinding.ItemAccommodationBinding
 import com.example.trip.models.Accommodation
@@ -57,6 +58,8 @@ class AccommodationListAdapter @Inject constructor() :
                 textDescription.text = accommodation.description
 
                 buttonVote.isSelected = accommodation.isVoted
+
+                Glide.with(itemView).load(accommodation.imageUrl).centerCrop().into(binding.imageAccommodation)
 
                 if (accommodation.description.isNullOrEmpty()) {
                     buttonExpand.setGone()

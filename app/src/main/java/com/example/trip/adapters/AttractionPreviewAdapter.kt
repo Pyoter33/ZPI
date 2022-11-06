@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.trip.databinding.ItemAttractionPreviewBinding
 import com.example.trip.models.AttractionPreview
 import com.skydoves.balloon.Balloon
@@ -40,13 +41,22 @@ class AttractionPreviewAdapter @Inject constructor() :
             with(binding) {
                 textName.text = attraction.name
                 textAddress.text = attraction.address
+                Glide.with(itemView).load(attraction.imageUrl).centerCrop().into(binding.imageAccommodation)
+
             }
             onClick(attraction)
+            onSeeMoreClick(attraction)
         }
 
         private fun onClick(attraction: AttractionPreview) {
             binding.card.setOnClickListener {
                 attractionClickListener.onClick(attraction)
+            }
+        }
+
+        private fun onSeeMoreClick(attraction: AttractionPreview) {
+            binding.buttonSeeInMaps.setOnClickListener {
+                attractionClickListener.onSeeMoreClick(attraction)
             }
         }
 
@@ -78,4 +88,5 @@ class AttractionPreviewDiffUtil : DiffUtil.ItemCallback<AttractionPreview>() {
 
 interface AttractionPreviewClickListener {
     fun onClick(attractionPreview: AttractionPreview)
+    fun onSeeMoreClick(attraction: AttractionPreview)
 }

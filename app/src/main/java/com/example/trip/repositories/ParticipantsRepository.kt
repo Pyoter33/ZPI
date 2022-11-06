@@ -13,7 +13,7 @@ class ParticipantsRepository @Inject constructor() {
         return flow {
             emit(
                 Resource.Success(
-                    "https://medium.com/codex/create-custom-dialogs-with-dialogfragment-in-android-5cf39c5ccb72"
+                    "https://travelnow/invite?token=aegewg3425yhg30gh4rahrah4563yhea-3gh"
                 )
             )
         }
@@ -24,18 +24,10 @@ class ParticipantsRepository @Inject constructor() {
             emit(
                 Resource.Success(
                     listOf(
-                        Participant(1, 0, "Dorian Olisadebe", "participant@example.com", UserRole.BASIC_USER),
-                        Participant(2, 0, "Krzysztof Siedem", "participant@example.com", UserRole.BASIC_USER),
-                        Participant(3, 0, "Kajetan Boba", "participant@example.com", UserRole.COORDINATOR),
-                        Participant(4, 0, "Piotr Marian", "participant@example.com", UserRole.BASIC_USER),
-                        Participant(5, 0, "Participant 1", "participant@example.com", UserRole.BASIC_USER),
-                        Participant(6, 0, "Participant 2", "participant@example.com", UserRole.BASIC_USER),
-                        Participant(7, 0, "Dorian Olisadebe", "participant@example.com", UserRole.BASIC_USER),
-                        Participant(8, 0, "Krzysztof Siedem", "participant@example.com", UserRole.BASIC_USER),
-                        Participant(9, 0, "Kajetan Boba", "participant@example.com", UserRole.COORDINATOR),
-                        Participant(10, 0, "Piotr Marian", "participant@example.com", UserRole.BASIC_USER),
-                        Participant(11, 0, "Participant 1", "participant@example.com", UserRole.BASIC_USER),
-                        Participant(12, 0, "Participant 2", "participant@example.com", UserRole.BASIC_USER),
+                        Participant(3, 0, "Kajetan Boba", "bo-ba7312@onet.pl", UserRole.COORDINATOR),
+                        Participant(4, 0, "Piotr Marian", "piterm44@gmail.com", UserRole.COORDINATOR),
+                        Participant(1, 0, "Dorian Olisadebe", "olisadebe@gmail.com", UserRole.BASIC_USER),
+                        Participant(2, 0, "Krzysztof Siedem", "krzysztof77@gmail.com", UserRole.BASIC_USER)
                     )
                 )
             )

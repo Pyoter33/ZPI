@@ -18,6 +18,7 @@ class CreateEditAccommodationViewModel @Inject constructor(
 
     val groupId = state.get<Long>("groupId")
     var linkText: String? = null
+    var price: String? = null
     var descriptionText: String? = null
 
     suspend fun postAccommodation(): Resource<Unit> {

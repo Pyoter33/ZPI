@@ -1,5 +1,7 @@
 package com.example.trip.views.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -61,12 +63,14 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
         setupArgs()
         observeAccommodationsList()
         setSwipeRefreshLayout()
+        onAddClick()
         onBackArrowClick(binding.buttonBack)
     }
 
     private fun setupArgs() {
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
-        binding.textPlanFor.text = "${args.dayPlan.name} for ${args.dayPlan.date.format(formatter)}" //
+        binding.textHeader.text = args.dayPlan.name
+        binding.textHeaderDate.text = args.dayPlan.date.format(formatter)
     }
 
     private fun setSwipeRefreshLayout() {
@@ -107,6 +111,17 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
         binding.attractionsList.layoutManager = LinearLayoutManager(context)
     }
 
+    private fun onAddClick() {
+        binding.buttonAdd.setOnClickListener {
+            findNavController().navigate(
+                AttractionsFragmentDirections.actionAttractionsFragmentToFindAttractionFragment(
+                    args.groupId,
+                    args.dayPlan.id
+                )
+            )
+        }
+    }
+
     //list item
     override fun onExpandClick(position: Int) {
         viewModel.setExpanded(position)
@@ -114,11 +129,19 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
     }
 
     override fun onSeeMoreClick(link: String) {
-
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(link)
+        )
+        startActivity(intent)
     }
 
     override fun onMenuEditClick(attraction: Attraction) {
-        findNavController().navigate(AttractionsFragmentDirections.actionAttractionsFragmentToCreateEditAttractionFragment(attraction))
+        findNavController().navigate(
+            AttractionsFragmentDirections.actionAttractionsFragmentToCreateEditAttractionFragment(
+                attraction
+            )
+        )
     }
 
     override fun onMenuDeleteClick(attraction: Attraction) {

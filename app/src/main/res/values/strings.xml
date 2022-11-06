@@ -95,4 +95,16 @@
     <string name="text_no_accommodation_chosen">No accommodation chosen yet!</string>
     <string name="text_retry">Retry</string>
     <string name="text_meeting_at">meeting at: %1$s</string>
+    <string name="text_price">Price</string>
+    <string name="text_meeting_time">Meeting time</string>
+    <string name="text_meeting_date">Meeting date</string>
+    <string name="text_hours">Hours</string>
+    <string name="text_minutes">Minutes</string>
+    <string name="text_destination">Destination</string>
+    <string name="text_meeting_location">Meeting location</string>
+    <string name="text_means_of_transport">Means of transport</string>
+    <string name="text_new_transport">New transport</string>
+    <string name="text_edit_transport">Edit transport</string>
+    <string name="text_minimal_number_of_participants">Minimal number of participants</string>
+    <string name="text_minimal_duration">Minimal duration</string>
 </resources>

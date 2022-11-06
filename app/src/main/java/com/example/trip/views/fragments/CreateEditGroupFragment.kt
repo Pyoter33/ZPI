@@ -13,13 +13,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.trip.R
-import com.example.trip.activities.MainActivity
 import com.example.trip.databinding.FragmentCreateEditGroupBinding
 import com.example.trip.models.Resource
 import com.example.trip.utils.onBackArrowClick
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
 import com.example.trip.viewmodels.groups.CreateEditGroupViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -48,6 +48,8 @@ class CreateEditGroupFragment @Inject constructor() : Fragment() {
         setupOnDescriptionTextChangeListener()
         setupOnCityTextChangeListener()
         setupOnNameTextChangeListener()
+        setupOnDaysTextChangeListener()
+        setupOnParticipantsTextChangeListener()
         setupSpinner()
         onSubmitClick()
         onBackArrowClick(binding.buttonBack)
@@ -55,15 +57,19 @@ class CreateEditGroupFragment @Inject constructor() : Fragment() {
 
     private fun setupArgs() {
         args.group?.let {
-            viewModel.toPost = true
+            viewModel.toPost = false
             binding.textNewGroup.text = getString(R.string.text_edit_group)
             with(binding) {
                 viewModel.name = it.name
                 viewModel.currency = it.currency
+                viewModel.participants = it.minParticipants.toString()
+                viewModel.days = it.minDays.toString()
                 viewModel.startingCity = it.startCity
                 viewModel.descriptionText = it.description
                 editTextName.setText(it.name)
                 editTextStartingCity.setText(it.startCity)
+                editTextMinParticipants.setText(it.minParticipants.toString())
+                editTextMinDays.setText(it.minDays.toString())
                 spinnerCurrency.setText(it.currency)
                 editTextDescription.setText(it.description)
             }
@@ -105,6 +111,46 @@ class CreateEditGroupFragment @Inject constructor() : Fragment() {
                     )
                 )
                 binding.textFieldCity.error = null
+            }
+
+        })
+    }
+
+    private fun setupOnParticipantsTextChangeListener() {
+        binding.textFieldMinParticipants.editText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun afterTextChanged(editable: Editable?) {
+                viewModel.participants = editable?.toString()
+                binding.textFieldMinParticipants.startIconDrawable?.setTint(
+                    resources.getColor(
+                        R.color.primary,
+                        null
+                    )
+                )
+                binding.textFieldMinParticipants.error = null
+            }
+
+        })
+    }
+
+    private fun setupOnDaysTextChangeListener() {
+        binding.textFieldMinDays.editText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun afterTextChanged(editable: Editable?) {
+                viewModel.days = editable?.toString()
+                binding.textFieldMinDays.startIconDrawable?.setTint(
+                    resources.getColor(
+                        R.color.primary,
+                        null
+                    )
+                )
+                binding.textFieldMinDays.error = null
             }
 
         })
@@ -164,13 +210,16 @@ class CreateEditGroupFragment @Inject constructor() : Fragment() {
                 }
                 is Resource.Failure -> {
                     disableLoading()
-                    (requireActivity() as MainActivity).showSnackbar(
+                    Snackbar.make(
                         requireView(),
                         R.string.text_post_failure,
-                        R.string.text_retry
-                    ) {
-                        submit()
-                    }
+                        Snackbar.LENGTH_LONG
+                    ).setBackgroundTint(resources.getColor(R.color.grey400, null))
+                        .setTextColor(resources.getColor(R.color.black, null))
+                        .setActionTextColor(resources.getColor(R.color.primary, null))
+                        .setAction(R.string.text_retry) {
+                            submit()
+                        }.show()
                 }
             }
         }
@@ -195,7 +244,21 @@ class CreateEditGroupFragment @Inject constructor() : Fragment() {
                 textFieldCurrency.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
             }
-
+            if (viewModel.participants.isNullOrEmpty()) {
+                textFieldMinParticipants.error = getString(R.string.text_text_empty)
+                textFieldMinParticipants.startIconDrawable?.setTint(
+                    resources.getColor(
+                        R.color.red,
+                        null
+                    )
+                )
+                showError = true
+            }
+            if (viewModel.days.isNullOrEmpty()) {
+                textFieldMinDays.error = getString(R.string.text_text_empty)
+                textFieldMinDays.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
+                showError = true
+            }
         }
 
         return showError
@@ -207,6 +270,8 @@ class CreateEditGroupFragment @Inject constructor() : Fragment() {
             textFieldCity.isEnabled = false
             textFieldCurrency.isEnabled = false
             textFieldDescription.isEnabled = false
+            textFieldMinDays.isEnabled = false
+            textFieldMinParticipants.isEnabled = false
             buttonSubmit.isEnabled = false
             layoutLoading.setVisible()
         }
@@ -218,6 +283,8 @@ class CreateEditGroupFragment @Inject constructor() : Fragment() {
             textFieldCity.isEnabled = true
             textFieldCurrency.isEnabled = true
             textFieldDescription.isEnabled = true
+            textFieldMinDays.isEnabled = true
+            textFieldMinParticipants.isEnabled = true
             buttonSubmit.isEnabled = true
             layoutLoading.setGone()
         }

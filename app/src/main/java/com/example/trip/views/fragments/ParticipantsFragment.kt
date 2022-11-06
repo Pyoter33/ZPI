@@ -16,10 +16,7 @@ import com.example.trip.adapters.ParticipantsClickListener
 import com.example.trip.databinding.FragmentParticipantsBinding
 import com.example.trip.models.Participant
 import com.example.trip.models.Resource
-import com.example.trip.utils.copyToClipboard
-import com.example.trip.utils.getLongFromBundle
-import com.example.trip.utils.setSwipeRefreshLayout
-import com.example.trip.utils.toast
+import com.example.trip.utils.*
 import com.example.trip.viewmodels.participants.ParticipantsViewModel
 import com.example.trip.views.dialogs.MenuPopupCoordinateFactory
 import com.example.trip.views.dialogs.participants.DeleteParticipantDialog
@@ -61,6 +58,7 @@ class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClick
         groupId = getLongFromBundle("groupId")
         setAdapter()
         observeAccommodationPreviews()
+        requireActivity().onBackArrowClick(binding.buttonBack)
         onInviteClick()
         setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
         setOnSearchClickListener()

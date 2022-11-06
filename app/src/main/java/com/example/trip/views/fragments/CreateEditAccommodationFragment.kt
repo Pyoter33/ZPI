@@ -81,6 +81,25 @@ class CreateEditAccommodationFragment @Inject constructor() : Fragment() {
         })
     }
 
+    private fun setupOnPriceTextChangeListener() {
+        binding.textFieldPrice.editText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun afterTextChanged(editable: Editable?) {
+                viewModel.price = editable?.toString()
+                binding.textFieldPrice.startIconDrawable?.setTint(
+                    resources.getColor(
+                        R.color.primary,
+                        null
+                    )
+                )
+                binding.textFieldPrice.error = null
+            }
+        })
+    }
+
     private fun setupOnDescriptionTextChangeListener() {
         binding.textFieldDescription.editText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -130,13 +149,19 @@ class CreateEditAccommodationFragment @Inject constructor() : Fragment() {
     }
 
     private fun isSubmitNotPermitted(): Boolean {
-        val textLink = binding.textFieldLink
         var showError = false
 
-        if (viewModel.linkText.isNullOrEmpty()) {
-            textLink.error = getString(R.string.text_text_empty)
-            textLink.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
-            showError = true
+        with(binding) {
+            if (viewModel.linkText.isNullOrEmpty()) {
+                textFieldLink.error = getString(R.string.text_text_empty)
+                textFieldLink.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
+                showError = true
+            }
+            if (viewModel.price.isNullOrEmpty()) {
+                textFieldPrice.error = getString(R.string.text_text_empty)
+                textFieldPrice.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
+                showError = true
+            }
         }
 
         return showError
@@ -145,6 +170,7 @@ class CreateEditAccommodationFragment @Inject constructor() : Fragment() {
     private fun enableLoading() {
         with(binding) {
             textFieldLink.isEnabled = false
+            textFieldPrice.isEnabled = false
             textFieldDescription.isEnabled = false
             buttonSubmit.isEnabled = false
             layoutLoading.setVisible()
@@ -154,6 +180,7 @@ class CreateEditAccommodationFragment @Inject constructor() : Fragment() {
     private fun disableLoading() {
         with(binding) {
             textFieldLink.isEnabled = true
+            textFieldPrice.isEnabled = true
             textFieldDescription.isEnabled = true
             buttonSubmit.isEnabled = true
             layoutLoading.setGone()

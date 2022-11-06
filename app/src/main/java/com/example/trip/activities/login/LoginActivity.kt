@@ -1,5 +1,6 @@
 package com.example.trip.activities.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,6 +9,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import com.example.trip.R
+import com.example.trip.activities.HomeActivity
 import com.example.trip.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
@@ -19,6 +21,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
+        onSignInClick()
         setContentView(binding.root)
 
 //        val username = binding.username
@@ -85,6 +88,13 @@ class LoginActivity : AppCompatActivity() {
 //                false
 //            }
 //        }
+    }
+
+    private fun onSignInClick() {
+        binding.layoutContent.buttonSignUp.setOnClickListener {
+            val activityIntent = Intent(this, HomeActivity::class.java)
+            startActivity(activityIntent)
+        }
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {

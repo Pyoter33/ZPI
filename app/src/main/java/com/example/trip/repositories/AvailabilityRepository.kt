@@ -18,8 +18,8 @@ class AvailabilityRepository @Inject constructor() {
                     Availability(
                         1,
                         -1,
-                        LocalDate.of(2022, 10, 10),
-                        LocalDate.of(2022, 10, 14)
+                        LocalDate.of(2022, 11, 18),
+                        LocalDate.of(2022, 11, 20)
                     )
                 )
             )
@@ -38,20 +38,14 @@ class AvailabilityRepository @Inject constructor() {
                         Availability(
                             1,
                             userId,
-                            LocalDate.of(2022, 10, 10),
-                            LocalDate.of(2022, 10, 14)
+                            LocalDate.of(2022, 11, 17),
+                            LocalDate.of(2022, 11, 20)
                         ),
                         Availability(
                             2,
                             userId,
-                            LocalDate.of(2022, 10, 17),
-                            LocalDate.of(2022, 10, 20)
-                        ),
-                        Availability(
-                            3,
-                            userId,
-                            LocalDate.of(2022, 10, 28),
-                            LocalDate.of(2022, 11, 4),
+                            LocalDate.of(2022, 11, 24),
+                            LocalDate.of(2022, 11, 27)
                         )
                     )
                 )
@@ -80,33 +74,17 @@ class AvailabilityRepository @Inject constructor() {
                             Availability(
                                 1,
                                 -1,
-                                LocalDate.of(2022, 12, 2),
-                                LocalDate.of(2022, 12, 11)
-                            ), 8
+                                LocalDate.of(2022, 11, 18),
+                                LocalDate.of(2022, 11, 20)
+                            ), 4
                         ),
                         Pair(
                             Availability(
                                 2,
                                 -1,
-                                LocalDate.of(2022, 12, 2),
-                                LocalDate.of(2022, 12, 10)
-                            ), 9
-                        ),
-                        Pair(
-                            Availability(
-                                3,
-                                -1,
-                                LocalDate.of(2022, 12, 2),
-                                LocalDate.of(2022, 12, 17)
-                            ), 7
-                        ),
-                        Pair(
-                            Availability(
-                                4,
-                                -1,
-                                LocalDate.of(2022, 12, 2),
-                                LocalDate.of(2022, 12, 15)
-                            ), 9
+                                LocalDate.of(2022, 11, 24),
+                                LocalDate.of(2022, 11, 27)
+                            ), 3
                         )
                     )
                 )

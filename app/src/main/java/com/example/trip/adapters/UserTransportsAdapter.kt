@@ -58,7 +58,7 @@ class UserTransportsAdapter @Inject constructor() :
                 textDuration.text = userTransport.duration.toStringTime()
                 textDate.text = userTransport.meetingDate.format(dateFormatter)
                 textMeeting.text = itemView.resources.getString(R.string.text_meeting_at, userTransport.meetingTime.format(timeFormatter))
-                textPrice.text = userTransport.price.toString()
+                textPrice.text = userTransport.price.toString() + "PLN"
                 textDescription.text = userTransport.description
             }
 

@@ -51,12 +51,12 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/text_new_group"
+                        android:id="@+id/text_new_transport"
                         style="@style/TextBigger"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/marginL"
-                        android:text="New transport"
+                        android:text="@string/text_new_transport"
                         android:textColor="@color/primary"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -68,12 +68,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/marginM"
                         android:layout_marginTop="@dimen/marginL"
-                        android:hint="Means of transport"
+                        android:hint="@string/text_means_of_transport"
                         app:endIconTint="@color/primary"
                         app:errorEnabled="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/text_new_group"
+                        app:layout_constraintTop_toBottomOf="@+id/text_new_transport"
                         app:placeholderText="Bus, Train, Car"
                         app:startIconDrawable="@drawable/ic_baseline_commute_24"
                         app:startIconTint="@color/primary">
@@ -94,7 +94,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/marginM"
                         android:layout_marginTop="@dimen/marginS"
-                        android:hint="Meeting location"
+                        android:hint="@string/text_meeting_location"
                         app:errorEnabled="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -118,7 +118,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/marginM"
                         android:layout_marginTop="@dimen/marginS"
-                        android:hint="Destination"
+                        android:hint="@string/text_destination"
                         app:errorEnabled="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -140,6 +140,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/marginM"
+                        android:layout_marginTop="@dimen/marginXS"
                         android:text="Duration"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textField_destination" />
@@ -147,10 +148,11 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textField_duration_hours"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="150dp"
+                        android:layout_width="190dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/marginM"
-                        android:hint="Hours"
+                        android:layout_marginTop="@dimen/marginXS"
+                        android:hint="@string/text_hours"
                         app:errorEnabled="true"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/text_label_duration"
@@ -159,7 +161,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editText_hours"
-                            android:layout_width="match_parent"
+                            android:layout_width="140dp"
                             android:layout_height="match_parent"
                             android:inputType="number" />
 
@@ -168,10 +170,10 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textField_duration_minutes"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="150dp"
+                        android:layout_width="190dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/marginL"
-                        android:hint="Minutes"
+                        android:layout_marginTop="@dimen/marginXS"
+                        android:hint="@string/text_minutes"
                         app:errorEnabled="true"
                         app:layout_constraintStart_toEndOf="@id/textField_duration_hours"
                         app:layout_constraintTop_toBottomOf="@+id/text_label_duration"
@@ -180,7 +182,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editText_minutes"
-                            android:layout_width="match_parent"
+                            android:layout_width="140dp"
                             android:layout_height="match_parent"
                             android:inputType="number" />
 
@@ -193,7 +195,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/marginM"
                         android:layout_marginTop="@dimen/marginS"
-                        android:hint="Meeting date"
+                        android:hint="@string/text_meeting_date"
                         app:errorEnabled="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -206,6 +208,8 @@
                             android:id="@+id/editText_meeting_date"
                             android:layout_width="200dp"
                             android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:focusable="false"
                             android:inputType="date" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -217,7 +221,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/marginM"
                         android:layout_marginTop="@dimen/marginS"
-                        android:hint="Meeting time"
+                        android:hint="@string/text_meeting_time"
                         app:errorEnabled="true"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -230,6 +234,8 @@
                             android:id="@+id/editText_meeting_time"
                             android:layout_width="200dp"
                             android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:focusable="false"
                             android:inputType="time" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -241,13 +247,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/marginM"
                         android:layout_marginTop="@dimen/marginS"
-                        android:hint="Price"
+                        android:hint="@string/text_price"
                         app:errorEnabled="true"
                         app:helperText="Provide an estimated price for a person."
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/textField_meeting_time"
-                        app:placeholderText="20.06.2022"
+                        app:placeholderText="159"
                         app:startIconDrawable="@drawable/ic_baseline_attach_money_24"
                         app:startIconTint="@color/primary"
                         app:suffixText="PLN">

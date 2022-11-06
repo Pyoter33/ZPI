@@ -1,5 +1,7 @@
 package com.example.trip.views.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.trip.PreTripDirections
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.AccommodationClickListener
@@ -18,6 +21,7 @@ import com.example.trip.models.Accommodation
 import com.example.trip.models.Resource
 import com.example.trip.utils.getLongFromBundle
 import com.example.trip.utils.getStringFromBundle
+import com.example.trip.utils.onBackArrowClick
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.accommodation.AccommodationsListViewModel
 import com.example.trip.views.dialogs.MenuPopupAcceptFactory
@@ -66,6 +70,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
         groupId = getLongFromBundle(GROUP_ID_ARG)
         startCity = getStringFromBundle(START_CITY_ARG)
         setAdapter()
+        requireActivity().onBackArrowClick(binding.buttonBack)
         observeAccommodationsList()
         setOnCheckedChipsListener()
         setSwipeRefreshLayout()
@@ -183,11 +188,22 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
     }
 
     override fun onLinkClick(accommodation: Accommodation) {
-
+        val intent = Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse(accommodation.sourceUrl)
+        )
+        startActivity(intent)
     }
 
     override fun onTransportClick(accommodation: Accommodation) {
-        findNavController().navigate(AccommodationListFragmentDirections.actionAccommodationListFragmentToTransportFragment(accommodation.groupId, accommodation.id, accommodation.address, startCity))
+        findNavController().navigate(
+            PreTripDirections.actionToTransport(
+                accommodation.groupId,
+                accommodation.id,
+                accommodation.address,
+                startCity
+            )
+        )
     }
 
     override fun onMenuAcceptClick(accommodation: Accommodation) {

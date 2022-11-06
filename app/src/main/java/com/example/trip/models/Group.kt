@@ -10,6 +10,8 @@ data class Group(
     val groupStatus: GroupStatus,
     val startCity: String,
     val currency: String,
+    val minParticipants: Int,
+    val minDays: Int,
     val description: String?,
     val participantsNo: Int
 ): Parcelable

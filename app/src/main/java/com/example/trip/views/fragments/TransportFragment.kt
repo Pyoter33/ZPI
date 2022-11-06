@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.R
@@ -68,6 +69,7 @@ class TransportFragment @Inject constructor() : Fragment(), OnMapReadyCallback,
 
         setHeader()
         onBackArrowClick(binding.buttonBack)
+        onAddClick()
         setAdapter()
         createMap()
     }
@@ -208,9 +210,9 @@ class TransportFragment @Inject constructor() : Fragment(), OnMapReadyCallback,
                 airTransport.flights.first().travelToAirportDuration!!.toStringTime()
             textDurationFlight.text =
                 airTransport.duration.minus(airTransport.flights.first().travelToAirportDuration!!)
-                    .minus(airTransport.flights.last().travelToAirportDuration!!).toStringTime()
+                    .minus(airTransport.flights.last().travelToAccommodationDuration!!).toStringTime()
             textDurationFromAirport.text =
-                airTransport.flights.last().travelToAirportDuration!!.toStringTime()
+                airTransport.flights.last().travelToAccommodationDuration!!.toStringTime()
             textDurationTotal.text = airTransport.duration.toStringTime()
 
             buttonLink.setOnClickListener {
@@ -223,8 +225,14 @@ class TransportFragment @Inject constructor() : Fragment(), OnMapReadyCallback,
 
     }
 
-    override fun onMenuEditClick(userTransport: UserTransport) {
+    private fun onAddClick() {
+        binding.buttonAdd.setOnClickListener {
+            findNavController().navigate(TransportFragmentDirections.actionTransportFragmentToCreateEditTransportFragment(args.groupId, args.accommodationId))
+        }
+    }
 
+    override fun onMenuEditClick(userTransport: UserTransport) {
+        findNavController().navigate(TransportFragmentDirections.actionTransportFragmentToCreateEditTransportFragment(args.groupId, args.accommodationId, userTransport))
     }
 
     override fun onMenuDeleteClick(userTransport: UserTransport) {

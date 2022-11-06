@@ -1,5 +1,6 @@
 package com.example.trip.utils
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.ClipData
@@ -103,6 +104,12 @@ fun Fragment.getStringFromBundle(
 fun Fragment.onBackArrowClick(view: View) {
     view.setOnClickListener {
         findNavController().popBackStack()
+    }
+}
+
+fun Activity.onBackArrowClick(view: View) {
+    view.setOnClickListener {
+        onBackPressed()
     }
 }
 
