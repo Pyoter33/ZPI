@@ -19,10 +19,7 @@ import com.example.trip.adapters.AccommodationListAdapter
 import com.example.trip.databinding.FragmentAccommodationListBinding
 import com.example.trip.models.Accommodation
 import com.example.trip.models.Resource
-import com.example.trip.utils.getLongFromBundle
-import com.example.trip.utils.getStringFromBundle
-import com.example.trip.utils.onBackArrowClick
-import com.example.trip.utils.toast
+import com.example.trip.utils.*
 import com.example.trip.viewmodels.accommodation.AccommodationsListViewModel
 import com.example.trip.views.dialogs.MenuPopupAcceptFactory
 import com.example.trip.views.dialogs.accommodation.AcceptAccommodationDialog
@@ -73,16 +70,10 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
         requireActivity().onBackArrowClick(binding.buttonBack)
         observeAccommodationsList()
         setOnCheckedChipsListener()
-        setSwipeRefreshLayout()
+        setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
         onAddClick()
     }
 
-    private fun setSwipeRefreshLayout() {
-        binding.layoutRefresh.setColorSchemeResources(R.color.primary)
-        binding.layoutRefresh.setOnRefreshListener {
-            viewModel.refreshData()
-        }
-    }
 
     private fun onAddClick() {
         binding.buttonAdd.setOnClickListener {

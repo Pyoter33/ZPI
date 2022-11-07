@@ -26,7 +26,7 @@ class DatesListAdapter @Inject constructor() :
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(availability: Availability) {
-            val formatter = DateTimeFormatter.ofPattern(("dd.MM.yyyy"))
+            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
             with(availability) {
                 binding.textDateStart.text = startDate.format(formatter)

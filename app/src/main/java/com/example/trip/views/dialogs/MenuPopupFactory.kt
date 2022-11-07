@@ -15,7 +15,6 @@ class MenuPopupFactory: Balloon.Factory() {
             setLayout(R.layout.layout_menu_popup)
             setWidthRatio(WIDTH_RATIO)
             setOverlayColorResource(R.color.black_semi_transparent)
-            setOverlayPadding(OVERLAY_PADDING)
             setBackgroundColorResource(R.color.white)
             setIsVisibleArrow(false)
             setCornerRadius(CORNER_RADIUS)
