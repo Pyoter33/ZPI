@@ -10,32 +10,48 @@
         >
 
         <TextView
-            android:id="@+id/text_name"
+            android:id="@+id/text_debtee"
             style="@style/TextBig"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginL"
+            android:layout_marginTop="@dimen/marginM"
             android:ellipsize="end"
             android:maxWidth="250dp"
-            android:layout_marginTop="@dimen/marginM"
-            android:layout_marginHorizontal="@dimen/marginL"
             android:maxLines="2"
             android:textColor="@color/grey900"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Dinner ingredients" />
+            tools:text="Dorian Olisadebe" />
 
 
         <TextView
-            android:id="@+id/text_buyer"
+            android:id="@+id/text_owes"
             style="@style/TextSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/marginXS"
             android:layout_marginHorizontal="@dimen/marginL"
+            android:layout_marginTop="@dimen/marginXS"
+            android:text="owes"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_name"
-            tools:text="by Dorian Olisadebe" />
+            app:layout_constraintTop_toBottomOf="@+id/text_debtee" />
 
+        <TextView
+            android:id="@+id/text_debtor"
+            style="@style/TextBig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginL"
+            android:layout_marginTop="@dimen/marginXS"
+            android:layout_marginBottom="@dimen/marginM"
+            android:ellipsize="end"
+            android:maxWidth="250dp"
+            android:maxLines="2"
+            android:textColor="@color/grey900"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_owes"
+            tools:text="Piotr Marian" />
 
         <TextView
             android:id="@+id/text_price"
@@ -43,28 +59,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/marginL"
-            android:layout_marginTop="@dimen/marginM"
             android:ellipsize="end"
             android:maxWidth="250dp"
             android:maxLines="2"
             android:textColor="@color/primary"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="10,24 PLN" />
 
         <TextView
-            android:id="@+id/text_date"
+            android:id="@+id/text_status"
             style="@style/TextSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/marginL"
-            android:layout_marginBottom="@dimen/marginL"
+            android:ellipsize="end"
+            android:maxWidth="250dp"
+            android:maxLines="2"
+            android:textAllCaps="true"
+            android:textColor="@color/secondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_price"
-            app:layout_constraintVertical_bias="0.0"
-            tools:text="10.06.2022" />
-
+            tools:text="PENDING" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

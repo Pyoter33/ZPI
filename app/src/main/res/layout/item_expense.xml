@@ -26,6 +26,18 @@
 
 
         <TextView
+            android:id="@+id/text_buyer"
+            style="@style/TextSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginXS"
+            android:layout_marginHorizontal="@dimen/marginL"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_name"
+            tools:text="by Dorian Olisadebe" />
+
+
+        <TextView
             android:id="@+id/text_price"
             style="@style/TextBigger"
             android:layout_width="wrap_content"
@@ -40,14 +52,29 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="10,24 PLN" />
 
+        <TextView
+            android:id="@+id/text_date"
+            style="@style/TextSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginL"
+            android:layout_marginBottom="@dimen/marginL"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_price"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="10.06.2022" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_contribution"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/marginL"
+            android:layout_marginTop="@dimen/marginS"
             android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/text_buyer">
 
             <TextView
                 android:id="@+id/text_minus"
@@ -55,24 +82,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/text_dash"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:textColor="@color/secondary"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <com.google.android.material.progressindicator.LinearProgressIndicator
-                android:id="@+id/indicator"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:progress="50"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:trackCornerRadius="10dp"
-                app:trackThickness="6dp"
                 />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_monetization_on_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/text_minus"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/secondary" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,13 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".views.fragments.FinancesFragment">
+    android:animateLayoutChanges="true">
 
-    <TextView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/layout_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Finances fragment" />
+        app:colorScheme="@color/primary">
 
-</FrameLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".views.fragments.UserAvailabilityFragment">
+
+            <FrameLayout
+                android:id="@+id/layout_top_background"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="@drawable/background_top_primary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/button_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/marginM"
+                android:layout_marginTop="@dimen/marginL"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_baseline_arrow_back_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                style="@style/CardWhite"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="@dimen/marginM"
+                android:layout_marginVertical="@dimen/marginXL"
+                app:layout_constraintBottom_toTopOf="@+id/button_switch_to_balance"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_back"
+                app:layout_constraintVertical_bias="0.0">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/menu_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:elevation="@dimen/marginS"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/image_expenses"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginHorizontal="@dimen/marginM"
+                            android:layout_marginVertical="@dimen/marginM"
+                            android:src="@drawable/ic_baseline_attach_money_24"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:tint="@color/primary" />
+
+                        <TextView
+                            android:id="@+id/text_header"
+                            style="@style/TextMega"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/marginS"
+                            android:text="Finances"
+                            android:textColor="@color/primary"
+                            app:layout_constraintBottom_toBottomOf="@+id/image_expenses"
+                            app:layout_constraintStart_toEndOf="@+id/image_expenses"
+                            app:layout_constraintTop_toTopOf="@+id/image_expenses" />
+
+                        <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/tab_pager"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/marginM"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/image_expenses"
+                            app:layout_constraintVertical_bias="0.0"
+                            app:tabInlineLabel="true">
+
+                            <com.google.android.material.tabs.TabItem
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:icon="@drawable/ic_baseline_receipt_24"
+                                android:text="@string/text_expenses" />
+
+                            <com.google.android.material.tabs.TabItem
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/text_settlements"
+                                android:icon="@drawable/ic_outline_handshake_24"
+                                />
+
+                        </com.google.android.material.tabs.TabLayout>
+
+                        <Button
+                            android:id="@+id/button_add"
+                            style="@style/Button.Contained"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/marginS"
+                            android:text="@string/text_add"
+                            app:icon="@drawable/ic_baseline_add_24"
+                            app:iconGravity="end"
+                            app:layout_constraintBottom_toBottomOf="@+id/text_header"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/text_header" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/viewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/menu_layout" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/button_switch_to_balance"
+                style="@style/Button.Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/textMedium"
+                android:layout_marginBottom="@dimen/textMedium"
+                android:text="Balance"
+                android:textColor="@color/secondary"
+                app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
+                app:iconGravity="end"
+                app:iconTint="@color/secondary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</layout>

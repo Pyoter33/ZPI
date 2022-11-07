@@ -15,8 +15,6 @@ import com.example.trip.databinding.FragmentExpensesBinding
 import com.example.trip.models.Expense
 import com.example.trip.models.Resource
 import com.example.trip.utils.getLongFromBundle
-import com.example.trip.utils.onBackArrowClick
-import com.example.trip.utils.setSwipeRefreshLayout
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.finances.ExpensesViewModel
 import com.example.trip.views.dialogs.MenuPopupFactory
@@ -56,17 +54,8 @@ class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener,
 
         groupId = getLongFromBundle(GROUP_ID_ARG)
         setAdapter()
-        requireActivity().onBackArrowClick(binding.buttonBack)
         observeAccommodationsList()
         setOnCheckedChipsListener()
-        setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
-        onAddClick()
-    }
-
-    private fun onAddClick() {
-        binding.buttonAdd.setOnClickListener {
-
-        }
     }
 
     private fun observeAccommodationsList() {
@@ -75,10 +64,9 @@ class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener,
                 is Resource.Success -> {
                     adapter.submitList(it.data)
                     binding.chipGroup.clearCheck()
-                    binding.layoutRefresh.isRefreshing = false
                 }
                 is Resource.Loading -> {
-                    binding.layoutRefresh.isRefreshing = true
+                    //NO-OP
                 }
                 is Resource.Failure -> {
                     (requireActivity() as MainActivity).showSnackbar(
@@ -89,7 +77,6 @@ class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener,
                     ) {
                         viewModel.refreshData()
                     }
-                    binding.layoutRefresh.isRefreshing = false
                 }
             }
         }
