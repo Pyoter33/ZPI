@@ -18,6 +18,7 @@
     <string name="text_delete">Delete</string>
     <string name="text_title_accept_dialog">Are you sure you want to accept?</string>
     <string name="text_title_delete_dialog">Are you sure you want to delete?</string>
+    <string name="text_title_resolve_dialog">Are you sure you want to resolve?</string>
     <string name="text_message_cannot_undo">You cannot undo this operation!</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_yes">Yes</string>
@@ -114,4 +115,8 @@
     <string name="text_settlements">Settlements</string>
     <string name="text_pending">Pending</string>
     <string name="text_resolved">Resolved</string>
+    <string name="text_resolve">Resolve</string>
+    <string name="text_my_settlements">My settlements</string>
+    <string name="text_other_settlements">Other settlements</string>
+    <string name="text_save">Save</string>
 </resources>

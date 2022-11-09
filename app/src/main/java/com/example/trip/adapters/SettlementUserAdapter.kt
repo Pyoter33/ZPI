@@ -8,13 +8,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trip.R
 import com.example.trip.databinding.ItemSettlementBinding
+import com.example.trip.databinding.ItemSettlementHeaderBinding
 import com.example.trip.models.Settlement
 import com.example.trip.models.SettlementStatus
 import com.skydoves.balloon.Balloon
 import javax.inject.Inject
 
-class SettlementAdapter @Inject constructor() :
-    ListAdapter<Settlement, SettlementAdapter.SettlementViewHolder>(
+class SettlementUserAdapter @Inject constructor() :
+    ListAdapter<Settlement, RecyclerView.ViewHolder>(
         SettlementDiffUtil()
     ) {
 
@@ -30,12 +31,26 @@ class SettlementAdapter @Inject constructor() :
         this.popupMenu = popupMenu
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettlementViewHolder {
-        return SettlementViewHolder.create(parent, settlementClickListener, popupMenu)
+    override fun getItemViewType(position: Int): Int {
+        return if (position == HEADER) 0 else 1
     }
 
-    override fun onBindViewHolder(holder: SettlementViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun getItemCount(): Int {
+        return currentList.size + 1
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            HEADER -> SettlementHeaderViewHolder.create(parent)
+            else -> SettlementViewHolder.create(parent, settlementClickListener, popupMenu)
+        }
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when(holder) {
+            is SettlementHeaderViewHolder -> holder.bind()
+            is SettlementViewHolder -> holder.bind(getItem(position - 1))
+        }
     }
 
     class SettlementViewHolder(
@@ -55,16 +70,28 @@ class SettlementAdapter @Inject constructor() :
                     layoutMain.setBackgroundColor(itemView.resources.getColor(R.color.white, null))
                 } else {
                     textStatus.text = itemView.resources.getString(R.string.text_resolved)
-                    layoutMain.setBackgroundColor(itemView.resources.getColor(R.color.grey200, null))
+                    layoutMain.setBackgroundColor(
+                        itemView.resources.getColor(
+                            R.color.grey200,
+                            null
+                        )
+                    )
                 }
             }
-            setOnLongClick(settlement)
+
+            if (settlement.debtee.id == userId && settlement.status != SettlementStatus.RESOLVED) {
+                setOnLongClick(settlement)
+            }
         }
 
         private fun setOnLongClick(settlement: Settlement) {
             binding.root.setOnLongClickListener {
                 popupMenu.showAlignBottom(binding.root)
-                setOnPopupButtonClick(R.id.button_edit){settlementClickListener.onMenuResolve(settlement)}
+                setOnPopupButtonClick(R.id.button_resolve) {
+                    settlementClickListener.onMenuResolve(
+                        settlement
+                    )
+                }
                 true
             }
         }
@@ -92,18 +119,47 @@ class SettlementAdapter @Inject constructor() :
             }
         }
     }
-}
 
-class SettlementDiffUtil : DiffUtil.ItemCallback<Settlement>() {
-    override fun areItemsTheSame(oldItem: Settlement, newItem: Settlement): Boolean {
-        return oldItem === newItem
+
+    class SettlementHeaderViewHolder(
+        private val binding: ItemSettlementHeaderBinding,
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind() {
+            binding.textHeader.text = itemView.resources.getString(R.string.text_my_settlements)
+        }
+
+        companion object {
+            fun create(
+                parent: ViewGroup,
+            ): SettlementHeaderViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemSettlementHeaderBinding.inflate(layoutInflater, parent, false)
+                return SettlementHeaderViewHolder(
+                    binding
+                )
+            }
+        }
     }
 
-    override fun areContentsTheSame(oldItem: Settlement, newItem: Settlement): Boolean {
-        return oldItem.id == newItem.id && oldItem.groupId == newItem.groupId
+
+    companion object {
+        const val HEADER = 0
+        const val SETTLEMENT = 1
     }
+
 }
 
-interface SettlementClickListener {
-    fun onMenuResolve(settlement: Settlement)
-}
+    class SettlementDiffUtil : DiffUtil.ItemCallback<Settlement>() {
+        override fun areItemsTheSame(oldItem: Settlement, newItem: Settlement): Boolean {
+            return oldItem === newItem
+        }
+
+        override fun areContentsTheSame(oldItem: Settlement, newItem: Settlement): Boolean {
+            return oldItem.id == newItem.id && oldItem.groupId == newItem.groupId
+        }
+    }
+
+    interface SettlementClickListener {
+        fun onMenuResolve(settlement: Settlement)
+    }

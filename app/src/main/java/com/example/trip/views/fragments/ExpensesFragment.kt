@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
@@ -16,7 +16,7 @@ import com.example.trip.models.Expense
 import com.example.trip.models.Resource
 import com.example.trip.utils.getLongFromBundle
 import com.example.trip.utils.toast
-import com.example.trip.viewmodels.finances.ExpensesViewModel
+import com.example.trip.viewmodels.finances.FinancesViewModel
 import com.example.trip.views.dialogs.MenuPopupFactory
 import com.example.trip.views.dialogs.accommodation.DeleteAccommodationDialog
 import com.example.trip.views.dialogs.finances.DeleteExpenseDialog
@@ -39,7 +39,7 @@ class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener,
     @Inject
     lateinit var adapter: ExpensesAdapter
 
-    private val viewModel: ExpensesViewModel by viewModels()
+    private val viewModel: FinancesViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,11 +54,11 @@ class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener,
 
         groupId = getLongFromBundle(GROUP_ID_ARG)
         setAdapter()
-        observeAccommodationsList()
+        observeExpensesList()
         setOnCheckedChipsListener()
     }
 
-    private fun observeAccommodationsList() {
+    private fun observeExpensesList() {
         viewModel.expensesList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
@@ -75,7 +75,7 @@ class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener,
                         R.string.text_retry,
                         Snackbar.LENGTH_INDEFINITE
                     ) {
-                        viewModel.refreshData()
+                        viewModel.refreshDataExpense()
                     }
                 }
             }
@@ -92,9 +92,7 @@ class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener,
             MaterialDividerItemDecoration(
                 requireContext(),
                 layoutManager.orientation
-            ).apply {
-                isLastItemDecorated = false
-            }
+            )
         )
     }
 
@@ -106,10 +104,10 @@ class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener,
                 }
                 1 -> {
                     when (checkedIds.first()) {
-                        R.id.chip_votes -> {
+                        R.id.chip_expenses -> {
                             applyFilter(viewModel.filterMyExpenses(PLACEHOLDER_USERID))
                         }
-                        R.id.chip_accommodations -> {
+                        R.id.chip_contributions -> {
                             applyFilter(viewModel.filterContributions(PLACEHOLDER_USERID))
                         }
                     }
@@ -128,7 +126,7 @@ class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener,
                     adapter.submitList(it.data)
                 }
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
+                    requireContext().toast(R.string.text_fetch_failure) //snackbar
                 }
                 else -> {}
             }

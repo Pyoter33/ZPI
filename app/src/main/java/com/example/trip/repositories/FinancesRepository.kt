@@ -23,7 +23,7 @@ class FinancesRepository @Inject constructor() {
                             0,
                             LocalDate.of(2022, 10, 11),
                             "Dinner",
-                            BigDecimal.valueOf(170.4),
+                            BigDecimal.valueOf(170.40),
                             0,
                             1,
                             listOf(1, 2, 3, 4)
@@ -32,10 +32,10 @@ class FinancesRepository @Inject constructor() {
                             0,
                             LocalDate.of(2022, 10, 11),
                             "Fruit",
-                            BigDecimal.valueOf(30.1),
+                            BigDecimal.valueOf(30.10),
                             0,
                             1,
-                            listOf(1, 2, 3, 4)
+                            listOf(2, 3, 4)
                         ), ExpenseDto(
                             0,
                             LocalDate.of(2022, 10, 12),
@@ -43,7 +43,7 @@ class FinancesRepository @Inject constructor() {
                             BigDecimal.valueOf(16),
                             0,
                             2,
-                            listOf(1, 2)
+                            listOf(2)
                         ), ExpenseDto(
                             0,
                             LocalDate.of(2022, 10, 13),

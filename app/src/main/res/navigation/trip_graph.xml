@@ -92,4 +92,12 @@
                 app:argType="com.example.trip.models.Attraction" />
         </fragment>
     </navigation>
+    <fragment
+        android:id="@+id/tripSummary"
+        android:name="com.example.trip.views.fragments.TripSummaryFragment"
+        android:label="TripSummaryFragment" >
+        <argument
+            android:name="groupId"
+            app:argType="long" />
+    </fragment>
 </navigation>

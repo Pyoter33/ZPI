@@ -215,9 +215,6 @@ class TransportFragment @Inject constructor() : Fragment(), OnMapReadyCallback,
                 airTransport.flights.last().travelToAccommodationDuration!!.toStringTime()
             textDurationTotal.text = airTransport.duration.toStringTime()
 
-            buttonLink.setOnClickListener {
-                //click on link
-            }
         }
     }
 

@@ -72,11 +72,24 @@
                         android:layout_height="wrap_content"
                         android:layout_marginVertical="@dimen/marginL"
                         android:layout_marginStart="@dimen/marginS"
-                        android:text="Trip summary"
+                        android:text="Summary"
                         android:textColor="@color/primary"
                         app:layout_constraintBottom_toBottomOf="@+id/image_summary"
                         app:layout_constraintStart_toEndOf="@+id/image_summary"
                         app:layout_constraintTop_toTopOf="@+id/image_summary" />
+
+                    <Button
+                        android:id="@+id/button_add"
+                        style="@style/Button.Contained"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/marginS"
+                        android:text="@string/text_save"
+                        app:icon="@drawable/ic_baseline_file_download_24"
+                        app:iconGravity="end"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_trip_summary"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/text_trip_summary" />
 
                     <TextView
                         android:id="@+id/text_accommodation"
@@ -404,6 +417,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/selector_lock"
+                        android:layout_marginBottom="@dimen/marginL"
+                        app:layout_constraintBottom_toTopOf="@+id/button_start_trip"
                         app:layout_constraintEnd_toEndOf="@+id/image_participants"
                         app:layout_constraintTop_toBottomOf="@+id/list_participants"
                         app:tint="@color/grey700" />
@@ -437,8 +452,7 @@
                         android:textAllCaps="true"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/button_lock" />
+                        app:layout_constraintStart_toStartOf="parent" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.trip.R
-import com.example.trip.adapters.ExpensesAdapter
 import com.example.trip.adapters.FinancesPagerAdapter
 import com.example.trip.databinding.FragmentFinancesBinding
 import com.example.trip.models.Resource
 import com.example.trip.utils.getLongFromBundle
 import com.example.trip.utils.onBackArrowClick
 import com.example.trip.utils.setSwipeRefreshLayout
-import com.example.trip.viewmodels.finances.ExpensesViewModel
+import com.example.trip.viewmodels.finances.FinancesViewModel
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import kotlin.properties.Delegates
@@ -26,10 +26,9 @@ class FinancesFragment @Inject constructor() : Fragment() {
     private lateinit var binding: FragmentFinancesBinding
     private var groupId by Delegates.notNull<Long>()
 
-    @Inject
-    lateinit var adapter: ExpensesAdapter
+    private lateinit var adapter: FinancesPagerAdapter
 
-    private val viewModel: ExpensesViewModel by activityViewModels()
+    private val viewModel: FinancesViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +44,11 @@ class FinancesFragment @Inject constructor() : Fragment() {
         groupId = getLongFromBundle(GROUP_ID_ARG)
         setPager()
         requireActivity().onBackArrowClick(binding.buttonBack)
-        setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
+        setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) {
+            viewModel.refreshDataExpense()
+            viewModel.refreshDataSettlement()
+        }
+        observeLists()
         onAddClick()
     }
 
@@ -55,14 +58,28 @@ class FinancesFragment @Inject constructor() : Fragment() {
         }
     }
 
-    private fun observeExpensesList() {
+    private fun observeLists() {
         viewModel.expensesList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
                     binding.layoutRefresh.isRefreshing = false
                 }
                 is Resource.Loading -> {
-                    binding.layoutRefresh.isRefreshing = true
+                    //NO-OP
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                }
+            }
+        }
+
+        viewModel.settlementsList.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    binding.layoutRefresh.isRefreshing = false
+                }
+                is Resource.Loading -> {
+                    //NO-OP
                 }
                 is Resource.Failure -> {
                     binding.layoutRefresh.isRefreshing = false
@@ -71,10 +88,25 @@ class FinancesFragment @Inject constructor() : Fragment() {
         }
     }
 
-
     private fun setPager() {
-        val adapter = FinancesPagerAdapter()
-        binding.viewPager.adapter
+        adapter = FinancesPagerAdapter(
+            listOf(ExpensesFragment(), SettlementsFragment()),
+            childFragmentManager,
+            lifecycle
+        )
+        binding.viewPager.adapter = adapter
+        TabLayoutMediator(binding.tabPager, binding.viewPager) { tab, position ->
+            when (position) {
+                0 -> {
+                    tab.text = getString(R.string.text_expenses)
+                    tab.setIcon(R.drawable.ic_baseline_receipt_24)
+                }
+                1 -> {
+                    tab.text = getString(R.string.text_settlements)
+                    tab.setIcon(R.drawable.ic_outline_handshake_24)
+                }
+            }
+        }.attach()
     }
 
     companion object {

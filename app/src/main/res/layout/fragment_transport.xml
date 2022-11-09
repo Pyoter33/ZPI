@@ -428,6 +428,8 @@
                                         android:layout_height="wrap_content"
                                         android:text="total:"
                                         android:textColor="@color/grey600"
+                                        android:layout_marginBottom="@dimen/marginXXXL"
+                                        app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintStart_toStartOf="@+id/text_label_duration_to_air_port"
                                         app:layout_constraintTop_toBottomOf="@+id/text_label_duration_from_airport" />
 
@@ -440,23 +442,6 @@
                                         app:layout_constraintStart_toEndOf="@+id/text_label_duration_to_air_port"
                                         app:layout_constraintTop_toBottomOf="@+id/text_label_duration_from_airport"
                                         tools:text="3h 50 min " />
-
-
-                                    <Button
-                                        android:id="@+id/button_link"
-                                        style="@style/Button.Outlined"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginHorizontal="@dimen/marginXXL"
-                                        android:layout_marginVertical="@dimen/marginXL"
-                                        android:text="@string/text_link"
-                                        android:textColor="@color/secondary"
-                                        app:icon="@drawable/ic_baseline_link_24"
-                                        app:iconTint="@color/secondary"
-                                        app:layout_constraintBottom_toBottomOf="parent"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/text_label_duration_total"
-                                        app:layout_constraintVertical_bias="1.0" />
 
                                 </androidx.constraintlayout.widget.ConstraintLayout>
                             </androidx.cardview.widget.CardView>
