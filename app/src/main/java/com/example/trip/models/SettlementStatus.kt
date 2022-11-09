@@ -1,6 +1,6 @@
 package com.example.trip.models
 
-enum class SettlementStatus {
+enum class SettlementStatus() {
     PENDING,
     RESOLVED
 }

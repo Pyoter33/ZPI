@@ -112,4 +112,6 @@
     <string name="text_my_expenses">My expenses</string>
     <string name="text_my_contributions">My contributions</string>
     <string name="text_settlements">Settlements</string>
+    <string name="text_pending">Pending</string>
+    <string name="text_resolved">Resolved</string>
 </resources>
