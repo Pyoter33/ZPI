@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/marginS"
+        >
+
+        <TextView
+            android:id="@+id/text_name"
+            style="@style/TextBig"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginL"
+            android:layout_marginVertical="@dimen/marginXL"
+            android:ellipsize="end"
+            android:maxWidth="250dp"
+            android:maxLines="2"
+            android:textColor="@color/grey900"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/indicator"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Dorian Olisadebe" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/indicator"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:progress="80"
+            app:indicatorColor="@color/green_transparent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:trackColor="@color/transparent"
+            app:trackThickness="40dp" />
+
+        <TextView
+            android:id="@+id/text_price"
+            style="@style/TextBigger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginL"
+            android:ellipsize="end"
+            android:maxWidth="250dp"
+            android:maxLines="2"
+            app:layout_constraintBottom_toBottomOf="@+id/indicator"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/indicator"
+            tools:text="+ 10,24 PLN" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

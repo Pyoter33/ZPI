@@ -30,6 +30,8 @@
     <color name="transparent">#00FFFFFF</color>
     <color name="redRipple">#33DD2C00</color>
     <color name="red">#FFDD2C00</color>
+    <color name="red_transparent">#80DD2C00</color>
     <color name="green">#00DA14</color>
+    <color name="green_transparent">#8000DA14</color>
     <color name="yellow">#FFF200</color>
 </resources>

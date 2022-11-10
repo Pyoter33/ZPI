@@ -1,6 +1,5 @@
 package com.example.trip.repositories
 
-
 import com.example.trip.dto.ExpenseDto
 import com.example.trip.dto.SettlementDto
 import com.example.trip.models.Resource
@@ -106,5 +105,19 @@ class FinancesRepository @Inject constructor() {
         }
     }
 
+    fun getBalances(groupId: Long): Flow<Resource<Map<Long, BigDecimal>>> {
+        return flow {
+            emit(
+                Resource.Success(
+                    mapOf(
+                        1L to BigDecimal.valueOf(20.5),
+                        2L to BigDecimal.valueOf(-6.5),
+                        3L to BigDecimal.valueOf(80.5),
+                        4L to BigDecimal.valueOf(-14.5)
+                    )
+                )
+            )
+        }
+    }
 
 }
