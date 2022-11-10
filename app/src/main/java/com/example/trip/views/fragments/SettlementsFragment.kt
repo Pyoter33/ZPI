@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.R
@@ -17,8 +17,10 @@ import com.example.trip.databinding.FragmentSettlementsBinding
 import com.example.trip.models.Resource
 import com.example.trip.models.Settlement
 import com.example.trip.utils.getLongFromBundle
+import com.example.trip.utils.onBackArrowClick
+import com.example.trip.utils.setSwipeRefreshLayout
 import com.example.trip.utils.toast
-import com.example.trip.viewmodels.finances.FinancesViewModel
+import com.example.trip.viewmodels.finances.SettlementsViewModel
 import com.example.trip.views.dialogs.MenuPopupResolveFactory
 import com.example.trip.views.dialogs.finances.ResolveSettlementDialog
 import com.example.trip.views.dialogs.finances.ResolveSettlementDialogClickListener
@@ -43,7 +45,7 @@ class SettlementsFragment @Inject constructor() : Fragment(), SettlementClickLis
     @Inject
     lateinit var otherAdapter: SettlementOtherAdapter
 
-    private val viewModel: FinancesViewModel by activityViewModels()
+    private val viewModel: SettlementsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,14 +59,24 @@ class SettlementsFragment @Inject constructor() : Fragment(), SettlementClickLis
         super.onViewCreated(view, savedInstanceState)
 
         groupId = getLongFromBundle(GROUP_ID_ARG)
+        requireActivity().onBackArrowClick(binding.buttonBack)
+        setSwipeRefreshLayout(binding.layoutRefresh, R.color.secondary) { viewModel.refreshData() }
         setAdapters()
         observeSettlementsList()
+        onFinancesClick()
+    }
+
+    private fun onFinancesClick() {
+        binding.buttonSwitchToFinances.setOnClickListener {
+            (requireParentFragment() as MoneyPager).switchToFinancesFragment()
+        }
     }
 
     private fun observeSettlementsList() {
         viewModel.settlementsList.observe(viewLifecycleOwner) { settlement ->
             when (settlement) {
                 is Resource.Success -> {
+                    binding.layoutRefresh.isRefreshing = false
                     val userSettlements = settlement.data.filter { it.debtee.id == PLACEHOLDER_USERID || it.debtor.id == PLACEHOLDER_USERID }
                     val otherSettlements = settlement.data.minus(userSettlements.toSet())
 
@@ -75,13 +87,14 @@ class SettlementsFragment @Inject constructor() : Fragment(), SettlementClickLis
                     //NO-OP
                 }
                 is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
                     (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
                         R.string.text_retry,
                         Snackbar.LENGTH_INDEFINITE
                     ) {
-                        viewModel.refreshDataExpense()
+                        viewModel.refreshData()
                     }
                 }
             }

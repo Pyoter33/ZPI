@@ -19,7 +19,7 @@ class FinancesRepository @Inject constructor() {
                 Resource.Success(
                     listOf(
                         ExpenseDto(
-                            0,
+                            1,
                             LocalDate.of(2022, 10, 11),
                             "Dinner",
                             BigDecimal.valueOf(170.40),
@@ -28,7 +28,7 @@ class FinancesRepository @Inject constructor() {
                             listOf(1, 2, 3, 4)
                         ),
                         ExpenseDto(
-                            0,
+                            2,
                             LocalDate.of(2022, 10, 11),
                             "Fruit",
                             BigDecimal.valueOf(30.10),
@@ -36,7 +36,7 @@ class FinancesRepository @Inject constructor() {
                             1,
                             listOf(2, 3, 4)
                         ), ExpenseDto(
-                            0,
+                            3,
                             LocalDate.of(2022, 10, 12),
                             "Souvenirs",
                             BigDecimal.valueOf(16),
@@ -44,7 +44,41 @@ class FinancesRepository @Inject constructor() {
                             2,
                             listOf(2)
                         ), ExpenseDto(
+                            4,
+                            LocalDate.of(2022, 10, 13),
+                            "Bus ticket",
+                            BigDecimal.valueOf(12),
                             0,
+                            3,
+                            listOf(1, 4)
+                        ),
+                        ExpenseDto(
+                            5,
+                            LocalDate.of(2022, 10, 11),
+                            "Dinner",
+                            BigDecimal.valueOf(170.40),
+                            0,
+                            1,
+                            listOf(1, 2, 3, 4)
+                        ),
+                        ExpenseDto(
+                            6,
+                            LocalDate.of(2022, 10, 11),
+                            "Fruit",
+                            BigDecimal.valueOf(30.10),
+                            0,
+                            1,
+                            listOf(2, 3, 4)
+                        ), ExpenseDto(
+                            7,
+                            LocalDate.of(2022, 10, 12),
+                            "Souvenirs",
+                            BigDecimal.valueOf(16),
+                            0,
+                            2,
+                            listOf(2)
+                        ), ExpenseDto(
+                            8,
                             LocalDate.of(2022, 10, 13),
                             "Bus ticket",
                             BigDecimal.valueOf(12),

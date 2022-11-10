@@ -10,6 +10,7 @@ import com.example.trip.databinding.ItemBalancePlusBinding
 import com.example.trip.models.Balance
 import com.example.trip.models.BalanceStatus
 import javax.inject.Inject
+import kotlin.math.absoluteValue
 
 class BalancesAdapter @Inject constructor() :
     ListAdapter<Balance, RecyclerView.ViewHolder>(
@@ -41,7 +42,7 @@ class BalancesAdapter @Inject constructor() :
         fun bind(balance: Balance) {
             with(binding) {
                 textName.text = balance.participant.fullName
-                textPrice.text = balance.amount.toString() + " PLN"
+                textPrice.text = "+" + balance.amount.toString() + " PLN"
                 indicator.max = balance.maxAmount.toInt()
                 indicator.progress = balance.amount.toInt()
             }
@@ -68,8 +69,8 @@ class BalancesAdapter @Inject constructor() :
             with(binding) {
                 textName.text = balance.participant.fullName
                 textPrice.text = balance.amount.toString() + " PLN"
-                indicator.max = balance.maxAmount.toInt()
-                indicator.progress = balance.amount.toInt()
+                indicator.max = balance.maxAmount.toInt().absoluteValue
+                indicator.progress = balance.amount.toInt().absoluteValue
             }
         }
 

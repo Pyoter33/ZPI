@@ -5,7 +5,7 @@
         android:icon="@drawable/ic_baseline_travel_explore_24"
         android:title="@string/text_plans"/>
     <item
-        android:id="@+id/financesFragment"
+        android:id="@+id/finances"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_attach_money_24"
         android:title="@string/text_finances"/>

@@ -46,15 +46,22 @@ class FinancesFragment @Inject constructor() : Fragment() {
         requireActivity().onBackArrowClick(binding.buttonBack)
         setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) {
             viewModel.refreshDataExpense()
-            viewModel.refreshDataSettlement()
+            viewModel.refreshDataBalances()
         }
         observeLists()
+        onBalancesClick()
         onAddClick()
     }
 
     private fun onAddClick() {
         binding.buttonAdd.setOnClickListener {
 
+        }
+    }
+
+    private fun onBalancesClick() {
+        binding.buttonSwitchToBalance.setOnClickListener {
+            (requireParentFragment() as MoneyPager).switchToSettlementsFragment()
         }
     }
 
@@ -73,7 +80,7 @@ class FinancesFragment @Inject constructor() : Fragment() {
             }
         }
 
-        viewModel.settlementsList.observe(viewLifecycleOwner) {
+        viewModel.balances.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
                     binding.layoutRefresh.isRefreshing = false
@@ -90,7 +97,7 @@ class FinancesFragment @Inject constructor() : Fragment() {
 
     private fun setPager() {
         adapter = FinancesPagerAdapter(
-            listOf(ExpensesFragment(), SettlementsFragment()),
+            listOf(ExpensesFragment(), BalancesFragment()),
             childFragmentManager,
             lifecycle
         )
@@ -102,8 +109,8 @@ class FinancesFragment @Inject constructor() : Fragment() {
                     tab.setIcon(R.drawable.ic_baseline_receipt_24)
                 }
                 1 -> {
-                    tab.text = getString(R.string.text_settlements)
-                    tab.setIcon(R.drawable.ic_outline_handshake_24)
+                    tab.text = getString(R.string.text_balances)
+                    tab.setIcon(R.drawable.ic_baseline_sync_alt_24)
                 }
             }
         }.attach()

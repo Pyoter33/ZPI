@@ -1,11 +1,11 @@
 package com.example.trip.viewmodels.finances
 
 import androidx.lifecycle.*
+import com.example.trip.models.Balance
 import com.example.trip.models.Expense
 import com.example.trip.models.Resource
-import com.example.trip.models.Settlement
+import com.example.trip.usecases.finances.GetBalancesUseCase
 import com.example.trip.usecases.finances.GetExpensesUseCase
-import com.example.trip.usecases.finances.GetSettlementsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -13,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FinancesViewModel @Inject constructor(
     private val getExpensesUseCase: GetExpensesUseCase,
-    private val getSettlementsUseCase: GetSettlementsUseCase,
+    private val getBalancesUseCase: GetBalancesUseCase,
     state: SavedStateHandle
 ) :
     ViewModel() {
@@ -25,19 +25,19 @@ class FinancesViewModel @Inject constructor(
     }
     val expensesList: LiveData<Resource<List<Expense>>> = _expensesList
 
-    private val _settlementsList by lazy {
-        val mutableLiveData = MutableLiveData<Resource<List<Settlement>>>()
-        getDataSettlement(mutableLiveData)
+    private val _balances by lazy {
+        val mutableLiveData = MutableLiveData<Resource<List<Balance>>>()
+        getDataBalances(mutableLiveData)
         return@lazy mutableLiveData
     }
-    val settlementsList: LiveData<Resource<List<Settlement>>> = _settlementsList
+    val balances: LiveData<Resource<List<Balance>>> = _balances
 
     fun refreshDataExpense() {
         getDataExpense(_expensesList)
     }
 
-    fun refreshDataSettlement() {
-        getDataSettlement(_settlementsList)
+    fun refreshDataBalances() {
+        getDataBalances(_balances)
     }
 
     fun resetFilter(): Resource<List<Expense>> {
@@ -98,9 +98,9 @@ class FinancesViewModel @Inject constructor(
         }
     }
 
-    private fun getDataSettlement(mutableLiveData: MutableLiveData<Resource<List<Settlement>>>) {
+    private fun getDataBalances(mutableLiveData: MutableLiveData<Resource<List<Balance>>>) {
         viewModelScope.launch {
-            getSettlementsUseCase(1).collect { //from args
+            getBalancesUseCase(0).collect { //from args
                 mutableLiveData.value = it
             }
         }

@@ -108,9 +108,8 @@
                             <com.google.android.material.tabs.TabItem
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/text_settlements"
-                                android:icon="@drawable/ic_outline_handshake_24"
-                                />
+                                android:icon="@drawable/ic_baseline_sync_alt_24"
+                                android:text="@string/text_balances" />
 
                         </com.google.android.material.tabs.TabLayout>
 
@@ -149,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/textMedium"
                 android:layout_marginBottom="@dimen/textMedium"
-                android:text="Balance"
+                android:text="@string/text_settlements"
                 android:textColor="@color/secondary"
                 app:icon="@drawable/ic_baseline_arrow_forward_ios_24"
                 app:iconGravity="end"

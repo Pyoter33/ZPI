@@ -49,15 +49,8 @@ class SettlementOtherAdapter @Inject constructor() :
                 textPrice.text = settlement.amount.toString() + "PLN"
                 if (settlement.status == SettlementStatus.PENDING) {
                     textStatus.text = itemView.resources.getString(R.string.text_pending)
-                    layoutMain.setBackgroundColor(itemView.resources.getColor(R.color.white, null))
                 } else {
                     textStatus.text = itemView.resources.getString(R.string.text_resolved)
-                    layoutMain.setBackgroundColor(
-                        itemView.resources.getColor(
-                            R.color.grey200,
-                            null
-                        )
-                    )
                 }
             }
         }

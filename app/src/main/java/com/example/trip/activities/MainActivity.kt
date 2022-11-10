@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             R.id.availabilityPager,
             R.id.participantsFragmentPreTrip,
             R.id.dayPlansFragment,
-            R.id.financesFragment,
+            R.id.finances,
             R.id.participantsFragmentTrip,
             R.id.summaryFragment
         )

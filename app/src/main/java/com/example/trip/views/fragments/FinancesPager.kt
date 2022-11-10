@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.trip.adapters.AvailabilityPagerAdapter
+import com.example.trip.adapters.FragmentPagerAdapter
 import com.example.trip.databinding.FragmentFinancesPagerBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -37,7 +37,7 @@ class FinancesPager @Inject constructor() : Fragment() {
     }
 
     private fun setupViewPager() {
-        val adapter = AvailabilityPagerAdapter(this)
+        val adapter = FragmentPagerAdapter(this)
         adapter.apply {
             addNewFragment(UserAvailabilityFragment())
             addNewFragment(OptimalDatesFragment())

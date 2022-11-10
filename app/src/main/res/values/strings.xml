@@ -119,4 +119,6 @@
     <string name="text_my_settlements">My settlements</string>
     <string name="text_other_settlements">Other settlements</string>
     <string name="text_save">Save</string>
+    <string name="text_balances">Balances</string>
+    <string name="text_contributors">Contributors</string>
 </resources>

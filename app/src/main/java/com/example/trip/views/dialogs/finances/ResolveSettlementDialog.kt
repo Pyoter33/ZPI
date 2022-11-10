@@ -12,7 +12,7 @@ class ResolveSettlementDialog(private val resolveSettlementDialogClickListener: 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return AlertDialog.Builder(requireContext())
-            .setTitle(R.string.text_title_delete_dialog)
+            .setTitle(R.string.text_title_resolve_dialog)
             .setMessage(R.string.text_message_cannot_undo)
             .setPositiveButton(getString(R.string.text_resolve)) { _, _ ->
                 resolveSettlementDialogClickListener.onResolveClick(settlement)

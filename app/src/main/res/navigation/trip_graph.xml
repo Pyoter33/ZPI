@@ -9,15 +9,6 @@
         android:name="com.example.trip.views.fragments.ParticipantsFragment"
         android:label="fragment_participants"
         tools:layout="@layout/fragment_participants" />
-    <fragment
-        android:id="@+id/financesFragment"
-        android:name="com.example.trip.views.fragments.FinancesFragment"
-        android:label="fragment_finances"
-        tools:layout="@layout/fragment_finances">
-        <argument
-            android:name="groupId"
-            app:argType="integer" />
-    </fragment>
     <navigation
         android:id="@+id/dayPlan"
         android:label="dayPlan"
@@ -100,4 +91,8 @@
             android:name="groupId"
             app:argType="long" />
     </fragment>
+    <fragment
+        android:id="@+id/finances"
+        android:name="com.example.trip.views.fragments.MoneyPager"
+        android:label="MoneyPager" />
 </navigation>
