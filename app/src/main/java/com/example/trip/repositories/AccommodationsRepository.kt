@@ -54,7 +54,7 @@ class AccommodationsRepository @Inject constructor() {
                             "https://cf.bstatic.com/xdata/images/hotel/max1280x900/242710752.jpg?k=11f43404aba1d4d2c69ec7d94bf08c2d4c12f20d11d01ef0ea7af0669383099a&o=&hp=1",
                             "https://www.booking.com/Share-8Hgjqk",
                             4,
-                            BigDecimal(600),
+                            BigDecimal(600.4),
                             true
                         ),
                         Accommodation(

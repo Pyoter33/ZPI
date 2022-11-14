@@ -6,9 +6,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <fragment
         android:id="@+id/participantsFragmentTrip"
-        android:name="com.example.trip.views.fragments.ParticipantsFragment"
-        android:label="fragment_participants"
-        tools:layout="@layout/fragment_participants" />
+        android:name="com.example.trip.views.fragments.ParticipantsTripFragment"
+        android:label="fragment_participants" />
     <navigation
         android:id="@+id/dayPlan"
         android:label="dayPlan"
@@ -91,8 +90,92 @@
             android:name="groupId"
             app:argType="long" />
     </fragment>
-    <fragment
+    <navigation
         android:id="@+id/finances"
-        android:name="com.example.trip.views.fragments.MoneyPager"
-        android:label="MoneyPager" />
+        android:label="finances"
+        app:startDestination="@id/moneyPager">
+        <fragment
+            android:id="@+id/createEditExpenseFragment"
+            android:name="com.example.trip.views.fragments.CreateEditExpenseFragment"
+            android:label="CreateEditExpenseFragment">
+            <argument
+                android:name="groupId"
+                app:argType="long" />
+            <argument
+                android:name="currency"
+                app:argType="string" />
+            <argument
+                android:name="expense"
+                android:defaultValue="@null"
+                app:argType="com.example.trip.models.Expense"
+                app:nullable="true" />
+        </fragment>
+        <fragment
+            android:id="@+id/moneyPager"
+            android:name="com.example.trip.views.fragments.MoneyPager"
+            android:label="MoneyPager">
+            <action
+                android:id="@+id/action_finances_to_createEditExpenseFragment"
+                app:destination="@id/createEditExpenseFragment" />
+            <argument
+                android:name="groupId"
+                app:argType="long" />
+            <argument
+                android:name="currency"
+                app:argType="string" />
+            <action
+                android:id="@+id/action_moneyPager_to_expenseDetailsFragment"
+                app:destination="@id/expenseDetailsFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/financesFragment"
+            android:name="com.example.trip.views.fragments.FinancesFragment"
+            android:label="FinancesFragment" >
+            <argument
+                android:name="groupId"
+                app:argType="long" />
+            <argument
+                android:name="currency"
+                app:argType="string" />
+        </fragment>
+        <fragment
+            android:id="@+id/settlementsFragment"
+            android:name="com.example.trip.views.fragments.SettlementsFragment"
+            android:label="SettlementsFragment" >
+            <argument
+                android:name="groupId"
+                app:argType="long" />
+            <argument
+                android:name="currency"
+                app:argType="string" />
+        </fragment>
+        <fragment
+            android:id="@+id/expensesFragment"
+            android:name="com.example.trip.views.fragments.ExpensesFragment"
+            android:label="ExpensesFragment" >
+            <argument
+                android:name="groupId"
+                app:argType="long" />
+            <argument
+                android:name="currency"
+                app:argType="string" />
+        </fragment>
+        <fragment
+            android:id="@+id/expenseDetailsFragment"
+            android:name="com.example.trip.views.fragments.ExpenseDetailsFragment"
+            android:label="ExpenseDetailsFragment" >
+            <argument
+                android:name="groupId"
+                app:argType="long" />
+            <argument
+                android:name="currency"
+                app:argType="string" />
+            <argument
+                android:name="expense"
+                app:argType="com.example.trip.models.Expense" />
+            <action
+                android:id="@+id/action_expenseDetailsFragment_to_createEditExpenseFragment"
+                app:destination="@id/createEditExpenseFragment" />
+        </fragment>
+    </navigation>
 </navigation>

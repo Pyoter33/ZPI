@@ -5,10 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.trip.R
 import com.example.trip.databinding.ItemBalanceMinusBinding
 import com.example.trip.databinding.ItemBalancePlusBinding
 import com.example.trip.models.Balance
 import com.example.trip.models.BalanceStatus
+import com.example.trip.utils.toStringFormat
 import javax.inject.Inject
 import kotlin.math.absoluteValue
 
@@ -17,14 +19,20 @@ class BalancesAdapter @Inject constructor() :
         BalancesDiffUtil()
     ) {
 
+    private lateinit var currency: String
+
+    fun setCurrency(currency: String) {
+        this.currency = currency
+    }
+
     override fun getItemViewType(position: Int): Int {
         return getItem(position).status.code
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            BalanceStatus.POSITIVE.code -> BalancePlusViewHolder.create(parent)
-            else -> BalanceMinusViewHolder.create(parent)
+            BalanceStatus.POSITIVE.code -> BalancePlusViewHolder.create(parent, currency)
+            else -> BalanceMinusViewHolder.create(parent, currency)
         }
     }
 
@@ -36,13 +44,16 @@ class BalancesAdapter @Inject constructor() :
     }
 
     class BalancePlusViewHolder(
-        private val binding: ItemBalancePlusBinding
+        private val binding: ItemBalancePlusBinding,
+        private val currency: String
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(balance: Balance) {
             with(binding) {
                 textName.text = balance.participant.fullName
-                textPrice.text = "+" + balance.amount.toString() + " PLN"
+                textPrice.text = itemView.resources.getString(
+                    R.string.format_plus, balance.amount.toStringFormat(currency)
+                )
                 indicator.max = balance.maxAmount.toInt()
                 indicator.progress = balance.amount.toInt()
             }
@@ -50,12 +61,14 @@ class BalancesAdapter @Inject constructor() :
 
         companion object {
             fun create(
-                parent: ViewGroup
+                parent: ViewGroup,
+                currency: String
             ): BalancePlusViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemBalancePlusBinding.inflate(layoutInflater, parent, false)
                 return BalancePlusViewHolder(
-                    binding
+                    binding,
+                    currency
                 )
             }
         }
@@ -63,12 +76,13 @@ class BalancesAdapter @Inject constructor() :
 
     class BalanceMinusViewHolder(
         private val binding: ItemBalanceMinusBinding,
+        private val currency: String
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(balance: Balance) {
             with(binding) {
                 textName.text = balance.participant.fullName
-                textPrice.text = balance.amount.toString() + " PLN"
+                textPrice.text = balance.amount.toStringFormat(currency)
                 indicator.max = balance.maxAmount.toInt().absoluteValue
                 indicator.progress = balance.amount.toInt().absoluteValue
             }
@@ -77,11 +91,13 @@ class BalancesAdapter @Inject constructor() :
         companion object {
             fun create(
                 parent: ViewGroup,
+                currency: String
             ): BalanceMinusViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemBalanceMinusBinding.inflate(layoutInflater, parent, false)
                 return BalanceMinusViewHolder(
-                    binding
+                    binding,
+                    currency
                 )
             }
         }

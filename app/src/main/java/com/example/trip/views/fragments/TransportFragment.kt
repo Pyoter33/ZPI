@@ -95,6 +95,7 @@ class TransportFragment @Inject constructor() : Fragment(), OnMapReadyCallback,
         val layoutManager = LinearLayoutManager(context)
         adapter.setPopupMenu(popupMenu)
         adapter.setUserTransportClickListener(this)
+        adapter.setCurrency(args.currency)
         binding.listTransports.adapter = adapter
         binding.listTransports.layoutManager = layoutManager
         binding.listTransports.addItemDecoration(
@@ -224,12 +225,12 @@ class TransportFragment @Inject constructor() : Fragment(), OnMapReadyCallback,
 
     private fun onAddClick() {
         binding.buttonAdd.setOnClickListener {
-            findNavController().navigate(TransportFragmentDirections.actionTransportFragmentToCreateEditTransportFragment(args.groupId, args.accommodationId))
+            findNavController().navigate(TransportFragmentDirections.actionTransportFragmentToCreateEditTransportFragment(args.groupId, args.accommodationId, args.currency))
         }
     }
 
     override fun onMenuEditClick(userTransport: UserTransport) {
-        findNavController().navigate(TransportFragmentDirections.actionTransportFragmentToCreateEditTransportFragment(args.groupId, args.accommodationId, userTransport))
+        findNavController().navigate(TransportFragmentDirections.actionTransportFragmentToCreateEditTransportFragment(args.groupId, args.accommodationId, args.currency, userTransport))
     }
 
     override fun onMenuDeleteClick(userTransport: UserTransport) {

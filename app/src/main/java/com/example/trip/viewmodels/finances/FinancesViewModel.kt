@@ -1,11 +1,14 @@
 package com.example.trip.viewmodels.finances
 
 import androidx.lifecycle.*
+import com.example.trip.Constants
 import com.example.trip.models.Balance
 import com.example.trip.models.Expense
 import com.example.trip.models.Resource
+import com.example.trip.models.Settlement
 import com.example.trip.usecases.finances.GetBalancesUseCase
 import com.example.trip.usecases.finances.GetExpensesUseCase
+import com.example.trip.usecases.finances.GetSettlementsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -14,9 +17,11 @@ import javax.inject.Inject
 class FinancesViewModel @Inject constructor(
     private val getExpensesUseCase: GetExpensesUseCase,
     private val getBalancesUseCase: GetBalancesUseCase,
+    private val getSettlementsUseCase: GetSettlementsUseCase,
     state: SavedStateHandle
-) :
-    ViewModel() {
+) : ViewModel() {
+
+    private val groupId = state.get<Long>(Constants.GROUP_ID_KEY)
 
     private val _expensesList by lazy {
         val mutableLiveData = MutableLiveData<Resource<List<Expense>>>()
@@ -32,12 +37,23 @@ class FinancesViewModel @Inject constructor(
     }
     val balances: LiveData<Resource<List<Balance>>> = _balances
 
+    private val _settlementsList by lazy {
+        val mutableLiveData = MutableLiveData<Resource<List<Settlement>>>()
+        getDataSettlements(mutableLiveData)
+        return@lazy mutableLiveData
+    }
+    val settlementsList: LiveData<Resource<List<Settlement>>> = _settlementsList
+
     fun refreshDataExpense() {
         getDataExpense(_expensesList)
     }
 
     fun refreshDataBalances() {
         getDataBalances(_balances)
+    }
+
+    fun refreshDataSettlements() {
+        getDataSettlements(_settlementsList)
     }
 
     fun resetFilter(): Resource<List<Expense>> {
@@ -92,16 +108,30 @@ class FinancesViewModel @Inject constructor(
 
     private fun getDataExpense(mutableLiveData: MutableLiveData<Resource<List<Expense>>>) {
         viewModelScope.launch {
-            getExpensesUseCase(1).collect { //from args
-                mutableLiveData.value = it
+            groupId?.let {
+                getExpensesUseCase(it).collect {
+                    mutableLiveData.value = it
+                }
             }
         }
     }
 
     private fun getDataBalances(mutableLiveData: MutableLiveData<Resource<List<Balance>>>) {
         viewModelScope.launch {
-            getBalancesUseCase(0).collect { //from args
-                mutableLiveData.value = it
+            if (groupId != null) {
+                getBalancesUseCase(groupId).collect {
+                    mutableLiveData.value = it
+                }
+            }
+        }
+    }
+
+    private fun getDataSettlements(mutableLiveData: MutableLiveData<Resource<List<Settlement>>>) {
+        viewModelScope.launch {
+            groupId?.let {
+                getSettlementsUseCase(it).collect {
+                    mutableLiveData.value = it
+                }
             }
         }
     }

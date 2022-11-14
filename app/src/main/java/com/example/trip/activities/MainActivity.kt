@@ -9,7 +9,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI.setupWithNavController
+import com.example.trip.Constants
 import com.example.trip.R
 import com.example.trip.models.GroupStatus
 import com.example.trip.utils.setAppLocale
@@ -32,9 +32,10 @@ class MainActivity : AppCompatActivity() {
             R.id.availabilityPager,
             R.id.participantsFragmentPreTrip,
             R.id.dayPlansFragment,
-            R.id.finances,
+            R.id.moneyPager,
             R.id.participantsFragmentTrip,
-            R.id.summaryFragment
+            R.id.summaryFragment,
+            R.id.tripSummary
         )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,9 +63,24 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
         navController = navHostFragment.navController
         bottomNavigationView = findViewById(R.id.bottom_navigation_view)
-        setupWithNavController(bottomNavigationView, navController)
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.accommodation -> navController.navigate(R.id.accommodation, intent.extras)
+                R.id.availability -> navController.navigate(R.id.availability, intent.extras)
+                R.id.participants -> navController.navigate(R.id.participants, intent.extras)
+                R.id.dayPlan -> navController.navigate(R.id.dayPlan, intent.extras)
+                R.id.finances -> navController.navigate(R.id.finances, intent.extras)
+                R.id.participantsFragmentTrip -> navController.navigate(
+                    R.id.participantsFragmentTrip,
+                    intent.extras
+                )
+                R.id.summary -> navController.navigate(R.id.summary, intent.extras)
+                R.id.tripSummary -> navController.navigate(R.id.tripSummary, intent.extras)
+            }
+            true
+        }
 
-        val navGraph = when (intent.extras!!.getInt("status")) {
+        val navGraph = when (intent.extras!!.getInt(Constants.STATUS_KEY)) {
             GroupStatus.PLANNING.code -> {
                 bottomNavigationView.menu.clear()
                 bottomNavigationView.inflateMenu(R.menu.navigation_pre_trip_menu)
@@ -77,11 +93,16 @@ class MainActivity : AppCompatActivity() {
             }
             else -> navController.navInflater.inflate(R.navigation.post_trip_graph) //
         }
-
-        navController.graph = navGraph
+        navController.setGraph(navGraph, intent.extras)
     }
 
-    fun showSnackbar(view: View, @StringRes messageResId: Int, @StringRes actionResId: Int, length: Int = Snackbar.LENGTH_LONG, action: () -> Unit) {
+    fun showSnackbar(
+        view: View,
+        @StringRes messageResId: Int,
+        @StringRes actionResId: Int,
+        length: Int = Snackbar.LENGTH_LONG,
+        action: () -> Unit
+    ) {
         Snackbar.make(view, messageResId, length)
             .setAction(actionResId) {
                 action()

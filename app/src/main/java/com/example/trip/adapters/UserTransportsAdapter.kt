@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.trip.R
 import com.example.trip.databinding.ItemUserTransportBinding
 import com.example.trip.models.UserTransport
+import com.example.trip.utils.toStringFormat
 import com.example.trip.utils.toStringTime
 import com.skydoves.balloon.Balloon
 import java.time.format.DateTimeFormatter
@@ -23,6 +24,8 @@ class UserTransportsAdapter @Inject constructor() :
 
     private lateinit var popupMenu: Balloon
 
+    private lateinit var currency: String
+
     fun setUserTransportClickListener(userTransportClickLister: UserTransportClickListener) {
         this.userTransportClickLister = userTransportClickLister
     }
@@ -31,8 +34,12 @@ class UserTransportsAdapter @Inject constructor() :
         this.popupMenu = popupMenu
     }
 
+    fun setCurrency(currency: String) {
+        this.currency = currency
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserTransportViewHolder {
-        return UserTransportViewHolder.create(parent, userTransportClickLister, popupMenu)
+        return UserTransportViewHolder.create(parent, currency, userTransportClickLister, popupMenu)
     }
 
     override fun onBindViewHolder(holder: UserTransportViewHolder, position: Int) {
@@ -41,6 +48,7 @@ class UserTransportsAdapter @Inject constructor() :
 
     class UserTransportViewHolder(
         private val binding: ItemUserTransportBinding,
+        private val currency: String,
         private val userTransportClickLister: UserTransportClickListener,
         private val popupMenu: Balloon
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -58,7 +66,7 @@ class UserTransportsAdapter @Inject constructor() :
                 textDuration.text = userTransport.duration.toStringTime()
                 textDate.text = userTransport.meetingDate.format(dateFormatter)
                 textMeeting.text = itemView.resources.getString(R.string.text_meeting_at, userTransport.meetingTime.format(timeFormatter))
-                textPrice.text = userTransport.price.toString() + "PLN"
+                textPrice.text = userTransport.price.toStringFormat(currency)
                 textDescription.text = userTransport.description
             }
 
@@ -84,6 +92,7 @@ class UserTransportsAdapter @Inject constructor() :
         companion object {
             fun create(
                 parent: ViewGroup,
+                currency: String,
                 userTransportClickLister: UserTransportClickListener,
                 popupMenu: Balloon
             ): UserTransportViewHolder {
@@ -91,6 +100,7 @@ class UserTransportsAdapter @Inject constructor() :
                 val binding = ItemUserTransportBinding.inflate(layoutInflater, parent, false)
                 return UserTransportViewHolder(
                     binding,
+                    currency,
                     userTransportClickLister,
                     popupMenu
                 )

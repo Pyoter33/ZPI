@@ -5,8 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.trip.Constants
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.BalancesAdapter
@@ -29,7 +30,7 @@ class BalancesFragment @Inject constructor() : Fragment() {
     @Inject
     lateinit var adapter: BalancesAdapter
 
-    private val viewModel: FinancesViewModel by activityViewModels()
+    private val viewModel: FinancesViewModel by hiltNavGraphViewModels(R.id.finances)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +52,7 @@ class BalancesFragment @Inject constructor() : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.listBalances.adapter = adapter
         binding.listBalances.layoutManager = layoutManager
+        adapter.setCurrency(requireArguments().getString(Constants.CURRENCY_KEY, "?"))
         binding.listBalances.addItemDecoration(
             MaterialDividerItemDecoration(
                 requireContext(),

@@ -1,15 +1,19 @@
 package com.example.trip.views.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.trip.Constants
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.GroupsClickListener
@@ -19,6 +23,7 @@ import com.example.trip.models.Group
 import com.example.trip.models.GroupStatus
 import com.example.trip.models.Resource
 import com.example.trip.utils.setSwipeRefreshLayout
+import com.example.trip.utils.toast
 import com.example.trip.viewmodels.groups.GroupsListViewModel
 import com.example.trip.views.dialogs.MenuPopupFactory
 import com.skydoves.balloon.*
@@ -34,8 +39,26 @@ class GroupsListFragment @Inject constructor() : Fragment(), GroupsClickListener
 
     private val viewModel: GroupsListViewModel by viewModels()
 
+    private var doubleBackToExitPressedOnce = false
+
     @Inject
     lateinit var adapter: GroupsListAdapter
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (doubleBackToExitPressedOnce) {
+                    requireActivity().finishAffinity()
+                }
+                doubleBackToExitPressedOnce = true
+                Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+                requireContext().toast(R.string.text_click_twice)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -96,24 +119,30 @@ class GroupsListFragment @Inject constructor() : Fragment(), GroupsClickListener
         val activityIntent = Intent(requireContext(), MainActivity::class.java)
         when (group.groupStatus) {
             GroupStatus.PLANNING -> {
-                activityIntent.putExtra("status", GroupStatus.PLANNING.code)
-                activityIntent.putExtra("startCity", group.startCity)
+                activityIntent.putExtra(Constants.STATUS_KEY, GroupStatus.PLANNING.code)
+                activityIntent.putExtra(Constants.CURRENCY_KEY, group.currency)
+                activityIntent.putExtra(Constants.START_CITY, group.startCity)
             }
             GroupStatus.ONGOING -> {
-                activityIntent.putExtra("status", GroupStatus.ONGOING.code)
+                activityIntent.putExtra(Constants.STATUS_KEY, GroupStatus.ONGOING.code)
+                activityIntent.putExtra(Constants.CURRENCY_KEY, group.currency)
             }
             else -> {
                 return
             }
 
         }
-        activityIntent.putExtra("groupId", group.id)
+        activityIntent.putExtra(Constants.GROUP_ID_KEY, group.id)
         startActivity(activityIntent)
         requireActivity().finish()
     }
 
     override fun onMenuEditClick(group: Group) {
-        findNavController().navigate(GroupsListFragmentDirections.actionGroupsListFragmentToCreateEditGroupFragment(group))
+        findNavController().navigate(
+            GroupsListFragmentDirections.actionGroupsListFragmentToCreateEditGroupFragment(
+                group
+            )
+        )
     }
 
     override fun onMenuDeleteClick(group: Group) {

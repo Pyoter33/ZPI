@@ -57,7 +57,7 @@ class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClick
 
         groupId = getLongFromBundle("groupId")
         setAdapter()
-        observeAccommodationPreviews()
+        observeParticipants()
         requireActivity().onBackArrowClick(binding.buttonBack)
         onInviteClick()
         setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
@@ -84,7 +84,7 @@ class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClick
         }
     }
 
-    private fun observeAccommodationPreviews() {
+    private fun observeParticipants() {
         viewModel.participantsList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {

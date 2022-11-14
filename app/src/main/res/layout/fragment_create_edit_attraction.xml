@@ -21,10 +21,8 @@
 
         <ImageButton
             android:id="@+id/button_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/marginL"
-            android:layout_marginStart="@dimen/marginM"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@color/transparent"
             android:src="@drawable/ic_baseline_arrow_back_24"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +33,6 @@
             style="@style/CardWhite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/marginL"
             android:layout_marginHorizontal="@dimen/marginM"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

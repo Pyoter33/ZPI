@@ -7,6 +7,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Point
+import android.icu.text.DecimalFormat
 import android.transition.Fade
 import android.transition.Slide
 import android.transition.Transition
@@ -24,6 +25,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.trip.R
 import com.example.trip.models.Attraction
 import com.example.trip.models.AttractionPreview
+import java.math.BigDecimal
 import java.time.*
 import java.util.*
 
@@ -164,4 +166,22 @@ fun AttractionPreview.toAttraction(groupId: Long, dayPlanId: Long) = Attraction(
 
 fun Duration.toStringTime(): String {
     return "${toHours()}h ${toMinutesPart()}min"
+}
+
+fun BigDecimal.toStringFormat(currency: String): String {
+    val df = DecimalFormat("0.00")
+    return if(isIntegerValue(this)) {
+        "${toInt()} $currency"
+    } else {
+        "${df.format(this)} $currency"
+    }
+}
+
+private fun isIntegerValue(bd: BigDecimal): Boolean {
+    return bd.signum() == 0 || bd.scale() <= 0 || bd.stripTrailingZeros().scale() <= 0
+}
+
+fun String.formatPhone(): String {
+    val split = split(' ')
+    return "${split[0]} ${split[1].subSequence(0..2)} ${split[1].subSequence(3..5)} ${split[1].subSequence(6..8)}"
 }

@@ -3,6 +3,7 @@ package com.example.trip.viewmodels.groups
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.trip.Constants
 import com.example.trip.models.Group
 import com.example.trip.models.GroupStatus
 import com.example.trip.models.Resource
@@ -28,7 +29,7 @@ class CreateEditGroupViewModel @Inject constructor(
     var days: String? = null
     var descriptionText: String? = null
     var toPost = false
-    private val groupToUpdate = state.get<Group>("group")
+    private val groupToUpdate = state.get<Group>(Constants.GROUP_KEY)
 
     fun postGroupAsync(): Deferred<Resource<Unit>> {
         val deferred = viewModelScope.async(Dispatchers.IO) {

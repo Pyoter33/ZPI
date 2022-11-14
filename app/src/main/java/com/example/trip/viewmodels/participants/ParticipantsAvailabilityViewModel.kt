@@ -1,6 +1,7 @@
 package com.example.trip.viewmodels.participants
 
 import androidx.lifecycle.*
+import com.example.trip.Constants
 import com.example.trip.models.Availability
 import com.example.trip.models.Resource
 import com.example.trip.usecases.availability.GetUserAvailabilitiesUseCase
@@ -11,8 +12,10 @@ import javax.inject.Inject
 @HiltViewModel
 class ParticipantsAvailabilityViewModel @Inject constructor(
     private val getUserAvailabilitiesUseCase: GetUserAvailabilitiesUseCase,
-    savedStateHandle: SavedStateHandle
+    state: SavedStateHandle
 ) : ViewModel() {
+
+    private val groupId = state.get<Long>(Constants.GROUP_ID_KEY)
 
     private val _availabilityList by lazy {
         val mutableLiveData = MutableLiveData<Resource<List<Availability>>>()
@@ -27,8 +30,10 @@ class ParticipantsAvailabilityViewModel @Inject constructor(
 
     private fun getData(mutableLiveData: MutableLiveData<Resource<List<Availability>>>) {
         viewModelScope.launch {
-            getUserAvailabilitiesUseCase(1, 1).collect {
-                mutableLiveData.value = it
+            groupId?.let {
+                getUserAvailabilitiesUseCase(1, it).collect {
+                    mutableLiveData.value = it
+                }
             }
         }
     }

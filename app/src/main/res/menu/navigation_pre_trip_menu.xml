@@ -5,7 +5,7 @@
         android:icon="@drawable/ic_outline_hotel_24"
         android:title="@string/text_accommodation"/>
     <item
-        android:id="@+id/availabilityPager"
+        android:id="@+id/availability"
         android:enabled="true"
         android:icon="@drawable/ic_outline_calendar_month_24"
         android:title="@string/text_availability"/>

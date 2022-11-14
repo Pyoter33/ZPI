@@ -1,0 +1,360 @@
+<layout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/image_summary"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="@dimen/marginM"
+            android:layout_marginVertical="@dimen/marginM"
+            android:src="@drawable/ic_baseline_checklist_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/primary" />
+
+
+        <TextView
+            android:id="@+id/text_trip_summary"
+            style="@style/TextMega"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/marginL"
+            android:layout_marginStart="@dimen/marginS"
+            android:text="Summary"
+            android:textColor="@color/primary"
+            app:layout_constraintBottom_toBottomOf="@+id/image_summary"
+            app:layout_constraintStart_toEndOf="@+id/image_summary"
+            app:layout_constraintTop_toTopOf="@+id/image_summary" />
+
+        <TextView
+            android:id="@+id/text_accommodation"
+            style="@style/TextBig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginXL"
+            android:layout_marginTop="@dimen/marginXXXL"
+            android:text="Accommodation"
+            android:textColor="@color/primary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_trip_summary" />
+
+        <ImageView
+            android:id="@+id/image_accommodation_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginM"
+            android:src="@drawable/selector_accepted"
+            app:layout_constraintBottom_toBottomOf="@+id/text_accommodation"
+            app:layout_constraintStart_toEndOf="@+id/text_accommodation"
+            app:layout_constraintTop_toTopOf="@+id/text_accommodation"
+            app:tint="@drawable/selector_accepted_color" />
+
+
+        <TextView
+            android:id="@+id/text_accommodation_not_accepted"
+            style="@style/TextSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginXL"
+            android:layout_marginTop="@dimen/marginM"
+            android:text="@string/text_no_accommodation_chosen"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_accommodation" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_accommodation"
+            style="@style/CardWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginM"
+            android:layout_marginVertical="@dimen/marginM"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_accommodation_not_accepted"
+
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/marginM"
+                android:layout_marginVertical="@dimen/marginM">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView_image"
+                    style="@style/CardLight"
+                    android:layout_width="100dp"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="20dp"
+                    app:cardCornerRadius="@dimen/cornerSizeHalf"
+                    app:layout_constraintBottom_toTopOf="@+id/extra_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0">
+
+                    <ImageView
+                        android:id="@+id/image_accommodation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/img" />
+
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/text_name"
+                    style="@style/TextMedium"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/marginM"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    app:layout_constraintEnd_toStartOf="@+id/button_vote"
+                    app:layout_constraintStart_toEndOf="@+id/cardView_image"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Super hotel" />
+
+                <TextView
+                    android:id="@+id/text_address"
+                    style="@style/TextSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/marginM"
+                    android:layout_marginTop="@dimen/marginS"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    app:layout_constraintEnd_toStartOf="@+id/text_price"
+                    app:layout_constraintStart_toEndOf="@+id/cardView_image"
+                    app:layout_constraintTop_toBottomOf="@id/text_name"
+                    tools:text="Super city super street" />
+
+                <ImageButton
+                    android:id="@+id/button_vote"
+                    style="@style/IconButton.Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:src="@drawable/ic_twotone_thumb_up_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/grey400" />
+
+                <TextView
+                    android:id="@+id/text_votes"
+                    style="@style/TextSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/grey400"
+                    app:layout_constraintEnd_toEndOf="@+id/button_vote"
+                    app:layout_constraintStart_toStartOf="@+id/button_vote"
+                    app:layout_constraintTop_toBottomOf="@+id/button_vote"
+                    tools:text="2" />
+
+
+                <TextView
+                    android:id="@+id/text_price"
+                    style="@style/TextBig"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/marginM"
+                    android:textColor="@color/primary"
+                    app:layout_constraintBottom_toTopOf="@+id/button_transport"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_votes"
+                    app:layout_constraintVertical_bias="1.0"
+                    tools:text="259 PLN" />
+
+
+                <Button
+                    android:id="@+id/button_transport"
+                    style="@style/Button.Outlined"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/marginS"
+                    android:layout_marginBottom="@dimen/marginM"
+                    android:enabled="false"
+                    android:text="@string/text_transport"
+                    app:icon="@drawable/ic_baseline_emoji_transportation_24"
+                    app:layout_constraintBottom_toTopOf="@+id/extra_layout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_address"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <Button
+                    android:id="@+id/button_link"
+                    style="@style/Button.Outlined"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/marginM"
+                    android:layout_marginTop="@dimen/marginS"
+                    android:layout_marginBottom="@dimen/marginM"
+                    android:enabled="false"
+                    android:text="@string/text_link"
+                    app:icon="@drawable/ic_baseline_link_24"
+                    app:layout_constraintBottom_toTopOf="@+id/extra_layout"
+                    app:layout_constraintEnd_toStartOf="@id/button_transport"
+                    app:layout_constraintTop_toBottomOf="@+id/text_address"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/extra_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <TextView
+                        android:id="@+id/text_description"
+                        style="@style/TextVerySmall"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="@dimen/marginS"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem." />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/text_dates"
+            style="@style/TextBig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginXL"
+            android:layout_marginTop="@dimen/marginXXXL"
+            android:text="Dates"
+            android:textColor="@color/primary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/card_accommodation" />
+
+        <ImageView
+            android:id="@+id/image_dates_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginM"
+            android:src="@drawable/selector_accepted"
+            app:layout_constraintBottom_toBottomOf="@+id/text_dates"
+            app:layout_constraintStart_toEndOf="@+id/text_dates"
+            app:layout_constraintTop_toTopOf="@+id/text_dates"
+            app:tint="@drawable/selector_accepted_color" />
+
+        <ImageButton
+            android:id="@+id/button_uncheck_dates"
+            style="@style/IconButton.Primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginXL"
+            android:layout_marginVertical="@dimen/marginM"
+            android:src="@drawable/ic_baseline_delete_24"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/text_dates"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_dates"
+            app:tint="@color/red" />
+
+        <TextView
+            android:id="@+id/text_dates_not_accepted"
+            style="@style/TextSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/marginXL"
+            android:layout_marginTop="@dimen/marginM"
+            android:text="No dates chosen yet!"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_dates" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField_date"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginXL"
+            android:layout_marginTop="@dimen/marginM"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_dates_not_accepted"
+            app:startIconDrawable="@drawable/ic_outline_calendar_month_24"
+            app:startIconTint="@color/primary">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editText_date"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:focusable="false"
+                android:inputType="date"
+                tools:text="10.05.2022 - 11.06.2022" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/text_participants"
+            style="@style/TextBig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginXL"
+            android:layout_marginTop="@dimen/marginXXXL"
+            android:text="@string/text_participants"
+            android:textColor="@color/primary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textField_date" />
+
+        <TextView
+            android:id="@+id/text_participants_no"
+            style="@style/TextSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginXS"
+            android:textColor="@color/primary"
+            app:layout_constraintBottom_toBottomOf="@+id/text_participants"
+            app:layout_constraintEnd_toStartOf="@+id/image_participants"
+            app:layout_constraintTop_toTopOf="@+id/text_participants"
+            tools:text="12" />
+
+        <ImageView
+            android:id="@+id/image_participants"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginXS"
+            android:layout_marginVertical="@dimen/marginM"
+            android:src="@drawable/ic_baseline_person_24"
+            app:layout_constraintBottom_toBottomOf="@+id/text_participants_no"
+            app:layout_constraintEnd_toEndOf="@+id/list_participants"
+            app:layout_constraintTop_toTopOf="@+id/text_participants_no"
+            app:tint="@color/primary" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_participants"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginM"
+            android:layout_marginTop="@dimen/marginS"
+            android:nestedScrollingEnabled="false"
+            android:paddingTop="@dimen/marginS"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_max="500dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_participants"
+            tools:listitem="@layout/item_participant_summary" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

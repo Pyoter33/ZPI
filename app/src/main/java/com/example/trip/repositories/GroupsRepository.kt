@@ -19,7 +19,7 @@ class GroupsRepository @Inject constructor() {
                             "Weekend trip to Prague",
                             GroupStatus.PLANNING,
                             "Wroclaw",
-                            "PLN",
+                            "USD",
                             3,
                             2,
                             "Weekend in Prague, sightseeing, knedlicky eating, beer drinking and chill!",

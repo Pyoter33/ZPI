@@ -1,6 +1,7 @@
 package com.example.trip.viewmodels
 
 import androidx.lifecycle.*
+import com.example.trip.Constants
 import com.example.trip.models.Accommodation
 import com.example.trip.models.Availability
 import com.example.trip.models.Participant
@@ -23,18 +24,18 @@ class SummaryViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    //private val groupId = state.get<Int>("groupId")!!
+    private val groupId = state.get<Long>(Constants.GROUP_ID_KEY)
 
     private var isAccommodationAdded = false
     private var isDateAdded = false
 
-    private val _acceptedAccommodation = getAcceptedAccommodationUseCase(0).asLiveData()
+    private val _acceptedAccommodation = groupId?.let { getAcceptedAccommodationUseCase(it).asLiveData() }?: MutableLiveData()
     val acceptedAccommodation: LiveData<Resource<Accommodation?>> = _acceptedAccommodation
 
-    private val _acceptedAvailability = getAcceptedAvailabilityUseCase(0).asLiveData()
+    private val _acceptedAvailability = groupId?.let { getAcceptedAvailabilityUseCase(it).asLiveData() }?: MutableLiveData()
     val acceptedAvailability: LiveData<Resource<Availability?>> = _acceptedAvailability
 
-    private val _participants = getParticipantsUseCase(0).asLiveData()
+    private val _participants = groupId?.let { getParticipantsUseCase(it).asLiveData() }?: MutableLiveData()
     val participants: LiveData<Resource<List<Participant>>> = _participants
 
     private val _isButtonUnlocked = MutableLiveData(false)

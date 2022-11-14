@@ -10,12 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.trip.PreTripDirections
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.ParticipantsSummaryAdapter
 import com.example.trip.databinding.FragmentSummaryBinding
+import com.example.trip.databinding.LayoutPdfBinding
 import com.example.trip.models.Accommodation
 import com.example.trip.models.Availability
 import com.example.trip.models.Resource
@@ -30,7 +32,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDialogClickListener,
@@ -47,7 +48,7 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
 
     private val viewModel: SummaryViewModel by viewModels()
 
-    private var groupId by Delegates.notNull<Long>()
+    private val args: SummaryFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,10 +60,6 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        groupId = getLongFromBundle(GROUP_ID_ARG)
-        startCity = getStringFromBundle(START_CITY_ARG)
-
         setAdapter()
         observeAccommodation()
         observeAvailability()
@@ -211,7 +208,7 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
             textName.text = accommodation.name
             textAddress.text = accommodation.address
             textVotes.text = accommodation.votes.toString()
-            textPrice.text = getString(R.string.text_pln, accommodation.price.toString())
+            textPrice.text = accommodation.price.toStringFormat(args.currency)
             textDescription.text = accommodation.description
 
             Glide.with(this@SummaryFragment).load(accommodation.imageUrl).centerCrop().into(binding.imageAccommodation)
@@ -225,7 +222,7 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
             }
 
             buttonTransport.setOnClickListener {
-                findNavController().navigate(PreTripDirections.actionToTransport(groupId, accommodation.id, accommodation.address, startCity))
+                findNavController().navigate(PreTripDirections.actionToTransport(args.groupId, accommodation.id, accommodation.address, startCity, args.currency))
             }
         }
     }
@@ -266,6 +263,24 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
             binding.buttonStartTrip.isEnabled = false
         }
     }
+
+    private fun setPdf() {
+        val pdfBinding = LayoutPdfBinding.inflate(LayoutInflater.from(context))
+
+        with(pdfBinding) {
+            editTextDate.text = binding.editTextDate.text
+            textName.text = binding.textName.text
+            textAddress.text = binding.textAddress.text
+            textVotes.text = binding.textVotes.text
+            textPrice.text = binding.textPrice.text
+            textDescription.text = binding.textDescription.text
+            listParticipants.adapter = adapter
+        }
+    }
+
+
+
+
 
     override fun onDeleteClick(accommodation: Accommodation) {
         lifecycleScope.launch {
@@ -309,10 +324,4 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
             }
         }
     }
-
-    companion object {
-        private const val GROUP_ID_ARG = "groupId"
-        private const val START_CITY_ARG = "startCity"
-    }
-
 }

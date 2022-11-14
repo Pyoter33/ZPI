@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.PreTripDirections
 import com.example.trip.R
@@ -19,7 +20,9 @@ import com.example.trip.adapters.AccommodationListAdapter
 import com.example.trip.databinding.FragmentAccommodationListBinding
 import com.example.trip.models.Accommodation
 import com.example.trip.models.Resource
-import com.example.trip.utils.*
+import com.example.trip.utils.onBackArrowClick
+import com.example.trip.utils.setSwipeRefreshLayout
+import com.example.trip.utils.toast
 import com.example.trip.viewmodels.accommodation.AccommodationsListViewModel
 import com.example.trip.views.dialogs.MenuPopupAcceptFactory
 import com.example.trip.views.dialogs.accommodation.AcceptAccommodationDialog
@@ -30,7 +33,6 @@ import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class AccommodationListFragment @Inject constructor() : Fragment(), AccommodationClickListener,
@@ -39,14 +41,12 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
     private lateinit var binding: FragmentAccommodationListBinding
     private val popupMenu by balloon<MenuPopupAcceptFactory>()
 
-    private var groupId by Delegates.notNull<Long>()
-
-    private lateinit var startCity: String
-
     @Inject
     lateinit var adapter: AccommodationListAdapter
 
     private val viewModel: AccommodationsListViewModel by viewModels()
+
+    private val args: AccommodationListFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -61,11 +61,10 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
         popupMenu.dismiss()
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        groupId = getLongFromBundle(GROUP_ID_ARG)
-        startCity = getStringFromBundle(START_CITY_ARG)
         setAdapter()
         requireActivity().onBackArrowClick(binding.buttonBack)
         observeAccommodationsList()
@@ -79,7 +78,8 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
         binding.buttonAdd.setOnClickListener {
             findNavController().navigate(
                 AccommodationListFragmentDirections.actionAccommodationListFragmentToCreateEditAccommodationFragment(
-                    groupId
+                    args.groupId,
+                    args.currency
                 )
             )
         }
@@ -113,6 +113,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
     private fun setAdapter() {
         adapter.setAccommodationClickListener(this)
         adapter.setPopupMenu(popupMenu)
+        adapter.setCurrency(args.currency)
         binding.accommodationList.adapter = adapter
         binding.accommodationList.layoutManager = LinearLayoutManager(context)
     }
@@ -192,7 +193,8 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
                 accommodation.groupId,
                 accommodation.id,
                 accommodation.address,
-                startCity
+                args.startCity,
+                args.currency
             )
         )
     }
@@ -205,7 +207,8 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
     override fun onMenuEditClick(accommodation: Accommodation) {
         findNavController().navigate(
             AccommodationListFragmentDirections.actionAccommodationListFragmentToCreateEditAccommodationFragment(
-                groupId,
+                args.groupId,
+                args.currency,
                 accommodation.id,
                 accommodation
             )

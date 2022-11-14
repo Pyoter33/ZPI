@@ -1,9 +1,7 @@
 package com.example.trip.viewmodels.accommodation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.example.trip.Constants
 import com.example.trip.models.Accommodation
 import com.example.trip.models.Resource
 import com.example.trip.usecases.accommodation.GetAccommodationsListUseCase
@@ -14,8 +12,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AccommodationsListViewModel @Inject constructor(private val getAccommodationsListUseCase: GetAccommodationsListUseCase) :
+class AccommodationsListViewModel @Inject constructor(
+    private val getAccommodationsListUseCase: GetAccommodationsListUseCase,
+    private val state: SavedStateHandle
+) :
     ViewModel() {
+
+    private val groupId = state.get<Long>(Constants.GROUP_ID_KEY)
 
     private val _accommodationsList by lazy {
         val mutableLiveData = MutableLiveData<Resource<List<Accommodation>>>()
@@ -95,8 +98,10 @@ class AccommodationsListViewModel @Inject constructor(private val getAccommodati
 
     private fun getData(mutableLiveData: MutableLiveData<Resource<List<Accommodation>>>) {
         viewModelScope.launch {
-            getAccommodationsListUseCase(1).collect { //from args
-                mutableLiveData.value = it
+            if (groupId != null) {
+                getAccommodationsListUseCase(groupId).collect {
+                    mutableLiveData.value = it
+                }
             }
         }
     }

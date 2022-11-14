@@ -23,6 +23,9 @@
         <argument
             android:name="startCity"
             app:argType="string" />
+        <argument
+            android:name="currency"
+            app:argType="string" />
         <fragment
             android:id="@+id/createEditTransportFragment"
             android:name="com.example.trip.views.fragments.CreateEditTransportFragment"
@@ -38,6 +41,9 @@
                 android:defaultValue="@null"
                 app:argType="com.example.trip.models.UserTransport"
                 app:nullable="true" />
+            <argument
+                android:name="currency"
+                app:argType="string" />
         </fragment>
         <fragment
             android:id="@+id/transportFragment"
@@ -55,25 +61,14 @@
             <argument
                 android:name="startCity"
                 app:argType="string" />
+            <argument
+                android:name="currency"
+                app:argType="string" />
             <action
                 android:id="@+id/action_transportFragment_to_createEditTransportFragment"
                 app:destination="@id/createEditTransportFragment" />
         </fragment>
     </navigation>
-    <fragment
-        android:id="@+id/availabilityFragment"
-        android:name="com.example.trip.views.fragments.UserAvailabilityFragment"
-        android:label="fragment_availability"
-        tools:layout="@layout/fragment_availability" />
-    <fragment
-        android:id="@+id/optimalDatesFragment"
-        android:name="com.example.trip.views.fragments.OptimalDatesFragment"
-        android:label="fragment_optimal_dates"
-        tools:layout="@layout/fragment_optimal_dates" />
-    <fragment
-        android:id="@+id/availabilityPager"
-        android:name="com.example.trip.views.fragments.AvailabilityPager"
-        android:label="AvailabilityPager" />
     <navigation
         android:id="@+id/accommodation"
         android:label="accommodation"
@@ -86,6 +81,15 @@
             <action
                 android:id="@+id/action_accommodationListFragment_to_createEditAccommodationFragment"
                 app:destination="@id/createEditAccommodationFragment" />
+            <argument
+                android:name="groupId"
+                app:argType="long" />
+            <argument
+                android:name="currency"
+                app:argType="string" />
+            <argument
+                android:name="startCity"
+                app:argType="string" />
         </fragment>
         <fragment
             android:id="@+id/createEditAccommodationFragment"
@@ -99,6 +103,9 @@
                 android:name="id"
                 app:argType="long"
                 android:defaultValue="-1L" />
+            <argument
+                android:name="currency"
+                app:argType="string" />
             <argument
                 android:name="accommodation"
                 app:argType="com.example.trip.models.Accommodation"
@@ -118,6 +125,9 @@
             <action
                 android:id="@+id/action_participantsFragmentPreTrip_to_participantsAvailabilityFragment"
                 app:destination="@id/participantsAvailabilityFragment" />
+            <argument
+                android:name="groupId"
+                app:argType="long" />
         </fragment>
         <fragment
             android:id="@+id/participantsAvailabilityFragment"
@@ -139,7 +149,43 @@
         <fragment
             android:id="@+id/summaryFragment"
             android:name="com.example.trip.views.fragments.SummaryFragment"
-            android:label="SummaryFragment"/>
+            android:label="SummaryFragment">
+            <argument
+                android:name="groupId"
+                app:argType="long" />
+            <argument
+                android:name="currency"
+                app:argType="string" />
+        </fragment>
 
+    </navigation>
+    <navigation android:id="@+id/availability"
+        app:startDestination="@id/availabilityPager">
+        <fragment
+            android:id="@+id/availabilityFragment"
+            android:name="com.example.trip.views.fragments.UserAvailabilityFragment"
+            android:label="fragment_availability"
+            tools:layout="@layout/fragment_availability">
+            <argument
+                android:name="groupId"
+                app:argType="long" />
+        </fragment>
+        <fragment
+            android:id="@+id/optimalDatesFragment"
+            android:name="com.example.trip.views.fragments.OptimalDatesFragment"
+            android:label="fragment_optimal_dates"
+            tools:layout="@layout/fragment_optimal_dates">
+            <argument
+                android:name="groupId"
+                app:argType="long" />
+        </fragment>
+        <fragment
+            android:id="@+id/availabilityPager"
+            android:name="com.example.trip.views.fragments.AvailabilityPager"
+            android:label="AvailabilityPager">
+            <argument
+                android:name="groupId"
+                app:argType="long" />
+        </fragment>
     </navigation>
 </navigation>

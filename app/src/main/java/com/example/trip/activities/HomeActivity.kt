@@ -12,8 +12,4 @@ class HomeActivity @Inject constructor(): AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
     }
-
-    override fun onBackPressed() {
-        finishAffinity()
-    }
 }

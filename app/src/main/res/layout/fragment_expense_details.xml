@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".views.fragments.CreateEditAccommodationFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/layout_top_background"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="@drawable/background_top_primary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </FrameLayout>
+
+
+            <ImageButton
+                android:id="@+id/button_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_baseline_arrow_back_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.cardview.widget.CardView
+                style="@style/CardWhite"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="@dimen/marginM"
+                android:layout_marginBottom="@dimen/marginL"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_back">
+
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/text_expense_name"
+                            style="@style/TextBigger"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/marginL"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:textColor="@color/primary"
+                            app:layout_constraintEnd_toStartOf="@+id/button_edit"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="Dinner for Friday" />
+
+                        <ImageButton
+                            android:id="@+id/button_edit"
+                            style="@style/IconButton.Primary"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+
+                            android:src="@drawable/ic_baseline_edit_24"
+                            app:layout_constraintBottom_toBottomOf="@+id/text_expense_name"
+                            app:layout_constraintEnd_toStartOf="@id/button_delete"
+                            app:layout_constraintTop_toTopOf="@+id/text_expense_name"
+                            app:layout_constraintVertical_bias="0.476" />
+
+                        <ImageButton
+                            android:id="@+id/button_delete"
+                            style="@style/IconButton.Primary"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginEnd="@dimen/marginS"
+                            android:src="@drawable/ic_baseline_delete_24"
+                            app:tint="@color/red"
+                            app:layout_constraintBottom_toBottomOf="@+id/text_expense_name"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/text_expense_name" />
+
+                        <ImageView
+                            android:id="@+id/image_money"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginTop="@dimen/marginXL"
+                            android:src="@drawable/ic_baseline_attach_money_24"
+                            android:layout_marginStart="@dimen/marginM"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/text_expense_name"
+                            app:tint="@color/primary"
+                            tools:text="2h 15 min"
+                            />
+
+                        <TextView
+                            android:id="@+id/text_price"
+                            style="@style/TextBig"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/marginS"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            app:layout_constraintBottom_toBottomOf="@+id/image_money"
+                            app:layout_constraintStart_toEndOf="@+id/image_money"
+                            app:layout_constraintTop_toTopOf="@+id/image_money"
+                            tools:text="150 PLN" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/layout_contributors"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/marginXXL"
+                            android:background="@color/grey300"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/image_money">
+
+
+                            <TextView
+                                android:id="@+id/text_contributors"
+                                style="@style/TextBig"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginVertical="@dimen/marginM"
+                                android:layout_marginStart="@dimen/marginM"
+                                android:text="@string/text_contributors"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/list_participants"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false"
+                            android:paddingTop="@dimen/marginS"
+                            android:scrollbars="horizontal"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/layout_contributors"
+                            tools:listitem="@layout/item_participant_price" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.core.widget.NestedScrollView>
+            </androidx.cardview.widget.CardView>
+
+            <FrameLayout
+                android:id="@+id/layout_loading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black_transparent"
+                android:elevation="@dimen/marginS"
+                android:visibility="gone">
+
+                <com.google.android.material.progressindicator.CircularProgressIndicator
+                    android:id="@+id/circularProgressIndicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:indeterminate="true" />
+
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

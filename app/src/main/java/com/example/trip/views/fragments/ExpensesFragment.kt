@@ -5,8 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.trip.Constants
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.ExpenseClickListener
@@ -14,32 +15,22 @@ import com.example.trip.adapters.ExpensesAdapter
 import com.example.trip.databinding.FragmentExpensesBinding
 import com.example.trip.models.Expense
 import com.example.trip.models.Resource
-import com.example.trip.utils.getLongFromBundle
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.finances.FinancesViewModel
-import com.example.trip.views.dialogs.MenuPopupFactory
-import com.example.trip.views.dialogs.accommodation.DeleteAccommodationDialog
-import com.example.trip.views.dialogs.finances.DeleteExpenseDialog
-import com.example.trip.views.dialogs.finances.DeleteExpenseDialogClickListener
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.android.material.snackbar.Snackbar
-import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 @AndroidEntryPoint
-class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener, DeleteExpenseDialogClickListener{
+class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener {
 
     private lateinit var binding: FragmentExpensesBinding
-    private val popupMenu by balloon<MenuPopupFactory>()
-
-    private var groupId by Delegates.notNull<Long>()
 
     @Inject
     lateinit var adapter: ExpensesAdapter
 
-    private val viewModel: FinancesViewModel by activityViewModels()
+    private val viewModel: FinancesViewModel by hiltNavGraphViewModels(R.id.finances)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +43,6 @@ class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener,
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        groupId = getLongFromBundle(GROUP_ID_ARG)
         setAdapter()
         observeExpensesList()
         setOnCheckedChipsListener()
@@ -85,7 +75,7 @@ class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener,
     private fun setAdapter() {
         val layoutManager = LinearLayoutManager(context)
         adapter.setExpenseClickListener(this)
-        adapter.setPopupMenu(popupMenu)
+        adapter.setCurrency(requireArguments().getString(Constants.CURRENCY_KEY, "?"))
         binding.listExpenses.adapter = adapter
         binding.listExpenses.layoutManager = layoutManager
         binding.listExpenses.addItemDecoration(
@@ -134,20 +124,10 @@ class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener,
     }
 
     //list item
-
-    override fun onMenuEditClick(expense: Expense) {
-
+    override fun onClick(expense: Expense) {
+        (requireParentFragment() as FinancesFragment).onExpenseClick(expense)
     }
 
-    override fun onMenuDeleteClick(expense: Expense) {
-        val deleteDialog = DeleteExpenseDialog(this, expense)
-        deleteDialog.show(childFragmentManager, DeleteAccommodationDialog.TAG)
-    }
-
-    //dialogs
-    override fun onDeleteClick(expense: Expense) {
-        requireContext().toast("delete")
-    }
 
     companion object {
         private const val PLACEHOLDER_USERID = 1L

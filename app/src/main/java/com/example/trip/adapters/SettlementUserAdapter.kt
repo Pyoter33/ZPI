@@ -11,6 +11,7 @@ import com.example.trip.databinding.ItemSettlementBinding
 import com.example.trip.databinding.ItemSettlementHeaderBinding
 import com.example.trip.models.Settlement
 import com.example.trip.models.SettlementStatus
+import com.example.trip.utils.toStringFormat
 import com.skydoves.balloon.Balloon
 import javax.inject.Inject
 
@@ -18,6 +19,8 @@ class SettlementUserAdapter @Inject constructor() :
     ListAdapter<Settlement, RecyclerView.ViewHolder>(
         SettlementDiffUtil()
     ) {
+
+    private lateinit var currency: String
 
     private lateinit var settlementClickListener: SettlementClickListener
 
@@ -31,6 +34,10 @@ class SettlementUserAdapter @Inject constructor() :
         this.popupMenu = popupMenu
     }
 
+    fun setCurrency(currency: String) {
+        this.currency = currency
+    }
+
     override fun getItemViewType(position: Int): Int {
         return if (position == HEADER) 0 else 1
     }
@@ -42,7 +49,7 @@ class SettlementUserAdapter @Inject constructor() :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             HEADER -> SettlementHeaderViewHolder.create(parent)
-            else -> SettlementViewHolder.create(parent, settlementClickListener, popupMenu)
+            else -> SettlementViewHolder.create(parent, currency, settlementClickListener, popupMenu)
         }
     }
 
@@ -55,6 +62,7 @@ class SettlementUserAdapter @Inject constructor() :
 
     class SettlementViewHolder(
         private val binding: ItemSettlementBinding,
+        private val currency: String,
         private val settlementClickListener: SettlementClickListener,
         private val popupMenu: Balloon
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -64,7 +72,7 @@ class SettlementUserAdapter @Inject constructor() :
             with(binding) {
                 textDebtee.text = settlement.debtee.fullName
                 textDebtor.text = settlement.debtor.fullName
-                textPrice.text = settlement.amount.toString() + "PLN"
+                textPrice.text = settlement.amount.toStringFormat(currency)
                 if (settlement.status == SettlementStatus.PENDING) {
                     textStatus.text = itemView.resources.getString(R.string.text_pending)
                 } else {
@@ -99,6 +107,7 @@ class SettlementUserAdapter @Inject constructor() :
         companion object {
             fun create(
                 parent: ViewGroup,
+                currency: String,
                 settlementClickListener: SettlementClickListener,
                 popupMenu: Balloon
             ): SettlementViewHolder {
@@ -106,6 +115,7 @@ class SettlementUserAdapter @Inject constructor() :
                 val binding = ItemSettlementBinding.inflate(layoutInflater, parent, false)
                 return SettlementViewHolder(
                     binding,
+                    currency,
                     settlementClickListener,
                     popupMenu
                 )

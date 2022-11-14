@@ -121,4 +121,9 @@
     <string name="text_save">Save</string>
     <string name="text_balances">Balances</string>
     <string name="text_contributors">Contributors</string>
+    <string name="text_new_expense">New expense</string>
+    <string name="text_edit_expense">Edit expense</string>
+    <string name="text_click_twice"> Click back button twice to exit the app!</string>
+    <string name="format_plus"> +%1$s </string>
+    <string name="text_phone_number">Phone number</string>
 </resources>

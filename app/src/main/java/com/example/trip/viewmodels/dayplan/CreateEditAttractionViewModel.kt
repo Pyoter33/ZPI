@@ -3,6 +3,7 @@ package com.example.trip.viewmodels.dayplan
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.trip.Constants
 import com.example.trip.models.Attraction
 import com.example.trip.models.Resource
 import com.example.trip.usecases.dayplan.PostAttractionUseCase
@@ -22,7 +23,7 @@ class CreateEditAttractionViewModel @Inject constructor(
 
     var descriptionText: String? = null
     var toPost = false
-    private val attraction = state.get<Attraction>("attraction")
+    private val attraction = state.get<Attraction>(Constants.ATTRACTION_KEY)
 
     fun postAttractionAsync(): Deferred<Resource<Unit>> {
         val deferred = viewModelScope.async(Dispatchers.IO) {

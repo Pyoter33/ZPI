@@ -22,7 +22,6 @@ import com.example.trip.viewmodels.SummaryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class TripSummaryFragment @Inject constructor() : Fragment() {
@@ -33,8 +32,6 @@ class TripSummaryFragment @Inject constructor() : Fragment() {
     lateinit var adapter: ParticipantsSummaryAdapter
 
     private val viewModel: SummaryViewModel by viewModels()
-
-    private var groupId by Delegates.notNull<Long>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,8 +44,7 @@ class TripSummaryFragment @Inject constructor() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        groupId = getLongFromBundle(GROUP_ID_ARG)
-
+        binding.buttonLock.setInvisible()
         setAdapter()
         observeAccommodation()
         observeAvailability()

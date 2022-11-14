@@ -1,6 +1,9 @@
 package com.example.trip.viewmodels.dayplan
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.trip.models.AttractionPreview
 import com.example.trip.models.Resource
 import com.example.trip.usecases.dayplan.GetAttractionPreviewUseCase
@@ -10,8 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FindAttractionViewModel @Inject constructor(
-    private val getAttractionPreviewUseCase: GetAttractionPreviewUseCase,
-    state: SavedStateHandle
+    private val getAttractionPreviewUseCase: GetAttractionPreviewUseCase
 ) : ViewModel() {
 
     private val _attractionsList by lazy { MutableLiveData<Resource<List<AttractionPreview>>>() }

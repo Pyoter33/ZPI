@@ -5,30 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import com.example.trip.R
 import com.example.trip.adapters.FinancesPagerAdapter
 import com.example.trip.databinding.FragmentFinancesBinding
+import com.example.trip.models.Expense
 import com.example.trip.models.Resource
-import com.example.trip.utils.getLongFromBundle
 import com.example.trip.utils.onBackArrowClick
 import com.example.trip.utils.setSwipeRefreshLayout
 import com.example.trip.viewmodels.finances.FinancesViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 
 @AndroidEntryPoint
 class FinancesFragment @Inject constructor() : Fragment() {
 
     private lateinit var binding: FragmentFinancesBinding
-    private var groupId by Delegates.notNull<Long>()
-
     private lateinit var adapter: FinancesPagerAdapter
 
-    private val viewModel: FinancesViewModel by activityViewModels()
+    private val viewModel: FinancesViewModel by hiltNavGraphViewModels(R.id.finances)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +38,6 @@ class FinancesFragment @Inject constructor() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        groupId = getLongFromBundle(GROUP_ID_ARG)
         setPager()
         requireActivity().onBackArrowClick(binding.buttonBack)
         setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) {
@@ -53,9 +49,14 @@ class FinancesFragment @Inject constructor() : Fragment() {
         onAddClick()
     }
 
+    fun onExpenseClick(expense: Expense) {
+        (requireParentFragment() as MoneyPager).navigateToExpenseDetailsFragment(expense)
+    }
+
+
     private fun onAddClick() {
         binding.buttonAdd.setOnClickListener {
-
+            (requireParentFragment() as MoneyPager).navigateToCreateEditFragment()
         }
     }
 
@@ -97,9 +98,13 @@ class FinancesFragment @Inject constructor() : Fragment() {
 
     private fun setPager() {
         adapter = FinancesPagerAdapter(
-            listOf(ExpensesFragment(), BalancesFragment()),
+            listOf(
+                ExpensesFragment(),
+                BalancesFragment()
+            ),
             childFragmentManager,
-            lifecycle
+            lifecycle,
+            requireArguments()
         )
         binding.viewPager.adapter = adapter
         TabLayoutMediator(binding.tabPager, binding.viewPager) { tab, position ->

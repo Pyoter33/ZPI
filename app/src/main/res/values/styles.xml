@@ -85,17 +85,17 @@
     </style>
 
     <style name="TextMedium">
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/grey900</item>
         <item name="android:textSize">@dimen/textMedium</item>
     </style>
 
     <style name="TextBig">
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/grey900</item>
         <item name="android:textSize">@dimen/textBig</item>
     </style>
 
     <style name="TextBigger">
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textColor">@color/grey900</item>
         <item name="android:textSize">@dimen/textBigger</item>
     </style>
 

@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.R
@@ -17,7 +17,7 @@ import com.example.trip.databinding.FragmentAvailabilityBinding
 import com.example.trip.models.Availability
 import com.example.trip.models.Resource
 import com.example.trip.utils.*
-import com.example.trip.viewmodels.availability.UserAvailabilityViewModel
+import com.example.trip.viewmodels.availability.AvailabilityViewModel
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -28,22 +28,23 @@ import java.time.YearMonth
 import java.time.temporal.WeekFields
 import java.util.*
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 
 @AndroidEntryPoint
 class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickListener {
 
-    private val viewModel: UserAvailabilityViewModel by viewModels()
+    private val viewModel: AvailabilityViewModel by hiltNavGraphViewModels(R.id.availability)
 
     private lateinit var binding: FragmentAvailabilityBinding
 
     private lateinit var dateValidator: DateValidator
 
-    private var groupId by Delegates.notNull<Long>()
-
     @Inject
     lateinit var adapter: DatesExtendedListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,7 +57,6 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        groupId = getLongFromBundle("groupId")
         setAdapter()
         onAddClick()
         onOptimalDatesClick()
@@ -147,7 +147,7 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
     }
 
     private fun observeAvailabilityList() {
-        viewModel.refreshData()
+        viewModel.refreshAvailability()
         viewModel.availabilityList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
@@ -165,7 +165,7 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
                         R.string.text_fetch_failure,
                         R.string.text_retry
                     ) {
-                        viewModel.refreshData()
+                        viewModel.refreshAvailability()
                     }
                     binding.layoutLoading.setGone()
                 }
@@ -215,7 +215,7 @@ class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickLis
         lifecycleScope.launch {
             when (viewModel.postAvailability(availability)) {
                 is Resource.Success -> {
-                    viewModel.refreshData()
+                    viewModel.refreshAvailability()
                 }
                 is Resource.Loading -> {
 

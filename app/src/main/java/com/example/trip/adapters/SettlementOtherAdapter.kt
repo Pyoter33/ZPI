@@ -9,12 +9,19 @@ import com.example.trip.databinding.ItemSettlementBinding
 import com.example.trip.databinding.ItemSettlementHeaderBinding
 import com.example.trip.models.Settlement
 import com.example.trip.models.SettlementStatus
+import com.example.trip.utils.toStringFormat
 import javax.inject.Inject
 
 class SettlementOtherAdapter @Inject constructor() :
     ListAdapter<Settlement, RecyclerView.ViewHolder>(
         SettlementDiffUtil()
     ) {
+
+    private lateinit var currency: String
+
+    fun setCurrency(currency: String) {
+        this.currency = currency
+    }
 
     override fun getItemViewType(position: Int): Int {
         return if (position == HEADER) 0 else 1
@@ -27,7 +34,7 @@ class SettlementOtherAdapter @Inject constructor() :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             HEADER -> SettlementHeaderViewHolder.create(parent)
-            else -> SettlementViewHolder.create(parent)
+            else -> SettlementViewHolder.create(parent, currency)
         }
     }
 
@@ -39,14 +46,15 @@ class SettlementOtherAdapter @Inject constructor() :
     }
 
     class SettlementViewHolder(
-        private val binding: ItemSettlementBinding
+        private val binding: ItemSettlementBinding,
+        private val currency: String
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(settlement: Settlement) {
             with(binding) {
                 textDebtee.text = settlement.debtee.fullName
                 textDebtor.text = settlement.debtor.fullName
-                textPrice.text = settlement.amount.toString() + "PLN"
+                textPrice.text = settlement.amount.toStringFormat(currency)
                 if (settlement.status == SettlementStatus.PENDING) {
                     textStatus.text = itemView.resources.getString(R.string.text_pending)
                 } else {
@@ -57,12 +65,14 @@ class SettlementOtherAdapter @Inject constructor() :
 
         companion object {
             fun create(
-                parent: ViewGroup
+                parent: ViewGroup,
+                currency: String
             ): SettlementViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemSettlementBinding.inflate(layoutInflater, parent, false)
                 return SettlementViewHolder(
-                    binding
+                    binding,
+                    currency
                 )
             }
         }

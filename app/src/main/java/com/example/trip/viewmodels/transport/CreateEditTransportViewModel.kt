@@ -3,6 +3,7 @@ package com.example.trip.viewmodels.transport
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.trip.Constants
 import com.example.trip.models.Resource
 import com.example.trip.models.UserTransport
 import com.example.trip.usecases.transport.PostTransportUseCase
@@ -22,9 +23,9 @@ class CreateEditTransportViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    private val groupId = state.get<Long>("groupId")
-    private val accommodationId = state.get<Long>("accommodationId")
-    private val userTransportToUpdate = state.get<UserTransport>("userTransport")
+    private val groupId = state.get<Long>(Constants.GROUP_ID_KEY)
+    private val accommodationId = state.get<Long>(Constants.ACCOMMODATION_ID_KEY)
+    private val userTransportToUpdate = state.get<UserTransport>(Constants.USER_TRANSPORT_KEY)
 
     var toPost = false
     var meansOfTransport = userTransportToUpdate?.meansOfTransport?.toString()?.trim('[', ']')

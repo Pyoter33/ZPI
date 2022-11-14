@@ -1,6 +1,7 @@
 package com.example.trip.viewmodels.participants
 
 import androidx.lifecycle.*
+import com.example.trip.Constants
 import com.example.trip.models.Participant
 import com.example.trip.models.Resource
 import com.example.trip.usecases.participants.DeleteParticipantsUseCase
@@ -16,8 +17,11 @@ class ParticipantsViewModel @Inject constructor(
     private val getParticipantsUseCase: GetParticipantsUseCase,
     private val getInviteLinkUseCase: GetInviteLinkUseCase,
     private val updateParticipantUseCase: UpdateParticipantUseCase,
-    private val deleteParticipantsUseCase: DeleteParticipantsUseCase
+    private val deleteParticipantsUseCase: DeleteParticipantsUseCase,
+    state: SavedStateHandle
 ) : ViewModel() {
+
+    private val groupId = state.get<Long>(Constants.GROUP_ID_KEY)
 
     private val _participantsList by lazy {
         val mutableLiveData = MutableLiveData<Resource<List<Participant>>>()
@@ -27,7 +31,7 @@ class ParticipantsViewModel @Inject constructor(
     val participantsList: LiveData<Resource<List<Participant>>> = _participantsList
 
     private val _inviteLink by lazy {
-        return@lazy getInviteLinkUseCase(0).asLiveData()
+        return@lazy groupId?.let { getInviteLinkUseCase(it).asLiveData() }?: MutableLiveData()
     }
     val inviteLink: LiveData<Resource<String>> = _inviteLink
 
@@ -53,8 +57,10 @@ class ParticipantsViewModel @Inject constructor(
 
     private fun getData(mutableLiveData: MutableLiveData<Resource<List<Participant>>>) {
         viewModelScope.launch {
-            getParticipantsUseCase(1).collect { //from args
-                mutableLiveData.value = it
+            groupId?.let {
+                getParticipantsUseCase(it).collect { //from args
+                    mutableLiveData.value = it
+                }
             }
         }
     }

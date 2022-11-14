@@ -13,6 +13,7 @@ import com.example.trip.databinding.ItemAccommodationBinding
 import com.example.trip.models.Accommodation
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
+import com.example.trip.utils.toStringFormat
 import com.skydoves.balloon.Balloon
 import javax.inject.Inject
 
@@ -24,10 +25,16 @@ class AccommodationListAdapter @Inject constructor() :
 
     private lateinit var accommodationClickListener: AccommodationClickListener
 
+    private lateinit var currency: String
+
     private lateinit var popupMenu: Balloon
 
     fun setAccommodationClickListener(accommodationClickListener: AccommodationClickListener) {
         this.accommodationClickListener = accommodationClickListener
+    }
+
+    fun setCurrency(currency: String) {
+        this.currency = currency
     }
 
     fun setPopupMenu(popupMenu: Balloon) {
@@ -35,7 +42,7 @@ class AccommodationListAdapter @Inject constructor() :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccommodationViewHolder {
-        return AccommodationViewHolder.create(parent, accommodationClickListener, popupMenu)
+        return AccommodationViewHolder.create(parent, currency, accommodationClickListener, popupMenu)
     }
 
     override fun onBindViewHolder(holder: AccommodationViewHolder, position: Int) {
@@ -44,6 +51,7 @@ class AccommodationListAdapter @Inject constructor() :
 
     class AccommodationViewHolder(
         private val binding: ItemAccommodationBinding,
+        private val currency: String,
         private val accommodationClickListener: AccommodationClickListener,
         private val popupMenu: Balloon
     ) : RecyclerView.ViewHolder(binding.root) {
@@ -53,8 +61,7 @@ class AccommodationListAdapter @Inject constructor() :
                 textName.text = accommodation.name
                 textAddress.text = accommodation.address
                 textVotes.text = accommodation.votes.toString()
-                textPrice.text =
-                    itemView.resources.getString(R.string.text_pln, accommodation.price.toString())
+                textPrice.text = accommodation.price.toStringFormat(currency)
                 textDescription.text = accommodation.description
 
                 buttonVote.isSelected = accommodation.isVoted
@@ -128,6 +135,7 @@ class AccommodationListAdapter @Inject constructor() :
         companion object {
             fun create(
                 parent: ViewGroup,
+                currency: String,
                 accommodationClickListener: AccommodationClickListener,
                 popupMenu: Balloon
             ): AccommodationViewHolder {
@@ -135,6 +143,7 @@ class AccommodationListAdapter @Inject constructor() :
                 val binding = ItemAccommodationBinding.inflate(layoutInflater, parent, false)
                 return AccommodationViewHolder(
                     binding,
+                    currency,
                     accommodationClickListener,
                     popupMenu
                 )

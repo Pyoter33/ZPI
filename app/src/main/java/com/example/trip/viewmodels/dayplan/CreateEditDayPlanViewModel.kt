@@ -3,6 +3,7 @@ package com.example.trip.viewmodels.dayplan
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.trip.Constants
 import com.example.trip.R
 import com.example.trip.models.DayPlan
 import com.example.trip.models.Resource
@@ -26,8 +27,8 @@ class CreateEditDayPlanViewModel @Inject constructor(
     var date: LocalDate? = null
     var icon: Int = R.drawable.ic_baseline_church_24
 
-    val groupId = state.get<Long>("groupId")
-    val dayPlan = state.get<DayPlan>("dayPlan")
+    val groupId = state.get<Long>(Constants.GROUP_ID_KEY)
+    val dayPlan = state.get<DayPlan>(Constants.DAY_PLAN_KEY)
     var toPost = true
 
     fun postDayPlanAsync(): Deferred<Resource<Unit>> {

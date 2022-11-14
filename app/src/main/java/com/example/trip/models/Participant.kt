@@ -9,5 +9,6 @@ data class Participant(
     val groupId: Long,
     val fullName: String,
     val email: String,
+    val phoneNumber: String,
     val role: UserRole
 ): Parcelable

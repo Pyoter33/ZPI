@@ -3,6 +3,7 @@ package com.example.trip.viewmodels.accommodation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.trip.Constants
 import com.example.trip.models.Resource
 import com.example.trip.usecases.accommodation.PostAccommodationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,7 @@ class CreateEditAccommodationViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    val groupId = state.get<Long>("groupId")
+    private val groupId = state.get<Long>(Constants.GROUP_ID_KEY)
     var linkText: String? = null
     var price: String? = null
     var descriptionText: String? = null

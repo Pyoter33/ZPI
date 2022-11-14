@@ -10,11 +10,11 @@ import com.example.trip.R
 import com.example.trip.databinding.ItemParticipantBinding
 import com.example.trip.models.Participant
 import com.example.trip.models.UserRole
+import com.example.trip.utils.formatPhone
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
 import com.skydoves.balloon.Balloon
 import javax.inject.Inject
-
 
 class ParticipantsAdapter @Inject constructor() :
     ListAdapter<Participant, ParticipantsAdapter.ParticipantsViewHolder>(ParticipantsDiffUtil()) {
@@ -46,17 +46,18 @@ class ParticipantsAdapter @Inject constructor() :
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(participant: Participant) {
-            with(participant) { //fix
-                binding.textFullName.text = fullName
-                binding.textEmail.text = email
-                if(role == UserRole.COORDINATOR) {
-                    binding.imageCoordinator.setVisible()
+            with(binding) {
+                textFullName.text = participant.fullName
+                textEmail.text = participant.email
+                textPhone.text = participant.phoneNumber.formatPhone()
+                if(participant.role == UserRole.COORDINATOR) {
+                    imageCoordinator.setVisible()
                 } else {
-                    binding.imageCoordinator.setGone()
+                    imageCoordinator.setGone()
                 }
 
-                setOnLongClick(this)
-                setOnCalendarClickListener(this)
+                setOnLongClick(participant)
+                setOnCalendarClickListener(participant)
             }
         }
 

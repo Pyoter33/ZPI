@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.trip.Constants
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.SettlementClickListener
@@ -20,7 +21,7 @@ import com.example.trip.utils.getLongFromBundle
 import com.example.trip.utils.onBackArrowClick
 import com.example.trip.utils.setSwipeRefreshLayout
 import com.example.trip.utils.toast
-import com.example.trip.viewmodels.finances.SettlementsViewModel
+import com.example.trip.viewmodels.finances.FinancesViewModel
 import com.example.trip.views.dialogs.MenuPopupResolveFactory
 import com.example.trip.views.dialogs.finances.ResolveSettlementDialog
 import com.example.trip.views.dialogs.finances.ResolveSettlementDialogClickListener
@@ -45,7 +46,7 @@ class SettlementsFragment @Inject constructor() : Fragment(), SettlementClickLis
     @Inject
     lateinit var otherAdapter: SettlementOtherAdapter
 
-    private val viewModel: SettlementsViewModel by viewModels()
+    private val viewModel: FinancesViewModel by hiltNavGraphViewModels(R.id.finances)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,7 +61,7 @@ class SettlementsFragment @Inject constructor() : Fragment(), SettlementClickLis
 
         groupId = getLongFromBundle(GROUP_ID_ARG)
         requireActivity().onBackArrowClick(binding.buttonBack)
-        setSwipeRefreshLayout(binding.layoutRefresh, R.color.secondary) { viewModel.refreshData() }
+        setSwipeRefreshLayout(binding.layoutRefresh, R.color.secondary) { viewModel.refreshDataSettlements() }
         setAdapters()
         observeSettlementsList()
         onFinancesClick()
@@ -94,7 +95,7 @@ class SettlementsFragment @Inject constructor() : Fragment(), SettlementClickLis
                         R.string.text_retry,
                         Snackbar.LENGTH_INDEFINITE
                     ) {
-                        viewModel.refreshData()
+                        viewModel.refreshDataSettlements()
                     }
                 }
             }
@@ -102,9 +103,12 @@ class SettlementsFragment @Inject constructor() : Fragment(), SettlementClickLis
     }
 
     private fun setAdapters() {
+        val currency = requireArguments().getString(Constants.CURRENCY_KEY, "?")
         val layoutManager = LinearLayoutManager(context)
         userAdapter.setSettlementClickListener(this)
         userAdapter.setPopupMenu(popupMenu)
+        userAdapter.setCurrency(currency)
+        otherAdapter.setCurrency(currency)
 
         val concatAdapter = ConcatAdapter(userAdapter, otherAdapter)
         binding.listSettlements.adapter = concatAdapter

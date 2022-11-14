@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
@@ -15,7 +15,7 @@ import com.example.trip.databinding.FragmentOptimalDatesBinding
 import com.example.trip.models.Availability
 import com.example.trip.models.Resource
 import com.example.trip.utils.*
-import com.example.trip.viewmodels.availability.OptimalDatesViewModel
+import com.example.trip.viewmodels.availability.AvailabilityViewModel
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kizitonwose.calendarview.utils.yearMonth
@@ -28,7 +28,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class OptimalDatesFragment @Inject constructor() : Fragment(), DatesPagerClickListener {
 
-    private val viewModel: OptimalDatesViewModel by viewModels()
+    private val viewModel: AvailabilityViewModel by hiltNavGraphViewModels(R.id.availability)
 
     private lateinit var binding: FragmentOptimalDatesBinding
 
@@ -95,7 +95,7 @@ class OptimalDatesFragment @Inject constructor() : Fragment(), DatesPagerClickLi
     }
 
     private fun observeAvailability() {
-        viewModel.availability.observe(viewLifecycleOwner) {
+        viewModel.optimalAvailability.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
                     adapter.submitList(it.data)
@@ -111,7 +111,7 @@ class OptimalDatesFragment @Inject constructor() : Fragment(), DatesPagerClickLi
                         R.string.text_retry,
                         Snackbar.LENGTH_INDEFINITE
                     ) {
-                        viewModel.refreshData()
+                        viewModel.refreshOptimalAvailability()
                     }
                     binding.layoutLoading.setGone()
                 }

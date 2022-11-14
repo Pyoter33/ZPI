@@ -1,6 +1,7 @@
 package com.example.trip.viewmodels.transport
 
 import androidx.lifecycle.*
+import com.example.trip.Constants
 import com.example.trip.models.Resource
 import com.example.trip.models.Transport
 import com.example.trip.usecases.transport.GetMapsRouteUseCase
@@ -14,8 +15,11 @@ import javax.inject.Inject
 class TransportViewModel @Inject constructor(
     private val getTransportUseCase: GetTransportUseCase,
     private val getMapsRouteUseCase: GetMapsRouteUseCase,
-    savedStateHandle: SavedStateHandle
+    state: SavedStateHandle
 ) : ViewModel() {
+
+    private val groupId = state.get<Long>(Constants.GROUP_ID_KEY)
+    private val accommodationId = state.get<Long>(Constants.ACCOMMODATION_ID_KEY)
 
     private val _transport by lazy {
         val mutableLiveData = MutableLiveData<Resource<Transport>>()
@@ -42,8 +46,12 @@ class TransportViewModel @Inject constructor(
 
     private fun getData(mutableLiveData: MutableLiveData<Resource<Transport>>) {
         viewModelScope.launch {
-            getTransportUseCase(1, 1).collect {
-                mutableLiveData.value = it
+            groupId?.let {
+                accommodationId?.let { accommodationId ->
+                    getTransportUseCase(it, accommodationId).collect {
+                        mutableLiveData.value = it
+                    }
+                }
             }
         }
     }

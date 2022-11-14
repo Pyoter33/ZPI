@@ -154,4 +154,16 @@ class FinancesRepository @Inject constructor() {
         }
     }
 
+    suspend fun postExpense(expenseDto: ExpenseDto): Resource<Unit> {
+        return Resource.Failure()
+    }
+
+    suspend fun updateExpense(expenseDto: ExpenseDto): Resource<Unit> {
+        return Resource.Failure()
+    }
+
+    suspend fun deleteExpense(groupId: Long, id: Long): Resource<Unit> {
+        return Resource.Failure()
+    }
+
 }
