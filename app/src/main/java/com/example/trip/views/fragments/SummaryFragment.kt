@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.example.trip.Constants.SUMMARY_FILE_NAME
 import com.example.trip.PreTripDirections
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
@@ -27,6 +28,8 @@ import com.example.trip.views.dialogs.accommodation.DeleteAccommodationDialogCli
 import com.example.trip.views.dialogs.availability.DeleteAvailabilityDialogClickListener
 import com.example.trip.views.dialogs.summary.DeleteAcceptedAccommodationDialog
 import com.example.trip.views.dialogs.summary.DeleteAcceptedAvailabilityDialog
+import com.gkemon.XMLtoPDF.PdfGenerator
+import com.gkemon.XMLtoPDF.PdfGeneratorListener
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -70,6 +73,7 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
         observeButtonLock()
         onUncheckAccommodationClick()
         setupOnDateTextChangeListener()
+        onSaveClick()
     }
 
     private fun setAdapter() {
@@ -104,6 +108,12 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
     private fun observeButtonLock() {
         viewModel.isButtonUnlocked.observe(viewLifecycleOwner) {
             binding.buttonStartTrip.isEnabled = it
+        }
+    }
+
+    private fun onSaveClick() {
+        binding.buttonSave.setOnClickListener {
+            setPdf()
         }
     }
 
@@ -211,7 +221,8 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
             textPrice.text = accommodation.price.toStringFormat(args.currency)
             textDescription.text = accommodation.description
 
-            Glide.with(this@SummaryFragment).load(accommodation.imageUrl).centerCrop().into(binding.imageAccommodation)
+            Glide.with(this@SummaryFragment).load(accommodation.imageUrl).centerCrop()
+                .into(binding.imageAccommodation)
 
             buttonLink.setOnClickListener {
                 val intent = Intent(
@@ -222,7 +233,15 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
             }
 
             buttonTransport.setOnClickListener {
-                findNavController().navigate(PreTripDirections.actionToTransport(args.groupId, accommodation.id, accommodation.address, startCity, args.currency))
+                findNavController().navigate(
+                    PreTripDirections.actionToTransport(
+                        args.groupId,
+                        accommodation.id,
+                        accommodation.address,
+                        startCity,
+                        args.currency
+                    )
+                )
             }
         }
     }
@@ -273,14 +292,29 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
             textAddress.text = binding.textAddress.text
             textVotes.text = binding.textVotes.text
             textPrice.text = binding.textPrice.text
+            textParticipantsNo.text = binding.textParticipantsNo.text
+            imageAccommodation.setImageDrawable(binding.imageAccommodation.drawable)
             textDescription.text = binding.textDescription.text
             listParticipants.adapter = adapter
         }
+
+        PdfGenerator.getBuilder()
+            .setContext(requireActivity())
+            .fromViewSource()
+            .fromView(pdfBinding.root)
+            .setFileName(SUMMARY_FILE_NAME)
+            .build(object : PdfGeneratorListener() {
+                override fun onStartPDFGeneration() {
+                    //NO-OP
+                }
+
+                override fun onFinishPDFGeneration() {
+                    //NO-OP
+                }
+
+            })
+
     }
-
-
-
-
 
     override fun onDeleteClick(accommodation: Accommodation) {
         lifecycleScope.launch {

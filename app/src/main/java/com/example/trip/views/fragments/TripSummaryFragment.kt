@@ -11,14 +11,18 @@ import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.example.trip.Constants
 import com.example.trip.R
 import com.example.trip.adapters.ParticipantsSummaryAdapter
 import com.example.trip.databinding.FragmentSummaryBinding
+import com.example.trip.databinding.LayoutPdfBinding
 import com.example.trip.models.Accommodation
 import com.example.trip.models.Availability
 import com.example.trip.models.Resource
 import com.example.trip.utils.*
 import com.example.trip.viewmodels.SummaryViewModel
+import com.gkemon.XMLtoPDF.PdfGenerator
+import com.gkemon.XMLtoPDF.PdfGeneratorListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -50,6 +54,7 @@ class TripSummaryFragment @Inject constructor() : Fragment() {
         observeAvailability()
         observeParticipants()
         disableLayout()
+        onSaveClick()
         requireActivity().onBackArrowClick(binding.buttonBack)
         observeButtonLock()
     }
@@ -68,6 +73,12 @@ class TripSummaryFragment @Inject constructor() : Fragment() {
     private fun observeButtonLock() {
         viewModel.isButtonUnlocked.observe(viewLifecycleOwner) {
             binding.buttonStartTrip.isEnabled = it
+        }
+    }
+
+    private fun onSaveClick() {
+        binding.buttonSave.setOnClickListener {
+            setPdf()
         }
     }
 
@@ -164,6 +175,40 @@ class TripSummaryFragment @Inject constructor() : Fragment() {
             )
 
         }
+    }
+
+    private fun setPdf() {
+        val pdfBinding = LayoutPdfBinding.inflate(LayoutInflater.from(context))
+
+        with(pdfBinding) {
+            editTextDate.text = binding.editTextDate.text
+            textName.text = binding.textName.text
+            textAddress.text = binding.textAddress.text
+            buttonVote.setInvisible()
+            textVotes.setInvisible()
+            textPrice.setInvisible()
+            textParticipantsNo.text = binding.textParticipantsNo.text
+            imageAccommodation.setImageDrawable(binding.imageAccommodation.drawable)
+            textDescription.text = binding.textDescription.text
+            listParticipants.adapter = adapter
+        }
+
+        PdfGenerator.getBuilder()
+            .setContext(requireActivity())
+            .fromViewSource()
+            .fromView(pdfBinding.root)
+            .setFileName(Constants.SUMMARY_FILE_NAME)
+            .build(object : PdfGeneratorListener() {
+                override fun onStartPDFGeneration() {
+                    //NO-OP
+                }
+
+                override fun onFinishPDFGeneration() {
+                    //NO-OP
+                }
+
+            })
+
     }
 
     companion object {

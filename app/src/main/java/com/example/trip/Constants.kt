@@ -11,4 +11,5 @@ object Constants {
     const val STATUS_KEY = "status"
     const val CURRENCY_KEY = "currency"
     const val START_CITY = "startCity"
+    const val SUMMARY_FILE_NAME = "summary.pdf"
 }
