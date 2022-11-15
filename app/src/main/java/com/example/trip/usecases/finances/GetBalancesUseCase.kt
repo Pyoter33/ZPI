@@ -13,7 +13,6 @@ class GetBalancesUseCase @Inject constructor(
     private val financesRepository: FinancesRepository,
     private val participantsRepository: ParticipantsRepository
 ) {
-
     operator fun invoke(groupId: Long): Flow<Resource<List<Balance>>> {
         val result = combine(
             financesRepository.getBalances(groupId),
@@ -23,7 +22,6 @@ class GetBalancesUseCase @Inject constructor(
             if (balancesDto is Resource.Loading || participants is Resource.Loading) return@combine Resource.Loading()
 
             val maxAmount = (balancesDto as Resource.Success).data.values.max()
-            val minAmount = balancesDto.data.values.min()
 
             val balances = balancesDto.data.map { entry ->
                 val participant= (participants as Resource.Success).data.find { it.id == entry.key } ?: return@combine Resource.Failure<List<Balance>>()
@@ -31,7 +29,7 @@ class GetBalancesUseCase @Inject constructor(
                     Balance(
                         participant,
                         entry.value,
-                        minAmount,
+                        maxAmount,
                         BalanceStatus.NEGATIVE
                     )
                 } else {

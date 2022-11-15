@@ -2,6 +2,7 @@ package com.example.trip.repositories
 
 import com.example.trip.models.Accommodation
 import com.example.trip.models.Resource
+import com.example.trip.service.AccommodationService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -10,10 +11,19 @@ import java.math.BigDecimal
 import javax.inject.Inject
 
 
-class AccommodationsRepository @Inject constructor() {
+class AccommodationsRepository @Inject constructor(private val accommodationService: AccommodationService) {
 
     fun getAcceptedAccommodation(groupId: Long): Flow<Resource<Accommodation?>> {
         return flow {
+            emit(Resource.Loading())
+
+//            val response = accommodationService.getAccommodation(groupId)
+//            if (response.isSuccessful) {
+//                emit(Resource.Success(response.body()))
+//            } else {
+//                emit(Resource.Failure(response.code()))
+//            }
+
             emit(
                 Resource.Success(
                     Accommodation(
@@ -39,6 +49,9 @@ class AccommodationsRepository @Inject constructor() {
     }
 
     fun getAccommodationsList(groupId: Long): Flow<Resource<List<Accommodation>>> {
+
+
+
         return flow {
             emit(Resource.Loading())
             emit(

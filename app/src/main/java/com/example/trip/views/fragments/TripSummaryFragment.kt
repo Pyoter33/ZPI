@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.ImageViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -48,7 +49,6 @@ class TripSummaryFragment @Inject constructor() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonLock.setInvisible()
         setAdapter()
         observeAccommodation()
         observeAvailability()
@@ -63,6 +63,14 @@ class TripSummaryFragment @Inject constructor() : Fragment() {
         binding.editTextDate.isClickable = false
         binding.buttonStartTrip.setGone()
         binding.textFieldDate.isHelperTextEnabled = false
+        binding.buttonLock.setInvisible()
+
+        val layoutParams = binding.listParticipants.layoutParams
+        (layoutParams as ConstraintLayout.LayoutParams).apply {
+            constrainedHeight = false
+            matchConstraintMaxHeight = ConstraintLayout.LayoutParams.WRAP_CONTENT
+        }
+        binding.listParticipants.layoutParams = layoutParams
     }
 
     private fun setAdapter() {

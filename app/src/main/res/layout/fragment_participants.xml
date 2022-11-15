@@ -38,7 +38,7 @@
                 style="@style/CardWhite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/marginL"
+                android:layout_marginHorizontal="@dimen/marginM"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/button_back">

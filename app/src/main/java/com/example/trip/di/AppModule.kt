@@ -2,6 +2,8 @@ package com.example.trip.di
 
 import android.content.Context
 import android.content.pm.PackageManager
+import com.example.trip.Constants
+import com.example.trip.service.AccommodationService
 import com.google.maps.GeoApiContext
 import dagger.Module
 import dagger.Provides
@@ -20,23 +22,25 @@ import javax.inject.Singleton
 object AppModule {
 
     @Provides
-    fun provideUrl() = ""  ///
+    fun provideUrl() = Constants.BASE_URL
 
     @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(@ApplicationContext context: Context): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor()
+        val headerInterceptor = HeaderInterceptor(context)
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
 
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .addInterceptor(headerInterceptor)
             .build()
     }
 
 
     @Singleton
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient, BASE_URL:String): Retrofit = Retrofit.Builder()
+    fun provideRetrofit(okHttpClient: OkHttpClient, BASE_URL: String): Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .baseUrl(BASE_URL)
         .client(okHttpClient)
@@ -50,10 +54,16 @@ object AppModule {
             context.packageName,
             PackageManager.GET_META_DATA
         )
-        val apiKey = appInfo.metaData.getString("com.google.android.geo.API_KEY")
+        val apiKey = appInfo.metaData.getString(Constants.GOOGLE_API_KEY)
 
         return GeoApiContext.Builder().apiKey(apiKey)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAccommodationService(retrofit: Retrofit): AccommodationService {
+        return retrofit.create(AccommodationService::class.java)
     }
 
 }
