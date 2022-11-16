@@ -10,7 +10,6 @@ interface AvailabilityService {
 
     @GET("availability/user")
     suspend fun getAvailabilitiesForUser(
-        @Query("userId") userId: Long,
         @Query("groupId") groupId: Long
     ): Response<List<AvailabilityDto>>
 
@@ -21,7 +20,6 @@ interface AvailabilityService {
 
     @DELETE("availability/user")
     suspend fun deleteAvailability(
-        @Query("userId") userId: Long,
         @Query("groupId") groupId: Long
     ): Response<Unit>
 

@@ -16,7 +16,6 @@ interface AccommodationService {
     @PATCH("accommodation")
     suspend fun updateAccommodation(
         @Query("accommodationId") accommodationId: Long,
-        @Query("userId") userId: Long,
         @Body accommodationPostDto: AccommodationPostDto
     ): Response<AccommodationDto>
 
