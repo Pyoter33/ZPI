@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 class TransportRepository @Inject constructor(private val geoApiContext: GeoApiContext) {
 
-    fun getTransport(groupId: Long, accommodationId: Long): Flow<Resource<Transport>> {
+    fun getTransport(accommodationId: Long): Flow<Resource<Transport>> {
         return flow {
             emit(
                 Resource.Success(

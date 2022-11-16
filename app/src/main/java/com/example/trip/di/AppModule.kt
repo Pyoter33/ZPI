@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import com.example.trip.Constants
 import com.example.trip.service.AccommodationService
+import com.example.trip.service.AuthService
 import com.google.maps.GeoApiContext
 import dagger.Module
 import dagger.Provides
@@ -64,6 +65,12 @@ object AppModule {
     @Singleton
     fun provideAccommodationService(retrofit: Retrofit): AccommodationService {
         return retrofit.create(AccommodationService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthService(retrofit: Retrofit): AuthService {
+        return retrofit.create(AuthService::class.java)
     }
 
 }

@@ -228,12 +228,12 @@ class CreateEditDayPlanFragment @Inject constructor() : Fragment() {
         var showError = false
 
         with(binding) {
-            if (textFieldName.editText?.text.isNullOrEmpty()) {
+            if (viewModel.name.isNullOrEmpty()) {
                 textFieldName.error = getString(R.string.text_text_empty)
                 textFieldName.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
             }
-            if (textFieldDate.editText?.text.isNullOrEmpty()) {
+            if (viewModel.date == null) {
                 textFieldDate.error = getString(R.string.text_text_empty)
                 textFieldDate.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true

@@ -8,8 +8,8 @@ import javax.inject.Inject
 
 class GetTransportUseCase @Inject constructor(private val transportRepository: TransportRepository) {
 
-    operator fun invoke(groupId: Long, accommodationId: Long): Flow<Resource<Transport>> {
-        return transportRepository.getTransport(groupId, accommodationId)
+    operator fun invoke(accommodationId: Long): Flow<Resource<Transport>> {
+        return transportRepository.getTransport(accommodationId)
     }
 
 }

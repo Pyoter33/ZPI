@@ -12,8 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.example.trip.Constants
 import com.example.trip.Constants.SUMMARY_FILE_NAME
-import com.example.trip.PreTripDirections
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.ParticipantsSummaryAdapter
@@ -44,7 +44,6 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
 
     private lateinit var accommodationDialog: DeleteAcceptedAccommodationDialog
     private lateinit var availabilityDialog: DeleteAcceptedAvailabilityDialog
-    private lateinit var startCity: String
 
     @Inject
     lateinit var adapter: ParticipantsSummaryAdapter
@@ -233,15 +232,15 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
             }
 
             buttonTransport.setOnClickListener {
-                findNavController().navigate(
-                    PreTripDirections.actionToTransport(
-                        args.groupId,
-                        accommodation.id,
-                        accommodation.address,
-                        startCity,
-                        args.currency
-                    )
-                )
+                val bundle = Bundle().apply {
+                    putLong(Constants.GROUP_ID_KEY, accommodation.groupId)
+                    putLong(Constants.ACCOMMODATION_ID_KEY, accommodation.id)
+                    putString(Constants.DESTINATION_KEY, accommodation.address)
+                    putString(Constants.START_CITY_KEY, args.startCity)
+                    putString(Constants.CURRENCY_KEY, args.currency)
+                }
+
+                findNavController().navigate(R.id.transport, bundle)
             }
         }
     }

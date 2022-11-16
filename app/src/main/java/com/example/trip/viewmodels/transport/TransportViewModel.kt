@@ -18,7 +18,6 @@ class TransportViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    private val groupId = state.get<Long>(Constants.GROUP_ID_KEY)
     private val accommodationId = state.get<Long>(Constants.ACCOMMODATION_ID_KEY)
 
     private val _transport by lazy {
@@ -46,12 +45,10 @@ class TransportViewModel @Inject constructor(
 
     private fun getData(mutableLiveData: MutableLiveData<Resource<Transport>>) {
         viewModelScope.launch {
-            groupId?.let {
                 accommodationId?.let { accommodationId ->
-                    getTransportUseCase(it, accommodationId).collect {
+                    getTransportUseCase(accommodationId).collect {
                         mutableLiveData.value = it
                     }
-                }
             }
         }
     }

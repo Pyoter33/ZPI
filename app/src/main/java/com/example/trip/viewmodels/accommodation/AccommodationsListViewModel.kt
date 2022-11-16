@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AccommodationsListViewModel @Inject constructor(
     private val getAccommodationsListUseCase: GetAccommodationsListUseCase,
-    private val state: SavedStateHandle
+    state: SavedStateHandle
 ) :
     ViewModel() {
 

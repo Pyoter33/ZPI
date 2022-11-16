@@ -13,5 +13,5 @@ data class FlightDto(
     val flightDuration: Duration,
     val travelToAirportDuration: Duration,
     val travelToAccommodationDuration: Duration,
-    val airTransport: AirTransport
+    val airTransport: AirTransportDto
 )

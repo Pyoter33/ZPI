@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.trip.PreTripDirections
+import com.example.trip.Constants
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.AccommodationClickListener
@@ -60,8 +60,6 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
         super.onStop()
         popupMenu.dismiss()
     }
-
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -188,15 +186,13 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
     }
 
     override fun onTransportClick(accommodation: Accommodation) {
-        findNavController().navigate(
-            PreTripDirections.actionToTransport(
-                accommodation.groupId,
-                accommodation.id,
-                accommodation.address,
-                args.startCity,
-                args.currency
-            )
-        )
+        val bundle = Bundle().apply { putLong(Constants.GROUP_ID_KEY, accommodation.groupId)
+            putLong(Constants.ACCOMMODATION_ID_KEY, accommodation.id)
+            putString(Constants.DESTINATION_KEY, accommodation.address)
+            putString(Constants.START_CITY_KEY, args.startCity)
+            putString(Constants.CURRENCY_KEY, args.currency)}
+
+        findNavController().navigate(R.id.transport, bundle)
     }
 
     override fun onMenuAcceptClick(accommodation: Accommodation) {

@@ -25,6 +25,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.trip.R
 import com.example.trip.models.Attraction
 import com.example.trip.models.AttractionPreview
+import com.example.trip.models.Resource
+import retrofit2.Response
 import java.math.BigDecimal
 import java.time.*
 import java.util.*
@@ -184,4 +186,13 @@ private fun isIntegerValue(bd: BigDecimal): Boolean {
 fun String.formatPhone(): String {
     val split = split(' ')
     return "${split[0]} ${split[1].subSequence(0..2)} ${split[1].subSequence(3..5)} ${split[1].subSequence(6..8)}"
+}
+
+fun <T> Response<T>.toBodyResourceOrFailure(): Resource<T> {
+    return when {
+        isSuccessful && body() != null -> {
+            Resource.Success(body()!!)
+        }
+        else -> Resource.Failure(code())
+    }
 }

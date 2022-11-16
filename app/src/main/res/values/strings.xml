@@ -126,4 +126,5 @@
     <string name="text_click_twice"> Click back button twice to exit the app!</string>
     <string name="format_plus"> +%1$s </string>
     <string name="text_phone_number">Phone number</string>
+    <string name="text_not_login">Login unsuccessful. Please check your email and password.</string>
 </resources>

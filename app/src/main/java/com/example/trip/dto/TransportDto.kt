@@ -17,7 +17,7 @@ sealed interface TransportDto {
     val transportTypeJson: Int
 }
 
-data class AirTransport(
+data class AirTransportDto(
     override val transportId: Long,
     override val duration: Duration,
     override val price: BigDecimal,
@@ -30,7 +30,7 @@ data class AirTransport(
     val flight: List<FlightDto>
 ): TransportDto
 
-data class CarTransport(
+data class CarTransportDto(
     override val transportId: Long,
     override val duration: Duration,
     override val price: BigDecimal,
@@ -43,7 +43,7 @@ data class CarTransport(
     val distanceInKm: Long
 ): TransportDto
 
-data class UserTransport(
+data class UserTransportDto(
     override val transportId: Long,
     override val duration: Duration,
     override val price: BigDecimal,
