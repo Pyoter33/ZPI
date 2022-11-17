@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -70,6 +71,13 @@ class GroupsListFragment @Inject constructor() : Fragment(), GroupsClickListener
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val preferences = requireContext().getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE);
+        val token = preferences.getString(Constants.AUTHORIZATION_HEADER, "")!!
+        val userId = preferences.getLong(Constants.USER_ID_KEY, -1L)!!
+
+        Log.i("tak login", token)
+        Log.i("tak user", userId.toString())
 
         setAdapter()
         onCreateClick()

@@ -161,7 +161,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/marginS"
-                                android:text="You need to choose at least one contributor!"
+                                android:text="@string/text_you_need_to_choose_at_least_one_contributor"
                                 android:textColor="@color/red"
                                 android:visibility="invisible"
                                 app:layout_constraintBottom_toBottomOf="parent"

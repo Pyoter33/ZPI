@@ -3,8 +3,11 @@ package com.example.trip.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.trip.R
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class LoginActivity : AppCompatActivity() {
+@AndroidEntryPoint
+class LoginActivity @Inject constructor() : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -139,7 +139,6 @@
                     android:layout_marginHorizontal="@dimen/marginL"
                     android:layout_marginTop="@dimen/marginXS"
                     android:hint="Phone"
-                    app:errorEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/textField_code"
                     app:layout_constraintTop_toBottomOf="@+id/text_label_phone"
@@ -155,25 +154,37 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <TextView
+                    android:id="@+id/text_error"
+                    style="@style/TextVerySmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_error_multiple"
+                    android:textColor="@color/red"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="@+id/textField_code"
+                    app:layout_constraintTop_toBottomOf="@+id/textField_code" />
+
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textField_date"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="@dimen/marginL"
                     android:layout_marginTop="@dimen/marginS"
+                    android:layout_marginHorizontal="@dimen/marginL"
                     android:hint="@string/text_birthday"
                     app:errorEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textField_phone"
+                    app:layout_constraintTop_toBottomOf="@+id/text_error"
                     app:placeholderText="dd.mm.yyyy"
                     app:startIconDrawable="@drawable/ic_baseline_cake_24"
                     app:startIconTint="@color/primary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editText_date"
-                        android:layout_width="150dp"
+                        android:layout_width="180dp"
                         android:layout_height="match_parent"
                         android:clickable="true"
                         android:focusable="false"
@@ -245,7 +256,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textField_repeat_password" />
 
                 <Button
-                    android:id="@+id/button_register"
+                    android:id="@+id/button_login"
                     style="@style/Button.Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

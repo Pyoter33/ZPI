@@ -18,7 +18,7 @@ class LoginViewModel @Inject constructor(private val loginUseCase: LoginUseCase)
     var email: String? = null
     var password: String? = null
 
-    fun postLoginAsync(): Deferred<Resource<UserDto>> {
+    fun postLoginAsync(): Deferred<Resource<Pair<UserDto, String>>> {
         val deferred = viewModelScope.async(Dispatchers.IO) {
             loginUseCase(LoginRequestDto(email!!, password!!))
         }

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.trip.Constants
 import com.example.trip.R
 import com.example.trip.activities.HomeActivity
@@ -44,12 +45,13 @@ class LoginFragment @Inject constructor(): Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupOnNameTextChangeListener()
+        onRegisterClick()
+        setupOnEmailTextChangeListener()
         setupOnPasswordTextChangeListener()
         onSignInClick()
     }
 
-    private fun setupOnNameTextChangeListener() {
+    private fun setupOnEmailTextChangeListener() {
         binding.textFieldEmail.editText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
@@ -93,6 +95,12 @@ class LoginFragment @Inject constructor(): Fragment() {
         }
     }
 
+    private fun onRegisterClick() {
+        binding.buttonRegister.setOnClickListener {
+            findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
+        }
+    }
+
     private fun submit() {
         if (isSubmitNotPermitted()) return
         enableLoading()
@@ -102,7 +110,8 @@ class LoginFragment @Inject constructor(): Fragment() {
                 is Resource.Success -> {
                     disableLoading()
                     val preferences = requireContext().getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE)
-                    preferences.edit().putLong(Constants.USER_ID_KEY, result.data.userId).apply()
+                    preferences.edit().putLong(Constants.USER_ID_KEY, result.data.first.userId).apply()
+                    preferences.edit().putString(Constants.AUTHORIZATION_HEADER, result.data.second).apply()
                     val activityIntent = Intent(requireContext(), HomeActivity::class.java)
                     startActivity(activityIntent)
                 }

@@ -6,17 +6,22 @@ import com.example.trip.dto.RegisterRequestDto
 import com.example.trip.dto.UserDto
 import com.example.trip.models.Resource
 import com.example.trip.service.AuthService
-import com.example.trip.utils.toBodyResourceOrFailure
+import java.time.LocalDate
 import javax.inject.Inject
 
 class AuthRepository @Inject constructor(private val authService: AuthService) {
 
-    suspend fun login(loginRequestDto: LoginRequestDto): Resource<UserDto>  {
+    suspend fun login(loginRequestDto: LoginRequestDto): Resource<Pair<UserDto, String>>  {
+        return Resource.Success(Pair(UserDto(1L, "", "", "", "", LocalDate.now()), "tak"))
+
         val result = authService.postLogin(loginRequestDto)
-        return result.toBodyResourceOrFailure()
+        val token = result.headers()[Constants.AUTHORIZATION_HEADER]
+       // return result.toBodyResourceOrFailure()
     }
 
     suspend fun register(registerRequestDto: RegisterRequestDto): Resource<String>  {
+        return Resource.Success("tak")
+
         val result = authService.postRegister(registerRequestDto)
         val token = result.headers()[Constants.AUTHORIZATION_HEADER]
 
