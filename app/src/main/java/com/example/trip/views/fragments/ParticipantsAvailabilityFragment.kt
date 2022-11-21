@@ -5,7 +5,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,11 +26,9 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class ParticipantsAvailabilityFragment @Inject constructor() : Fragment() {
+class ParticipantsAvailabilityFragment @Inject constructor() : BaseFragment<FragmentParticipantsAvailabilityBinding>() {
 
     private val viewModel: ParticipantsAvailabilityViewModel by viewModels()
-
-    private lateinit var binding: FragmentParticipantsAvailabilityBinding
 
     private lateinit var dateValidator: DateValidator
 
@@ -40,13 +37,10 @@ class ParticipantsAvailabilityFragment @Inject constructor() : Fragment() {
     @Inject
     lateinit var adapter: DatesListAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentParticipantsAvailabilityBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentParticipantsAvailabilityBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

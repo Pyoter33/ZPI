@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -23,21 +22,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateEditAccommodationFragment @Inject constructor() : Fragment() {
+class CreateEditAccommodationFragment @Inject constructor() : BaseFragment<FragmentCreateEditAccommodationBinding>() {
 
     private val viewModel: CreateEditAccommodationViewModel by viewModels()
 
     private val args: CreateEditAccommodationFragmentArgs by navArgs()
 
-    private lateinit var binding: FragmentCreateEditAccommodationBinding
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentCreateEditAccommodationBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentCreateEditAccommodationBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

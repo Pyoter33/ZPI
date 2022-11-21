@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -29,25 +28,20 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateEditTransportFragment @Inject constructor() : Fragment() {
+class CreateEditTransportFragment @Inject constructor() : BaseFragment<FragmentCreateEditTransportBinding>() {
 
     private val viewModel: CreateEditTransportViewModel by viewModels()
 
     private val args: CreateEditTransportFragmentArgs by navArgs()
 
-    private lateinit var binding: FragmentCreateEditTransportBinding
-
     private lateinit var dateFormatter: DateTimeFormatter
 
     private lateinit var timeFormatter: DateTimeFormatter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentCreateEditTransportBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentCreateEditTransportBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

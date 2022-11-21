@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -33,10 +32,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AccommodationListFragment @Inject constructor() : Fragment(), AccommodationClickListener,
+class AccommodationListFragment @Inject constructor() : BaseFragment<FragmentAccommodationListBinding>(), AccommodationClickListener,
     AcceptAccommodationDialogClickListener, DeleteAccommodationDialogClickListener {
 
-    private lateinit var binding: FragmentAccommodationListBinding
     private val popupMenu by balloon<MenuPopupAcceptFactory>()
 
     @Inject
@@ -46,13 +44,10 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
 
     private val args: AccommodationListFragmentArgs by navArgs()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentAccommodationListBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentAccommodationListBinding.inflate(inflater, container, false)
 
     override fun onStop() {
         super.onStop()
@@ -191,7 +186,9 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
             putLong(Constants.ACCOMMODATION_ID_KEY, accommodation.id)
             putString(Constants.DESTINATION_KEY, accommodation.address)
             putString(Constants.START_CITY_KEY, args.startCity)
-            putString(Constants.CURRENCY_KEY, args.currency)}
+            putString(Constants.CURRENCY_KEY, args.currency)
+            putLongArray(Constants.COORDINATORS_KEY, args.coordinators)
+        }
 
         findNavController().navigate(R.id.transport, bundle)
     }

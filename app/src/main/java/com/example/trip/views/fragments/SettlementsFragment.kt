@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,9 +29,8 @@ import javax.inject.Inject
 import kotlin.properties.Delegates
 
 @AndroidEntryPoint
-class SettlementsFragment @Inject constructor() : Fragment(), SettlementClickListener, ResolveSettlementDialogClickListener{
+class SettlementsFragment @Inject constructor() : BaseFragment<FragmentSettlementsBinding>(), SettlementClickListener, ResolveSettlementDialogClickListener{
 
-    private lateinit var binding: FragmentSettlementsBinding
     private val popupMenu by balloon<MenuPopupResolveFactory>()
 
     private var groupId by Delegates.notNull<Long>()
@@ -45,13 +43,10 @@ class SettlementsFragment @Inject constructor() : Fragment(), SettlementClickLis
 
     private val viewModel: FinancesViewModel by hiltNavGraphViewModels(R.id.finances)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSettlementsBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentSettlementsBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

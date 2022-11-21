@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.trip.R
@@ -27,10 +26,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DayPlansFragment @Inject constructor() : Fragment(), DayPlansClickListener,
+class DayPlansFragment @Inject constructor() : BaseFragment<FragmentDayPlansBinding>(), DayPlansClickListener,
     DeleteDayPlanDialogClickListener {
 
-    private lateinit var binding: FragmentDayPlansBinding
     private val popupMenu by balloon<MenuPopupFactory>()
 
     @Inject
@@ -38,13 +36,10 @@ class DayPlansFragment @Inject constructor() : Fragment(), DayPlansClickListener
 
     private val viewModel: DayPlansViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentDayPlansBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentDayPlansBinding.inflate(inflater, container, false)
 
     override fun onStop() {
         super.onStop()

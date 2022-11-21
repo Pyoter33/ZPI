@@ -4,24 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.example.trip.adapters.FragmentPagerAdapter
 import com.example.trip.databinding.FragmentAvailabilityPagerBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AvailabilityPager @Inject constructor() : Fragment() {
+class AvailabilityPager @Inject constructor() : BaseFragment<FragmentAvailabilityPagerBinding>() {
 
-    private lateinit var binding: FragmentAvailabilityPagerBinding
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentAvailabilityPagerBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentAvailabilityPagerBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

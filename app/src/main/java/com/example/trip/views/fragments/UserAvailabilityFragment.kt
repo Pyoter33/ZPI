@@ -5,7 +5,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,24 +30,19 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class UserAvailabilityFragment @Inject constructor() : Fragment(), DatesClickListener {
+class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvailabilityBinding>(), DatesClickListener {
 
     private val viewModel: AvailabilityViewModel by hiltNavGraphViewModels(R.id.availability)
-
-    private lateinit var binding: FragmentAvailabilityBinding
 
     private lateinit var dateValidator: DateValidator
 
     @Inject
     lateinit var adapter: DatesExtendedListAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentAvailabilityBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentAvailabilityBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

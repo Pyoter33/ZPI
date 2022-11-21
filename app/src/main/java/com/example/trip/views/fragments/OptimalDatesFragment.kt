@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.trip.R
@@ -26,11 +25,9 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OptimalDatesFragment @Inject constructor() : Fragment(), DatesPagerClickListener {
+class OptimalDatesFragment @Inject constructor() : BaseFragment<FragmentOptimalDatesBinding>(), DatesPagerClickListener {
 
     private val viewModel: AvailabilityViewModel by hiltNavGraphViewModels(R.id.availability)
-
-    private lateinit var binding: FragmentOptimalDatesBinding
 
     private lateinit var dateValidator: DateValidator
 
@@ -44,13 +41,10 @@ class OptimalDatesFragment @Inject constructor() : Fragment(), DatesPagerClickLi
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentOptimalDatesBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentOptimalDatesBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -141,9 +135,9 @@ class OptimalDatesFragment @Inject constructor() : Fragment(), DatesPagerClickLi
         requireActivity().toast("accept")
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
         binding.pagerDates.unregisterOnPageChangeCallback(viewPagerCallback)
+        super.onDestroyView()
     }
 
     companion object {

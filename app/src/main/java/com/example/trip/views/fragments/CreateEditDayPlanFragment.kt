@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -28,15 +27,14 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class CreateEditDayPlanFragment @Inject constructor() : Fragment() {
+class CreateEditDayPlanFragment @Inject constructor() :
+    BaseFragment<FragmentCreateEditDayPlanBinding>() {
 
-    private val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+    private val formatter = DateTimeFormatter.ofPattern(DATE_FORMAT)
 
     private val viewModel: CreateEditDayPlanViewModel by viewModels()
 
     private val args: CreateEditDayPlanFragmentArgs by navArgs()
-
-    private lateinit var binding: FragmentCreateEditDayPlanBinding
 
     private lateinit var powerMenu: CustomPowerMenu<Int, IconSpinnerAdapter>
 
@@ -51,13 +49,10 @@ class CreateEditDayPlanFragment @Inject constructor() : Fragment() {
         DayPlanIcon.RESTAURANT.resId
     )
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentCreateEditDayPlanBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentCreateEditDayPlanBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -263,5 +258,8 @@ class CreateEditDayPlanFragment @Inject constructor() : Fragment() {
         }
     }
 
+    companion object {
+        const val DATE_FORMAT = "dd.MM.yyyy"
+    }
 
 }

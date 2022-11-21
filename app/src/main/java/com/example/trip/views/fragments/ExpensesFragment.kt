@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.Constants
@@ -24,22 +23,17 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener {
-
-    private lateinit var binding: FragmentExpensesBinding
+class ExpensesFragment @Inject constructor() : BaseFragment<FragmentExpensesBinding>(), ExpenseClickListener {
 
     @Inject
     lateinit var adapter: ExpensesAdapter
 
     private val viewModel: FinancesViewModel by hiltNavGraphViewModels(R.id.finances)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentExpensesBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentExpensesBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

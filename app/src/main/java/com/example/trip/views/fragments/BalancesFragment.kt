@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.Constants
@@ -13,37 +12,28 @@ import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.BalancesAdapter
 import com.example.trip.databinding.FragmentBalancesBinding
 import com.example.trip.models.Resource
-import com.example.trip.utils.getLongFromBundle
 import com.example.trip.viewmodels.finances.FinancesViewModel
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 @AndroidEntryPoint
-class BalancesFragment @Inject constructor() : Fragment() {
-
-    private lateinit var binding: FragmentBalancesBinding
-    private var groupId by Delegates.notNull<Long>()
+class BalancesFragment @Inject constructor() : BaseFragment<FragmentBalancesBinding>() {
 
     @Inject
     lateinit var adapter: BalancesAdapter
 
     private val viewModel: FinancesViewModel by hiltNavGraphViewModels(R.id.finances)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentBalancesBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentBalancesBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        groupId = getLongFromBundle(GROUP_ID_ARG)
         setAdapter()
         observeLists()
     }

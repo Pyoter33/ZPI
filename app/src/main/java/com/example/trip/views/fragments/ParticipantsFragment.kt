@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.trip.R
@@ -30,10 +29,8 @@ import kotlin.properties.Delegates
 
 
 @AndroidEntryPoint
-class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClickListener,
+class ParticipantsFragment @Inject constructor() : BaseFragment<FragmentParticipantsBinding>(), ParticipantsClickListener,
     DeleteParticipantDialogClickListener, GetInviteLinkDialogClickListener {
-
-    private lateinit var binding: FragmentParticipantsBinding
 
     @Inject
     lateinit var adapter: ParticipantsAdapter
@@ -44,13 +41,10 @@ class ParticipantsFragment @Inject constructor() : Fragment(), ParticipantsClick
 
     private var groupId by Delegates.notNull<Long>()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentParticipantsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentParticipantsBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

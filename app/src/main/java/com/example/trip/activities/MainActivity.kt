@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity(), LeaveGroupDialogClickListener {
         private const val APP_LOCALE = "gb"
     }
 
+    private var snackbar: Snackbar? = null
     private lateinit var navController: NavController
     private lateinit var bottomNavigationView: BottomNavigationView
     private val rootDestinations =
@@ -147,7 +148,7 @@ class MainActivity : AppCompatActivity(), LeaveGroupDialogClickListener {
         length: Int = Snackbar.LENGTH_LONG,
         action: () -> Unit
     ) {
-        Snackbar.make(view, messageResId, length)
+        snackbar = Snackbar.make(view, messageResId, length)
             .setAction(actionResId) {
                 action()
             }
@@ -155,7 +156,11 @@ class MainActivity : AppCompatActivity(), LeaveGroupDialogClickListener {
             .setBackgroundTint(resources.getColor(R.color.grey400, null))
             .setTextColor(resources.getColor(R.color.black, null))
             .setActionTextColor(resources.getColor(R.color.primary, null))
-            .show()
+        snackbar!!.show()
+    }
+
+    fun hideSnackbar() {
+        snackbar?.dismiss()
     }
 
     override fun onLeaveClick() {

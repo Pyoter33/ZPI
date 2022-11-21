@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.ImageViewCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.example.trip.Constants
@@ -29,22 +28,17 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TripSummaryFragment @Inject constructor() : Fragment() {
-
-    private lateinit var binding: FragmentSummaryBinding
+class TripSummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBinding>() {
 
     @Inject
     lateinit var adapter: ParticipantsSummaryAdapter
 
     private val viewModel: SummaryViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSummaryBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentSummaryBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

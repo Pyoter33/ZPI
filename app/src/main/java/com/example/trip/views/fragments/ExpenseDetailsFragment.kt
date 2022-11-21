@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -29,24 +28,19 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ExpenseDetailsFragment @Inject constructor() : Fragment(), DeleteExpenseDialogClickListener {
+class ExpenseDetailsFragment @Inject constructor() : BaseFragment<FragmentExpenseDetailsBinding>(), DeleteExpenseDialogClickListener {
 
     private val viewModel: ExpenseDetailsViewModel by viewModels()
 
     private val args: ExpenseDetailsFragmentArgs by navArgs()
 
-    private lateinit var binding: FragmentExpenseDetailsBinding
-
     @Inject
     lateinit var adapter: ParticipantsPriceAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentExpenseDetailsBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentExpenseDetailsBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import com.example.trip.R
 import com.example.trip.adapters.FinancesPagerAdapter
@@ -20,20 +19,16 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class FinancesFragment @Inject constructor() : Fragment() {
+class FinancesFragment @Inject constructor() : BaseFragment<FragmentFinancesBinding>() {
 
-    private lateinit var binding: FragmentFinancesBinding
     private lateinit var adapter: FinancesPagerAdapter
 
     private val viewModel: FinancesViewModel by hiltNavGraphViewModels(R.id.finances)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentFinancesBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentFinancesBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

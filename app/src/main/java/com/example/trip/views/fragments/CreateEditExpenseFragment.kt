@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -30,25 +29,20 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CreateEditExpenseFragment @Inject constructor() : Fragment(),
+class CreateEditExpenseFragment @Inject constructor() : BaseFragment<FragmentCreateEditExpenseBinding>(),
     CheckableParticipantClickListener {
 
     private val viewModel: CreateEditExpenseViewModel by viewModels()
 
     private val args: CreateEditExpenseFragmentArgs by navArgs()
 
-    private lateinit var binding: FragmentCreateEditExpenseBinding
-
     @Inject
     lateinit var adapter: CheckableParticipantsAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentCreateEditExpenseBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentCreateEditExpenseBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -144,6 +138,7 @@ class CreateEditExpenseFragment @Inject constructor() : Fragment(),
     private fun setOnCheckAllClick() {
         binding.checkboxCheckAll.setOnClickListener {
             viewModel.checkAll((it as MaterialCheckBox).isChecked)
+            binding.textError.setInvisible()
             adapter.notifyDataSetChanged()
         }
     }

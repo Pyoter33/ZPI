@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -37,10 +36,8 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDialogClickListener,
+class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBinding>(), DeleteAccommodationDialogClickListener,
     DeleteAvailabilityDialogClickListener {
-
-    private lateinit var binding: FragmentSummaryBinding
 
     private lateinit var accommodationDialog: DeleteAcceptedAccommodationDialog
     private lateinit var availabilityDialog: DeleteAcceptedAvailabilityDialog
@@ -52,13 +49,10 @@ class SummaryFragment @Inject constructor() : Fragment(), DeleteAccommodationDia
 
     private val args: SummaryFragmentArgs by navArgs()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSummaryBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentSummaryBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

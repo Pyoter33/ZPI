@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -37,12 +36,10 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class TransportFragment @Inject constructor() : Fragment(), OnMapReadyCallback,
+class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBinding>(), OnMapReadyCallback,
     UserTransportClickListener {
 
     private val viewModel: TransportViewModel by viewModels()
-
-    private lateinit var binding: FragmentTransportBinding
 
     private lateinit var googleMap: GoogleMap
 
@@ -56,13 +53,10 @@ class TransportFragment @Inject constructor() : Fragment(), OnMapReadyCallback,
     @Inject
     lateinit var flightsPagerAdapter: FlightsPagerAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentTransportBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentTransportBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

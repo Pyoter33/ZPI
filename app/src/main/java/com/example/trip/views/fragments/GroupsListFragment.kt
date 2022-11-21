@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,9 +35,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class GroupsListFragment @Inject constructor() : Fragment(), GroupsClickListener {
-
-    private lateinit var binding: FragmentGroupsListBinding
+class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsListBinding>(), GroupsClickListener {
 
     private val popupMenu by balloon<MenuPopupFactory>()
 
@@ -65,13 +62,10 @@ class GroupsListFragment @Inject constructor() : Fragment(), GroupsClickListener
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentGroupsListBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentGroupsListBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,7 +73,7 @@ class GroupsListFragment @Inject constructor() : Fragment(), GroupsClickListener
         setAdapter()
         onCreateClick()
         onSettingsClick()
-        observeAccommodationsList()
+        observeGroupsList()
         setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
     }
 
@@ -121,7 +115,7 @@ class GroupsListFragment @Inject constructor() : Fragment(), GroupsClickListener
     }
 
 
-    private fun observeAccommodationsList() {
+    private fun observeGroupsList() {
         viewModel.groupsList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {

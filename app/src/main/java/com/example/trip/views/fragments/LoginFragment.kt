@@ -8,7 +8,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -26,21 +25,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LoginFragment @Inject constructor(): Fragment() {
-
-    private lateinit var binding: FragmentLoginBinding
+class LoginFragment @Inject constructor(): BaseFragment<FragmentLoginBinding>() {
 
     private val viewModel: LoginViewModel by viewModels()
 
-    override fun onCreateView(
+    override fun prepareBinding(
         inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentLoginBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
+        container: ViewGroup?
+    ) = FragmentLoginBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

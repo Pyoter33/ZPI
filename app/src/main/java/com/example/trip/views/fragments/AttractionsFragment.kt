@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -32,10 +31,9 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickListener,
+class AttractionsFragment @Inject constructor() : BaseFragment<FragmentAttractionsBinding>(), AttractionClickListener,
     DeleteAttractionDialogClickListener {
 
-    private lateinit var binding: FragmentAttractionsBinding
     private val popupMenu by balloon<MenuPopupFactory>()
 
     private val args: AttractionsFragmentArgs by navArgs()
@@ -45,13 +43,10 @@ class AttractionsFragment @Inject constructor() : Fragment(), AttractionClickLis
 
     private val viewModel: AttractionsViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentAttractionsBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentAttractionsBinding.inflate(inflater, container, false)
 
     override fun onStop() {
         super.onStop()

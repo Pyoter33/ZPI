@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_groupsListFragment_to_createEditGroupFragment"
             app:destination="@id/createEditGroupFragment" />
+        <action
+            android:id="@+id/action_groupsListFragment_to_editUserFragment"
+            app:destination="@id/editUserFragment" />
     </fragment>
     <fragment
         android:id="@+id/createEditGroupFragment"
@@ -22,4 +25,8 @@
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
+    <fragment
+        android:id="@+id/editUserFragment"
+        android:name="com.example.trip.views.fragments.EditUserFragment"
+        android:label="EditUserFragment" />
 </navigation>

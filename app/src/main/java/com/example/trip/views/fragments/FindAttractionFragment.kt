@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -29,9 +28,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class FindAttractionFragment @Inject constructor() : Fragment(), AttractionPreviewClickListener {
-
-    private lateinit var binding: FragmentFindAttractionBinding
+class FindAttractionFragment @Inject constructor() : BaseFragment<FragmentFindAttractionBinding>(), AttractionPreviewClickListener {
 
     @Inject
     lateinit var adapter: AttractionPreviewAdapter
@@ -40,13 +37,10 @@ class FindAttractionFragment @Inject constructor() : Fragment(), AttractionPrevi
 
     private val viewModel: FindAttractionViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentFindAttractionBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override fun prepareBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ) = FragmentFindAttractionBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
