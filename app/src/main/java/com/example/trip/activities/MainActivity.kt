@@ -3,8 +3,11 @@ package com.example.trip.activities
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
@@ -13,12 +16,19 @@ import com.example.trip.Constants
 import com.example.trip.R
 import com.example.trip.models.GroupStatus
 import com.example.trip.utils.setAppLocale
+import com.example.trip.utils.setGone
+import com.example.trip.utils.setVisible
+import com.example.trip.views.dialogs.LeaveGroupDialog
+import com.example.trip.views.dialogs.LeaveGroupDialogClickListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.skydoves.powermenu.PowerMenu
+import com.skydoves.powermenu.PowerMenuItem
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), LeaveGroupDialogClickListener {
 
     companion object {
         private const val APP_LOCALE = "gb"
@@ -42,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setNavigation()
+        setSettings()
     }
 
     override fun attachBaseContext(newBase: Context) {
@@ -56,6 +67,39 @@ class MainActivity : AppCompatActivity() {
         } else {
             super.onBackPressed()
         }
+    }
+
+    private fun setSettings() {
+        val buttonSettings = findViewById<ImageButton>(R.id.button_settings)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id in rootDestinations) {
+                buttonSettings.setVisible()
+            } else {
+                buttonSettings.setGone()
+            }
+        }
+
+        buttonSettings.setOnClickListener {
+            val powerMenu = PowerMenu.Builder(this)
+                .addItem(PowerMenuItem("Leave group"))
+                .setAutoDismiss(true)
+                .setShowBackground(false)
+                .setTextTypeface(Typeface.create("roboto_medium", Typeface.NORMAL))
+                .setTextSize(13)
+                .setMenuColor(Color.WHITE)
+                .setOnMenuItemClickListener { position, _ ->
+                    when(position) {
+                        0 -> showDialog()
+                    }
+                }
+                .build()
+            powerMenu.showAsAnchorLeftBottom(it,0, 10)
+        }
+    }
+
+    private fun showDialog() {
+        val leaveDialog = LeaveGroupDialog(this)
+        leaveDialog.show(supportFragmentManager, LeaveGroupDialog.TAG)
     }
 
     private fun setNavigation() {
@@ -91,7 +135,7 @@ class MainActivity : AppCompatActivity() {
                 bottomNavigationView.inflateMenu(R.menu.navigation_trip_menu)
                 navController.navInflater.inflate(R.navigation.trip_graph)
             }
-            else -> navController.navInflater.inflate(R.navigation.post_trip_graph) //
+            else -> navController.navInflater.inflate(R.navigation.post_trip_graph)
         }
         navController.setGraph(navGraph, intent.extras)
     }
@@ -112,6 +156,10 @@ class MainActivity : AppCompatActivity() {
             .setTextColor(resources.getColor(R.color.black, null))
             .setActionTextColor(resources.getColor(R.color.primary, null))
             .show()
+    }
+
+    override fun onLeaveClick() {
+
     }
 
 }

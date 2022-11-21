@@ -20,9 +20,7 @@ import com.example.trip.adapters.AccommodationListAdapter
 import com.example.trip.databinding.FragmentAccommodationListBinding
 import com.example.trip.models.Accommodation
 import com.example.trip.models.Resource
-import com.example.trip.utils.onBackArrowClick
-import com.example.trip.utils.setSwipeRefreshLayout
-import com.example.trip.utils.toast
+import com.example.trip.utils.*
 import com.example.trip.viewmodels.accommodation.AccommodationsListViewModel
 import com.example.trip.views.dialogs.MenuPopupAcceptFactory
 import com.example.trip.views.dialogs.accommodation.AcceptAccommodationDialog
@@ -87,12 +85,14 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
         viewModel.accommodationsList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
+                    if(it.data.isEmpty()) binding.textEmptyList.setVisible() else binding.textEmptyList.setGone()
                     adapter.submitList(it.data)
                     binding.chipGroup.clearCheck()
                     binding.layoutRefresh.isRefreshing = false
                 }
                 is Resource.Loading -> {
                     binding.layoutRefresh.isRefreshing = true
+                    binding.textEmptyList.setGone()
                 }
                 is Resource.Failure -> {
                     (requireActivity() as MainActivity).showSnackbar(
@@ -103,6 +103,7 @@ class AccommodationListFragment @Inject constructor() : Fragment(), Accommodatio
                         viewModel.refreshData()
                     }
                     binding.layoutRefresh.isRefreshing = false
+                    binding.textEmptyList.setGone()
                 }
             }
         }

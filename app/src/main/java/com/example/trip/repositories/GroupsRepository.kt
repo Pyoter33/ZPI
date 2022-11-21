@@ -23,7 +23,8 @@ class GroupsRepository @Inject constructor() {
                             3,
                             2,
                             "Weekend in Prague, sightseeing, knedlicky eating, beer drinking and chill!",
-                            4
+                            4,
+                            listOf()
                         ),
                         Group(
                             2,
@@ -34,7 +35,8 @@ class GroupsRepository @Inject constructor() {
                             6,
                             7,
                             "We start in Madrid, than Barcelona, Valencia, Malaga. A lot of sightseeing and lying on the beach. Bring your suncream!",
-                            10
+                            10,
+                            listOf()
                         ),
                         Group(
                             3,
@@ -45,7 +47,8 @@ class GroupsRepository @Inject constructor() {
                             3,
                             2,
                             "Let's see all the museums!!!",
-                            3
+                            3,
+                            listOf()
                         )
                     )
                 )

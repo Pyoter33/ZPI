@@ -15,7 +15,8 @@ import com.example.trip.adapters.ExpensesAdapter
 import com.example.trip.databinding.FragmentExpensesBinding
 import com.example.trip.models.Expense
 import com.example.trip.models.Resource
-import com.example.trip.utils.toast
+import com.example.trip.utils.setGone
+import com.example.trip.utils.setVisible
 import com.example.trip.viewmodels.finances.FinancesViewModel
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.android.material.snackbar.Snackbar
@@ -52,11 +53,12 @@ class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener 
         viewModel.expensesList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
+                    if(it.data.isEmpty()) binding.textEmptyList.setVisible() else binding.textEmptyList.setGone()
                     adapter.submitList(it.data)
                     binding.chipGroup.clearCheck()
                 }
                 is Resource.Loading -> {
-                    //NO-OP
+                    binding.textEmptyList.setGone()
                 }
                 is Resource.Failure -> {
                     (requireActivity() as MainActivity).showSnackbar(
@@ -67,6 +69,7 @@ class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener 
                     ) {
                         viewModel.refreshDataExpense()
                     }
+                    binding.textEmptyList.setGone()
                 }
             }
         }
@@ -116,7 +119,14 @@ class ExpensesFragment @Inject constructor() : Fragment(), ExpenseClickListener 
                     adapter.submitList(it.data)
                 }
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure) //snackbar
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry,
+                        Snackbar.LENGTH_INDEFINITE
+                    ) {
+                        viewModel.refreshDataExpense()
+                    }
                 }
                 else -> {}
             }

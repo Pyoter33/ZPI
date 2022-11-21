@@ -17,10 +17,7 @@ import com.example.trip.adapters.SettlementUserAdapter
 import com.example.trip.databinding.FragmentSettlementsBinding
 import com.example.trip.models.Resource
 import com.example.trip.models.Settlement
-import com.example.trip.utils.getLongFromBundle
-import com.example.trip.utils.onBackArrowClick
-import com.example.trip.utils.setSwipeRefreshLayout
-import com.example.trip.utils.toast
+import com.example.trip.utils.*
 import com.example.trip.viewmodels.finances.FinancesViewModel
 import com.example.trip.views.dialogs.MenuPopupResolveFactory
 import com.example.trip.views.dialogs.finances.ResolveSettlementDialog
@@ -77,15 +74,15 @@ class SettlementsFragment @Inject constructor() : Fragment(), SettlementClickLis
         viewModel.settlementsList.observe(viewLifecycleOwner) { settlement ->
             when (settlement) {
                 is Resource.Success -> {
+                    if(settlement.data.isEmpty()) { binding.textEmptyList.setVisible() } else binding.textEmptyList.setGone()
                     binding.layoutRefresh.isRefreshing = false
                     val userSettlements = settlement.data.filter { it.debtee.id == PLACEHOLDER_USERID || it.debtor.id == PLACEHOLDER_USERID }
                     val otherSettlements = settlement.data.minus(userSettlements.toSet())
-
                     userAdapter.submitList(userSettlements)
                     otherAdapter.submitList(otherSettlements)
                 }
                 is Resource.Loading -> {
-                    //NO-OP
+                    binding.textEmptyList.setGone()
                 }
                 is Resource.Failure -> {
                     binding.layoutRefresh.isRefreshing = false
@@ -97,6 +94,7 @@ class SettlementsFragment @Inject constructor() : Fragment(), SettlementClickLis
                     ) {
                         viewModel.refreshDataSettlements()
                     }
+                    binding.textEmptyList.setGone()
                 }
             }
         }

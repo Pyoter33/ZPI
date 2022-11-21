@@ -15,6 +15,8 @@ import com.example.trip.databinding.FragmentDayPlansBinding
 import com.example.trip.models.DayPlan
 import com.example.trip.models.Resource
 import com.example.trip.utils.onBackArrowClick
+import com.example.trip.utils.setGone
+import com.example.trip.utils.setVisible
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.dayplan.DayPlansViewModel
 import com.example.trip.views.dialogs.MenuPopupFactory
@@ -80,11 +82,13 @@ class DayPlansFragment @Inject constructor() : Fragment(), DayPlansClickListener
         viewModel.dayPlans.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
+                    if(it.data.isEmpty()) binding.textEmptyList.setVisible() else binding.textEmptyList.setGone()
                     adapter.submitList(it.data)
                     binding.layoutRefresh.isRefreshing = false
                 }
                 is Resource.Loading -> {
                     binding.layoutRefresh.isRefreshing = true
+                    binding.textEmptyList.setGone()
                 }
                 is Resource.Failure -> {
                     (requireActivity() as MainActivity).showSnackbar(
@@ -95,6 +99,7 @@ class DayPlansFragment @Inject constructor() : Fragment(), DayPlansClickListener
                         viewModel.refreshData()
                     }
                     binding.layoutRefresh.isRefreshing = false
+                    binding.textEmptyList.setGone()
                 }
             }
         }

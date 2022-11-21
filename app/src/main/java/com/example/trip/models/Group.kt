@@ -13,5 +13,6 @@ data class Group(
     val minParticipants: Int,
     val minDays: Int,
     val description: String?,
-    val participantsNo: Int
+    val participantsNo: Int,
+    val coordinators: List<Long>
 ): Parcelable

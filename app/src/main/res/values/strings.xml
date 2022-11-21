@@ -16,9 +16,11 @@
     <string name="text_accept">Accept</string>
     <string name="text_edit">Edit</string>
     <string name="text_delete">Delete</string>
+    <string name="text_leave">Leave</string>
     <string name="text_title_accept_dialog">Are you sure you want to accept?</string>
     <string name="text_title_delete_dialog">Are you sure you want to delete?</string>
     <string name="text_title_resolve_dialog">Are you sure you want to resolve?</string>
+    <string name="text_title_leave_dialog">Are you sure you want to leave?</string>
     <string name="text_message_cannot_undo">You cannot undo this operation!</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_yes">Yes</string>
@@ -132,4 +134,11 @@
     <string name="text_you_need_to_choose_at_least_one_contributor">You need to choose at least one contributor!</string>
     <string name="text_error_multiple">This fields cannot be empty!</string>
     <string name="text_error_not_same">Passwords do not match!</string>
+    <string name="text_no_accommodations">No accommodations added yet!</string>
+    <string name="text_no_attractions">No attractions added yet!</string>
+    <string name="text_no_attractions_found">No attractions found!</string>
+    <string name="text_no_expenses">No expenses added yet!</string>
+    <string name="text_no_day_plans">No day plans added yet!</string>
+    <string name="text_no_settlements">No settlements needed yet!</string>
+    <string name="text_edit_personal_data">Edit personal data</string>
 </resources>

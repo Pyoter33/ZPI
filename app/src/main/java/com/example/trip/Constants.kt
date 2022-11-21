@@ -19,4 +19,5 @@ object Constants {
     const val DESTINATION_KEY = "destination"
     const val START_CITY_KEY = "startCity"
     const val USER_ID_KEY = "userId"
+    const val COORDINATORS_KEY = "coordinators"
 }

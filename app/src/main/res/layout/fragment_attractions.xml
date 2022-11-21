@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/layout_refresh"
         android:layout_width="match_parent"
@@ -97,7 +96,7 @@
                                 style="@style/Button.Contained"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="@dimen/marginS"
+                                android:layout_marginEnd="@dimen/marginM"
                                 android:text="@string/text_add"
                                 app:icon="@drawable/ic_baseline_add_24"
                                 app:iconGravity="end"
@@ -121,6 +120,21 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/cardView_header" />
+
+                    <TextView
+                        android:id="@+id/text_empty_list"
+                        style="@style/TextMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_no_attractions"
+                        android:textColor="@color/grey600"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cardView_header"
+                        tools:visibility="visible" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>

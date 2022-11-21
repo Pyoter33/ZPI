@@ -45,11 +45,21 @@ class LoginFragment @Inject constructor(): Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        checkTokenAndId()
         onRegisterClick()
         setupOnEmailTextChangeListener()
         setupOnPasswordTextChangeListener()
         onSignInClick()
     }
+
+    private fun checkTokenAndId() {
+        val preferences = requireContext().getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE)
+
+        if(preferences.contains(Constants.USER_ID_KEY) && preferences.contains(Constants.AUTHORIZATION_HEADER)) {
+            login()
+        }
+    }
+
 
     private fun setupOnEmailTextChangeListener() {
         binding.textFieldEmail.editText?.addTextChangedListener(object : TextWatcher {
@@ -112,8 +122,7 @@ class LoginFragment @Inject constructor(): Fragment() {
                     val preferences = requireContext().getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE)
                     preferences.edit().putLong(Constants.USER_ID_KEY, result.data.first.userId).apply()
                     preferences.edit().putString(Constants.AUTHORIZATION_HEADER, result.data.second).apply()
-                    val activityIntent = Intent(requireContext(), HomeActivity::class.java)
-                    startActivity(activityIntent)
+                    login()
                 }
                 is Resource.Loading -> {}
                 is Resource.Failure -> {
@@ -123,6 +132,11 @@ class LoginFragment @Inject constructor(): Fragment() {
             }
 
         }
+    }
+
+    private fun login() {
+        val activityIntent = Intent(requireContext(), HomeActivity::class.java)
+        startActivity(activityIntent)
     }
 
     private fun isSubmitNotPermitted(): Boolean {

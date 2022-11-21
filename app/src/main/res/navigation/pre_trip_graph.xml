@@ -64,6 +64,9 @@
             <action
                 android:id="@+id/action_transportFragment_to_createEditTransportFragment"
                 app:destination="@id/createEditTransportFragment" />
+            <argument
+                android:name="coordinators"
+                app:argType="long[]" />
         </fragment>
     </navigation>
     <navigation
@@ -87,6 +90,9 @@
             <argument
                 android:name="startCity"
                 app:argType="string" />
+            <argument
+                android:name="coordinators"
+                app:argType="long[]" />
         </fragment>
         <fragment
             android:id="@+id/createEditAccommodationFragment"
@@ -125,6 +131,9 @@
             <argument
                 android:name="groupId"
                 app:argType="long" />
+            <argument
+                android:name="coordinators"
+                app:argType="long[]" />
         </fragment>
         <fragment
             android:id="@+id/participantsAvailabilityFragment"
@@ -156,6 +165,9 @@
             <argument
                 android:name="startCity"
                 app:argType="string" />
+            <argument
+                android:name="coordinators"
+                app:argType="long[]" />
         </fragment>
 
     </navigation>
@@ -186,6 +198,9 @@
             <argument
                 android:name="groupId"
                 app:argType="long" />
+            <argument
+                android:name="coordinators"
+                app:argType="long[]" />
         </fragment>
     </navigation>
 </navigation>

@@ -44,7 +44,8 @@ class CreateEditGroupViewModel @Inject constructor(
                     participants!!.toInt(),
                     days!!.toInt(),
                     descriptionText,
-                    0
+                    0,
+                    listOf()
                 )
             )
         }
@@ -64,7 +65,8 @@ class CreateEditGroupViewModel @Inject constructor(
                         participants!!.toInt(),
                         days!!.toInt(),
                         descriptionText,
-                        it.participantsNo
+                        it.participantsNo,
+                        listOf()
                     )
                 )
             } ?: Resource.Failure()

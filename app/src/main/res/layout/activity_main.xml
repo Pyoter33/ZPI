@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
+
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
         style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
@@ -28,6 +30,19 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/button_settings"
+        style="@style/IconButton.Primary"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:padding="@dimen/marginXS"
+        android:layout_marginVertical="@dimen/marginM"
+        android:scaleType="fitXY"
+        app:tint="@color/white"
+        android:src="@drawable/ic_baseline_more_vert_24"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

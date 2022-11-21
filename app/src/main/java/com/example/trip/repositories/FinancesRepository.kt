@@ -3,12 +3,10 @@ package com.example.trip.repositories
 import com.example.trip.dto.ExpenseDto
 import com.example.trip.dto.SettlementDto
 import com.example.trip.models.Resource
-import com.example.trip.models.SettlementStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.math.BigDecimal
 import java.time.LocalDate
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 class FinancesRepository @Inject constructor() {
@@ -97,43 +95,43 @@ class FinancesRepository @Inject constructor() {
             emit(
                 Resource.Success(
                     listOf(
-                        SettlementDto(
-                            0,
-                            LocalDateTime.of(2022, 10, 11, 0, 0),
-                            SettlementStatus.PENDING,
-                            BigDecimal.valueOf(14.4),
-                            2,
-                            1,
-                            0
-                        ),
-                        SettlementDto(
-                            0,
-                            LocalDateTime.of(2022, 10, 11, 0, 0),
-                            SettlementStatus.PENDING,
-                            BigDecimal.valueOf(10.4),
-                            3,
-                            4,
-                            0
-                        ),
-                        SettlementDto(
-                            0,
-                            LocalDateTime.of(2022, 10, 11, 0, 0),
-                            SettlementStatus.RESOLVED,
-                            BigDecimal.valueOf(30.4),
-                            3,
-                            1,
-                            0
-                        ),
-                        SettlementDto(
-                            0,
-                            LocalDateTime.of(2022, 10, 11, 0, 0),
-                            SettlementStatus.PENDING,
-                            BigDecimal.valueOf(11.4),
-                            2,
-                            4,
-                            0
-                        )
-                    )
+//                        SettlementDto(
+//                            0,
+//                            LocalDateTime.of(2022, 10, 11, 0, 0),
+//                            SettlementStatus.PENDING,
+//                            BigDecimal.valueOf(14.4),
+//                            2,
+//                            1,
+//                            0
+//                        ),
+//                        SettlementDto(
+//                            0,
+//                            LocalDateTime.of(2022, 10, 11, 0, 0),
+//                            SettlementStatus.PENDING,
+//                            BigDecimal.valueOf(10.4),
+//                            3,
+//                            4,
+//                            0
+//                        ),
+//                        SettlementDto(
+//                            0,
+//                            LocalDateTime.of(2022, 10, 11, 0, 0),
+//                            SettlementStatus.RESOLVED,
+//                            BigDecimal.valueOf(30.4),
+//                            3,
+//                            1,
+//                            0
+//                        ),
+//                        SettlementDto(
+//                            0,
+//                            LocalDateTime.of(2022, 10, 11, 0, 0),
+//                            SettlementStatus.PENDING,
+//                            BigDecimal.valueOf(11.4),
+//                            2,
+//                            4,
+//                            0
+//                        )
+                     )
                 )
             )
         }

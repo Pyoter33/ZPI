@@ -20,6 +20,8 @@ import com.example.trip.adapters.AttractionPreviewClickListener
 import com.example.trip.databinding.FragmentFindAttractionBinding
 import com.example.trip.models.AttractionPreview
 import com.example.trip.models.Resource
+import com.example.trip.utils.setGone
+import com.example.trip.utils.setVisible
 import com.example.trip.utils.toAttraction
 import com.example.trip.viewmodels.dayplan.FindAttractionViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -69,9 +71,14 @@ class FindAttractionFragment @Inject constructor() : Fragment(), AttractionPrevi
         viewModel.attractionsList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
+                    if(it.data.isEmpty()) binding.textEmptyList.setVisible() else binding.textEmptyList.setGone()
                     adapter.submitList(it.data)
+                    binding.layoutLoading.setGone()
                 }
-                is Resource.Loading -> {}
+                is Resource.Loading -> {
+                    binding.layoutLoading.setVisible()
+                    binding.textEmptyList.setGone()
+                }
                 is Resource.Failure -> {
                     (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
@@ -80,6 +87,8 @@ class FindAttractionFragment @Inject constructor() : Fragment(), AttractionPrevi
                     ) {
                         viewModel.getData(binding.editTextQuery.text.toString())
                     }
+                    binding.layoutLoading.setGone()
+                    binding.textEmptyList.setGone()
                 }
             }
         }

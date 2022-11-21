@@ -41,6 +41,20 @@
 
             </com.google.android.material.chip.ChipGroup>
 
+            <TextView
+                android:id="@+id/text_empty_list"
+                style="@style/TextMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_no_attractions"
+                android:textColor="@color/grey600"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/list_expenses"
+                tools:visibility="visible" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/list_expenses"
                 android:layout_width="match_parent"
