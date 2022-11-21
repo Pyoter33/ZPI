@@ -12,5 +12,9 @@ data class AttractionDto(
     val days: Set<DayPlanDto>,
     val latitude: Double,
     val longitude: Double
-    //distance to next
+)
+
+data class AttractionPlanDto(
+    val attraction: AttractionDto,
+    val distanceToNext: Double
 )
