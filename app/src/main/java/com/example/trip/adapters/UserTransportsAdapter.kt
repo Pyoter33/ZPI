@@ -1,8 +1,8 @@
 package com.example.trip.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +11,6 @@ import com.example.trip.databinding.ItemUserTransportBinding
 import com.example.trip.models.UserTransport
 import com.example.trip.utils.toStringFormat
 import com.example.trip.utils.toStringTime
-import com.skydoves.balloon.Balloon
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -22,16 +21,10 @@ class UserTransportsAdapter @Inject constructor() :
 
     private lateinit var userTransportClickLister: UserTransportClickListener
 
-    private lateinit var popupMenu: Balloon
-
     private lateinit var currency: String
 
     fun setUserTransportClickListener(userTransportClickLister: UserTransportClickListener) {
         this.userTransportClickLister = userTransportClickLister
-    }
-
-    fun setPopupMenu(popupMenu: Balloon) {
-        this.popupMenu = popupMenu
     }
 
     fun setCurrency(currency: String) {
@@ -39,7 +32,7 @@ class UserTransportsAdapter @Inject constructor() :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserTransportViewHolder {
-        return UserTransportViewHolder.create(parent, currency, userTransportClickLister, popupMenu)
+        return UserTransportViewHolder.create(parent, currency, userTransportClickLister)
     }
 
     override fun onBindViewHolder(holder: UserTransportViewHolder, position: Int) {
@@ -49,8 +42,7 @@ class UserTransportsAdapter @Inject constructor() :
     class UserTransportViewHolder(
         private val binding: ItemUserTransportBinding,
         private val currency: String,
-        private val userTransportClickLister: UserTransportClickListener,
-        private val popupMenu: Balloon
+        private val userTransportClickListener: UserTransportClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(userTransport: UserTransport) {
@@ -75,17 +67,8 @@ class UserTransportsAdapter @Inject constructor() :
 
         private fun setOnLongClick(userTransport: UserTransport) {
             binding.root.setOnLongClickListener {
-                popupMenu.showAlignBottom(binding.root)
-                setOnPopupButtonClick(R.id.button_edit){userTransportClickLister.onMenuEditClick(userTransport)}
-                setOnPopupButtonClick(R.id.button_delete){userTransportClickLister.onMenuDeleteClick(userTransport)}
+                userTransportClickListener.onLongClick(userTransport, it)
                 true
-            }
-        }
-
-        private fun setOnPopupButtonClick(id: Int, action: () -> Unit) {
-            popupMenu.getContentView().findViewById<Button>(id).setOnClickListener {
-                action()
-                popupMenu.dismiss()
             }
         }
 
@@ -93,16 +76,14 @@ class UserTransportsAdapter @Inject constructor() :
             fun create(
                 parent: ViewGroup,
                 currency: String,
-                userTransportClickLister: UserTransportClickListener,
-                popupMenu: Balloon
+                userTransportClickLister: UserTransportClickListener
             ): UserTransportViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemUserTransportBinding.inflate(layoutInflater, parent, false)
                 return UserTransportViewHolder(
                     binding,
                     currency,
-                    userTransportClickLister,
-                    popupMenu
+                    userTransportClickLister
                 )
             }
         }
@@ -120,6 +101,5 @@ class UserTransportDiffUtil : DiffUtil.ItemCallback<UserTransport>() {
 }
 
 interface UserTransportClickListener {
-    fun onMenuEditClick(userTransport: UserTransport)
-    fun onMenuDeleteClick(userTransport: UserTransport)
+    fun onLongClick(userTransport: UserTransport, view: View)
 }

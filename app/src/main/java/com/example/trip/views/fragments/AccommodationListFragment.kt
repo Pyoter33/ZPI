@@ -19,9 +19,11 @@ import com.example.trip.adapters.AccommodationListAdapter
 import com.example.trip.databinding.FragmentAccommodationListBinding
 import com.example.trip.models.Accommodation
 import com.example.trip.models.Resource
+import com.example.trip.models.UserType
 import com.example.trip.utils.*
 import com.example.trip.viewmodels.accommodation.AccommodationsListViewModel
 import com.example.trip.views.dialogs.MenuPopupAcceptFactory
+import com.example.trip.views.dialogs.MenuPopupFactory
 import com.example.trip.views.dialogs.accommodation.AcceptAccommodationDialog
 import com.example.trip.views.dialogs.accommodation.AcceptAccommodationDialogClickListener
 import com.example.trip.views.dialogs.accommodation.DeleteAccommodationDialog
@@ -32,10 +34,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AccommodationListFragment @Inject constructor() : BaseFragment<FragmentAccommodationListBinding>(), AccommodationClickListener,
+class AccommodationListFragment @Inject constructor() :
+    BaseFragment<FragmentAccommodationListBinding>(), AccommodationClickListener,
     AcceptAccommodationDialogClickListener, DeleteAccommodationDialogClickListener {
 
-    private val popupMenu by balloon<MenuPopupAcceptFactory>()
+    private val popupMenuCreator by balloon<MenuPopupFactory>()
+
+    private val popupMenuCoordinator by balloon<MenuPopupAcceptFactory>()
+
+    @Inject
+    lateinit var preferencesHelper: SharedPreferencesHelper
 
     @Inject
     lateinit var adapter: AccommodationListAdapter
@@ -49,11 +57,6 @@ class AccommodationListFragment @Inject constructor() : BaseFragment<FragmentAcc
         container: ViewGroup?
     ) = FragmentAccommodationListBinding.inflate(inflater, container, false)
 
-    override fun onStop() {
-        super.onStop()
-        popupMenu.dismiss()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
@@ -63,7 +66,6 @@ class AccommodationListFragment @Inject constructor() : BaseFragment<FragmentAcc
         setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
         onAddClick()
     }
-
 
     private fun onAddClick() {
         binding.buttonAdd.setOnClickListener {
@@ -80,7 +82,7 @@ class AccommodationListFragment @Inject constructor() : BaseFragment<FragmentAcc
         viewModel.accommodationsList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    if(it.data.isEmpty()) binding.textEmptyList.setVisible() else binding.textEmptyList.setGone()
+                    if (it.data.isEmpty()) binding.textEmptyList.setVisible() else binding.textEmptyList.setGone()
                     adapter.submitList(it.data)
                     binding.chipGroup.clearCheck()
                     binding.layoutRefresh.isRefreshing = false
@@ -106,13 +108,13 @@ class AccommodationListFragment @Inject constructor() : BaseFragment<FragmentAcc
 
     private fun setAdapter() {
         adapter.setAccommodationClickListener(this)
-        adapter.setPopupMenu(popupMenu)
         adapter.setCurrency(args.currency)
         binding.accommodationList.adapter = adapter
         binding.accommodationList.layoutManager = LinearLayoutManager(context)
     }
 
     private fun setOnCheckedChipsListener() {
+        val userId = preferencesHelper.getUserId()
         binding.chipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
 
             when (checkedIds.size) {
@@ -125,12 +127,12 @@ class AccommodationListFragment @Inject constructor() : BaseFragment<FragmentAcc
                             applyFilter(viewModel.filterVoted())
                         }
                         R.id.chip_accommodations -> {
-                            applyFilter(viewModel.filterAccommodations(PLACEHOLDER_USERID))
+                            applyFilter(viewModel.filterAccommodations(userId))
                         }
                     }
                 }
                 2 -> {
-                    applyFilter(viewModel.filterVotedAccommodations(PLACEHOLDER_USERID))
+                    applyFilter(viewModel.filterVotedAccommodations(userId))
                 }
             }
         }
@@ -182,7 +184,8 @@ class AccommodationListFragment @Inject constructor() : BaseFragment<FragmentAcc
     }
 
     override fun onTransportClick(accommodation: Accommodation) {
-        val bundle = Bundle().apply { putLong(Constants.GROUP_ID_KEY, accommodation.groupId)
+        val bundle = Bundle().apply {
+            putLong(Constants.GROUP_ID_KEY, accommodation.groupId)
             putLong(Constants.ACCOMMODATION_ID_KEY, accommodation.id)
             putString(Constants.DESTINATION_KEY, accommodation.address)
             putString(Constants.START_CITY_KEY, args.startCity)
@@ -193,12 +196,40 @@ class AccommodationListFragment @Inject constructor() : BaseFragment<FragmentAcc
         findNavController().navigate(R.id.transport, bundle)
     }
 
-    override fun onMenuAcceptClick(accommodation: Accommodation) {
+    override fun onLongClick(accommodation: Accommodation, view: View) {
+        val popupMenu = when (getUserType(accommodation.creatorId)) {
+            UserType.COORDINATOR -> {
+                popupMenuCoordinator.apply {
+                    setOnPopupButtonClick(R.id.button_accept) { onMenuAcceptClick(accommodation) }
+                    setOnPopupButtonClick(R.id.button_edit) { onMenuEditClick(accommodation) }
+                    setOnPopupButtonClick(R.id.button_delete) { onMenuDeleteClick(accommodation) }
+                }
+            }
+            UserType.CREATOR -> {
+                popupMenuCreator.apply {
+                    setOnPopupButtonClick(R.id.button_edit) { onMenuEditClick(accommodation) }
+                    setOnPopupButtonClick(R.id.button_delete) { onMenuDeleteClick(accommodation) }
+                }
+            }
+            else -> null
+        }
+        popupMenu?.showAlignBottom(view)
+    }
+
+    private fun getUserType(creatorId: Long): UserType {
+        return when (preferencesHelper.getUserId()) {
+            in args.coordinators -> UserType.COORDINATOR
+            creatorId -> UserType.CREATOR
+            else -> UserType.BASIC_USER
+        }
+    }
+
+    private fun onMenuAcceptClick(accommodation: Accommodation) {
         val acceptDialog = AcceptAccommodationDialog(this, accommodation)
         acceptDialog.show(childFragmentManager, AcceptAccommodationDialog.TAG)
     }
 
-    override fun onMenuEditClick(accommodation: Accommodation) {
+    private fun onMenuEditClick(accommodation: Accommodation) {
         findNavController().navigate(
             AccommodationListFragmentDirections.actionAccommodationListFragmentToCreateEditAccommodationFragment(
                 args.groupId,
@@ -209,7 +240,7 @@ class AccommodationListFragment @Inject constructor() : BaseFragment<FragmentAcc
         )
     }
 
-    override fun onMenuDeleteClick(accommodation: Accommodation) {
+    private fun onMenuDeleteClick(accommodation: Accommodation) {
         val deleteDialog = DeleteAccommodationDialog(this, accommodation)
         deleteDialog.show(childFragmentManager, DeleteAccommodationDialog.TAG)
     }
@@ -222,11 +253,4 @@ class AccommodationListFragment @Inject constructor() : BaseFragment<FragmentAcc
     override fun onDeleteClick(accommodation: Accommodation) {
         requireContext().toast("delete")
     }
-
-    companion object {
-        private const val PLACEHOLDER_USERID = 1L
-        private const val GROUP_ID_ARG = "groupId"
-        private const val START_CITY_ARG = "startCity"
-    }
-
 }

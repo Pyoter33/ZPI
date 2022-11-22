@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
+import com.example.trip.Constants
 import com.example.trip.adapters.FragmentPagerAdapter
 import com.example.trip.databinding.FragmentAvailabilityPagerBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -11,6 +13,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AvailabilityPager @Inject constructor() : BaseFragment<FragmentAvailabilityPagerBinding>() {
+
+    val args: AvailabilityPagerArgs by navArgs()
 
     override fun prepareBinding(
         inflater: LayoutInflater,
@@ -31,7 +35,9 @@ class AvailabilityPager @Inject constructor() : BaseFragment<FragmentAvailabilit
     }
 
     private fun setupViewPager() {
-        val adapter = FragmentPagerAdapter(this)
+        val adapter = FragmentPagerAdapter(
+            this,
+            Bundle().apply { putLongArray(Constants.COORDINATORS_KEY, args.coordinators) })
         adapter.apply {
             addNewFragment(UserAvailabilityFragment())
             addNewFragment(OptimalDatesFragment())

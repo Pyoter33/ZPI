@@ -15,8 +15,10 @@ import android.transition.TransitionManager
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.ColorRes
+import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
@@ -26,6 +28,7 @@ import com.example.trip.R
 import com.example.trip.models.Attraction
 import com.example.trip.models.AttractionPreview
 import com.example.trip.models.Resource
+import com.skydoves.balloon.Balloon
 import retrofit2.Response
 import java.math.BigDecimal
 import java.time.*
@@ -68,7 +71,7 @@ fun Context.setAppLocale(language: String): Context {
     return createConfigurationContext(config)
 }
 
-fun Context.copyToClipboard(text: CharSequence){
+fun Context.copyToClipboard(text: CharSequence) {
     val clipboard = getSystemService(ClipboardManager::class.java) as ClipboardManager
     val clip = ClipData.newPlainText("label", text)
     clipboard.setPrimaryClip(clip)
@@ -172,10 +175,19 @@ fun Duration.toStringTime(): String {
 
 fun BigDecimal.toStringFormat(currency: String): String {
     val df = DecimalFormat("0.00")
-    return if(isIntegerValue(this)) {
+    return if (isIntegerValue(this)) {
         "${toInt()} $currency"
     } else {
         "${df.format(this)} $currency"
+    }
+}
+
+fun BigDecimal.toStringFormat(): String {
+    val df = DecimalFormat("0.00")
+    return if (isIntegerValue(this)) {
+        "${toInt()}"
+    } else {
+        df.format(this)
     }
 }
 
@@ -185,7 +197,11 @@ private fun isIntegerValue(bd: BigDecimal): Boolean {
 
 fun String.formatPhone(): String {
     val split = split(' ')
-    return "${split[0]} ${split[1].subSequence(0..2)} ${split[1].subSequence(3..5)} ${split[1].subSequence(6..8)}"
+    return "${split[0]} ${split[1].subSequence(0..2)} ${split[1].subSequence(3..5)} ${
+        split[1].subSequence(
+            6..8
+        )
+    }"
 }
 
 fun <T> Response<T>.toBodyResourceOrFailure(): Resource<T> {
@@ -194,5 +210,12 @@ fun <T> Response<T>.toBodyResourceOrFailure(): Resource<T> {
             Resource.Success(body()!!)
         }
         else -> Resource.Failure(code())
+    }
+}
+
+fun Balloon.setOnPopupButtonClick(@IdRes id: Int, action: () -> Unit) {
+    getContentView().findViewById<Button>(id).setOnClickListener {
+        action()
+        dismiss()
     }
 }

@@ -56,7 +56,7 @@ class MoneyPager @Inject constructor() : BaseFragment<FragmentMoneyPagerBinding>
     }
 
     private fun setupViewPager() {
-        val adapter = FragmentPagerAdapter(this)
+        val adapter = FragmentPagerAdapter(this, Bundle())
         adapter.apply {
             addNewFragment(FinancesFragment().apply { arguments = args.toBundle() })
             addNewFragment(SettlementsFragment().apply { arguments = args.toBundle() })

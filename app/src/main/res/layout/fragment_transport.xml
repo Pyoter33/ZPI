@@ -472,7 +472,6 @@
                                 android:id="@+id/list_transports"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="@dimen/marginXL"
                                 android:layout_marginVertical="@dimen/marginS"
                                 android:nestedScrollingEnabled="false"
                                 app:layout_constraintBottom_toBottomOf="parent"

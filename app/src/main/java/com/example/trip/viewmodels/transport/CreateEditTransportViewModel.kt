@@ -8,6 +8,7 @@ import com.example.trip.models.Resource
 import com.example.trip.models.UserTransport
 import com.example.trip.usecases.transport.PostTransportUseCase
 import com.example.trip.usecases.transport.UpdateTransportUseCase
+import com.example.trip.utils.toStringFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +36,7 @@ class CreateEditTransportViewModel @Inject constructor(
     var durationHours = userTransportToUpdate?.duration?.toHoursPart()?.toString()
     var meetingDate = userTransportToUpdate?.meetingDate
     var meetingTime = userTransportToUpdate?.meetingTime
-    var price = userTransportToUpdate?.price?.toPlainString()
+    var price = userTransportToUpdate?.price?.toStringFormat()
     var description = userTransportToUpdate?.description
 
 

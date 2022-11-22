@@ -12,26 +12,26 @@ interface FinanceService {
     @GET("finance-optimizer")
     suspend fun getExpenses(
         @Query("groupId") groupId: Long
-    ): Response<Set<ExpenseDto>>
+    ): Response<List<ExpenseDto>>
 
     @POST("finance-optimizer")
     suspend fun postExpense(
         @Query("groupId") groupId: Long,
         @Body expensePostDto: ExpensePostDto
-    ): Response<ExpenseDto>
+    ): Response<Void>
 
     @PATCH("finance-optimizer")
     suspend fun updateExpense(
         @Query("groupId") groupId: Long,
         @Query("expenditureId") expenditureId: Long,
         @Body expensePostDto: ExpensePostDto
-    ): Response<ExpenseDto>
+    ): Response<Void>
 
     @DELETE("finance-optimizer")
     suspend fun deleteExpense(
         @Query("expenditureId") expenditureId: Long,
         @Query("groupId") groupId: Long
-    ): Response<Unit>
+    ): Response<Void>
 
     @GET("finance-optimizer/balance")
     suspend fun getBalances(
@@ -47,6 +47,6 @@ interface FinanceService {
     suspend fun acceptSettlement(
         @Query("requestId") requestId: Long,
         @Query("groupId") groupId: Long
-    ): Response<Unit>
+    ): Response<Void>
 
 }

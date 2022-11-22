@@ -10,7 +10,6 @@ enum class GroupStage {
 
 
 data class TripGroupDto(
-    val groupId: Long,
     val name: String,
     val currency: Currency,
     val description: String?,
@@ -23,5 +22,6 @@ data class TripGroupDto(
     val groupStage: GroupStage,
     val minimalNumberOfDays: Int,
     val minimalNumberOfParticipants: Int,
-    val selectedAccommodationId: Long?
+    val selectedAccommodationId: Long?,
+    val selectedSharedAvailability: Long?,
     )

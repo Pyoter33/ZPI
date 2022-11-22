@@ -9,6 +9,8 @@ import com.example.trip.R
 import com.example.trip.databinding.ItemOptimalAvailabilityBinding
 import com.example.trip.models.Availability
 import com.example.trip.models.OptimalAvailability
+import com.example.trip.utils.setGone
+import com.example.trip.utils.setVisible
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -17,12 +19,14 @@ class DatesPagerAdapter @Inject constructor() :
 
     private lateinit var datesClickListener: DatesPagerClickListener
 
+    var showAccept = true
+
     fun setDatesClickListener(datesClickListener: DatesPagerClickListener) {
         this.datesClickListener = datesClickListener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DatesPagerViewHolder {
-        return DatesPagerViewHolder.create(parent, datesClickListener)
+        return DatesPagerViewHolder.create(parent, showAccept, datesClickListener)
     }
 
     override fun onBindViewHolder(holder: DatesPagerViewHolder, position: Int) {
@@ -31,6 +35,7 @@ class DatesPagerAdapter @Inject constructor() :
 
     class DatesPagerViewHolder(
         private val binding: ItemOptimalAvailabilityBinding,
+        private val showAccept: Boolean,
         private val datesClickListener: DatesPagerClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -45,6 +50,7 @@ class DatesPagerAdapter @Inject constructor() :
                 )
                 textParticipantsNo.text = availability.users.toString()
                 textDaysNo.text = itemView.resources.getString(R.string.format_days, availability.days)
+                if(showAccept) buttonAcceptDates.setVisible() else buttonAcceptDates.setGone()
             }
 
             setOnAcceptClickListener(availability.availability)
@@ -59,12 +65,14 @@ class DatesPagerAdapter @Inject constructor() :
         companion object {
             fun create(
                 parent: ViewGroup,
+                showAccept: Boolean,
                 datesClickListener: DatesPagerClickListener
             ): DatesPagerViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemOptimalAvailabilityBinding.inflate(layoutInflater, parent, false)
                 return DatesPagerViewHolder(
                     binding,
+                    showAccept,
                     datesClickListener
                 )
             }

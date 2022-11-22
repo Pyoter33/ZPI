@@ -16,12 +16,12 @@ interface AvailabilityService {
     @POST("availability/user")
     suspend fun postAvailability(
         @Body availabilityPostDto: AvailabilityPostDto
-    ): Response<AvailabilityDto>
+    ): Response<Void>
 
     @DELETE("availability/user")
     suspend fun deleteAvailability(
         @Query("groupId") groupId: Long
-    ): Response<Unit>
+    ): Response<Void>
 
     @GET("shared-availability")
     suspend fun getAvailabilitiesForGroup(@Query("groupId") groupId: Long): Response<List<SharedGroupAvailabilityDto>>

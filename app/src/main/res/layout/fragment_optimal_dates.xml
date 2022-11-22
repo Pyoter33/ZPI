@@ -88,7 +88,7 @@
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/pager_dates"
                         android:layout_width="match_parent"
-                        android:layout_height="65dp"
+                        android:layout_height="90dp"
                         android:layout_marginTop="@dimen/marginXL"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

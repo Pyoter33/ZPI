@@ -16,5 +16,5 @@ data class AttractionDto(
 
 data class AttractionPlanDto(
     val attraction: AttractionDto,
-    val distanceToNext: Double
+    val distanceToNext: Double?
 )

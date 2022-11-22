@@ -1,9 +1,6 @@
 package com.example.trip.service
 
-import com.example.trip.dto.AttractionCandidateDto
-import com.example.trip.dto.AttractionDto
-import com.example.trip.dto.DayPlanDto
-import com.example.trip.dto.DayPlanPostDto
+import com.example.trip.dto.*
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -13,48 +10,48 @@ interface DayPlanService {
     suspend fun getDayPlansForGroup(@Query("groupId") groupId: Long): Response<DayPlanDto>
 
     @POST("day-plan")
-    suspend fun postDayPlan(@Body dayPlanPostDto: DayPlanPostDto): Response<DayPlanDto>
+    suspend fun postDayPlan(@Body dayPlanPostDto: DayPlanPostDto): Response<Void>
 
     @PATCH("day-plan")
     suspend fun updateDayPlan(
         @Query("dayPlanId") dayPlanId: Long,
         @Body dayPlanPostDto: DayPlanPostDto
-    ): Response<DayPlanDto>
+    ): Response<Void>
 
     @DELETE("day-plan")
-    suspend fun deleteDayPlan(@Query("dayPlanId") dayPlanId: Long): Response<Unit>
+    suspend fun deleteDayPlan(@Query("dayPlanId") dayPlanId: Long): Response<Void>
 
     @GET("attraction")
     suspend fun getAttractions(
         @Query("groupId") groupId: Long,
         @Query("dayPlanId") dayPlanId: Long
-    ): Response<AttractionDto>
+    ): Response<List<AttractionDto>>
 
     @POST("attraction")
     suspend fun postAttraction(
         @Query("dayPlanId") dayPlanId: Long,
         @Body attractionCandidateDto: AttractionCandidateDto
-    ): Response<AttractionDto>
+    ): Response<Void>
 
     @PATCH("attraction")
     suspend fun updateAttraction(
         @Body attractionCandidateDto: AttractionDto
-    ): Response<AttractionDto>
+    ): Response<Void>
 
     @DELETE("attraction")
     suspend fun deleteAttraction(
         @Query("attractionId") attractionId: Long,
         @Query("dayPlanId") dayPlanId: Long
-    ): Response<Unit>
+    ): Response<Void>
 
     @GET("attraction/find")
     suspend fun findAttractions(
         @Query("name") name: String
     ): Response<List<AttractionCandidateDto>>
 
-    @GET("optimize/{dayPlanId}")
+    @GET("attraction/optimize/{dayPlanId}")
     suspend fun getOptimizedAttractions(
         @Path("dayPlanId") dayPlanId: Long
-    ): Response<List<AttractionDto>>
+    ): Response<List<AttractionPlanDto>>
 
 }

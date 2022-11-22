@@ -24,11 +24,8 @@ class MenuPopupFactory: Balloon.Factory() {
         }
     }
 
-
-
     companion object {
         private const val WIDTH_RATIO = 0.8f
-        private const val OVERLAY_PADDING = 2f
         private const val CORNER_RADIUS = 20f
     }
 }

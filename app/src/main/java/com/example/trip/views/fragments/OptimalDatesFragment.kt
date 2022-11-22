@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.viewpager2.widget.ViewPager2
+import com.example.trip.Constants
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.DatesPagerAdapter
@@ -25,16 +26,20 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OptimalDatesFragment @Inject constructor() : BaseFragment<FragmentOptimalDatesBinding>(), DatesPagerClickListener {
+class OptimalDatesFragment @Inject constructor() : BaseFragment<FragmentOptimalDatesBinding>(),
+    DatesPagerClickListener {
 
     private val viewModel: AvailabilityViewModel by hiltNavGraphViewModels(R.id.availability)
 
     private lateinit var dateValidator: DateValidator
 
     @Inject
+    lateinit var preferencesHelper: SharedPreferencesHelper
+
+    @Inject
     lateinit var adapter: DatesPagerAdapter
 
-    private val viewPagerCallback = object: ViewPager2.OnPageChangeCallback() {
+    private val viewPagerCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             val availability = adapter.currentList[position].availability
             updateCalendar(availability)
@@ -58,6 +63,7 @@ class OptimalDatesFragment @Inject constructor() : BaseFragment<FragmentOptimalD
     private fun setPager() {
         binding.pagerDates.adapter = adapter
         adapter.setDatesClickListener(this)
+        adapter.showAccept = requireArguments().getLongArray(Constants.COORDINATORS_KEY)!!.contains(preferencesHelper.getUserId())
         TabLayoutMediator(binding.tabPager, binding.pagerDates) { tab, position ->
         }.attach()
 

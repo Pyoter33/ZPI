@@ -16,6 +16,7 @@ import com.example.trip.databinding.FragmentCreateEditAccommodationBinding
 import com.example.trip.models.Resource
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
+import com.example.trip.utils.toStringFormat
 import com.example.trip.viewmodels.accommodation.CreateEditAccommodationViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -53,7 +54,7 @@ class CreateEditAccommodationFragment @Inject constructor() : BaseFragment<Fragm
     private fun setupArgs() {
         args.accommodation?.let {
             binding.textFieldLink.editText!!.setText(it.sourceUrl)
-            binding.textFieldPrice.editText!!.setText(it.price.toString())
+            binding.textFieldPrice.editText!!.setText(it.price.toStringFormat())
             binding.textFieldDescription.editText!!.setText(it.description)
             viewModel.descriptionText = it.description
             viewModel.linkText = it.sourceUrl

@@ -32,28 +32,6 @@
             tools:text="20.10.2022 - 11.11.2022" />
 
         <ImageView
-            android:id="@+id/image_participants"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/marginS"
-            android:layout_marginHorizontal="@dimen/marginL"
-            android:src="@drawable/ic_baseline_person_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_calendar"
-            app:tint="@color/secondary" />
-
-        <TextView
-            android:id="@+id/text_participants_no"
-            style="@style/TextMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/marginM"
-            app:layout_constraintBottom_toBottomOf="@+id/image_participants"
-            app:layout_constraintStart_toEndOf="@+id/image_participants"
-            app:layout_constraintTop_toTopOf="@+id/image_participants"
-            tools:text="5" />
-
-        <ImageView
             android:id="@+id/image_days"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -61,7 +39,7 @@
             android:layout_marginHorizontal="@dimen/marginL"
             android:src="@drawable/ic_baseline_calendar_today_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image_participants"
+            app:layout_constraintTop_toBottomOf="@+id/image_calendar"
             app:tint="@color/secondary" />
 
         <TextView
@@ -75,6 +53,28 @@
             app:layout_constraintTop_toTopOf="@+id/image_days"
             tools:text="4 days" />
 
+        <ImageView
+            android:id="@+id/image_participants"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginS"
+            android:layout_marginHorizontal="@dimen/marginL"
+            android:src="@drawable/ic_baseline_person_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_days"
+            app:tint="@color/secondary" />
+
+        <TextView
+            android:id="@+id/text_participants_no"
+            style="@style/TextMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/marginM"
+            app:layout_constraintBottom_toBottomOf="@+id/image_participants"
+            app:layout_constraintStart_toEndOf="@+id/image_participants"
+            app:layout_constraintTop_toTopOf="@+id/image_participants"
+            tools:text="5" />
+
 
         <Button
             android:id="@+id/button_accept_dates"
@@ -86,7 +86,7 @@
             android:textColor="@color/secondary"
             app:icon="@drawable/ic_baseline_check_24"
             app:iconTint="@color/secondary"
-            app:layout_constraintBottom_toBottomOf="@+id/image_days"
+            app:layout_constraintBottom_toBottomOf="@+id/image_participants"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

@@ -24,7 +24,7 @@ class GroupsRepository @Inject constructor() {
                             2,
                             "Weekend in Prague, sightseeing, knedlicky eating, beer drinking and chill!",
                             4,
-                            listOf()
+                            listOf(1L)
                         ),
                         Group(
                             2,

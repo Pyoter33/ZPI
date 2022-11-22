@@ -36,7 +36,8 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBinding>(), OnMapReadyCallback,
+class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBinding>(),
+    OnMapReadyCallback,
     UserTransportClickListener {
 
     private val viewModel: TransportViewModel by viewModels()
@@ -137,7 +138,7 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
 
     private fun observeRoute() {
         viewModel.route.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 is Resource.Success -> {
                     val polylineOptions = it.data
                     polylineOptions.color(resources.getColor(R.color.primary_darker, null))
@@ -158,7 +159,8 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
     }
 
     private fun setOnSeeMoreClickListener(carTransport: CarTransport) {
-        val link = "https://www.google.com/maps/dir/?api=1&origin=${carTransport.sourceLatLng}&destination=${carTransport.destinationLatLng}"
+        val link =
+            "https://www.google.com/maps/dir/?api=1&origin=${carTransport.sourceLatLng}&destination=${carTransport.destinationLatLng}"
 
         binding.buttonSeeInMaps.setOnClickListener {
             val intent = Intent(
@@ -205,7 +207,8 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
                 airTransport.flights.first().travelToAirportDuration!!.toStringTime()
             textDurationFlight.text =
                 airTransport.duration.minus(airTransport.flights.first().travelToAirportDuration!!)
-                    .minus(airTransport.flights.last().travelToAccommodationDuration!!).toStringTime()
+                    .minus(airTransport.flights.last().travelToAccommodationDuration!!)
+                    .toStringTime()
             textDurationFromAirport.text =
                 airTransport.flights.last().travelToAccommodationDuration!!.toStringTime()
             textDurationTotal.text = airTransport.duration.toStringTime()
@@ -219,15 +222,37 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
 
     private fun onAddClick() {
         binding.buttonAdd.setOnClickListener {
-            findNavController().navigate(TransportFragmentDirections.actionTransportFragmentToCreateEditTransportFragment(args.groupId, args.accommodationId, args.currency))
+            findNavController().navigate(
+                TransportFragmentDirections.actionTransportFragmentToCreateEditTransportFragment(
+                    args.groupId,
+                    args.accommodationId,
+                    args.currency
+                )
+            )
         }
     }
 
-    override fun onMenuEditClick(userTransport: UserTransport) {
-        findNavController().navigate(TransportFragmentDirections.actionTransportFragmentToCreateEditTransportFragment(args.groupId, args.accommodationId, args.currency, userTransport))
+    override fun onLongClick(userTransport: UserTransport, view: View) {
+        popupMenu.apply {
+            setOnPopupButtonClick(R.id.button_edit) { onMenuEditClick(userTransport) }
+            setOnPopupButtonClick(R.id.button_delete) { onMenuDeleteClick(userTransport) }
+        }
+        popupMenu.showAlignBottom(view)
     }
 
-    override fun onMenuDeleteClick(userTransport: UserTransport) {
+
+    private fun onMenuEditClick(userTransport: UserTransport) {
+        findNavController().navigate(
+            TransportFragmentDirections.actionTransportFragmentToCreateEditTransportFragment(
+                args.groupId,
+                args.accommodationId,
+                args.currency,
+                userTransport
+            )
+        )
+    }
+
+    private fun onMenuDeleteClick(userTransport: UserTransport) {
 
     }
 

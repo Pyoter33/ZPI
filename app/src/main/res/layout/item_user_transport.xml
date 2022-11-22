@@ -6,7 +6,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/marginM">
+        android:layout_marginVertical="@dimen/marginM"
+        android:paddingHorizontal="@dimen/marginL"
+        >
 
         <ImageView
             android:id="@+id/image_transportations"
