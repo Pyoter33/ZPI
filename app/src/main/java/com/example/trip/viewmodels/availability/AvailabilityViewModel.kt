@@ -3,6 +3,7 @@ package com.example.trip.viewmodels.availability
 import androidx.lifecycle.*
 import com.example.trip.Constants
 import com.example.trip.models.Availability
+import com.example.trip.models.OptimalAvailability
 import com.example.trip.models.Resource
 import com.example.trip.usecases.availability.GetOptimalDatesUseCase
 import com.example.trip.usecases.availability.GetUserAvailabilitiesUseCase
@@ -31,11 +32,11 @@ class AvailabilityViewModel @Inject constructor(
     val availabilityList: LiveData<Resource<List<Availability>>> = _availabilityList
 
     private val _optimalAvailability by lazy {
-        val mutableLiveData = MutableLiveData<Resource<List<Pair<Availability, Int>>>>()
+        val mutableLiveData = MutableLiveData<Resource<List<OptimalAvailability>>>()
         getDataOptimalAvailability(mutableLiveData)
         return@lazy mutableLiveData
     }
-    val optimalAvailability: LiveData<Resource<List<Pair<Availability, Int>>>> = _optimalAvailability
+    val optimalAvailability: LiveData<Resource<List<OptimalAvailability>>> = _optimalAvailability
 
     fun refreshAvailability() {
         getDataAvailability(_availabilityList)
@@ -62,7 +63,7 @@ class AvailabilityViewModel @Inject constructor(
         }
     }
 
-    private fun getDataOptimalAvailability(mutableLiveData: MutableLiveData<Resource<List<Pair<Availability, Int>>>>) {
+    private fun getDataOptimalAvailability(mutableLiveData: MutableLiveData<Resource<List<OptimalAvailability>>>) {
         viewModelScope.launch {
             if (groupId != null) {
                 getOptimalDatesUseCase(groupId).collect {

@@ -36,7 +36,7 @@ class OptimalDatesFragment @Inject constructor() : BaseFragment<FragmentOptimalD
 
     private val viewPagerCallback = object: ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
-            val availability = adapter.currentList[position].first
+            val availability = adapter.currentList[position].availability
             updateCalendar(availability)
         }
     }

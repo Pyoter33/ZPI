@@ -8,11 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.trip.R
 import com.example.trip.databinding.ItemOptimalAvailabilityBinding
 import com.example.trip.models.Availability
+import com.example.trip.models.OptimalAvailability
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class DatesPagerAdapter @Inject constructor() :
-    ListAdapter<Pair<Availability, Int>, DatesPagerAdapter.DatesPagerViewHolder>(DatesPagerDiffUtil()) {
+    ListAdapter<OptimalAvailability, DatesPagerAdapter.DatesPagerViewHolder>(DatesPagerDiffUtil()) {
 
     private lateinit var datesClickListener: DatesPagerClickListener
 
@@ -33,19 +34,20 @@ class DatesPagerAdapter @Inject constructor() :
         private val datesClickListener: DatesPagerClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(availability: Pair<Availability, Int>) {
+        fun bind(availability: OptimalAvailability) {
             val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
             with(binding) {
                 textDates.text = itemView.resources.getString(
                     R.string.format_dash,
-                    availability.first.startDate.format(formatter),
-                    availability.first.endDate.format(formatter)
+                    availability.availability.startDate.format(formatter),
+                    availability.availability.endDate.format(formatter)
                 )
-                textParticipantsNo.text = availability.second.toString()
+                textParticipantsNo.text = availability.users.toString()
+                textDaysNo.text = itemView.resources.getString(R.string.format_days, availability.days)
             }
 
-            setOnAcceptClickListener(availability.first)
+            setOnAcceptClickListener(availability.availability)
         }
 
         private fun setOnAcceptClickListener(availability: Availability) {
@@ -71,19 +73,19 @@ class DatesPagerAdapter @Inject constructor() :
     }
 }
 
-class DatesPagerDiffUtil : DiffUtil.ItemCallback<Pair<Availability, Int>>() {
+class DatesPagerDiffUtil : DiffUtil.ItemCallback<OptimalAvailability>() {
     override fun areItemsTheSame(
-        oldItem: Pair<Availability, Int>,
-        newItem: Pair<Availability, Int>
+        oldItem: OptimalAvailability,
+        newItem: OptimalAvailability
     ): Boolean {
         return oldItem === newItem
     }
 
     override fun areContentsTheSame(
-        oldItem: Pair<Availability, Int>,
-        newItem: Pair<Availability, Int>
+        oldItem: OptimalAvailability,
+        newItem: OptimalAvailability
     ): Boolean {
-        return oldItem.first == newItem.first
+        return oldItem.availability == newItem.availability
     }
 }
 

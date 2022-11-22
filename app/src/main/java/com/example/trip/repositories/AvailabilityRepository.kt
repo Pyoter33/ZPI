@@ -1,6 +1,7 @@
 package com.example.trip.repositories
 
 import com.example.trip.models.Availability
+import com.example.trip.models.OptimalAvailability
 import com.example.trip.models.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -65,26 +66,26 @@ class AvailabilityRepository @Inject constructor() {
         return Resource.Failure()
     }
 
-    fun getOptimalDates(groupId: Long): Flow<Resource<List<Pair<Availability, Int>>>> {
+    fun getOptimalDates(groupId: Long): Flow<Resource<List<OptimalAvailability>>> {
         return flow {
             emit(
                 Resource.Success(
                     listOf(
-                        Pair(
+                       OptimalAvailability(
                             Availability(
                                 1,
                                 -1,
                                 LocalDate.of(2022, 11, 18),
                                 LocalDate.of(2022, 11, 20)
-                            ), 4
+                            ), 4, 3
                         ),
-                        Pair(
+                        OptimalAvailability(
                             Availability(
                                 2,
                                 -1,
                                 LocalDate.of(2022, 11, 24),
                                 LocalDate.of(2022, 11, 27)
-                            ), 3
+                            ), 3, 4
                         )
                     )
                 )
