@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.ParticipantsAdapter
@@ -25,7 +26,6 @@ import com.example.trip.views.dialogs.participants.GetInviteLinkDialogClickListe
 import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlin.properties.Delegates
 
 
 @AndroidEntryPoint
@@ -35,11 +35,14 @@ class ParticipantsFragment @Inject constructor() : BaseFragment<FragmentParticip
     @Inject
     lateinit var adapter: ParticipantsAdapter
 
+    @Inject
+    lateinit var preferencesHelper: SharedPreferencesHelper
+
     private val popupMenu by balloon<MenuPopupCoordinateFactory>()
 
     private val viewModel: ParticipantsViewModel by viewModels()
 
-    private var groupId by Delegates.notNull<Long>()
+    private val args: ParticipantsFragmentArgs by navArgs()
 
     override fun prepareBinding(
         inflater: LayoutInflater,
@@ -49,7 +52,6 @@ class ParticipantsFragment @Inject constructor() : BaseFragment<FragmentParticip
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        groupId = getLongFromBundle("groupId")
         setAdapter()
         observeParticipants()
         requireActivity().onBackArrowClick(binding.buttonBack)
@@ -60,6 +62,11 @@ class ParticipantsFragment @Inject constructor() : BaseFragment<FragmentParticip
     }
 
     private fun onInviteClick() {
+        if(!isCoordinator()) {
+            binding.buttonInvite.setGone()
+            return
+        }
+
         binding.buttonInvite.setOnClickListener {
             val inviteDialog = GetInviteLinkDialog(viewModel, this)
             inviteDialog.show(childFragmentManager, GetInviteLinkDialog.TAG)
@@ -68,7 +75,6 @@ class ParticipantsFragment @Inject constructor() : BaseFragment<FragmentParticip
 
     private fun setAdapter() {
         binding.listParticipants.adapter = adapter
-        adapter.setPopupMenu(popupMenu)
         adapter.setParticipantsClickListener(this)
     }
 
@@ -120,20 +126,30 @@ class ParticipantsFragment @Inject constructor() : BaseFragment<FragmentParticip
     override fun onCalendarClick(participant: Participant) {
         findNavController().navigate(
             ParticipantsFragmentDirections.actionParticipantsFragmentPreTripToParticipantsAvailabilityFragment(
-                groupId,
+                args.groupId,
                 participant
             )
         )
     }
 
-    override fun onMenuCoordinateClick(participant: Participant) {
+    override fun onLongClick(participant: Participant, view: View) {
+        if(isCoordinator()) {
+            popupMenu.setOnPopupButtonClick(R.id.button_coordinate) { onMenuCoordinateClick(participant) }
+            popupMenu.setOnPopupButtonClick(R.id.button_delete) { onMenuDeleteClick(participant) }
+            popupMenu.showAlignBottom(view)
+        }
+    }
+
+    private fun onMenuCoordinateClick(participant: Participant) {
 
     }
 
-    override fun onMenuDeleteClick(participant: Participant) {
+    private fun onMenuDeleteClick(participant: Participant) {
         val deleteDialog = DeleteParticipantDialog(this, participant)
         deleteDialog.show(childFragmentManager, DeleteParticipantDialog.TAG)
     }
+
+    private fun isCoordinator() = preferencesHelper.getUserId() in args.coordinators
 
     override fun onDeleteClick(participant: Participant) {
 

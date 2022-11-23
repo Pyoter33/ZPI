@@ -1,8 +1,8 @@
 package com.example.trip.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,33 +14,20 @@ import com.example.trip.models.Attraction
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setInvisible
 import com.example.trip.utils.setVisible
-import com.skydoves.balloon.Balloon
 import javax.inject.Inject
 
 
 class AttractionListAdapter @Inject constructor() :
     ListAdapter<Attraction, RecyclerView.ViewHolder>(AttractionDiffUtil()) {
 
-    companion object {
-        private const val ATTRACTION = 0
-        private const val ADD_MORE = 1
-    }
-
     private lateinit var attractionClickListener: AttractionClickListener
-
-    private lateinit var popupMenu: Balloon
 
     fun setAttractionClickListener(attractionClickListener: AttractionClickListener) {
         this.attractionClickListener = attractionClickListener
     }
 
-    fun setPopupMenu(popupMenu: Balloon) {
-        this.popupMenu = popupMenu
-    }
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return AttractionViewHolder.create(parent, attractionClickListener, popupMenu)
+        return AttractionViewHolder.create(parent, attractionClickListener)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -52,8 +39,7 @@ class AttractionListAdapter @Inject constructor() :
 
     class AttractionViewHolder(
         private val binding: ItemAttractionBinding,
-        private val attractionClickListener: AttractionClickListener,
-        private val popupMenu: Balloon
+        private val attractionClickListener: AttractionClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(attraction: Attraction) {
@@ -71,7 +57,8 @@ class AttractionListAdapter @Inject constructor() :
                     imageLine.setInvisible()
                 }
 
-                Glide.with(itemView).load(attraction.imageUrl).centerCrop().into(binding.imageAttraction)
+                Glide.with(itemView).load(attraction.imageUrl).centerCrop()
+                    .into(binding.imageAttraction)
 
                 if (attraction.description.isNullOrEmpty()) {
                     buttonExpand.setInvisible()
@@ -106,41 +93,21 @@ class AttractionListAdapter @Inject constructor() :
 
         private fun setOnLongClick(attraction: Attraction) {
             binding.card.setOnLongClickListener {
-                popupMenu.showAlignBottom(binding.card)
-                setOnPopupButtonClick(R.id.button_edit) {
-                    attractionClickListener.onMenuEditClick(
-                        attraction
-                    )
-                }
-                setOnPopupButtonClick(R.id.button_delete) {
-                    attractionClickListener.onMenuDeleteClick(
-                        attraction
-                    )
-                }
+                attractionClickListener.onLongClick(attraction, it)
                 true
             }
         }
 
-        private fun setOnPopupButtonClick(id: Int, action: () -> Unit) {
-            popupMenu.getContentView().findViewById<Button>(id).setOnClickListener {
-                action()
-                popupMenu.dismiss()
-            }
-        }
-
-
         companion object {
             fun create(
                 parent: ViewGroup,
-                attractionClickListener: AttractionClickListener,
-                popupMenu: Balloon
+                attractionClickListener: AttractionClickListener
             ): AttractionViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemAttractionBinding.inflate(layoutInflater, parent, false)
                 return AttractionViewHolder(
                     binding,
-                    attractionClickListener,
-                    popupMenu
+                    attractionClickListener
                 )
             }
         }
@@ -186,7 +153,6 @@ class AttractionDiffUtil : DiffUtil.ItemCallback<Attraction>() {
 interface AttractionClickListener {
     fun onExpandClick(position: Int)
     fun onSeeMoreClick(link: String)
-    fun onMenuEditClick(attraction: Attraction)
-    fun onMenuDeleteClick(attraction: Attraction)
+    fun onLongClick(attraction: Attraction, view: View)
     fun onAddMoreClick()
 }

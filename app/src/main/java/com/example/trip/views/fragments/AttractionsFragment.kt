@@ -17,10 +17,7 @@ import com.example.trip.adapters.AttractionListAdapter
 import com.example.trip.databinding.FragmentAttractionsBinding
 import com.example.trip.models.Attraction
 import com.example.trip.models.Resource
-import com.example.trip.utils.onBackArrowClick
-import com.example.trip.utils.setGone
-import com.example.trip.utils.setVisible
-import com.example.trip.utils.toast
+import com.example.trip.utils.*
 import com.example.trip.viewmodels.dayplan.AttractionsViewModel
 import com.example.trip.views.dialogs.MenuPopupFactory
 import com.example.trip.views.dialogs.dayplan.DeleteAttractionDialog
@@ -31,12 +28,16 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AttractionsFragment @Inject constructor() : BaseFragment<FragmentAttractionsBinding>(), AttractionClickListener,
+class AttractionsFragment @Inject constructor() : BaseFragment<FragmentAttractionsBinding>(),
+    AttractionClickListener,
     DeleteAttractionDialogClickListener {
 
     private val popupMenu by balloon<MenuPopupFactory>()
 
     private val args: AttractionsFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var preferencesHelper: SharedPreferencesHelper
 
     @Inject
     lateinit var adapter: AttractionListAdapter
@@ -48,18 +49,13 @@ class AttractionsFragment @Inject constructor() : BaseFragment<FragmentAttractio
         container: ViewGroup?
     ) = FragmentAttractionsBinding.inflate(inflater, container, false)
 
-    override fun onStop() {
-        super.onStop()
-        popupMenu.dismiss()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setAdapter()
         setupArgs()
         observeAccommodationsList()
-        setSwipeRefreshLayout()
+        setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
         onAddClick()
         onBackArrowClick(binding.buttonBack)
     }
@@ -70,18 +66,11 @@ class AttractionsFragment @Inject constructor() : BaseFragment<FragmentAttractio
         binding.textHeaderDate.text = args.dayPlan.date.format(formatter)
     }
 
-    private fun setSwipeRefreshLayout() {
-        binding.layoutRefresh.setColorSchemeResources(R.color.primary)
-        binding.layoutRefresh.setOnRefreshListener {
-            viewModel.refreshData()
-        }
-    }
-
     private fun observeAccommodationsList() {
         viewModel.attractionsList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    if(it.data.isEmpty()) binding.textEmptyList.setVisible() else binding.textEmptyList.setGone()
+                    if (it.data.isEmpty()) binding.textEmptyList.setVisible() else binding.textEmptyList.setGone()
                     adapter.submitList(it.data)
                     binding.layoutRefresh.isRefreshing = false
                 }
@@ -106,12 +95,15 @@ class AttractionsFragment @Inject constructor() : BaseFragment<FragmentAttractio
 
     private fun setAdapter() {
         adapter.setAttractionClickListener(this)
-        adapter.setPopupMenu(popupMenu)
         binding.attractionsList.adapter = adapter
         binding.attractionsList.layoutManager = LinearLayoutManager(context)
     }
 
     private fun onAddClick() {
+        if(!isCoordinator()) {
+            binding.buttonAdd.setGone()
+            return
+        }
         binding.buttonAdd.setOnClickListener {
             findNavController().navigate(
                 AttractionsFragmentDirections.actionAttractionsFragmentToFindAttractionFragment(
@@ -136,7 +128,21 @@ class AttractionsFragment @Inject constructor() : BaseFragment<FragmentAttractio
         startActivity(intent)
     }
 
-    override fun onMenuEditClick(attraction: Attraction) {
+    override fun onLongClick(attraction: Attraction, view: View) {
+        if (isCoordinator()) {
+            popupMenu.setOnPopupButtonClick(R.id.button_edit) {
+                onMenuEditClick(attraction)
+            }
+            popupMenu.setOnPopupButtonClick(R.id.button_delete) {
+                onMenuDeleteClick(attraction)
+            }
+            popupMenu.showAlignBottom(view)
+        }
+    }
+
+    private fun isCoordinator() = preferencesHelper.getUserId() in args.coordinators
+
+    private fun onMenuEditClick(attraction: Attraction) {
         findNavController().navigate(
             AttractionsFragmentDirections.actionAttractionsFragmentToCreateEditAttractionFragment(
                 attraction
@@ -144,7 +150,7 @@ class AttractionsFragment @Inject constructor() : BaseFragment<FragmentAttractio
         )
     }
 
-    override fun onMenuDeleteClick(attraction: Attraction) {
+    private fun onMenuDeleteClick(attraction: Attraction) {
         val deleteDialog = DeleteAttractionDialog(this, attraction)
         deleteDialog.show(childFragmentManager, DeleteAttractionDialog.TAG)
     }

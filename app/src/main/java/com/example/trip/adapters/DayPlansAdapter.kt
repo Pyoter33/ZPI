@@ -1,16 +1,14 @@
 package com.example.trip.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.trip.R
 import com.example.trip.databinding.ItemDayPlanBinding
 import com.example.trip.models.DayPlan
 import com.example.trip.models.DayPlanIcon
-import com.skydoves.balloon.Balloon
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -20,18 +18,12 @@ class DayPlansAdapter @Inject constructor() :
 
     private lateinit var dayPlansClickListener: DayPlansClickListener
 
-    private lateinit var popupMenu: Balloon
-
     fun setDayPlansClickListener(dayPlansClickListener: DayPlansClickListener) {
         this.dayPlansClickListener = dayPlansClickListener
     }
 
-    fun setPopupMenu(popupMenu: Balloon) {
-        this.popupMenu = popupMenu
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DayPlansViewHolder {
-        return DayPlansViewHolder.create(parent, dayPlansClickListener, popupMenu)
+        return DayPlansViewHolder.create(parent, dayPlansClickListener)
     }
 
     override fun onBindViewHolder(holder: DayPlansViewHolder, position: Int) {
@@ -40,8 +32,7 @@ class DayPlansAdapter @Inject constructor() :
 
     class DayPlansViewHolder(
         private val binding: ItemDayPlanBinding,
-        private val dayPlansClickListener: DayPlansClickListener,
-        private val popupMenu: Balloon
+        private val dayPlansClickListener: DayPlansClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(dayPlan: DayPlan) {
@@ -76,40 +67,21 @@ class DayPlansAdapter @Inject constructor() :
 
         private fun setOnLongClick(dayPlan: DayPlan) {
             binding.card.setOnLongClickListener {
-                popupMenu.showAlignBottom(binding.card)
-                setOnPopupButtonClick(R.id.button_edit) {
-                    dayPlansClickListener.onMenuEditClick(
-                        dayPlan
-                    )
-                }
-                setOnPopupButtonClick(R.id.button_delete) {
-                    dayPlansClickListener.onMenuDeleteClick(
-                        dayPlan
-                    )
-                }
+                dayPlansClickListener.onLongClick(dayPlan, it)
                 true
-            }
-        }
-
-        private fun setOnPopupButtonClick(id: Int, action: () -> Unit) {
-            popupMenu.getContentView().findViewById<Button>(id).setOnClickListener {
-                action()
-                popupMenu.dismiss()
             }
         }
 
         companion object {
             fun create(
                 parent: ViewGroup,
-                dayPlansClickListener: DayPlansClickListener,
-                popupMenu: Balloon
+                dayPlansClickListener: DayPlansClickListener
             ): DayPlansViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemDayPlanBinding.inflate(layoutInflater, parent, false)
                 return DayPlansViewHolder(
                     binding,
-                    dayPlansClickListener,
-                    popupMenu
+                    dayPlansClickListener
                 )
             }
         }
@@ -130,6 +102,5 @@ class DayPlansDiffUtil : DiffUtil.ItemCallback<DayPlan>() {
 
 interface DayPlansClickListener {
     fun onClick(dayPlan: DayPlan)
-    fun onMenuEditClick(dayPlan: DayPlan)
-    fun onMenuDeleteClick(dayPlan: DayPlan)
+    fun onLongClick(dayPlan: DayPlan, view: View)
 }

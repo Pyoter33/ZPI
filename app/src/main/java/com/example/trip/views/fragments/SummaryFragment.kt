@@ -45,6 +45,9 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
     @Inject
     lateinit var adapter: ParticipantsSummaryAdapter
 
+    @Inject
+    lateinit var preferencesHelper: SharedPreferencesHelper
+
     private val viewModel: SummaryViewModel by viewModels()
 
     private val args: SummaryFragmentArgs by navArgs()
@@ -63,6 +66,7 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
         requireActivity().onBackArrowClick(binding.buttonBack)
         onListLockClick()
         onUncheckDateClick()
+        onStartTripButtonClick()
         observeButtonLock()
         onUncheckAccommodationClick()
         setupOnDateTextChangeListener()
@@ -81,18 +85,27 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
     }
 
     private fun onUncheckAccommodationClick() {
+        if(!isCoordinator()) {
+            binding.buttonUncheckAccommodation.setGone()
+            return
+        }
         binding.buttonUncheckAccommodation.setOnClickListener {
             accommodationDialog.show(childFragmentManager, DeleteAcceptedAccommodationDialog.TAG)
         }
     }
 
     private fun onUncheckDateClick() {
+        if(!isCoordinator()) {
+            binding.buttonUncheckDates.setGone()
+            return
+        }
         binding.buttonUncheckDates.setOnClickListener {
             availabilityDialog.show(childFragmentManager, DeleteAcceptedAvailabilityDialog.TAG)
         }
     }
 
     private fun setupOnDateTextChangeListener() {
+        if(!isCoordinator()) return
         binding.editTextDate.setOnClickListener {
             setAndShowCalendar()
         }
@@ -101,6 +114,16 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
     private fun observeButtonLock() {
         viewModel.isButtonUnlocked.observe(viewLifecycleOwner) {
             binding.buttonStartTrip.isEnabled = it
+        }
+    }
+
+    private fun onStartTripButtonClick() {
+        if(!isCoordinator()) {
+            binding.buttonStartTrip.setGone()
+            return
+        }
+        binding.buttonStartTrip.setOnClickListener {
+
         }
     }
 
@@ -163,6 +186,8 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
             }
         }
     }
+
+    private fun isCoordinator() = preferencesHelper.getUserId() in args.coordinators
 
     private fun observeAvailability() {
         viewModel.acceptedAvailability.observe(viewLifecycleOwner) {

@@ -27,8 +27,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.trip.R
 import com.example.trip.models.Attraction
 import com.example.trip.models.AttractionPreview
-import com.example.trip.models.Resource
 import com.skydoves.balloon.Balloon
+import retrofit2.HttpException
 import retrofit2.Response
 import java.math.BigDecimal
 import java.time.*
@@ -204,12 +204,12 @@ fun String.formatPhone(): String {
     }"
 }
 
-fun <T> Response<T>.toBodyResourceOrFailure(): Resource<T> {
+fun <T> Response<T>.toBodyOrError(): T {
     return when {
         isSuccessful && body() != null -> {
-            Resource.Success(body()!!)
+            body()!!
         }
-        else -> Resource.Failure(code())
+        else -> throw HttpException(this)
     }
 }
 

@@ -40,7 +40,7 @@ class MoneyPager @Inject constructor() : BaseFragment<FragmentMoneyPagerBinding>
     fun navigateToCreateEditFragment(expense: Expense? = null) {
         findNavController().navigate(
             MoneyPagerDirections.actionFinancesToCreateEditExpenseFragment(
-               0,
+                args.groupId,
                 args.currency,
                 expense
             )
@@ -56,10 +56,10 @@ class MoneyPager @Inject constructor() : BaseFragment<FragmentMoneyPagerBinding>
     }
 
     private fun setupViewPager() {
-        val adapter = FragmentPagerAdapter(this, Bundle())
+        val adapter = FragmentPagerAdapter(this, args.toBundle())
         adapter.apply {
-            addNewFragment(FinancesFragment().apply { arguments = args.toBundle() })
-            addNewFragment(SettlementsFragment().apply { arguments = args.toBundle() })
+            addNewFragment(FinancesFragment())
+            addNewFragment(SettlementsFragment())
         }
         binding.viewPager.adapter = adapter
     }

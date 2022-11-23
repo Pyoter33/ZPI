@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +25,8 @@ import com.example.trip.databinding.FragmentGroupsListBinding
 import com.example.trip.models.Group
 import com.example.trip.models.GroupStatus
 import com.example.trip.models.Resource
+import com.example.trip.utils.SharedPreferencesHelper
+import com.example.trip.utils.setOnPopupButtonClick
 import com.example.trip.utils.setSwipeRefreshLayout
 import com.example.trip.utils.toast
 import com.example.trip.viewmodels.groups.GroupsListViewModel
@@ -41,6 +44,9 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
 
     private val viewModel: GroupsListViewModel by viewModels()
 
+    @Inject
+    lateinit var preferencesHelper: SharedPreferencesHelper
+
     private var doubleBackToExitPressedOnce = false
 
     @Inject
@@ -55,7 +61,7 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
                     requireActivity().finishAffinity()
                 }
                 doubleBackToExitPressedOnce = true
-                Handler().postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+                Handler(Looper.getMainLooper()).postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
                 requireContext().toast(R.string.text_click_twice)
             }
         }
@@ -141,7 +147,6 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
 
     private fun setAdapter() {
         adapter.setGroupsClickListener(this)
-        adapter.setPopupMenu(popupMenu)
         binding.attractionsList.adapter = adapter
         binding.attractionsList.layoutManager = LinearLayoutManager(context)
     }
@@ -171,7 +176,21 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
         requireActivity().finish()
     }
 
-    override fun onMenuEditClick(group: Group) {
+    override fun onLongClick(group: Group, view: View) {
+        if(isCoordinator(group.coordinators)) {
+            popupMenu.setOnPopupButtonClick(R.id.button_edit) {
+                onMenuEditClick(group)
+            }
+            popupMenu.setOnPopupButtonClick(R.id.button_delete) {
+                onMenuDeleteClick(group)
+            }
+            popupMenu.showAlignBottom(view)
+        }
+    }
+
+    private fun isCoordinator(coordinators: List<Long>) = preferencesHelper.getUserId() in coordinators
+
+    private fun onMenuEditClick(group: Group) {
         findNavController().navigate(
             GroupsListFragmentDirections.actionGroupsListFragmentToCreateEditGroupFragment(
                 group
@@ -179,13 +198,12 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
         )
     }
 
-    override fun onMenuDeleteClick(group: Group) {
+    private fun onMenuDeleteClick(group: Group) {
         //check if finances are completed
     }
 
     override fun onInfoClick(group: Group, view: View) {
         val popupMenu = createInfoPopup(group)
-
         popupMenu.showAlignBottom(view)
     }
 

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.ParticipantsSimpleAdapter
@@ -15,9 +16,7 @@ import com.example.trip.adapters.ParticipantsSimpleClickListener
 import com.example.trip.databinding.FragmentParticipantsBinding
 import com.example.trip.models.Participant
 import com.example.trip.models.Resource
-import com.example.trip.utils.onBackArrowClick
-import com.example.trip.utils.setInvisible
-import com.example.trip.utils.setSwipeRefreshLayout
+import com.example.trip.utils.*
 import com.example.trip.viewmodels.participants.ParticipantsViewModel
 import com.example.trip.views.dialogs.MenuPopupCoordinateFactory
 import com.example.trip.views.dialogs.participants.DeleteParticipantDialog
@@ -33,9 +32,14 @@ class ParticipantsTripFragment @Inject constructor() : BaseFragment<FragmentPart
     @Inject
     lateinit var adapter: ParticipantsSimpleAdapter
 
+    @Inject
+    lateinit var preferencesHelper: SharedPreferencesHelper
+
     private val popupMenu by balloon<MenuPopupCoordinateFactory>()
 
     private val viewModel: ParticipantsViewModel by viewModels()
+
+    private val args: ParticipantsTripFragmentArgs by navArgs()
 
     override fun prepareBinding(
         inflater: LayoutInflater,
@@ -56,7 +60,6 @@ class ParticipantsTripFragment @Inject constructor() : BaseFragment<FragmentPart
 
     private fun setAdapter() {
         binding.listParticipants.adapter = adapter
-        adapter.setPopupMenu(popupMenu)
         adapter.setParticipantsClickListener(this)
     }
 
@@ -105,11 +108,21 @@ class ParticipantsTripFragment @Inject constructor() : BaseFragment<FragmentPart
         })
     }
 
-    override fun onMenuCoordinateClick(participant: Participant) {
+    override fun onLongClick(participant: Participant, view: View) {
+        if(isCoordinator()) {
+            popupMenu.setOnPopupButtonClick(R.id.button_coordinate) { onMenuCoordinateClick(participant) }
+            popupMenu.setOnPopupButtonClick(R.id.button_delete) { onMenuDeleteClick(participant) }
+            popupMenu.showAlignBottom(view)
+        }
+    }
+
+    private fun isCoordinator() = preferencesHelper.getUserId() in args.coordinators
+
+    private fun onMenuCoordinateClick(participant: Participant) {
 
     }
 
-    override fun onMenuDeleteClick(participant: Participant) {
+    private fun onMenuDeleteClick(participant: Participant) {
         val deleteDialog = DeleteParticipantDialog(this, participant)
         deleteDialog.show(childFragmentManager, DeleteParticipantDialog.TAG)
     }

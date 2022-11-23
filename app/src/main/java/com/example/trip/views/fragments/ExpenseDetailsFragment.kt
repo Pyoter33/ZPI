@@ -15,6 +15,7 @@ import com.example.trip.adapters.ParticipantsPriceAdapter
 import com.example.trip.databinding.FragmentExpenseDetailsBinding
 import com.example.trip.models.Expense
 import com.example.trip.models.Resource
+import com.example.trip.utils.SharedPreferencesHelper
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
 import com.example.trip.utils.toStringFormat
@@ -33,6 +34,9 @@ class ExpenseDetailsFragment @Inject constructor() : BaseFragment<FragmentExpens
     private val viewModel: ExpenseDetailsViewModel by viewModels()
 
     private val args: ExpenseDetailsFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var preferencesHelper: SharedPreferencesHelper
 
     @Inject
     lateinit var adapter: ParticipantsPriceAdapter
@@ -74,6 +78,10 @@ class ExpenseDetailsFragment @Inject constructor() : BaseFragment<FragmentExpens
 
     private fun setupArgs() {
         with(args) {
+            if(args.expense.creator.id != preferencesHelper.getUserId()) {
+                binding.buttonEdit.setGone()
+                binding.buttonDelete.setGone()
+            }
             binding.textExpenseName.text = expense.title
             binding.textPrice.text = expense.price.toStringFormat(currency)
             viewModel.setParticipants(expense.debtors, expense.price)
@@ -124,8 +132,6 @@ class ExpenseDetailsFragment @Inject constructor() : BaseFragment<FragmentExpens
 
         }
     }
-
-
 
     private fun observeParticipants() {
         viewModel.participants.observe(viewLifecycleOwner) {

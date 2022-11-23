@@ -1,8 +1,8 @@
 package com.example.trip.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -49,12 +49,17 @@ class SettlementUserAdapter @Inject constructor() :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             HEADER -> SettlementHeaderViewHolder.create(parent)
-            else -> SettlementViewHolder.create(parent, currency, settlementClickListener, popupMenu)
+            else -> SettlementViewHolder.create(
+                parent,
+                currency,
+                settlementClickListener,
+                popupMenu
+            )
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(holder) {
+        when (holder) {
             is SettlementHeaderViewHolder -> holder.bind()
             is SettlementViewHolder -> holder.bind(getItem(position - 1))
         }
@@ -68,7 +73,6 @@ class SettlementUserAdapter @Inject constructor() :
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(settlement: Settlement) {
-            val userId = 1L
             with(binding) {
                 textDebtee.text = settlement.debtee.fullName
                 textDebtor.text = settlement.debtor.fullName
@@ -79,28 +83,13 @@ class SettlementUserAdapter @Inject constructor() :
                     textStatus.text = itemView.resources.getString(R.string.text_resolved)
                 }
             }
-
-            if (settlement.debtee.id == userId && settlement.status != SettlementStatus.RESOLVED) {
-                setOnLongClick(settlement)
-            }
+            setOnLongClick(settlement)
         }
 
         private fun setOnLongClick(settlement: Settlement) {
             binding.root.setOnLongClickListener {
-                popupMenu.showAlignBottom(binding.root)
-                setOnPopupButtonClick(R.id.button_resolve) {
-                    settlementClickListener.onMenuResolve(
-                        settlement
-                    )
-                }
+                settlementClickListener.onLongClick(settlement, it)
                 true
-            }
-        }
-
-        private fun setOnPopupButtonClick(id: Int, action: () -> Unit) {
-            popupMenu.getContentView().findViewById<Button>(id).setOnClickListener {
-                action()
-                popupMenu.dismiss()
             }
         }
 
@@ -153,16 +142,16 @@ class SettlementUserAdapter @Inject constructor() :
 
 }
 
-    class SettlementDiffUtil : DiffUtil.ItemCallback<Settlement>() {
-        override fun areItemsTheSame(oldItem: Settlement, newItem: Settlement): Boolean {
-            return oldItem === newItem
-        }
-
-        override fun areContentsTheSame(oldItem: Settlement, newItem: Settlement): Boolean {
-            return oldItem.id == newItem.id && oldItem.groupId == newItem.groupId
-        }
+class SettlementDiffUtil : DiffUtil.ItemCallback<Settlement>() {
+    override fun areItemsTheSame(oldItem: Settlement, newItem: Settlement): Boolean {
+        return oldItem === newItem
     }
 
-    interface SettlementClickListener {
-        fun onMenuResolve(settlement: Settlement)
+    override fun areContentsTheSame(oldItem: Settlement, newItem: Settlement): Boolean {
+        return oldItem.id == newItem.id && oldItem.groupId == newItem.groupId
     }
+}
+
+interface SettlementClickListener {
+    fun onLongClick(settlement: Settlement, view: View)
+}

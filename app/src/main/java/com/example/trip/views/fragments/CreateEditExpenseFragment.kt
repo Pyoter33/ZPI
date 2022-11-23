@@ -17,10 +17,7 @@ import com.example.trip.adapters.CheckableParticipantClickListener
 import com.example.trip.adapters.CheckableParticipantsAdapter
 import com.example.trip.databinding.FragmentCreateEditExpenseBinding
 import com.example.trip.models.Resource
-import com.example.trip.utils.setGone
-import com.example.trip.utils.setInvisible
-import com.example.trip.utils.setSwipeRefreshLayout
-import com.example.trip.utils.setVisible
+import com.example.trip.utils.*
 import com.example.trip.viewmodels.finances.CreateEditExpenseViewModel
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -86,7 +83,7 @@ class CreateEditExpenseFragment @Inject constructor() : BaseFragment<FragmentCre
             binding.textNewExpense.text = getString(R.string.text_edit_expense)
             viewModel.toPost = false
             binding.editTextName.setText(it.title)
-            binding.editTextPrice.setText(it.price.toString())
+            binding.editTextPrice.setText(it.price.toStringFormat())
             viewModel.name = it.title
             viewModel.price = it.price.toString()
         }

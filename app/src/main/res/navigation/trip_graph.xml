@@ -49,6 +49,9 @@
             <argument
                 android:name="dayPlan"
                 app:argType="com.example.trip.models.DayPlan" />
+            <argument
+                android:name="coordinators"
+                app:argType="long[]" />
         </fragment>
         <fragment
             android:id="@+id/findAttractionFragment"
