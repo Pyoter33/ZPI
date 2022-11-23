@@ -88,7 +88,6 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
 
     private fun setAdapter() {
         val layoutManager = LinearLayoutManager(context)
-        adapter.setPopupMenu(popupMenu)
         adapter.setUserTransportClickListener(this)
         adapter.setCurrency(args.currency)
         binding.listTransports.adapter = adapter

@@ -37,18 +37,6 @@ class GroupsRepository @Inject constructor() {
                             "We start in Madrid, than Barcelona, Valencia, Malaga. A lot of sightseeing and lying on the beach. Bring your suncream!",
                             10,
                             listOf()
-                        ),
-                        Group(
-                            3,
-                            "Excursion to Dresden",
-                            GroupStatus.FINISHED,
-                            "Wroclaw",
-                            "PLN",
-                            3,
-                            2,
-                            "Let's see all the museums!!!",
-                            3,
-                            listOf()
                         )
                     )
                 )

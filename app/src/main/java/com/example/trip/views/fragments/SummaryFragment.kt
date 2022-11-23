@@ -85,20 +85,12 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
     }
 
     private fun onUncheckAccommodationClick() {
-        if(!isCoordinator()) {
-            binding.buttonUncheckAccommodation.setGone()
-            return
-        }
         binding.buttonUncheckAccommodation.setOnClickListener {
             accommodationDialog.show(childFragmentManager, DeleteAcceptedAccommodationDialog.TAG)
         }
     }
 
     private fun onUncheckDateClick() {
-        if(!isCoordinator()) {
-            binding.buttonUncheckDates.setGone()
-            return
-        }
         binding.buttonUncheckDates.setOnClickListener {
             availabilityDialog.show(childFragmentManager, DeleteAcceptedAvailabilityDialog.TAG)
         }
@@ -231,7 +223,7 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
             textAccommodationNotAccepted.setGone()
             cardAccommodation.setVisible()
             imageAccommodationStatus.isSelected = true
-            buttonUncheckAccommodation.setVisible()
+            if(isCoordinator()) buttonUncheckAccommodation.setVisible()
 
             textName.text = accommodation.name
             textAddress.text = accommodation.address
@@ -257,6 +249,7 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
                     putString(Constants.DESTINATION_KEY, accommodation.address)
                     putString(Constants.START_CITY_KEY, args.startCity)
                     putString(Constants.CURRENCY_KEY, args.currency)
+                    putLongArray(Constants.COORDINATORS_KEY, args.coordinators)
                 }
 
                 findNavController().navigate(R.id.transport, bundle)
@@ -279,7 +272,6 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
         with(binding) {
             textDatesNotAccepted.setGone()
             imageDatesStatus.isSelected = true
-            buttonUncheckDates.setVisible()
             editTextDate.setText(
                 getString(
                     R.string.format_dash,
@@ -287,6 +279,7 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
                     availability.endDate.format(formatter)
                 )
             )
+            if(isCoordinator()) buttonUncheckDates.setVisible()
         }
         viewModel.updateButtonLock(dateAdded = true)
     }

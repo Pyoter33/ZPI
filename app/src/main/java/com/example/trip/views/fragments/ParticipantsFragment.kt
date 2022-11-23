@@ -63,7 +63,7 @@ class ParticipantsFragment @Inject constructor() : BaseFragment<FragmentParticip
 
     private fun onInviteClick() {
         if(!isCoordinator()) {
-            binding.buttonInvite.setGone()
+            binding.buttonInvite.setInvisible()
             return
         }
 
