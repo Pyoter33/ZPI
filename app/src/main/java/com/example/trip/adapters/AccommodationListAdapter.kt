@@ -74,15 +74,15 @@ class AccommodationListAdapter @Inject constructor() :
 
             }
             setOnExpandClick()
-            setOnVoteClick(binding.buttonVote)
+            setOnVoteClick(accommodation)
             setOnLinkClick(accommodation)
             setOnTransportClick(accommodation)
             setOnLongClick(accommodation)
         }
 
-        private fun setOnVoteClick(button: View) {
+        private fun setOnVoteClick(accommodation: Accommodation) {
             binding.buttonVote.setOnClickListener {
-                accommodationClickListener.onVoteClick(bindingAdapterPosition, button)
+                accommodationClickListener.onVoteClick(accommodation, bindingAdapterPosition, it)
             }
         }
 
@@ -141,7 +141,7 @@ class AccommodationDiffUtil : DiffUtil.ItemCallback<Accommodation>() {
 
 interface AccommodationClickListener {
     fun onExpandClick(position: Int)
-    fun onVoteClick(position: Int, button: View)
+    fun onVoteClick(accommodation: Accommodation, position: Int, button: View)
     fun onLinkClick(accommodation: Accommodation)
     fun onTransportClick(accommodation: Accommodation)
     fun onLongClick(accommodation: Accommodation, view: View)

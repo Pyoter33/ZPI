@@ -15,6 +15,7 @@ import com.example.trip.R
 import com.example.trip.databinding.FragmentCreateEditGroupBinding
 import com.example.trip.models.Resource
 import com.example.trip.utils.onBackArrowClick
+import com.example.trip.utils.popBackStackWithRefresh
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
 import com.example.trip.viewmodels.groups.CreateEditGroupViewModel
@@ -197,7 +198,7 @@ class CreateEditGroupFragment @Inject constructor() : BaseFragment<FragmentCreat
             when (operation.await()) {
                 is Resource.Success -> {
                     disableLoading()
-                    findNavController().popBackStack()
+                    findNavController().popBackStackWithRefresh()
                 }
                 is Resource.Loading -> {
 

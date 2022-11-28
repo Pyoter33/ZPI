@@ -79,6 +79,15 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
         }
     }
 
+    private fun resetCalendar() {
+        dateValidator = DateValidator(listOf())
+        binding.calendar.setDayBinder(
+            dateValidator,
+            R.color.secondary,
+            R.color.secondary_transparent
+        )
+    }
+
     private fun setAdapter() {
         val layoutManager = LinearLayoutManager(context)
         adapter.setDatesClickListener(this)
@@ -137,13 +146,12 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
     }
 
     private fun observeAvailabilityList() {
-        viewModel.refreshAvailability()
         viewModel.availabilityList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
                     adapter.submitList(it.data)
                     dateValidator = DateValidator(it.data)
-                    updateView(it.data.first())
+                    it.data.firstOrNull()?.let { it1 -> updateView(it1) } ?: resetCalendar()
                     binding.layoutLoading.setGone()
                 }
                 is Resource.Loading -> {
@@ -195,22 +203,18 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
     }
 
     private fun addDates(startDate: Long, endDate: Long) {
-        val availability = Availability(
-            0,
-            1,
-            startDate.toLocalDate(),
-            endDate.toLocalDate()
-        )
-
+        binding.layoutLoading.setVisible()
         lifecycleScope.launch {
-            when (viewModel.postAvailability(availability)) {
+            when (viewModel.postAvailabilityAsync(startDate.toLocalDate(), endDate.toLocalDate()).await()) {
                 is Resource.Success -> {
+                    binding.layoutLoading.setGone()
                     viewModel.refreshAvailability()
                 }
                 is Resource.Loading -> {
-
+                    //NO-OP
                 }
                 is Resource.Failure -> {
+                    binding.layoutLoading.setGone()
                     (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_post_failure,
@@ -223,15 +227,33 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
         }
     }
 
+    override fun onDeleteClick(id: Long) {
+        binding.layoutLoading.setVisible()
+        lifecycleScope.launch {
+            when (viewModel.deleteAvailabilityAsync(id).await()) {
+                is Resource.Success -> {
+                    binding.layoutLoading.setGone()
+                    viewModel.refreshAvailability()
+                }
+                is Resource.Loading -> {
+                    //NO-OP
+                }
+                is Resource.Failure -> {
+                    binding.layoutLoading.setGone()
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onDeleteClick(id)
+                    }
+                }
+            }
+        }
+    }
+
     companion object {
-        private const val PLACEHOLDER_USERID = 1
-        private const val GROUP_ID_ARG = "groupId"
         private const val MONTH_RANGE = 1200L
         private const val ANIM_DURATION = 600L
     }
-
-    override fun onDeleteClick(id: Long) {
-
-    }
-
 }

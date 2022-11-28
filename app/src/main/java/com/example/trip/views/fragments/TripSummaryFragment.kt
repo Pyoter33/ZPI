@@ -107,7 +107,7 @@ class TripSummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBi
             when (it) {
                 is Resource.Success -> {
                     it.data?.let { availability ->
-                        setDate(availability)
+                        setDate(availability.availability)
                     }
                 }
                 is Resource.Loading -> {

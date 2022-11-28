@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trip.Constants
-import com.example.trip.R
+import com.example.trip.dto.DayPlanPostDto
 import com.example.trip.models.DayPlan
 import com.example.trip.models.Resource
 import com.example.trip.usecases.dayplan.PostDayPlanUseCase
@@ -25,7 +25,7 @@ class CreateEditDayPlanViewModel @Inject constructor(
 
     var name: String? = null
     var date: LocalDate? = null
-    var icon: Int = R.drawable.ic_baseline_church_24
+    var icon: Int = 0
 
     val groupId = state.get<Long>(Constants.GROUP_ID_KEY)
     val dayPlan = state.get<DayPlan>(Constants.DAY_PLAN_KEY)
@@ -34,8 +34,7 @@ class CreateEditDayPlanViewModel @Inject constructor(
     fun postDayPlanAsync(): Deferred<Resource<Unit>> {
         val deferred = viewModelScope.async(Dispatchers.IO) {
             groupId?.let { groupId ->
-                val dayPlan = DayPlan(0, groupId, name!!, date!!, 0, icon)
-                postDayPlanUseCase(dayPlan)
+                postDayPlanUseCase(DayPlanPostDto(groupId, date!!, name!!, icon))
             } ?: Resource.Failure()
         }
         return deferred
@@ -45,15 +44,8 @@ class CreateEditDayPlanViewModel @Inject constructor(
         val deferred = viewModelScope.async(Dispatchers.IO) {
             groupId?.let { groupId ->
                 dayPlan?.let { dayPlan ->
-                    val newDayPlan = DayPlan(
-                        dayPlan.id,
-                        groupId,
-                        name!!,
-                        date!!,
-                        dayPlan.attractionsNumber,
-                        icon
-                    )
-                    updateDayPlanUseCase(newDayPlan)
+                    val newDayPlan = DayPlanPostDto(groupId, date!!, name!!, icon)
+                    updateDayPlanUseCase(dayPlan.id, newDayPlan)
                 } ?: Resource.Failure()
             } ?: Resource.Failure()
         }

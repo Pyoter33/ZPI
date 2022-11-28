@@ -21,7 +21,6 @@ import com.example.trip.models.AttractionPreview
 import com.example.trip.models.Resource
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
-import com.example.trip.utils.toAttraction
 import com.example.trip.viewmodels.dayplan.FindAttractionViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -105,7 +104,8 @@ class FindAttractionFragment @Inject constructor() : BaseFragment<FragmentFindAt
     override fun onClick(attractionPreview: AttractionPreview) {
         findNavController().navigate(
             FindAttractionFragmentDirections.actionFindAttractionFragmentToCreateEditAttractionFragment(
-                attractionPreview.toAttraction(args.groupId, args.dayPlanId)
+                args.dayPlanId,
+                attractionPreview= attractionPreview
             )
         )
     }

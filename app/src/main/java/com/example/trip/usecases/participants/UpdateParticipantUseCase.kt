@@ -8,7 +8,7 @@ import javax.inject.Inject
 class UpdateParticipantUseCase @Inject constructor(private val participantsRepository: ParticipantsRepository) {
 
     suspend operator fun invoke(participant: Participant): Resource<Unit> {
-        return participantsRepository.updateParticipant(participant )
+        return Resource.Failure()
     }
 
 }

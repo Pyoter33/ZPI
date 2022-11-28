@@ -82,7 +82,7 @@ class AttractionPreviewDiffUtil : DiffUtil.ItemCallback<AttractionPreview>() {
     }
 
     override fun areContentsTheSame(oldItem: AttractionPreview, newItem: AttractionPreview): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem == newItem
     }
 }
 

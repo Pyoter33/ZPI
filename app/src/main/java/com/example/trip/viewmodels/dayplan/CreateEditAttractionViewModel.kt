@@ -4,7 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trip.Constants
+import com.example.trip.dto.AttractionCandidateDto
+import com.example.trip.dto.AttractionDto
 import com.example.trip.models.Attraction
+import com.example.trip.models.AttractionPreview
 import com.example.trip.models.Resource
 import com.example.trip.usecases.dayplan.PostAttractionUseCase
 import com.example.trip.usecases.dayplan.UpdateAttractionUseCase
@@ -24,13 +27,28 @@ class CreateEditAttractionViewModel @Inject constructor(
     var descriptionText: String? = null
     var toPost = false
     private val attraction = state.get<Attraction>(Constants.ATTRACTION_KEY)
+    private val attractionPreview = state.get<AttractionPreview>(Constants.ATTRACTION_PREVIEW_KEY)
+    private val dayPlanId = state.get<Long>(Constants.DAY_PLAN_ID_KEY)
 
     fun postAttractionAsync(): Deferred<Resource<Unit>> {
         val deferred = viewModelScope.async(Dispatchers.IO) {
-            attraction?.apply {
-                description = descriptionText ?: ""
-            }?.let {
-                postAttractionUseCase(it)
+            attractionPreview?.let {
+                dayPlanId?.let { id ->
+                    postAttractionUseCase(
+                        id,
+                        AttractionCandidateDto(
+                            it.name,
+                            it.address,
+                            null,
+                            it.latitude,
+                            it.longitude,
+                            it.placeId,
+                            it.imageReference,
+                            it.link,
+                            descriptionText
+                        )
+                    )
+                } ?: Resource.Failure()
             } ?: Resource.Failure()
         }
         return deferred
@@ -38,10 +56,20 @@ class CreateEditAttractionViewModel @Inject constructor(
 
     fun updateAttractionAsync(): Deferred<Resource<Unit>> {
         val deferred = viewModelScope.async(Dispatchers.IO) {
-            attraction?.apply {
-                description = descriptionText ?: ""
-            }?.let {
-                updateAttractionUseCase(it)
+            attraction?.let {
+                updateAttractionUseCase(
+                    AttractionDto(
+                        it.id,
+                        it.name,
+                        descriptionText,
+                        null,
+                        it.address,
+                        it.link,
+                        it.imageReference,
+                        0.0,
+                        0.0
+                    )
+                )
             } ?: Resource.Failure()
         }
         return deferred

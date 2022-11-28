@@ -2,10 +2,8 @@ package com.example.trip.viewmodels
 
 import androidx.lifecycle.*
 import com.example.trip.Constants
-import com.example.trip.models.Accommodation
-import com.example.trip.models.Availability
-import com.example.trip.models.Participant
-import com.example.trip.models.Resource
+import com.example.trip.models.*
+import com.example.trip.usecases.group.GetGroupUseCase
 import com.example.trip.usecases.participants.GetParticipantsUseCase
 import com.example.trip.usecases.summary.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +19,8 @@ class SummaryViewModel @Inject constructor(
     private val deleteAcceptedAccommodationUseCase: DeleteAcceptedAccommodationUseCase,
     private val deleteAcceptedAvailabilityUseCase: DeleteAcceptedAvailabilityUseCase,
     private val postAcceptedAvailabilityUseCase: PostAcceptedAvailabilityUseCase,
+    private val getGroupUseCase: GetGroupUseCase,
+    private val changeGroupStatusUseCase: ChangeGroupStageUseCase,
     state: SavedStateHandle
 ) : ViewModel() {
 
@@ -33,7 +33,7 @@ class SummaryViewModel @Inject constructor(
     val acceptedAccommodation: LiveData<Resource<Accommodation?>> = _acceptedAccommodation
 
     private val _acceptedAvailability = groupId?.let { getAcceptedAvailabilityUseCase(it).asLiveData() }?: MutableLiveData()
-    val acceptedAvailability: LiveData<Resource<Availability?>> = _acceptedAvailability
+    val acceptedAvailability: LiveData<Resource<OptimalAvailability?>> = _acceptedAvailability
 
     private val _participants = groupId?.let { getParticipantsUseCase(it).asLiveData() }?: MutableLiveData()
     val participants: LiveData<Resource<List<Participant>>> = _participants
@@ -41,25 +41,44 @@ class SummaryViewModel @Inject constructor(
     private val _isButtonUnlocked = MutableLiveData(false)
     val isButtonUnlocked: LiveData<Boolean> = _isButtonUnlocked
 
+    fun changeGroupStatusAsync(): Deferred<Resource<Unit>> {
+        return viewModelScope.async {
+            groupId?.let {
+                changeGroupStatusUseCase(it)
+            }?: Resource.Failure()
+        }
+    }
+
+    fun getGroupAsync(): Deferred<Resource<Group>> {
+        return viewModelScope.async {
+            groupId?.let {
+                getGroupUseCase(it)
+            }?: Resource.Failure()
+        }
+    }
+
     fun setNewAcceptedAvailabilityAsync(availability: Availability): Deferred<Resource<Unit>> {
-        val deferred = viewModelScope.async {
-            postAcceptedAvailabilityUseCase(availability)
+        return viewModelScope.async {
+            groupId?.let {
+                postAcceptedAvailabilityUseCase(it, availability)
+            }?: Resource.Failure()
         }
-        return deferred
     }
 
-    fun deleteAcceptedAvailabilityAsync(availability: Availability): Deferred<Resource<Unit>> {
-        val deferred = viewModelScope.async {
-            deleteAcceptedAvailabilityUseCase(availability)
+    fun deleteAcceptedAvailabilityAsync(): Deferred<Resource<Unit>> {
+        return viewModelScope.async {
+            groupId?.let {
+                deleteAcceptedAvailabilityUseCase(it)
+            }?: Resource.Failure()
         }
-        return deferred
     }
 
-    fun deleteAcceptedAccommodationAsync(accommodation: Accommodation): Deferred<Resource<Unit>> {
-        val deferred = viewModelScope.async {
-            deleteAcceptedAccommodationUseCase(accommodation)
+    fun deleteAcceptedAccommodationAsync(): Deferred<Resource<Unit>> {
+        return viewModelScope.async {
+            groupId?.let {
+                deleteAcceptedAccommodationUseCase(it)
+            }?: Resource.Failure()
         }
-        return deferred
     }
 
     fun updateButtonLock(accommodationAdded: Boolean = isAccommodationAdded, dateAdded: Boolean = isDateAdded) {

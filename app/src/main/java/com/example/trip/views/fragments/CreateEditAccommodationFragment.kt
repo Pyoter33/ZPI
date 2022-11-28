@@ -14,6 +14,7 @@ import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.databinding.FragmentCreateEditAccommodationBinding
 import com.example.trip.models.Resource
+import com.example.trip.utils.popBackStackWithRefresh
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
 import com.example.trip.utils.toStringFormat
@@ -53,6 +54,7 @@ class CreateEditAccommodationFragment @Inject constructor() : BaseFragment<Fragm
 
     private fun setupArgs() {
         args.accommodation?.let {
+            viewModel.toPost = false
             binding.textFieldLink.editText!!.setText(it.sourceUrl)
             binding.textFieldPrice.editText!!.setText(it.price.toStringFormat())
             binding.textFieldDescription.editText!!.setText(it.description)
@@ -120,13 +122,15 @@ class CreateEditAccommodationFragment @Inject constructor() : BaseFragment<Fragm
 
     private fun submit() {
         if (isSubmitNotPermitted()) return
+        val operation =
+            if (viewModel.toPost) viewModel.postAccommodationAsync() else viewModel.updateAccommodationAsync()
 
         enableLoading()
         lifecycleScope.launch {
-            when (viewModel.postAccommodation()) {
+            when (operation.await()) {
                 is Resource.Success -> {
                     disableLoading()
-                    findNavController().popBackStack()
+                    findNavController().popBackStackWithRefresh()
                 }
                 is Resource.Loading -> {
 

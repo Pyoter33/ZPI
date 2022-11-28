@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.Constants
@@ -25,20 +26,20 @@ import com.example.trip.databinding.FragmentGroupsListBinding
 import com.example.trip.models.Group
 import com.example.trip.models.GroupStatus
 import com.example.trip.models.Resource
-import com.example.trip.utils.SharedPreferencesHelper
-import com.example.trip.utils.setOnPopupButtonClick
-import com.example.trip.utils.setSwipeRefreshLayout
-import com.example.trip.utils.toast
+import com.example.trip.utils.*
 import com.example.trip.viewmodels.groups.GroupsListViewModel
+import com.example.trip.views.dialogs.DeleteGroupDialog
+import com.example.trip.views.dialogs.DeleteGroupDialogClickListener
 import com.example.trip.views.dialogs.MenuPopupFactory
 import com.skydoves.balloon.*
 import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsListBinding>(), GroupsClickListener {
+class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsListBinding>(), GroupsClickListener, DeleteGroupDialogClickListener {
 
     private val popupMenu by balloon<MenuPopupFactory>()
 
@@ -81,6 +82,14 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
         onSettingsClick()
         observeGroupsList()
         setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
+        refreshIfNewData { viewModel.refreshData() }
+        startGroup()
+    }
+
+    private fun startGroup() {
+        requireActivity().intent.extras?.getParcelable<Group>(Constants.GROUP_KEY)?.let {
+            onClick(it)
+        }
     }
 
     private fun onCreateClick() {
@@ -132,13 +141,13 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
                     binding.layoutRefresh.isRefreshing = true
                 }
                 is Resource.Failure -> {
-                    (requireActivity() as MainActivity).showSnackbar(
-                        requireView(),
-                        R.string.text_fetch_failure,
-                        R.string.text_retry
-                    ) {
-                        viewModel.refreshData()
-                    }
+//                    (requireActivity() as MainActivity).showSnackbar(
+//                        requireView(),
+//                        R.string.text_fetch_failure,
+//                        R.string.text_retry
+//                    ) {
+//                        viewModel.refreshData()
+//                    }
                     binding.layoutRefresh.isRefreshing = false
                 }
             }
@@ -179,7 +188,11 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
     override fun onLongClick(group: Group, view: View) {
         if(isCoordinator(group.coordinators)) {
             popupMenu.setOnPopupButtonClick(R.id.button_edit) {
-                onMenuEditClick(group)
+                if(group.groupStatus == GroupStatus.ONGOING) {
+                    requireContext().toast(R.string.text_cannot_edit_group)
+                } else {
+                    onMenuEditClick(group)
+                }
             }
             popupMenu.setOnPopupButtonClick(R.id.button_delete) {
                 onMenuDeleteClick(group)
@@ -199,7 +212,32 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
     }
 
     private fun onMenuDeleteClick(group: Group) {
-        //check if finances are completed
+        val deleteDialog = DeleteGroupDialog(this, group)
+        deleteDialog.show(childFragmentManager, DeleteGroupDialog.TAG)
+    }
+
+    override fun onDeleteClick(group: Group) {
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (viewModel.deleteGroupAsync(group.id).await()) {
+                is Resource.Success -> {
+                    viewModel.refreshData()
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onMenuDeleteClick(group)
+                    }
+                }
+                else -> {
+                    //NO-OP
+                }
+            }
+        }
     }
 
     override fun onInfoClick(group: Group, view: View) {
@@ -229,9 +267,5 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
             .setLifecycleOwner(viewLifecycleOwner)
             .setBalloonAnimation(BalloonAnimation.FADE)
             .build()
-    }
-
-    companion object {
-        private const val PLACEHOLDER_USERID = 1
     }
 }

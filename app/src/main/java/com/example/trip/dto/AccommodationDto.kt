@@ -5,7 +5,7 @@ import java.math.BigDecimal
 data class AccommodationDto(
     val accommodationId: Long,
     val groupId: Long,
-    val creatorId: Long,
+    val creator_id: Long,
     val name: String,
     val streetAddress: String,
     val city: String,

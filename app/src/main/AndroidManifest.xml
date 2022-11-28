@@ -17,12 +17,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Trip"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name=".activities.HomeActivity"
-            android:exported="true">
-
-
+            android:exported="true"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activities.LoginActivity"

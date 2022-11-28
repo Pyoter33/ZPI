@@ -9,6 +9,7 @@
     <string name="text_fetch_failure">"Couldn't fetch the data, try again!</string>
     <string name="text_post_failure">"Couldn't post the data, try again!</string>
     <string name="text_delete_failure">"Couldn't delete the data, try again!</string>
+    <string name="text_start_trip_failure">"Couldn't start trip, try again!</string>
     <string name="text_item_post_failure">"Couldn't post the %1$s, check the data and try again!</string>
     <string name="text_my_votes">My votes</string>
     <string name="text_my_accommodations">My accommodations</string>
@@ -21,6 +22,7 @@
     <string name="text_title_delete_dialog">Are you sure you want to delete?</string>
     <string name="text_title_resolve_dialog">Are you sure you want to resolve?</string>
     <string name="text_title_leave_dialog">Are you sure you want to leave?</string>
+    <string name="text_title_coordinate_dialog">Are you sure you want set %1$s as coordinator?</string>
     <string name="text_message_cannot_undo">You cannot undo this operation!</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_yes">Yes</string>
@@ -142,4 +144,8 @@
     <string name="text_no_day_plans">No day plans added yet!</string>
     <string name="text_no_settlements">No settlements needed yet!</string>
     <string name="text_edit_personal_data">Edit personal data</string>
+    <string name="text_cannot_edit_group">You cannot edit an ongoing group!</string>
+    <string name="text_is_now_coordinator"> %1$s is now a coordinator!  </string>
+    <string name="text_accommodation_accepted"> Accommodation accepted! See it in summary. </string>
+    <string name="text_availability_accepted"> Dates accepted! See them in summary. </string>
 </resources>

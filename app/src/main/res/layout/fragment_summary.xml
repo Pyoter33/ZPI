@@ -103,11 +103,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/marginM"
-                        android:src="@drawable/selector_accepted"
+                        android:visibility="gone"
+                        android:src="@drawable/ic_baseline_check_24"
                         app:layout_constraintBottom_toBottomOf="@+id/text_accommodation"
                         app:layout_constraintStart_toEndOf="@+id/text_accommodation"
                         app:layout_constraintTop_toTopOf="@+id/text_accommodation"
-                        app:tint="@drawable/selector_accepted_color" />
+                        app:tint="@color/primary" />
 
                     <ImageButton
                         android:id="@+id/button_uncheck_accommodation"
@@ -311,11 +312,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/marginM"
-                        android:src="@drawable/selector_accepted"
+                        android:visibility="gone"
+                        android:src="@drawable/ic_baseline_check_24"
                         app:layout_constraintBottom_toBottomOf="@+id/text_dates"
                         app:layout_constraintStart_toEndOf="@+id/text_dates"
                         app:layout_constraintTop_toTopOf="@+id/text_dates"
-                        app:tint="@drawable/selector_accepted_color" />
+                        app:tint="@color/primary" />
 
                     <ImageButton
                         android:id="@+id/button_uncheck_dates"

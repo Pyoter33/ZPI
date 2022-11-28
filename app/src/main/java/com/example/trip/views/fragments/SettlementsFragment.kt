@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.Constants
@@ -26,6 +27,7 @@ import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.android.material.snackbar.Snackbar
 import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -139,7 +141,27 @@ class SettlementsFragment @Inject constructor() : BaseFragment<FragmentSettlemen
 
     //dialogs
     override fun onResolveClick(settlement: Settlement) {
-        requireContext().toast("resolve")
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (viewModel.resolveSettlementAsync(settlement.id).await()) {
+                is Resource.Success -> {
+                    viewModel.refreshDataSettlements()
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onMenuResolve(settlement)
+                    }
+                }
+                else -> {
+                    //NO-OP
+                }
+            }
+        }
     }
 
 }

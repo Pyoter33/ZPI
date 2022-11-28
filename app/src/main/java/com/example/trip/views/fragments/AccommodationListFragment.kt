@@ -64,6 +64,7 @@ class AccommodationListFragment @Inject constructor() :
         observeAccommodationsList()
         setOnCheckedChipsListener()
         setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
+        refreshIfNewData { viewModel.refreshData() }
         onAddClick()
     }
 
@@ -153,17 +154,27 @@ class AccommodationListFragment @Inject constructor() :
     }
 
     //list item
-    override fun onVoteClick(position: Int, button: View) {
+    override fun onVoteClick(accommodation: Accommodation, position: Int, button: View) {
+        val operation = if(accommodation.isVoted) viewModel.deleteVoteAsync(accommodation.id) else viewModel.postVoteAsync(accommodation.id)
         viewModel.setVoted(position)
         adapter.notifyItemChanged(position)
         button.isEnabled = false
         lifecycleScope.launch {
-            when (viewModel.waitForDelay()) { //wait for response from backend
+            when (operation.await()) {
                 is Resource.Success -> {
                     button.isEnabled = true
                 }
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_post_failure)
+                    viewModel.setVoted(position)
+                    adapter.notifyItemChanged(position)
+                    button.isEnabled = true
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_post_failure,
+                        R.string.text_retry
+                    ) {
+                       onVoteClick(accommodation, position, button)
+                    }
                 }
                 else -> {}
             }
@@ -247,10 +258,52 @@ class AccommodationListFragment @Inject constructor() :
 
     //dialogs
     override fun onAcceptClick(accommodation: Accommodation) {
-        requireContext().toast("accept")
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (viewModel.postAcceptedAccommodationAsync(accommodation.id).await()) {
+                is Resource.Success -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    requireContext().toast(R.string.text_accommodation_accepted)
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onMenuDeleteClick(accommodation)
+                    }
+                }
+                else -> {
+                    //NO-OP
+                }
+            }
+        }
     }
 
     override fun onDeleteClick(accommodation: Accommodation) {
-        requireContext().toast("delete")
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (viewModel.deleteAccommodationAsync(accommodation.id).await()) {
+                is Resource.Success -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    viewModel.refreshData()
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onMenuDeleteClick(accommodation)
+                    }
+                }
+                else -> {
+                    //NO-OP
+                }
+            }
+        }
     }
 }

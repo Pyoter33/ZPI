@@ -91,8 +91,18 @@
             android:label="CreateEditAttractionFragment"
             tools:layout="@layout/fragment_create_edit_attraction">
             <argument
+                android:name="dayPlanId"
+                app:argType="long" />
+            <argument
                 android:name="attraction"
-                app:argType="com.example.trip.models.Attraction" />
+                app:argType="com.example.trip.models.Attraction"
+                app:nullable="true"
+                android:defaultValue="@null" />
+            <argument
+                android:name="attractionPreview"
+                app:argType="com.example.trip.models.AttractionPreview"
+                app:nullable="true"
+                android:defaultValue="@null" />
         </fragment>
     </navigation>
     <fragment

@@ -7,7 +7,7 @@ import retrofit2.http.*
 interface DayPlanService {
 
     @GET("day-plan")
-    suspend fun getDayPlansForGroup(@Query("groupId") groupId: Long): Response<DayPlanDto>
+    suspend fun getDayPlansForGroup(@Query("groupId") groupId: Long): Response<List<DayPlanDto>>
 
     @POST("day-plan")
     suspend fun postDayPlan(@Body dayPlanPostDto: DayPlanPostDto): Response<Void>
@@ -21,12 +21,6 @@ interface DayPlanService {
     @DELETE("day-plan")
     suspend fun deleteDayPlan(@Query("dayPlanId") dayPlanId: Long): Response<Void>
 
-    @GET("attraction")
-    suspend fun getAttractions(
-        @Query("groupId") groupId: Long,
-        @Query("dayPlanId") dayPlanId: Long
-    ): Response<List<AttractionDto>>
-
     @POST("attraction")
     suspend fun postAttraction(
         @Query("dayPlanId") dayPlanId: Long,
@@ -35,7 +29,7 @@ interface DayPlanService {
 
     @PATCH("attraction")
     suspend fun updateAttraction(
-        @Body attractionCandidateDto: AttractionDto
+        @Body attractionDto: AttractionDto
     ): Response<Void>
 
     @DELETE("attraction")

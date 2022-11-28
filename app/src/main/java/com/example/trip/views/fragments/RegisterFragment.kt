@@ -1,6 +1,5 @@
 package com.example.trip.views.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -11,7 +10,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.trip.Constants
 import com.example.trip.R
 import com.example.trip.activities.HomeActivity
 import com.example.trip.databinding.FragmentRegisterBinding
@@ -28,6 +26,9 @@ import javax.inject.Inject
 class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBinding>() {
 
     private val viewModel: RegisterViewModel by viewModels()
+
+    @Inject
+    lateinit var preferencesHelper: SharedPreferencesHelper
 
     override fun prepareBinding(
         inflater: LayoutInflater,
@@ -201,15 +202,14 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
         enableLoading()
 
         lifecycleScope.launch {
-            when (val result = viewModel.postRegisterAsync().await()) {
+            when (viewModel.postRegisterAsync().await()) {
                 is Resource.Success -> {
-                    val preferences = requireContext().getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE)
-                    preferences.edit().putString(Constants.AUTHORIZATION_HEADER, result.data).apply()
                     requireContext().toast(R.string.text_register_successful)
                     login()
                 }
                 is Resource.Loading -> {}
                 is Resource.Failure -> {
+                    disableLoading()
                     requireContext().toast(R.string.text_not_register)
                 }
             }
@@ -222,9 +222,8 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
             when (val result = viewModel.postLoginAsync().await()) {
                 is Resource.Success -> {
                     disableLoading()
-                    val preferences = requireContext().getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE)
-                    preferences.edit().putLong(Constants.USER_ID_KEY, result.data.first.userId).apply()
-                    preferences.edit().putString(Constants.AUTHORIZATION_HEADER, result.data.second).apply()
+                    preferencesHelper.setToken(result.data.second)
+                    preferencesHelper.setUserId(result.data.first.userId)
                     val activityIntent = Intent(requireContext(), HomeActivity::class.java)
                     startActivity(activityIntent)
                 }
@@ -285,12 +284,14 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
     private fun enableLoading() {
         with(binding) {
             textFieldEmail.isEnabled = false
+            textFieldName.isEnabled = false
             textFieldDate.isEnabled = false
             textFieldPhone.isEnabled = false
             textFieldCode.isEnabled = false
             textFieldRepeatPassword.isEnabled = false
             textFieldPassword.isEnabled = false
             buttonSignUp.isEnabled = false
+            buttonLogin.isEnabled = false
             layoutLoading.setVisible()
         }
     }
@@ -298,12 +299,14 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
     private fun disableLoading() {
         with(binding) {
             textFieldEmail.isEnabled = true
+            textFieldName.isEnabled = true
             textFieldDate.isEnabled = true
             textFieldPhone.isEnabled = true
             textFieldCode.isEnabled = true
             textFieldRepeatPassword.isEnabled = true
             textFieldPassword.isEnabled = true
             buttonSignUp.isEnabled = true
+            buttonLogin.isEnabled = true
             layoutLoading.setGone()
         }
     }

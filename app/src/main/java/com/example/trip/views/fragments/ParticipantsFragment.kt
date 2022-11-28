@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.trip.R
@@ -16,21 +17,20 @@ import com.example.trip.adapters.ParticipantsClickListener
 import com.example.trip.databinding.FragmentParticipantsBinding
 import com.example.trip.models.Participant
 import com.example.trip.models.Resource
+import com.example.trip.models.UserRole
 import com.example.trip.utils.*
 import com.example.trip.viewmodels.participants.ParticipantsViewModel
 import com.example.trip.views.dialogs.MenuPopupCoordinateFactory
-import com.example.trip.views.dialogs.participants.DeleteParticipantDialog
-import com.example.trip.views.dialogs.participants.DeleteParticipantDialogClickListener
-import com.example.trip.views.dialogs.participants.GetInviteLinkDialog
-import com.example.trip.views.dialogs.participants.GetInviteLinkDialogClickListener
+import com.example.trip.views.dialogs.participants.*
 import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class ParticipantsFragment @Inject constructor() : BaseFragment<FragmentParticipantsBinding>(), ParticipantsClickListener,
-    DeleteParticipantDialogClickListener, GetInviteLinkDialogClickListener {
+    DeleteParticipantDialogClickListener, GetInviteLinkDialogClickListener, SetCoordinatorDialogClickListener {
 
     @Inject
     lateinit var adapter: ParticipantsAdapter
@@ -133,7 +133,7 @@ class ParticipantsFragment @Inject constructor() : BaseFragment<FragmentParticip
     }
 
     override fun onLongClick(participant: Participant, view: View) {
-        if(isCoordinator()) {
+        if(isCoordinator() && participant.role == UserRole.BASIC_USER) {
             popupMenu.setOnPopupButtonClick(R.id.button_coordinate) { onMenuCoordinateClick(participant) }
             popupMenu.setOnPopupButtonClick(R.id.button_delete) { onMenuDeleteClick(participant) }
             popupMenu.showAlignBottom(view)
@@ -141,7 +141,8 @@ class ParticipantsFragment @Inject constructor() : BaseFragment<FragmentParticip
     }
 
     private fun onMenuCoordinateClick(participant: Participant) {
-
+        val setCoordinatorDialog = SetCoordinatorDialog(this, participant)
+        setCoordinatorDialog.show(childFragmentManager, SetCoordinatorDialog.TAG)
     }
 
     private fun onMenuDeleteClick(participant: Participant) {
@@ -149,10 +150,56 @@ class ParticipantsFragment @Inject constructor() : BaseFragment<FragmentParticip
         deleteDialog.show(childFragmentManager, DeleteParticipantDialog.TAG)
     }
 
+    override fun onCoordinateClick(participant: Participant) {
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (viewModel.postCoordinatorAsync(participant.id).await()) {
+                is Resource.Success -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    viewModel.refreshData()
+                    requireContext().toast(getString(R.string.text_is_now_coordinator, participant.fullName))
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onMenuDeleteClick(participant)
+                    }
+                }
+                else -> {
+                    //NO-OP
+                }
+            }
+        }
+    }
+
     private fun isCoordinator() = preferencesHelper.getUserId() in args.coordinators
 
     override fun onDeleteClick(participant: Participant) {
-
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (viewModel.deleteParticipantAsync(participant.id).await()) {
+                is Resource.Success -> {
+                    viewModel.refreshData()
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onMenuDeleteClick(participant)
+                    }
+                }
+                else -> {
+                    //NO-OP
+                }
+            }
+        }
     }
 
     override fun onCopyClick(link: String) {

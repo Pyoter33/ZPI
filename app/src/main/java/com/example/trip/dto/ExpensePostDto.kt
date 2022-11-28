@@ -4,5 +4,5 @@ data class ExpensePostDto(
     val creatorId: Long,
     val title: String,
     val price: Double,
-    val expenseDebtors: List<Long>
+    val debtorsIds: List<Long>
 )

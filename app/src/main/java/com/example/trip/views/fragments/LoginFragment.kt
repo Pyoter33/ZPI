@@ -1,6 +1,5 @@
 package com.example.trip.views.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -16,6 +15,7 @@ import com.example.trip.R
 import com.example.trip.activities.HomeActivity
 import com.example.trip.databinding.FragmentLoginBinding
 import com.example.trip.models.Resource
+import com.example.trip.utils.SharedPreferencesHelper
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
 import com.example.trip.utils.toast
@@ -28,6 +28,9 @@ import javax.inject.Inject
 class LoginFragment @Inject constructor(): BaseFragment<FragmentLoginBinding>() {
 
     private val viewModel: LoginViewModel by viewModels()
+
+    @Inject
+    lateinit var preferencesHelper: SharedPreferencesHelper
 
     override fun prepareBinding(
         inflater: LayoutInflater,
@@ -45,13 +48,10 @@ class LoginFragment @Inject constructor(): BaseFragment<FragmentLoginBinding>() 
     }
 
     private fun checkTokenAndId() {
-        val preferences = requireContext().getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE)
-
-        if(preferences.contains(Constants.USER_ID_KEY) && preferences.contains(Constants.AUTHORIZATION_HEADER)) {
+        if(preferencesHelper.containsKey(Constants.USER_ID_KEY) && preferencesHelper.containsKey(Constants.AUTHORIZATION_HEADER)) {
             login()
         }
     }
-
 
     private fun setupOnEmailTextChangeListener() {
         binding.textFieldEmail.editText?.addTextChangedListener(object : TextWatcher {
@@ -111,9 +111,8 @@ class LoginFragment @Inject constructor(): BaseFragment<FragmentLoginBinding>() 
             when (val result = viewModel.postLoginAsync().await()) {
                 is Resource.Success -> {
                     disableLoading()
-                    val preferences = requireContext().getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE)
-                    preferences.edit().putLong(Constants.USER_ID_KEY, result.data.first.userId).apply()
-                    preferences.edit().putString(Constants.AUTHORIZATION_HEADER, result.data.second).apply()
+                    preferencesHelper.setToken(result.data.second)
+                    preferencesHelper.setUserId(result.data.first.userId)
                     login()
                 }
                 is Resource.Loading -> {}

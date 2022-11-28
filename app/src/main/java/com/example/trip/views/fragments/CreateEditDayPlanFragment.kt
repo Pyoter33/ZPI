@@ -201,7 +201,7 @@ class CreateEditDayPlanFragment @Inject constructor() :
             when (operation.await()) {
                 is Resource.Success -> {
                     disableLoading()
-                    findNavController().popBackStack()
+                    findNavController().popBackStackWithRefresh()
                 }
                 is Resource.Loading -> {}
                 is Resource.Failure -> {

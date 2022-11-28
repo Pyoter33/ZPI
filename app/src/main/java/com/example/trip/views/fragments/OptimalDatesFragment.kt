@@ -64,7 +64,7 @@ class OptimalDatesFragment @Inject constructor() : BaseFragment<FragmentOptimalD
         binding.pagerDates.adapter = adapter
         adapter.setDatesClickListener(this)
         adapter.showAccept = requireArguments().getLongArray(Constants.COORDINATORS_KEY)!!.contains(preferencesHelper.getUserId())
-        TabLayoutMediator(binding.tabPager, binding.pagerDates) { tab, position ->
+        TabLayoutMediator(binding.tabPager, binding.pagerDates) { _, _ ->
         }.attach()
 
         binding.pagerDates.registerOnPageChangeCallback(viewPagerCallback)

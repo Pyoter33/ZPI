@@ -5,7 +5,7 @@ import java.util.*
 data class TripGroupPostDto(
     val name: String,
     val currency: Currency,
-    val description: String?,
+    val description: String? = null,
     val votesLimit: Int,
     val startLocation: String?,
     val startCity: String,

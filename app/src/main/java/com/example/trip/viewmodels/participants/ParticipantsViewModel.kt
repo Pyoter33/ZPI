@@ -7,8 +7,10 @@ import com.example.trip.models.Resource
 import com.example.trip.usecases.participants.DeleteParticipantsUseCase
 import com.example.trip.usecases.participants.GetInviteLinkUseCase
 import com.example.trip.usecases.participants.GetParticipantsUseCase
-import com.example.trip.usecases.participants.UpdateParticipantUseCase
+import com.example.trip.usecases.participants.PostCoordinatorUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,7 +18,7 @@ import javax.inject.Inject
 class ParticipantsViewModel @Inject constructor(
     private val getParticipantsUseCase: GetParticipantsUseCase,
     private val getInviteLinkUseCase: GetInviteLinkUseCase,
-    private val updateParticipantUseCase: UpdateParticipantUseCase,
+    private val postCoordinatorUseCase: PostCoordinatorUseCase,
     private val deleteParticipantsUseCase: DeleteParticipantsUseCase,
     state: SavedStateHandle
 ) : ViewModel() {
@@ -58,11 +60,34 @@ class ParticipantsViewModel @Inject constructor(
     private fun getData(mutableLiveData: MutableLiveData<Resource<List<Participant>>>) {
         viewModelScope.launch {
             groupId?.let {
-                getParticipantsUseCase(it).collect { //from args
+                getParticipantsUseCase(it).collect {
                     mutableLiveData.value = it
                 }
             }
         }
     }
+
+    fun deleteParticipantAsync(participantId: Long): Deferred<Resource<Unit>> {
+        return viewModelScope.async {
+            groupId?.let {
+                deleteParticipantsUseCase(
+                    groupId,
+                    participantId
+                )
+            } ?: Resource.Failure()
+        }
+    }
+
+    fun postCoordinatorAsync(participantId: Long): Deferred<Resource<Unit>> {
+        return viewModelScope.async {
+            groupId?.let {
+                postCoordinatorUseCase(
+                    groupId,
+                    participantId
+                )
+            } ?: Resource.Failure()
+        }
+    }
+
 
 }

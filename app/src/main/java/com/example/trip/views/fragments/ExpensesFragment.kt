@@ -14,6 +14,7 @@ import com.example.trip.adapters.ExpensesAdapter
 import com.example.trip.databinding.FragmentExpensesBinding
 import com.example.trip.models.Expense
 import com.example.trip.models.Resource
+import com.example.trip.utils.SharedPreferencesHelper
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
 import com.example.trip.viewmodels.finances.FinancesViewModel
@@ -27,6 +28,9 @@ class ExpensesFragment @Inject constructor() : BaseFragment<FragmentExpensesBind
 
     @Inject
     lateinit var adapter: ExpensesAdapter
+
+    @Inject
+    lateinit var preferencesHelper: SharedPreferencesHelper
 
     private val viewModel: FinancesViewModel by hiltNavGraphViewModels(R.id.finances)
 
@@ -92,15 +96,15 @@ class ExpensesFragment @Inject constructor() : BaseFragment<FragmentExpensesBind
                 1 -> {
                     when (checkedIds.first()) {
                         R.id.chip_expenses -> {
-                            applyFilter(viewModel.filterMyExpenses(PLACEHOLDER_USERID))
+                            applyFilter(viewModel.filterMyExpenses(preferencesHelper.getUserId()))
                         }
                         R.id.chip_contributions -> {
-                            applyFilter(viewModel.filterContributions(PLACEHOLDER_USERID))
+                            applyFilter(viewModel.filterContributions(preferencesHelper.getUserId()))
                         }
                     }
                 }
                 2 -> {
-                    applyFilter(viewModel.filterMyExpensesContributions(PLACEHOLDER_USERID))
+                    applyFilter(viewModel.filterMyExpensesContributions(preferencesHelper.getUserId()))
                 }
             }
         }
@@ -130,12 +134,6 @@ class ExpensesFragment @Inject constructor() : BaseFragment<FragmentExpensesBind
     //list item
     override fun onClick(expense: Expense) {
         (requireParentFragment() as FinancesFragment).onExpenseClick(expense)
-    }
-
-
-    companion object {
-        private const val PLACEHOLDER_USERID = 1L
-        private const val GROUP_ID_ARG = "groupId"
     }
 
 }
