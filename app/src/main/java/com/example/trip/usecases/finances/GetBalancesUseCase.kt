@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart
 import retrofit2.HttpException
+import java.math.BigDecimal
 import javax.inject.Inject
 
 class GetBalancesUseCase @Inject constructor(
@@ -36,26 +37,53 @@ class GetBalancesUseCase @Inject constructor(
     private suspend fun getBalances(groupId: Long): Resource<List<Balance>> {
         val balancesDto = financesRepository.getBalances(groupId)
         val participants = participantsRepository.getParticipantsForGroup(groupId)
-        val maxAmount = balancesDto.values.maxOrNull()
+        val maxAmount = balancesDto.values.maxOrNull() ?: BigDecimal.ONE
 
-        val balances = balancesDto.map { entry ->
-            val participant= participants.find { it.userId == entry.key } ?: return Resource.Failure()
-            if (entry.value.toDouble() < 0) {
-                Balance(
-                    participant.toParticipant(UserRole.UNSPECIFIED),
-                    entry.value,
-                    maxAmount!!,
-                    BalanceStatus.NEGATIVE
-                )
-            } else {
-                Balance(
-                    participant.toParticipant(UserRole.UNSPECIFIED),
-                    entry.value,
-                    maxAmount!!,
-                    BalanceStatus.POSITIVE
-                )
-            }
+        val balances = participants.map { participant ->
+            val balance = balancesDto[participant.userId]
+            balance?.let {
+                if (it.toDouble() < 0) {
+                    Balance(
+                        participant.toParticipant(UserRole.UNSPECIFIED),
+                        it,
+                        maxAmount,
+                        BalanceStatus.NEGATIVE
+                    )
+                } else {
+                    Balance(
+                        participant.toParticipant(UserRole.UNSPECIFIED),
+                        it,
+                        maxAmount,
+                        BalanceStatus.POSITIVE
+                    )
+                }
+            } ?: Balance(
+                participant.toParticipant(UserRole.UNSPECIFIED),
+                BigDecimal.ZERO,
+                maxAmount,
+                BalanceStatus.NEUTRAL
+            )
         }
+
+
+//        val balances = balancesDto.map { entry ->
+//            val participant= participants.find { it.userId == entry.key } ?: return Resource.Failure()
+//            if (entry.value.toDouble() < 0) {
+//                Balance(
+//                    participant.toParticipant(UserRole.UNSPECIFIED),
+//                    entry.value,
+//                    maxAmount!!,
+//                    BalanceStatus.NEGATIVE
+//                )
+//            } else {
+//                Balance(
+//                    participant.toParticipant(UserRole.UNSPECIFIED),
+//                    entry.value,
+//                    maxAmount!!,
+//                    BalanceStatus.POSITIVE
+//                )
+//            }
+//        }
         return Resource.Success(balances)
     }
 

@@ -185,7 +185,7 @@ class CreateEditExpenseFragment @Inject constructor() : BaseFragment<FragmentCre
             when (operation.await()) {
                 is Resource.Success -> {
                     disableLoading()
-                    findNavController().popBackStack()
+                    findNavController().popBackStackWithRefresh(R.id.moneyPager, false)
                 }
                 is Resource.Loading -> {}
                 is Resource.Failure -> {

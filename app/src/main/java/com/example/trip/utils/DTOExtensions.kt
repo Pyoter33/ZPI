@@ -9,7 +9,7 @@ import com.example.trip.models.UserRole
 fun UserDto.toParticipant(role: UserRole): Participant =
     Participant(
         userId,
-        "$firstName $lastName",
+        "$firstName $surname",
         email,
         phoneNumber,
         role

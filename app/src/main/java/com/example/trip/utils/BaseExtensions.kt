@@ -187,7 +187,10 @@ fun String.formatPhone(): String {
     val split = split(' ')
     return "${split[0]} ${split[1].subSequence(0..2)} ${split[1].subSequence(3..5)} ${
         split[1].subSequence(
-            6..8
+            6..8 ////validate phonenumber length
+        //accommodation in summary pdf
+        //block dates in day plan and availability
+        //first and last name
         )
     }"
 }

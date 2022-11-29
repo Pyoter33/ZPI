@@ -39,7 +39,7 @@ class GetCheckableParticipantsUseCase @Inject constructor(
         val result = participants.map {
             val participant = Participant(
                 it.userId,
-                "${it.firstName} ${it.lastName}",
+                "${it.firstName} ${it.surname}",
                 it.email,
                 it.phoneNumber,
                 if (it.userId in coordinatorsIds) UserRole.COORDINATOR else UserRole.BASIC_USER

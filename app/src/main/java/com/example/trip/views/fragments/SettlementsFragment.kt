@@ -78,7 +78,11 @@ class SettlementsFragment @Inject constructor() : BaseFragment<FragmentSettlemen
                 is Resource.Success -> {
                     if (settlement.data.isEmpty()) {
                         binding.textEmptyList.setVisible()
-                    } else binding.textEmptyList.setGone()
+                        binding.listSettlements.setInvisible()
+                    } else {
+                        binding.textEmptyList.setGone()
+                        binding.listSettlements.setVisible()
+                    }
                     binding.layoutRefresh.isRefreshing = false
                     val userSettlements =
                         settlement.data.filter { it.debtee.id == userId || it.debtor.id == userId }

@@ -4,11 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.trip.R
 import com.example.trip.adapters.FragmentPagerAdapter
 import com.example.trip.databinding.FragmentMoneyPagerBinding
 import com.example.trip.models.Expense
+import com.example.trip.utils.refreshIfNewData
+import com.example.trip.viewmodels.finances.FinancesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -16,6 +20,8 @@ import javax.inject.Inject
 class MoneyPager @Inject constructor() : BaseFragment<FragmentMoneyPagerBinding>() {
 
     private val args: MoneyPagerArgs by navArgs()
+
+    private val viewModel: FinancesViewModel by hiltNavGraphViewModels(R.id.finances)
 
     override fun prepareBinding(
         inflater: LayoutInflater,
@@ -25,6 +31,11 @@ class MoneyPager @Inject constructor() : BaseFragment<FragmentMoneyPagerBinding>
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViewPager()
+        refreshIfNewData {
+            viewModel.refreshDataExpense()
+            viewModel.refreshDataBalances()
+            viewModel.refreshDataSettlements()
+        }
     }
 
     fun navigateToExpenseDetailsFragment(expense: Expense) {
