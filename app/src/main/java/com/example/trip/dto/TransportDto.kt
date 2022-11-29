@@ -1,9 +1,9 @@
 package com.example.trip.dto
 
 import java.math.BigDecimal
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
-import kotlin.time.Duration
 
 sealed interface TransportDto {
     val transportId: Long
@@ -26,9 +26,10 @@ data class AirTransportDto(
     override val startDate: LocalDate,
     override val endDate: LocalDate,
     override val link: String,
-    override val transportTypeJson: Int,
     val flight: List<FlightDto>
-): TransportDto
+): TransportDto {
+    override val transportTypeJson: Int = 1
+}
 
 data class CarTransportDto(
     override val transportId: Long,
@@ -39,9 +40,10 @@ data class CarTransportDto(
     override val startDate: LocalDate,
     override val endDate: LocalDate,
     override val link: String,
-    override val transportTypeJson: Int,
     val distanceInKm: Long
-): TransportDto
+): TransportDto {
+    override val transportTypeJson: Int = 2
+}
 
 data class UserTransportDto(
     override val transportId: Long,
@@ -52,8 +54,9 @@ data class UserTransportDto(
     override val startDate: LocalDate,
     override val endDate: LocalDate,
     override val link: String,
-    override val transportTypeJson: Int,
     val meanOfTransport: String,
     val description: String?,
     val meetingTime: LocalDateTime
-): TransportDto
+): TransportDto {
+    override val transportTypeJson: Int = 3
+}

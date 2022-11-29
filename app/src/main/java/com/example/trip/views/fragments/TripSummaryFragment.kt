@@ -150,7 +150,7 @@ class TripSummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBi
             ImageViewCompat.setImageTintList(binding.buttonVote, ColorStateList.valueOf(resources.getColor(R.color.grey400, null)))
             textDescription.text = accommodation.description
 
-            Glide.with(this@TripSummaryFragment).load(accommodation.imageUrl).centerCrop().into(binding.imageAccommodation)
+            Glide.with(this@TripSummaryFragment).load(accommodation.imageUrl).placeholder(R.drawable.ic_baseline_downloading_24).error(R.drawable.ic_baseline_question_mark_24).centerCrop().into(binding.imageAccommodation)
 
             buttonLink.setOnClickListener {
                 val intent = Intent(

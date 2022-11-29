@@ -10,8 +10,8 @@ data class Attraction(
     val name: String,
     val address: String,
     var description: String?,
-    val imageUrl: String,
-    val imageReference: String,
+    val imageUrl: String?,
+    val imageReference: String?,
     val link: String,
     val distanceToNext: Double?,
     var isExpanded: Boolean = false

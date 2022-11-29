@@ -39,6 +39,7 @@
     <string name="text_dash">-</string>
     <string name="format_dash">%1$s - %2$s</string>
     <string name="format_time">%1$dh %2$dmin</string>
+    <string name="format_space">%1$s %2$s</string>
     <string name="format_days">%1$d days</string>
     <string name="text_my_dates">My dates</string>
     <string name="format_date">%1$d.%2$d.%3$d</string>
@@ -83,7 +84,7 @@
     <string name="text_name">Name</string>
     <string name="text_date">Date</string>
     <string name="text_first_name">First name</string>
-    <string name="text_last_name">Last name</string>
+    <string name="text_surname">Surname</string>
     <string name="text_birthday">Birthday</string>
     <string name="text_full_name">Full name</string>
     <string name="text_invite">Invite</string>
@@ -136,6 +137,7 @@
     <string name="text_register_successful">Register successful. Logging in…</string>
     <string name="text_you_need_to_choose_at_least_one_contributor">You need to choose at least one contributor!</string>
     <string name="text_error_multiple">This fields cannot be empty!</string>
+    <string name="text_error_phone">Enter a valid 9 digit phone number!</string>
     <string name="text_error_not_same">Passwords do not match!</string>
     <string name="text_no_accommodations">No accommodations added yet!</string>
     <string name="text_no_attractions">No attractions added yet!</string>

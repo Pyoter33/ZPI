@@ -3,13 +3,15 @@ package com.example.trip.di
 import android.content.Context
 import android.content.pm.PackageManager
 import com.example.trip.Constants
+import com.example.trip.dto.AirTransportDto
+import com.example.trip.dto.CarTransportDto
+import com.example.trip.dto.TransportDto
+import com.example.trip.dto.UserTransportDto
 import com.example.trip.service.*
-import com.example.trip.utils.moshi.BigDecimalAdapter
-import com.example.trip.utils.moshi.CurrencyAdapter
-import com.example.trip.utils.moshi.LocalDateAdapter
-import com.example.trip.utils.moshi.LocalDateTimeAdapter
+import com.example.trip.utils.moshi.*
 import com.google.maps.GeoApiContext
 import com.squareup.moshi.Moshi
+import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -48,11 +50,18 @@ object AppModule {
     @Singleton
     @Provides
     fun provideMoshi(): Moshi {
+        val transportFactory = PolymorphicJsonAdapterFactory.of(TransportDto::class.java, "transportTypeJson")
+            .withSubtype(AirTransportDto::class.java, 1.toString())
+            .withSubtype(CarTransportDto::class.java, 2.toString())
+            .withSubtype(UserTransportDto::class.java, 3.toString())
+
         return Moshi.Builder()
             .add(LocalDateAdapter())
             .add(CurrencyAdapter())
             .add(BigDecimalAdapter())
             .add(LocalDateTimeAdapter())
+            .add(DurationAdapter())
+            .add(transportFactory)
             .addLast(KotlinJsonAdapterFactory())
             .build()
     }
@@ -122,6 +131,12 @@ object AppModule {
     @Singleton
     fun provideFinanceService(retrofit: Retrofit): FinanceService {
         return retrofit.create(FinanceService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTransportService(retrofit: Retrofit): TransportService {
+        return retrofit.create(TransportService::class.java)
     }
 
 }

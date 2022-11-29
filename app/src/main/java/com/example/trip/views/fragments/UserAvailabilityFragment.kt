@@ -18,6 +18,8 @@ import com.example.trip.models.Resource
 import com.example.trip.utils.*
 import com.example.trip.viewmodels.availability.AvailabilityViewModel
 import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.CompositeDateValidator
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.kizitonwose.calendarview.utils.yearMonth
@@ -30,7 +32,8 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvailabilityBinding>(), DatesClickListener {
+class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvailabilityBinding>(),
+    DatesClickListener {
 
     private val viewModel: AvailabilityViewModel by hiltNavGraphViewModels(R.id.availability)
 
@@ -183,7 +186,11 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
     }
 
     private fun setAndShowCalendar() {
-        val calendarConstraints = CalendarConstraints.Builder().setValidator(dateValidator).build()
+        val dateValidatorForward = DateValidatorPointForward.now()
+        val listValidators = listOf(dateValidatorForward, dateValidator)
+        val validators = CompositeDateValidator.allOf(listValidators)
+
+        val calendarConstraints = CalendarConstraints.Builder().setValidator(validators).build()
         val calendar =
             MaterialDatePicker.Builder.dateRangePicker().setCalendarConstraints(calendarConstraints)
                 .setTheme(R.style.ThemeOverlay_App_DatePicker).build()
@@ -205,7 +212,8 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
     private fun addDates(startDate: Long, endDate: Long) {
         binding.layoutLoading.setVisible()
         lifecycleScope.launch {
-            when (viewModel.postAvailabilityAsync(startDate.toLocalDate(), endDate.toLocalDate()).await()) {
+            when (viewModel.postAvailabilityAsync(startDate.toLocalDate(), endDate.toLocalDate())
+                .await()) {
                 is Resource.Success -> {
                     binding.layoutLoading.setGone()
                     viewModel.refreshAvailability()

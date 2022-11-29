@@ -31,11 +31,14 @@ import com.example.trip.views.dialogs.summary.DeleteAcceptedAccommodationDialog
 import com.example.trip.views.dialogs.summary.DeleteAcceptedAvailabilityDialog
 import com.gkemon.XMLtoPDF.PdfGenerator
 import com.gkemon.XMLtoPDF.PdfGeneratorListener
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBinding>(),
@@ -177,8 +180,9 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
     }
 
     private fun setAndShowCalendar() {
+        val calendarConstraints = CalendarConstraints.Builder().setValidator(DateValidatorPointForward.now()).build()
         val calendar =
-            MaterialDatePicker.Builder.dateRangePicker()
+            MaterialDatePicker.Builder.dateRangePicker().setCalendarConstraints(calendarConstraints)
                 .setTheme(R.style.ThemeOverlay_App_DatePicker).build()
 
         calendar.addOnPositiveButtonClickListener {
@@ -285,7 +289,7 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
             textPrice.text = accommodation.price.toStringFormat(args.currency)
             textDescription.text = accommodation.description
 
-            Glide.with(this@SummaryFragment).load(accommodation.imageUrl).centerCrop()
+            Glide.with(this@SummaryFragment).load(accommodation.imageUrl).placeholder(R.drawable.ic_baseline_downloading_24).error(R.drawable.ic_baseline_question_mark_24).centerCrop()
                 .into(binding.imageAccommodation)
 
             buttonLink.setOnClickListener {
@@ -353,14 +357,18 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
 
         with(pdfBinding) {
             editTextDate.text = binding.editTextDate.text
-            textName.text = binding.textName.text
-            textAddress.text = binding.textAddress.text
-            textVotes.text = binding.textVotes.text
-            textPrice.text = binding.textPrice.text
-            textParticipantsNo.text = binding.textParticipantsNo.text
-            imageAccommodation.setImageDrawable(binding.imageAccommodation.drawable)
-            textDescription.text = binding.textDescription.text
-            listParticipants.adapter = adapter
+            if(binding.cardAccommodation.isVisible) {
+                textName.text = binding.textName.text
+                textAddress.text = binding.textAddress.text
+                textVotes.text = binding.textVotes.text
+                textPrice.text = binding.textPrice.text
+                textParticipantsNo.text = binding.textParticipantsNo.text
+                imageAccommodation.setImageDrawable(binding.imageAccommodation.drawable)
+                textDescription.text = binding.textDescription.text
+                listParticipants.adapter = adapter
+            } else {
+                cardAccommodation.setGone()
+            }
         }
 
         PdfGenerator.getBuilder()

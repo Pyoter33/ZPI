@@ -4,7 +4,7 @@ import com.example.trip.dto.ExpensePostDto
 import com.example.trip.models.Resource
 import com.example.trip.repositories.FinancesRepository
 import retrofit2.HttpException
-import java.net.ConnectException
+
 import javax.inject.Inject
 
 class PostExpenseUseCase @Inject constructor(private val financesRepository: FinancesRepository) {
@@ -16,7 +16,7 @@ class PostExpenseUseCase @Inject constructor(private val financesRepository: Fin
         } catch (e: HttpException) {
             e.printStackTrace()
             Resource.Failure(e.code())
-        } catch (e: ConnectException) {
+        } catch (e: Exception) {
             e.printStackTrace()
             Resource.Failure(0)
         }

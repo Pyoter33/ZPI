@@ -8,7 +8,7 @@ data class AttractionDto(
     val openingHours: String?,
     val address: String,
     val attractionLink: String,
-    val photoLink: String,
+    val photoLink: String?,
     val latitude: Double,
     val longitude: Double
 )

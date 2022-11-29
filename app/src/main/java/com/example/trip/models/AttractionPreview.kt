@@ -10,7 +10,7 @@ data class AttractionPreview(
     val latitude: Double,
     val longitude: Double,
     val placeId: String,
-    val imageUrl: String,
-    val imageReference: String,
+    val imageUrl: String?,
+    val imageReference: String?,
     val link: String
 ): Parcelable

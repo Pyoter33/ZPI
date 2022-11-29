@@ -57,7 +57,7 @@ class AttractionListAdapter @Inject constructor() :
                     imageLine.setInvisible()
                 }
 
-                Glide.with(itemView).load(attraction.imageUrl).centerCrop()
+                Glide.with(itemView).load(attraction.imageUrl).placeholder(R.drawable.ic_baseline_downloading_24).error(R.drawable.ic_baseline_question_mark_24).centerCrop()
                     .into(binding.imageAttraction)
 
                 if (attraction.description.isNullOrEmpty()) {

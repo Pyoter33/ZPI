@@ -4,7 +4,7 @@ import com.example.trip.dto.RegisterRequestDto
 import com.example.trip.models.Resource
 import com.example.trip.repositories.AuthRepository
 import retrofit2.HttpException
-import java.net.ConnectException
+
 import javax.inject.Inject
 
 class RegisterUseCase @Inject constructor(private val authRepository: AuthRepository) {
@@ -16,7 +16,7 @@ class RegisterUseCase @Inject constructor(private val authRepository: AuthReposi
         } catch (e: HttpException) {
             e.printStackTrace()
             Resource.Failure(e.code())
-        } catch (e: ConnectException) {
+        } catch (e: Exception) {
             e.printStackTrace()
             Resource.Failure(0)
         }

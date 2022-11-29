@@ -20,7 +20,8 @@ class RegisterViewModel @Inject constructor(private val registerUseCase: Registe
     ViewModel() {
 
     var email: String? = null
-    var fullName: String? = null
+    var firstName: String? = null
+    var surname: String? = null
     var code: String? = null
     var phone: String? = null
     var birthday: LocalDate? = null
@@ -29,15 +30,13 @@ class RegisterViewModel @Inject constructor(private val registerUseCase: Registe
 
     fun postRegisterAsync(): Deferred<Resource<Unit>> {
         val deferred = viewModelScope.async(Dispatchers.IO) {
-            val firstName = fullName!!.split(' ')[0]
-            val surname = fullName!!.substringAfter(' ')
             registerUseCase(
                 RegisterRequestDto(
                     email!!,
                     "+$code $phone",
                     password!!,
-                    firstName,
-                    surname,
+                    firstName!!,
+                    surname!!,
                     birthday!!
                 )
             )

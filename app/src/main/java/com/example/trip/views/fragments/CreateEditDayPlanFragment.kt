@@ -154,6 +154,17 @@ class CreateEditDayPlanFragment @Inject constructor() :
     }
 
     private fun setAndShowCalendar() {
+//        val dateValidatorMin: CalendarConstraints.DateValidator =
+//            DateValidatorPointForward.from(min.getTimeInMillis())
+//        val dateValidatorMax: CalendarConstraints.DateValidator =
+//            DateValidatorPointBackward.before(max.getTimeInMillis())
+//
+//        val listValidators = ArrayList<CalendarConstraints.DateValidator>()
+//        listValidators.add(dateValidatorMin)
+//        listValidators.add(dateValidatorMax)
+//        val validators = CompositeDateValidator.allOf(listValidators)
+//        constraintsBuilderRange.setValidator(validators)
+
         val calendar =
             MaterialDatePicker.Builder.datePicker()
                 .setTheme(R.style.ThemeOverlay_App_DatePicker).build()

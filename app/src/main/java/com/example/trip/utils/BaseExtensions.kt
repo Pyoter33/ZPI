@@ -191,6 +191,10 @@ fun String.formatPhone(): String {
         //accommodation in summary pdf
         //block dates in day plan and availability
         //first and last name
+        //too long name in balances
+        //animations
+        //user edit
+        //leave group
         )
     }"
 }

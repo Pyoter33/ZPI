@@ -3,7 +3,7 @@ package com.example.trip.usecases.participants
 import com.example.trip.models.Resource
 import com.example.trip.repositories.ParticipantsRepository
 import retrofit2.HttpException
-import java.net.ConnectException
+
 import javax.inject.Inject
 
 class DeleteParticipantsUseCase @Inject constructor(private val participantsRepository: ParticipantsRepository) {
@@ -15,7 +15,7 @@ class DeleteParticipantsUseCase @Inject constructor(private val participantsRepo
         } catch (e: HttpException) {
             e.printStackTrace()
             Resource.Failure(e.code())
-        } catch (e: ConnectException) {
+        } catch (e: Exception) {
             e.printStackTrace()
             Resource.Failure(0)
         }

@@ -16,6 +16,8 @@ import com.example.trip.databinding.FragmentRegisterBinding
 import com.example.trip.models.Resource
 import com.example.trip.utils.*
 import com.example.trip.viewmodels.auth.RegisterViewModel
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -44,6 +46,7 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
         setupOnDateTextChangeListener()
         setupOnPhoneTextChangeListener()
         setupOnCodeTextChangeListener()
+        setupOnSurnameTextChangeListener()
         setupOnEmailTextChangeListener()
         setupOnPasswordTextChangeListener()
         onSignInClick()
@@ -75,7 +78,7 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun afterTextChanged(editable: Editable?) {
-                viewModel.fullName = editable?.toString()
+                viewModel.firstName = editable?.toString()
                 binding.textFieldName.startIconDrawable?.setTint(
                     resources.getColor(
                         R.color.primary,
@@ -83,6 +86,25 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
                     )
                 )
                 binding.textFieldName.error = null
+            }
+        })
+    }
+
+    private fun setupOnSurnameTextChangeListener() {
+        binding.textFieldSurname.editText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun afterTextChanged(editable: Editable?) {
+                viewModel.surname = editable?.toString()
+                binding.textFieldSurname.startIconDrawable?.setTint(
+                    resources.getColor(
+                        R.color.primary,
+                        null
+                    )
+                )
+                binding.textFieldSurname.error = null
             }
         })
     }
@@ -165,8 +187,10 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
 
     private fun setAndShowCalendar() {
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        val calendarConstraints = CalendarConstraints.Builder().setValidator(
+            DateValidatorPointBackward.now()).build()
         val calendar =
-            MaterialDatePicker.Builder.datePicker()
+            MaterialDatePicker.Builder.datePicker().setCalendarConstraints(calendarConstraints)
                 .setTheme(R.style.ThemeOverlay_App_DatePicker).build()
 
         calendar.addOnPositiveButtonClickListener {
@@ -237,7 +261,6 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
         }
     }
 
-
     private fun isSubmitNotPermitted(): Boolean {
         var showError = false
 
@@ -247,7 +270,12 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
                 textFieldEmail.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
             }
-            if(viewModel.fullName.isNullOrEmpty()) {
+            if(viewModel.firstName.isNullOrEmpty()) {
+                textFieldName.error = getString(R.string.text_text_empty)
+                textFieldName.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
+                showError = true
+            }
+            if(viewModel.surname.isNullOrEmpty()) {
                 textFieldName.error = getString(R.string.text_text_empty)
                 textFieldName.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
@@ -257,7 +285,12 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
                 showError = true
             }
             if(viewModel.phone.isNullOrEmpty()) {
-                textError.setVisible()
+                textError.text = getString(R.string.text_error_multiple)
+                textFieldPhone.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
+                showError = true
+            }
+            if (viewModel.phone?.length != 9) {
+                textError.text = getString(R.string.text_error_phone)
                 textFieldPhone.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
             }

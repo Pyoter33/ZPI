@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.trip.R
 import com.example.trip.databinding.ItemAccommodationBinding
 import com.example.trip.models.Accommodation
 import com.example.trip.utils.setGone
@@ -56,7 +57,7 @@ class AccommodationListAdapter @Inject constructor() :
 
                 buttonVote.isSelected = accommodation.isVoted
 
-                Glide.with(itemView).load(accommodation.imageUrl).centerCrop().into(binding.imageAccommodation)
+                Glide.with(itemView).load(accommodation.imageUrl).placeholder(R.drawable.ic_baseline_downloading_24).error(R.drawable.ic_baseline_question_mark_24).centerCrop().into(binding.imageAccommodation)
 
                 if (accommodation.description.isNullOrEmpty()) {
                     buttonExpand.setGone()

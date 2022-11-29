@@ -4,7 +4,7 @@ import com.example.trip.dto.AvailabilityPostDto
 import com.example.trip.models.Resource
 import com.example.trip.repositories.AvailabilityRepository
 import retrofit2.HttpException
-import java.net.ConnectException
+
 import javax.inject.Inject
 
 class PostAvailabilityUseCase @Inject constructor(private val availabilityRepository: AvailabilityRepository) {
@@ -16,7 +16,7 @@ class PostAvailabilityUseCase @Inject constructor(private val availabilityReposi
         } catch (e: HttpException) {
             e.printStackTrace()
             Resource.Failure(e.code())
-        } catch (e: ConnectException) {
+        } catch (e: Exception) {
             e.printStackTrace()
             Resource.Failure(0)
         }

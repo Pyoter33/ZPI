@@ -3,7 +3,7 @@ package com.example.trip.usecases.summary
 import com.example.trip.models.Resource
 import com.example.trip.repositories.AvailabilityRepository
 import retrofit2.HttpException
-import java.net.ConnectException
+
 import javax.inject.Inject
 
 class DeleteAcceptedAvailabilityUseCase @Inject constructor(private val availabilityRepository: AvailabilityRepository) {
@@ -15,7 +15,7 @@ class DeleteAcceptedAvailabilityUseCase @Inject constructor(private val availabi
         } catch (e: HttpException) {
             e.printStackTrace()
             Resource.Failure(e.code())
-        } catch (e: ConnectException) {
+        } catch (e: Exception) {
             e.printStackTrace()
             Resource.Failure(0)
         }

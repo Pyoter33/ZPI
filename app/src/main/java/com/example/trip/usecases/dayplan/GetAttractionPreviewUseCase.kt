@@ -46,8 +46,8 @@ class GetAttractionPreviewUseCase @Inject constructor(
             )
         })
 
-    private fun getPhotoUrl(reference: String): String {
-        return "https://maps.googleapis.com/maps/api/place/photo?maxwidth=300&photo_reference=$reference&key=$apiKey"
+    private fun getPhotoUrl(reference: String?): String? {
+        return reference?.let { "https://maps.googleapis.com/maps/api/place/photo?maxwidth=300&photo_reference=$reference&key=$apiKey" }
     }
 
 }

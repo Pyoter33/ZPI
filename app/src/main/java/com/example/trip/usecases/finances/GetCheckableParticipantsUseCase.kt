@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onStart
 import retrofit2.HttpException
 import java.math.BigDecimal
-import java.net.ConnectException
+
 import javax.inject.Inject
 
 class GetCheckableParticipantsUseCase @Inject constructor(
@@ -25,7 +25,7 @@ class GetCheckableParticipantsUseCase @Inject constructor(
         } catch (e: HttpException) {
             e.printStackTrace()
             flowOf(Resource.Failure())
-        } catch (e: ConnectException) {
+        } catch (e: Exception) {
             e.printStackTrace()
             flowOf(Resource.Failure(0))
         }.onStart {

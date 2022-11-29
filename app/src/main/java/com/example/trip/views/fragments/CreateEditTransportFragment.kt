@@ -19,6 +19,8 @@ import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
 import com.example.trip.utils.toLocalDate
 import com.example.trip.viewmodels.transport.CreateEditTransportViewModel
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import dagger.hilt.android.AndroidEntryPoint
@@ -204,8 +206,10 @@ class CreateEditTransportFragment @Inject constructor() : BaseFragment<FragmentC
     }
 
     private fun setAndShowCalendar() {
+        val calendarConstraints = CalendarConstraints.Builder().setValidator(
+            DateValidatorPointForward.now()).build()
         val calendar =
-            MaterialDatePicker.Builder.datePicker()
+            MaterialDatePicker.Builder.datePicker().setCalendarConstraints(calendarConstraints)
                 .setTheme(R.style.ThemeOverlay_App_DatePicker).build()
 
         calendar.addOnPositiveButtonClickListener {
