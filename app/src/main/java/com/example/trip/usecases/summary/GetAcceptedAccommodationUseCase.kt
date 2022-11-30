@@ -28,7 +28,7 @@ class GetAcceptedAccommodationUseCase @Inject constructor(private val accommodat
         val accommodationId = groupsRepository.getGroup(groupId).selectedAccommodationId
 
         return Resource.Success(accommodationId?.let {
-            val result = accommodationsRepository.getAcceptedAccommodation(it)
+            val result = accommodationsRepository.getAccommodation(it)
                 Accommodation(
                     result.accommodationId,
                     result.groupId,

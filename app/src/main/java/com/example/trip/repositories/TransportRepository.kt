@@ -1,10 +1,11 @@
 package com.example.trip.repositories
 
 import com.example.trip.dto.TransportDto
+import com.example.trip.dto.UserTransportPostDto
 import com.example.trip.models.Resource
-import com.example.trip.models.UserTransport
 import com.example.trip.service.TransportService
 import com.example.trip.utils.toBodyOrError
+import com.example.trip.utils.toNullableBodyOrError
 import com.google.maps.DirectionsApi
 import com.google.maps.GeoApiContext
 import com.google.maps.model.DirectionsResult
@@ -16,16 +17,16 @@ class TransportRepository @Inject constructor(private val geoApiContext: GeoApiC
         return transportService.getTransport(accommodationId).toBodyOrError()
     }
 
-    suspend fun postUserTransport(userTransport: UserTransport): Resource<Unit> {
-        return Resource.Failure()
+    suspend fun postUserTransport(accommodationId:Long, userTransport: UserTransportPostDto) {
+        transportService.postUserTransport(accommodationId, userTransport).toNullableBodyOrError()
     }
 
-    suspend fun updateUserTransport(userTransport: UserTransport): Resource<Unit> {
-        return Resource.Failure()
+    suspend fun updateUserTransport(transportId: Long, userTransport: UserTransportPostDto) {
+        transportService.updateUserTransport(transportId, userTransport).toNullableBodyOrError()
     }
 
-    suspend fun deleteUserTransport(id: Long): Resource<Unit> {
-        return Resource.Failure()
+    suspend fun deleteUserTransport(accommodationId: Long, transportId: Long) {
+        transportService.deleteUserTransport(accommodationId, transportId)
     }
 
     suspend fun getRoute(

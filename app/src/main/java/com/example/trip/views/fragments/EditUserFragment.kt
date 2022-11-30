@@ -46,7 +46,7 @@ class EditUserFragment @Inject constructor(): BaseFragment<FragmentEditUserBindi
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun afterTextChanged(editable: Editable?) {
-                viewModel.fullName = editable?.toString()
+                viewModel.firstName = editable?.toString()
                 binding.textFieldName.startIconDrawable?.setTint(
                     resources.getColor(
                         R.color.primary,
@@ -54,6 +54,25 @@ class EditUserFragment @Inject constructor(): BaseFragment<FragmentEditUserBindi
                     )
                 )
                 binding.textFieldName.error = null
+            }
+        })
+    }
+
+    private fun setupOnSurnameTextChangeListener() {
+        binding.textFieldSurname.editText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun afterTextChanged(editable: Editable?) {
+                viewModel.surname = editable?.toString()
+                binding.textFieldSurname.startIconDrawable?.setTint(
+                    resources.getColor(
+                        R.color.primary,
+                        null
+                    )
+                )
+                binding.textFieldSurname.error = null
             }
         })
     }

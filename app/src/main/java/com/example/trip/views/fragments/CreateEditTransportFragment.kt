@@ -14,10 +14,7 @@ import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.databinding.FragmentCreateEditTransportBinding
 import com.example.trip.models.Resource
-import com.example.trip.utils.onBackArrowClick
-import com.example.trip.utils.setGone
-import com.example.trip.utils.setVisible
-import com.example.trip.utils.toLocalDate
+import com.example.trip.utils.*
 import com.example.trip.viewmodels.transport.CreateEditTransportViewModel
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
@@ -297,7 +294,7 @@ class CreateEditTransportFragment @Inject constructor() : BaseFragment<FragmentC
             when (operation.await()) {
                 is Resource.Success -> {
                     disableLoading()
-                    findNavController().popBackStack()
+                    findNavController().popBackStackWithRefresh()
                 }
                 is Resource.Loading -> {
                 }

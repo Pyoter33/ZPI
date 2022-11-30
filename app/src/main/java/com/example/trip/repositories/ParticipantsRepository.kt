@@ -15,6 +15,10 @@ class ParticipantsRepository @Inject constructor(private val tripGroupService: T
         return result.headers()[Constants.LOCATION_KEY] ?: throw HttpException(result)
     }
 
+    suspend fun updateParticipant(userDto: UserDto) {
+        tripGroupService.updateUser(userDto).toNullableBodyOrError()
+    }
+
     suspend fun getParticipantsForGroup(groupId: Long): List<UserDto> {
         return tripGroupService.getParticipants(groupId).toBodyOrError()
     }

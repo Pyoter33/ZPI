@@ -10,7 +10,7 @@ interface AccommodationService {
     suspend fun getAccommodationsList(@Query("groupId") groupId: Long): Response<List<AccommodationDto>>
 
     @GET("accommodation")
-    suspend fun getAcceptedAccommodation(@Query("accommodationId") accommodationId: Long): Response<AccommodationDto>
+    suspend fun getAccommodation(@Query("accommodationId") accommodationId: Long): Response<AccommodationDto>
 
     @POST("accommodation")
     suspend fun postAccommodation(@Body accommodationPostDto: AccommodationPostDto): Response<Void>

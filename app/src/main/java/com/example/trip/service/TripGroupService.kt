@@ -34,7 +34,6 @@ interface TripGroupService {
         @Path("userId") userId: Long
     ): Response<List<UserGroupDto>>
 
-
     @POST("trip-group/group")
     suspend fun postGroup(
         @Body tripGroupPostDto: TripGroupPostDto
@@ -55,6 +54,16 @@ interface TripGroupService {
     suspend fun getParticipants(
         @Query("groupId") groupId: Long
     ): Response<List<UserDto>>
+
+    @GET("user")
+    suspend fun getUser(
+        @Query("userId") userId: Long
+    ): Response<UserDto>
+
+    @PATCH("user")
+    suspend fun updateUser(
+        @Query("appUser") appUser: UserDto
+    ): Response<Void>
 
     @DELETE("trip-group/user")
     suspend fun deleteParticipant(

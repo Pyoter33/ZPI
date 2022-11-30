@@ -115,10 +115,4 @@ class FinancesFragment @Inject constructor() : BaseFragment<FragmentFinancesBind
             }
         }.attach()
     }
-
-    companion object {
-        private const val PLACEHOLDER_USERID = 1L
-        private const val GROUP_ID_ARG = "groupId"
-    }
-
 }

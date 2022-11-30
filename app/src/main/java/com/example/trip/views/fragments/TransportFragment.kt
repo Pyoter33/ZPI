@@ -67,6 +67,7 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
         onAddClick()
         setAdapter()
         createMap()
+        refreshIfNewData { viewModel.refreshData() }
     }
 
     private fun setHeader() {

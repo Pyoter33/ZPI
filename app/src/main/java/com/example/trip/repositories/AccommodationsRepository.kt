@@ -14,8 +14,8 @@ class AccommodationsRepository @Inject constructor(private val accommodationServ
         return accommodationService.getAccommodationsList(groupId).toBodyOrError()
     }
 
-    suspend fun getAcceptedAccommodation(accommodationId: Long): AccommodationDto {
-        return accommodationService.getAcceptedAccommodation(accommodationId).toBodyOrError()
+    suspend fun getAccommodation(accommodationId: Long): AccommodationDto {
+        return accommodationService.getAccommodation(accommodationId).toBodyOrError()
     }
 
     suspend fun postAccommodation(accommodationDto: AccommodationPostDto) {

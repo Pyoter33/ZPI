@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trip.Constants
+import com.example.trip.dto.UserTransportPostDto
 import com.example.trip.models.Resource
 import com.example.trip.models.UserTransport
 import com.example.trip.usecases.transport.PostTransportUseCase
@@ -15,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import java.math.BigDecimal
 import java.time.Duration
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,26 +44,22 @@ class CreateEditTransportViewModel @Inject constructor(
 
     fun postTransportAsync(): Deferred<Resource<Unit>> {
         val deferred = viewModelScope.async(Dispatchers.IO) {
-
-            groupId?.let { groupId ->
                 accommodationId?.let { accommodationId ->
-                    val transport = UserTransport(
-                        0,
-                        groupId,
-                        accommodationId,
-                        meansOfTransport!!.split(','),
+                    val transport = UserTransportPostDto(
                         Duration.ofHours(durationHours!!.toLong())
                             .plusMinutes(durationMinutes!!.toLong()),
-                        meetingDate!!,
-                        meetingTime!!,
                         BigDecimal.valueOf(price!!.toDouble()),
                         meetingLocation!!,
                         destination!!,
-                        description
+                        meetingDate!!,
+                        meetingDate!!,
+                        meansOfTransport!!,
+                       description,
+                        LocalDateTime.of(meetingDate!!, meetingTime!!),
+                        ""
                     )
-                    postTransportUseCase(transport)
+                    postTransportUseCase(accommodationId, transport)
                 } ?: Resource.Failure()
-            } ?: Resource.Failure()
         }
         return deferred
     }
@@ -69,22 +67,20 @@ class CreateEditTransportViewModel @Inject constructor(
     fun updateTransportAsync(): Deferred<Resource<Unit>> {
         val deferred = viewModelScope.async(Dispatchers.IO) {
             userTransportToUpdate?.let {
-                updateTransportUseCase(
-                    UserTransport(
-                        it.id,
-                        it.groupId,
-                        it.accommodationId,
-                        meansOfTransport!!.split(','),
-                        Duration.ofHours(durationHours!!.toLong())
-                            .plusMinutes(durationMinutes!!.toLong()),
-                        meetingDate!!,
-                        meetingTime!!,
-                        BigDecimal.valueOf(price!!.toDouble()),
-                        meetingLocation!!,
-                        destination!!,
-                        description
-                    )
+                val transport = UserTransportPostDto(
+                    Duration.ofHours(durationHours!!.toLong())
+                        .plusMinutes(durationMinutes!!.toLong()),
+                    BigDecimal.valueOf(price!!.toDouble()),
+                    meetingLocation!!,
+                    destination!!,
+                    meetingDate!!,
+                    meetingDate!!,
+                    meansOfTransport!!,
+                    description,
+                    LocalDateTime.of(meetingDate!!, meetingTime!!),
+                    ""
                 )
+                updateTransportUseCase(it.id, transport)
             } ?: Resource.Failure()
         }
         return deferred
