@@ -11,6 +11,7 @@ import com.example.trip.databinding.ItemGroupBinding
 import com.example.trip.models.Group
 import com.example.trip.models.GroupStatus
 import com.example.trip.utils.setGone
+import java.time.LocalDate
 import javax.inject.Inject
 
 
@@ -43,9 +44,9 @@ class GroupsListAdapter @Inject constructor() :
                     itemView.resources.getString(R.string.text_from, group.startCity)
                 textParticipants.text = group.participantsNo.toString()
                 textStatus.text =
-                    when (group.groupStatus) {
-                        GroupStatus.PLANNING -> itemView.resources.getString(GroupStatus.PLANNING.resourceId)
-                        GroupStatus.ONGOING -> itemView.resources.getString(GroupStatus.ONGOING.resourceId)
+                    when {
+                        group.groupStatus == GroupStatus.PLANNING -> itemView.resources.getString(GroupStatus.PLANNING.resourceId)
+                        group.groupStatus ==  GroupStatus.ONGOING && group.endDate?.isAfter(LocalDate.now()) == false -> itemView.resources.getString(GroupStatus.ONGOING.resourceId)
                         else -> itemView.resources.getString(GroupStatus.FINISHED.resourceId)
                     }
                 if (group.description == null) {

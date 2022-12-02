@@ -26,17 +26,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
         <androidx.cardview.widget.CardView
             style="@style/CardWhite"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintHeight_max="0dp"
+            app:layout_constrainedHeight="true"
             android:layout_marginHorizontal="@dimen/marginM"
             android:layout_marginBottom="@dimen/marginL"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_back">
+            app:layout_constraintTop_toBottomOf="@+id/button_back"
+            app:layout_constraintVertical_bias="0.0">
 
             <ScrollView
                 android:id="@+id/scrollView"
@@ -53,7 +55,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/marginL"
-                        android:text="Transport"
+                        android:text="@string/text_transport"
                         android:textColor="@color/primary"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -114,8 +116,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/marginS"
-                        android:layout_marginEnd="@dimen/marginL"
                         android:layout_marginTop="@dimen/marginM"
+                        android:layout_marginEnd="@dimen/marginL"
                         android:ellipsize="end"
                         android:maxLines="2"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -130,8 +132,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/marginS"
-                        android:layout_marginEnd="@dimen/marginL"
                         android:layout_marginTop="@dimen/marginXXXXL"
+                        android:layout_marginEnd="@dimen/marginL"
                         android:ellipsize="end"
                         android:maxLines="2"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -188,8 +190,8 @@
                                                 style="@style/TextBigger"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginTop="@dimen/marginXL"
                                                 android:layout_marginHorizontal="@dimen/marginM"
+                                                android:layout_marginTop="@dimen/marginXL"
                                                 android:text="Car"
                                                 android:textColor="@color/primary"
                                                 app:layout_constraintStart_toStartOf="parent"
@@ -424,9 +426,9 @@
                                         style="@style/TextSmall"
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginBottom="@dimen/marginXXXL"
                                         android:text="total:"
                                         android:textColor="@color/grey600"
-                                        android:layout_marginBottom="@dimen/marginXXXL"
                                         app:layout_constraintBottom_toBottomOf="parent"
                                         app:layout_constraintStart_toStartOf="@+id/text_label_duration_to_air_port"
                                         app:layout_constraintTop_toBottomOf="@+id/text_label_duration_from_airport" />
@@ -472,7 +474,8 @@
                                 android:id="@+id/list_transports"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginVertical="@dimen/marginS"
+                                android:layout_marginTop="@dimen/marginS"
+                                android:layout_marginBottom="@dimen/marginL"
                                 android:nestedScrollingEnabled="false"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"

@@ -14,6 +14,7 @@
             style="@style/TextBig"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="end"
             android:layout_marginHorizontal="@dimen/marginL"
             android:layout_marginVertical="@dimen/marginXL"
             android:ellipsize="end"
@@ -22,6 +23,7 @@
             android:textColor="@color/grey900"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/indicator"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Dorian Olisadebe" />
 

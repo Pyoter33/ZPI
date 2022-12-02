@@ -7,6 +7,7 @@ import com.example.trip.models.DayPlan
 import com.example.trip.models.Resource
 import com.example.trip.usecases.dayplan.DeleteAttractionUseCase
 import com.example.trip.usecases.dayplan.GetAttractionsUseCase
+import com.example.trip.usecases.dayplan.UpdateStartingPointUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
@@ -17,6 +18,7 @@ import javax.inject.Inject
 class AttractionsViewModel @Inject constructor(
     private val getAttractionsUseCase: GetAttractionsUseCase,
     private val deleteAttractionUseCase: DeleteAttractionUseCase,
+    private val updateStartingPointUseCase: UpdateStartingPointUseCase,
     state: SavedStateHandle
 ) : ViewModel() {
 
@@ -54,6 +56,14 @@ class AttractionsViewModel @Inject constructor(
         return viewModelScope.async {
             dayPlan?.let {
                 deleteAttractionUseCase(attractionId, it.id)
+            } ?: Resource.Failure()
+        }
+    }
+
+    fun updateStartingPointAsync(attractionId: Long): Deferred<Resource<Unit>> {
+        return viewModelScope.async {
+            dayPlan?.let {
+                updateStartingPointUseCase(it.id, attractionId)
             } ?: Resource.Failure()
         }
     }

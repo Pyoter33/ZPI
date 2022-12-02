@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,19 +26,19 @@ import com.example.trip.viewmodels.transport.TransportViewModel
 import com.example.trip.views.dialogs.MenuPopupFactory
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.maps.android.ktx.awaitMap
 import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBinding>(),
-    OnMapReadyCallback,
     UserTransportClickListener {
 
     private val viewModel: TransportViewModel by viewModels()
@@ -53,6 +54,9 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
 
     @Inject
     lateinit var flightsPagerAdapter: FlightsPagerAdapter
+
+    @Inject
+    lateinit var preferencesHelper: SharedPreferencesHelper
 
     override fun prepareBinding(
         inflater: LayoutInflater,
@@ -74,16 +78,26 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
         with(binding) {
             textStartLocation.text = args.startCity
             textDestination.text = args.destination
+            if(!canEdit()) binding.buttonAdd.setInvisible()
         }
+    }
+
+    private fun canEdit(): Boolean {
+        val userId = preferencesHelper.getUserId()
+        return userId in args.coordinators || userId == args.accommodationCreatorId
     }
 
     private fun createMap() {
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.mapView) as SupportMapFragmentWrapper
 
-        mapFragment.getMapAsync(this)
-        mapFragment.setOnTouchListener {
-            binding.scrollView.requestDisallowInterceptTouchEvent(true)
+        lifecycleScope.launch {
+            googleMap = mapFragment.awaitMap()
+            mapFragment.setOnTouchListener {
+                binding.scrollView.requestDisallowInterceptTouchEvent(true)
+            }
+            observeTransport()
+            observeRoute()
         }
     }
 
@@ -178,14 +192,22 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
         val lng = latLngSplit.last()
 
         val latLng = LatLng(lat.toDouble(), lng.toDouble())
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 7f))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, getZoom(carTransport.distance)))
         viewModel.getRoute(carTransport.sourceLatLng, carTransport.destinationLatLng)
+    }
+
+    private fun getZoom(distance: Long) = when(distance / 1000) {
+        in 0..30 -> 10f
+        in 31..100 -> 8f
+        in 101..400 -> 7f
+        in 401..700 -> 6f
+        else -> 4f
     }
 
     private fun setCarTransport(carTransport: CarTransport) {
         with(binding) {
             textDistance.text = getString(
-                R.string.format_km, carTransport.distance.toFloat()
+                R.string.format_km, carTransport.distance.toFloat() / 1000
             )
             textDurationCar.text = carTransport.duration.toStringTime()
         }
@@ -193,7 +215,7 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
     }
 
     private fun hideCarTransport() {
-
+        binding.cardCar.setGone()
     }
 
     private fun setAirTransport(airTransport: AirTransport) {
@@ -217,7 +239,7 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
     }
 
     private fun hideAirTransport() {
-
+        binding.cardPlane.setGone()
     }
 
     private fun onAddClick() {
@@ -226,13 +248,15 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
                 TransportFragmentDirections.actionTransportFragmentToCreateEditTransportFragment(
                     args.groupId,
                     args.accommodationId,
-                    args.currency
+                    args.currency,
+                    args.startDate
                 )
             )
         }
     }
 
     override fun onLongClick(userTransport: UserTransport, view: View) {
+        if(!canEdit()) return
         popupMenu.apply {
             setOnPopupButtonClick(R.id.button_edit) { onMenuEditClick(userTransport) }
             setOnPopupButtonClick(R.id.button_delete) { onMenuDeleteClick(userTransport) }
@@ -247,20 +271,35 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
                 args.groupId,
                 args.accommodationId,
                 args.currency,
-                userTransport
+                args.startDate,
+                userTransport,
             )
         )
     }
 
     private fun onMenuDeleteClick(userTransport: UserTransport) {
-
-    }
-
-    //map
-    override fun onMapReady(googleMap: GoogleMap) {
-        this.googleMap = googleMap
-        observeTransport()
-        observeRoute()
+        binding.layoutLoading.setVisible()
+        lifecycleScope.launch {
+            when (viewModel.deleteTransportAsync(userTransport.id).await()) {
+                is Resource.Success -> {
+                    binding.layoutLoading.setGone()
+                    viewModel.refreshData()
+                }
+                is Resource.Failure -> {
+                    binding.layoutLoading.setGone()
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onMenuDeleteClick(userTransport)
+                    }
+                }
+                else -> {
+                    //NO-OP
+                }
+            }
+        }
     }
 
 }

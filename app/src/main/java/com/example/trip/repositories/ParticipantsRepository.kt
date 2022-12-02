@@ -1,6 +1,7 @@
 package com.example.trip.repositories
 
 import com.example.trip.Constants
+import com.example.trip.dto.AppUserDto
 import com.example.trip.dto.UserDto
 import com.example.trip.service.TripGroupService
 import com.example.trip.utils.toBodyOrError
@@ -15,8 +16,12 @@ class ParticipantsRepository @Inject constructor(private val tripGroupService: T
         return result.headers()[Constants.LOCATION_KEY] ?: throw HttpException(result)
     }
 
-    suspend fun updateParticipant(userDto: UserDto) {
-        tripGroupService.updateUser(userDto).toNullableBodyOrError()
+    suspend fun updateParticipant(appUserDto: AppUserDto) {
+        tripGroupService.updateUser(appUserDto).toNullableBodyOrError()
+    }
+
+    suspend fun getUser(userId: Long): AppUserDto {
+        return tripGroupService.getUser(userId).toBodyOrError()
     }
 
     suspend fun getParticipantsForGroup(groupId: Long): List<UserDto> {

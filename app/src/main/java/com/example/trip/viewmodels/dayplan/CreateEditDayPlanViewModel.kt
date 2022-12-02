@@ -9,6 +9,7 @@ import com.example.trip.models.DayPlan
 import com.example.trip.models.Resource
 import com.example.trip.usecases.dayplan.PostDayPlanUseCase
 import com.example.trip.usecases.dayplan.UpdateDayPlanUseCase
+import com.example.trip.usecases.summary.GetAcceptedAvailabilityUseCaseFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class CreateEditDayPlanViewModel @Inject constructor(
     private val postDayPlanUseCase: PostDayPlanUseCase,
     private val updateDayPlanUseCase: UpdateDayPlanUseCase,
+    private val getAcceptedAvailabilityUseCaseFlow: GetAcceptedAvailabilityUseCaseFlow,
     state: SavedStateHandle
 ) : ViewModel() {
 
@@ -51,5 +53,6 @@ class CreateEditDayPlanViewModel @Inject constructor(
         }
         return deferred
     }
+
 
 }

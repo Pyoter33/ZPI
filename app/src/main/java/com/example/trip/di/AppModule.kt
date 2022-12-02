@@ -11,17 +11,18 @@ import com.example.trip.service.*
 import com.example.trip.utils.moshi.*
 import com.google.maps.GeoApiContext
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.adapters.PolymorphicJsonAdapterFactory
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dev.onenowy.moshipolymorphicadapter.ValuePolymorphicAdapterFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -42,6 +43,9 @@ object AppModule {
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
 
         return OkHttpClient.Builder()
+            .connectTimeout(20, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
             .addInterceptor(headerInterceptor)
             .build()
@@ -50,10 +54,10 @@ object AppModule {
     @Singleton
     @Provides
     fun provideMoshi(): Moshi {
-        val transportFactory = PolymorphicJsonAdapterFactory.of(TransportDto::class.java, "transportTypeJson")
-            .withSubtype(AirTransportDto::class.java, 1.toString())
-            .withSubtype(CarTransportDto::class.java, 2.toString())
-            .withSubtype(UserTransportDto::class.java, 3.toString())
+        val transportFactory = ValuePolymorphicAdapterFactory.of(TransportDto::class.java, "transportTypeJson", Int::class.java)
+            .withSubtype(AirTransportDto::class.java, 1)
+            .withSubtype(CarTransportDto::class.java, 2)
+            .withSubtype(UserTransportDto::class.java, 3)
 
         return Moshi.Builder()
             .add(LocalDateAdapter())

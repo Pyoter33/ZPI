@@ -7,6 +7,6 @@ class AirTransport(
     val duration: Duration,
     val source: String,
     val destination: String,
-    val link: String,
+    val link: String?,
     val flights: List<Flight>
 )

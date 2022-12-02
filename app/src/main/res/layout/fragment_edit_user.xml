@@ -59,7 +59,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/marginL"
-                    android:layout_marginTop="@dimen/marginS"
+                    android:layout_marginTop="@dimen/marginL"
                     android:hint="@string/text_first_name"
                     app:errorEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"

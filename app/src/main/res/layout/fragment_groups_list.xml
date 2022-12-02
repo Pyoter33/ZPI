@@ -111,6 +111,19 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
 
+                    <TextView
+                        android:id="@+id/text_empty_list"
+                        style="@style/TextMedium"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/text_no_accommodations"
+                        android:textColor="@color/grey600"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/attractions_list"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cardView_header"
+                        tools:visibility="visible" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/attractions_list"

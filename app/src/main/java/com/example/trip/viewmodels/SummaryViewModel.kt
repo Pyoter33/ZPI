@@ -9,12 +9,13 @@ import com.example.trip.usecases.summary.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
 class SummaryViewModel @Inject constructor(
     private val getAcceptedAccommodationUseCase: GetAcceptedAccommodationUseCase,
-    private val getAcceptedAvailabilityUseCase: GetAcceptedAvailabilityUseCase,
+    private val getAcceptedAvailabilityUseCaseFlow: GetAcceptedAvailabilityUseCaseFlow,
     private val getParticipantsUseCase: GetParticipantsUseCase,
     private val deleteAcceptedAccommodationUseCase: DeleteAcceptedAccommodationUseCase,
     private val deleteAcceptedAvailabilityUseCase: DeleteAcceptedAvailabilityUseCase,
@@ -26,13 +27,14 @@ class SummaryViewModel @Inject constructor(
 
     private val groupId = state.get<Long>(Constants.GROUP_ID_KEY)
 
+    var startDate: LocalDate? = null
     private var isAccommodationAdded = false
     private var isDateAdded = false
 
     private val _acceptedAccommodation = groupId?.let { getAcceptedAccommodationUseCase(it).asLiveData() }?: MutableLiveData()
     val acceptedAccommodation: LiveData<Resource<Accommodation?>> = _acceptedAccommodation
 
-    private val _acceptedAvailability = groupId?.let { getAcceptedAvailabilityUseCase(it).asLiveData() }?: MutableLiveData()
+    private val _acceptedAvailability = groupId?.let { getAcceptedAvailabilityUseCaseFlow(it).asLiveData() }?: MutableLiveData()
     val acceptedAvailability: LiveData<Resource<OptimalAvailability?>> = _acceptedAvailability
 
     private val _participants = groupId?.let { getParticipantsUseCase(it).asLiveData() }?: MutableLiveData()
@@ -85,6 +87,10 @@ class SummaryViewModel @Inject constructor(
         isAccommodationAdded = accommodationAdded
         isDateAdded = dateAdded
         _isButtonUnlocked.value = isAccommodationAdded && isDateAdded
+    }
+
+    private fun getData(mutableLiveData: MutableLiveData<Resource<List<Participant>>>) {
+
     }
 
 }

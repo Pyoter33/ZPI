@@ -26,11 +26,10 @@ class CreateEditTransportViewModel @Inject constructor(
     state: SavedStateHandle
 ) : ViewModel() {
 
-    private val groupId = state.get<Long>(Constants.GROUP_ID_KEY)
     private val accommodationId = state.get<Long>(Constants.ACCOMMODATION_ID_KEY)
     private val userTransportToUpdate = state.get<UserTransport>(Constants.USER_TRANSPORT_KEY)
 
-    var toPost = false
+    var toPost = true
     var meansOfTransport = userTransportToUpdate?.meansOfTransport?.toString()?.trim('[', ']')
     var meetingLocation = userTransportToUpdate?.source
     var destination = userTransportToUpdate?.destination

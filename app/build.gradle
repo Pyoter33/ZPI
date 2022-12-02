@@ -56,6 +56,8 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     implementation 'androidx.annotation:annotation:1.4.0'
     implementation 'com.google.maps:google-maps-services:2.1.0'
+    implementation 'com.google.maps.android:maps-ktx:3.2.1'
+    implementation 'com.google.maps.android:maps-utils-ktx:3.4.0'
     implementation 'org.slf4j:slf4j-simple:1.7.25'
 
     //tests
@@ -86,6 +88,7 @@ dependencies {
     implementation "com.squareup.moshi:moshi:1.14.0"
     implementation "com.squareup.moshi:moshi-adapters:1.14.0"
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.7.21"
+    implementation "dev.onenowy.moshipolymorphicadapter:moshi-polymorphic-adapter:0.1.3"
 
 
     //ui

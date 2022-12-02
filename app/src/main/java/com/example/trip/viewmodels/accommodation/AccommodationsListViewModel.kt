@@ -5,11 +5,13 @@ import com.example.trip.Constants
 import com.example.trip.dto.AccommodationVoteId
 import com.example.trip.dto.AccommodationVotePostDto
 import com.example.trip.models.Accommodation
+import com.example.trip.models.OptimalAvailability
 import com.example.trip.models.Resource
 import com.example.trip.usecases.accommodation.DeleteAccommodationUseCase
 import com.example.trip.usecases.accommodation.DeleteVoteUseCase
 import com.example.trip.usecases.accommodation.GetAccommodationsListUseCase
 import com.example.trip.usecases.accommodation.PostVoteUseCase
+import com.example.trip.usecases.summary.GetAcceptedAvailabilityUseCase
 import com.example.trip.usecases.summary.UpdateAcceptedAccommodationUseCase
 import com.example.trip.utils.SharedPreferencesHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +27,7 @@ class AccommodationsListViewModel @Inject constructor(
     private val postVoteUseCase: PostVoteUseCase,
     private val deleteVoteUseCase: DeleteVoteUseCase,
     private val postAcceptedAccommodationUseCase: UpdateAcceptedAccommodationUseCase,
+    private val getAcceptedAvailabilityUseCase: GetAcceptedAvailabilityUseCase,
     private val preferencesHelper: SharedPreferencesHelper,
     state: SavedStateHandle
 ) :
@@ -151,6 +154,14 @@ class AccommodationsListViewModel @Inject constructor(
                     mutableLiveData.value = it
                 }
             }
+        }
+    }
+
+    fun getAcceptedAvailabilityAsync(): Deferred<Resource<OptimalAvailability?>> {
+        return viewModelScope.async {
+            groupId?.let {
+                getAcceptedAvailabilityUseCase(groupId)
+            }?: Resource.Failure()
         }
     }
 }

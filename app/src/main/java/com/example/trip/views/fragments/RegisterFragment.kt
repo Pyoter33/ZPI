@@ -282,14 +282,17 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
             }
             if(viewModel.code.isNullOrEmpty()) {
                 textError.setVisible()
+                textError.text = getString(R.string.text_error_multiple)
                 showError = true
             }
             if(viewModel.phone.isNullOrEmpty()) {
+                textError.setVisible()
                 textError.text = getString(R.string.text_error_multiple)
                 textFieldPhone.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
             }
             if (viewModel.phone?.length != 9) {
+                textError.setVisible()
                 textError.text = getString(R.string.text_error_phone)
                 textFieldPhone.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true

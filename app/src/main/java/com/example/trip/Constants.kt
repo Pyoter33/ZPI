@@ -24,6 +24,8 @@ object Constants {
     const val ATTRACTION_PREVIEW_KEY = "attractionPreview"
     const val DAY_PLAN_ID_KEY = "dayPlanId"
     const val PARTICIPANT_KEY = "participant"
+    const val START_DATE_KEY = "startDate"
+    const val ACCOMMODATION_CREATOR_ID_KEY = "accommodationCreatorId"
     const val TO_REFRESH_KEY = "refresh"
     const val LOCATION_KEY = "Location"
 }

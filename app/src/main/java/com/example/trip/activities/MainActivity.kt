@@ -3,28 +3,31 @@ package com.example.trip.activities
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageButton
+import android.widget.PopupMenu
+import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.trip.Constants
 import com.example.trip.R
 import com.example.trip.models.GroupStatus
+import com.example.trip.models.Resource
 import com.example.trip.utils.setAppLocale
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
+import com.example.trip.viewmodels.MainActivityViewModel
 import com.example.trip.views.dialogs.LeaveGroupDialog
 import com.example.trip.views.dialogs.LeaveGroupDialogClickListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.skydoves.powermenu.PowerMenu
-import com.skydoves.powermenu.PowerMenuItem
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -33,6 +36,8 @@ class MainActivity : AppCompatActivity(), LeaveGroupDialogClickListener {
     companion object {
         private const val APP_LOCALE = "gb"
     }
+
+    private val viewModel: MainActivityViewModel by viewModels()
 
     private var snackbar: Snackbar? = null
     private lateinit var navController: NavController
@@ -81,20 +86,19 @@ class MainActivity : AppCompatActivity(), LeaveGroupDialogClickListener {
         }
 
         buttonSettings.setOnClickListener {
-            val powerMenu = PowerMenu.Builder(this)
-                .addItem(PowerMenuItem("Leave group"))
-                .setAutoDismiss(true)
-                .setShowBackground(false)
-                .setTextTypeface(Typeface.create("roboto_medium", Typeface.NORMAL))
-                .setTextSize(13)
-                .setMenuColor(Color.WHITE)
-                .setOnMenuItemClickListener { position, _ ->
-                    when(position) {
-                        0 -> showDialog()
+            val popupMenu = PopupMenu(this, it)
+            popupMenu.menuInflater.inflate(R.menu.group_options_menu, popupMenu.menu)
+
+            popupMenu.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.leave_group -> {
+                        showDialog()
+                        true
                     }
+                    else -> false
                 }
-                .build()
-            powerMenu.showAsAnchorLeftBottom(it,0, 10)
+            }
+            popupMenu.show()
         }
     }
 
@@ -136,7 +140,12 @@ class MainActivity : AppCompatActivity(), LeaveGroupDialogClickListener {
                 bottomNavigationView.inflateMenu(R.menu.navigation_trip_menu)
                 navController.navInflater.inflate(R.navigation.trip_graph)
             }
-            else -> navController.navInflater.inflate(R.navigation.post_trip_graph)
+            else -> {
+                bottomNavigationView.menu.clear()
+                bottomNavigationView.inflateMenu(R.menu.navigation_post_trip_menu)
+                bottomNavigationView.menu.findItem(R.id.finances).isChecked = true
+                navController.navInflater.inflate(R.navigation.post_trip_graph)
+            }
         }
         navController.setGraph(navGraph, intent.extras)
     }
@@ -164,6 +173,32 @@ class MainActivity : AppCompatActivity(), LeaveGroupDialogClickListener {
     }
 
     override fun onLeaveClick() {
+        val layoutLoading = findViewById<FrameLayout>(R.id.layout_loading)
+        layoutLoading.setVisible()
+        lifecycleScope.launch {
+            when (viewModel.leaveGroupAsync().await()) {
+                is Resource.Success -> {
+                    layoutLoading.setGone()
+                    val activityIntent = Intent(this@MainActivity, HomeActivity::class.java)
+                    startActivity(activityIntent)
+                    finish()
+                }
+                is Resource.Failure -> {
+                    layoutLoading.setGone()
+                    showSnackbar(
+                        window.decorView.rootView,
+                        R.string.text_leave_failure,
+                        R.string.text_retry
+                    ) {
+                        showDialog()
+                    }
+                }
+                else -> {
+                    //NO-OP
+                }
+            }
+
+        }
 
     }
 

@@ -9,6 +9,7 @@
     <string name="text_fetch_failure">"Couldn't fetch the data, try again!</string>
     <string name="text_post_failure">"Couldn't post the data, try again!</string>
     <string name="text_delete_failure">"Couldn't delete the data, try again!</string>
+    <string name="text_leave_failure">"Couldn't leave the group! Perhaps you have unresolved financial settlements!</string>
     <string name="text_start_trip_failure">"Couldn't start trip, try again!</string>
     <string name="text_item_post_failure">"Couldn't post the %1$s, check the data and try again!</string>
     <string name="text_my_votes">My votes</string>
@@ -22,8 +23,10 @@
     <string name="text_title_delete_dialog">Are you sure you want to delete?</string>
     <string name="text_title_resolve_dialog">Are you sure you want to resolve?</string>
     <string name="text_title_leave_dialog">Are you sure you want to leave?</string>
+    <string name="text_title_transport_dialog">Cannot show transport options!</string>
     <string name="text_title_coordinate_dialog">Are you sure you want set %1$s as coordinator?</string>
     <string name="text_message_cannot_undo">You cannot undo this operation!</string>
+    <string name="text_message_cannot_generate">Transport options cannot be generated if no availability is accepted.</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_yes">Yes</string>
     <string name="text_no">No</string>
@@ -124,6 +127,7 @@
     <string name="text_resolve">Resolve</string>
     <string name="text_my_settlements">My settlements</string>
     <string name="text_other_settlements">Other settlements</string>
+    <string name="text_ok">OK</string>
     <string name="text_save">Save</string>
     <string name="text_balances">Balances</string>
     <string name="text_contributors">Contributors</string>
@@ -140,6 +144,7 @@
     <string name="text_error_phone">Enter a valid 9 digit phone number!</string>
     <string name="text_error_not_same">Passwords do not match!</string>
     <string name="text_no_accommodations">No accommodations added yet!</string>
+    <string name="text_no_groups">No groups added yet!</string>
     <string name="text_no_attractions">No attractions added yet!</string>
     <string name="text_no_attractions_found">No attractions found!</string>
     <string name="text_no_expenses">No expenses added yet!</string>
@@ -150,4 +155,9 @@
     <string name="text_is_now_coordinator"> %1$s is now a coordinator!  </string>
     <string name="text_accommodation_accepted"> Accommodation accepted! See it in summary. </string>
     <string name="text_availability_accepted"> Dates accepted! See them in summary. </string>
+    <string name="text_edit_user_data">Edit user data</string>
+    <string name="text_sign_out">Sign out</string>
+    <string name="text_leave_group">Leave group</string>
+    <string name="text_groups">Groups</string>
+    <string name="text_set_start">Set as start</string>
 </resources>

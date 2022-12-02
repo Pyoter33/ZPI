@@ -12,14 +12,17 @@ import kotlinx.coroutines.flow.onStart
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class GetGroupsUseCase @Inject constructor(private val groupsRepository: GroupsRepository, private val preferencesHelper: SharedPreferencesHelper) {
+class GetGroupsUseCase @Inject constructor(
+    private val groupsRepository: GroupsRepository,
+    private val preferencesHelper: SharedPreferencesHelper
+) {
 
     suspend operator fun invoke(): Flow<Resource<List<Group>>> {
         return flow {
             emit(getGroups())
         }.catch {
             it.printStackTrace()
-            if(it.cause is HttpException){
+            if (it.cause is HttpException) {
                 emit(Resource.Failure((it.cause as HttpException).code()))
             } else {
                 emit(Resource.Failure(0))
@@ -42,6 +45,8 @@ class GetGroupsUseCase @Inject constructor(private val groupsRepository: GroupsR
                 it.minimalNumberOfDays,
                 it.description,
                 it.participantsNum,
+                it.startDate,
+                it.endDate,
                 coordinators
             )
         })

@@ -187,14 +187,14 @@ fun String.formatPhone(): String {
     val split = split(' ')
     return "${split[0]} ${split[1].subSequence(0..2)} ${split[1].subSequence(3..5)} ${
         split[1].subSequence(
-            6..8 ////validate phonenumber length
+            6..8 ////validate phone number length?
         //accommodation in summary pdf
-        //block dates in day plan and availability
-        //first and last name
-        //too long name in balances
+        //block dates in day plan and availability 
+        //move snackbars to  
         //animations
         //user edit
         //leave group
+        //Cannot invoke "java.time.LocalDate.plus(long, java.time.temporal.TemporalUnit)" because the return value of "com.zpi.transportservice.dto.TripDataDto.startDate()" is null
         )
     }"
 }

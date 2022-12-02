@@ -2,8 +2,6 @@ package com.example.trip.views.fragments
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,6 +9,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.Constants
 import com.example.trip.R
+import com.example.trip.activities.HomeActivity
 import com.example.trip.activities.LoginActivity
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.GroupsClickListener
@@ -32,14 +32,14 @@ import com.example.trip.views.dialogs.DeleteGroupDialog
 import com.example.trip.views.dialogs.DeleteGroupDialogClickListener
 import com.example.trip.views.dialogs.MenuPopupFactory
 import com.skydoves.balloon.*
-import com.skydoves.powermenu.PowerMenu
-import com.skydoves.powermenu.PowerMenuItem
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsListBinding>(), GroupsClickListener, DeleteGroupDialogClickListener {
+class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsListBinding>(),
+    GroupsClickListener, DeleteGroupDialogClickListener {
 
     private val popupMenu by balloon<MenuPopupFactory>()
 
@@ -62,7 +62,10 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
                     requireActivity().finishAffinity()
                 }
                 doubleBackToExitPressedOnce = true
-                Handler(Looper.getMainLooper()).postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
+                Handler(Looper.getMainLooper()).postDelayed(
+                    { doubleBackToExitPressedOnce = false },
+                    2000
+                )
                 requireContext().toast(R.string.text_click_twice)
             }
         }
@@ -100,27 +103,29 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
 
     private fun onSettingsClick() {
         binding.buttonSettings.setOnClickListener {
-            val powerMenu = PowerMenu.Builder(requireContext())
-                .addItem(PowerMenuItem("Edit personal data"))
-                .addItem(PowerMenuItem("Sign out"))
-                .setAutoDismiss(true)
-                .setShowBackground(false)
-                .setTextSize(13)
-                .setTextTypeface(Typeface.create("roboto_medium", Typeface.NORMAL))
-                .setMenuColor(Color.WHITE)
-                .setOnMenuItemClickListener { position, _ ->
-                    when(position) {
-                        0 -> {  }
-                        1 -> { signOut() }
+            val popupMenu = PopupMenu(requireContext(), it)
+            popupMenu.menuInflater.inflate(R.menu.user_options_menu, popupMenu.menu)
+
+            popupMenu.setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.edit_user_data -> {
+                        findNavController().navigate(GroupsListFragmentDirections.actionGroupsListFragmentToEditUserFragment())
+                        true
                     }
+                    R.id.sign_out -> {
+                        signOut()
+                        true
+                    }
+                    else -> false
                 }
-                .build()
-            powerMenu.showAsAnchorLeftBottom(it,0, 15)
+            }
+            popupMenu.show()
         }
     }
 
     private fun signOut() {
-        val preferences = requireContext().getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE)
+        val preferences =
+            requireContext().getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE)
         preferences.edit().remove(Constants.AUTHORIZATION_HEADER).apply()
         preferences.edit().remove(Constants.USER_ID_KEY).apply()
 
@@ -129,11 +134,11 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
         requireActivity().finish()
     }
 
-
     private fun observeGroupsList() {
         viewModel.groupsList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
+                    if (it.data.isEmpty()) binding.textEmptyList.setVisible() else binding.textEmptyList.setGone()
                     adapter.submitList(it.data)
                     binding.layoutRefresh.isRefreshing = false
                 }
@@ -141,13 +146,13 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
                     binding.layoutRefresh.isRefreshing = true
                 }
                 is Resource.Failure -> {
-//                    (requireActivity() as MainActivity).showSnackbar(
-//                        requireView(),
-//                        R.string.text_fetch_failure,
-//                        R.string.text_retry
-//                    ) {
-//                        viewModel.refreshData()
-//                    }
+                    (requireActivity() as HomeActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry
+                    ) {
+                        viewModel.refreshData()
+                    }
                     binding.layoutRefresh.isRefreshing = false
                 }
             }
@@ -163,32 +168,40 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
     //list item
     override fun onClick(group: Group) {
         val activityIntent = Intent(requireContext(), MainActivity::class.java)
-        when (group.groupStatus) {
-            GroupStatus.PLANNING -> {
+        when {
+            group.groupStatus == GroupStatus.PLANNING -> {
                 activityIntent.putExtra(Constants.STATUS_KEY, GroupStatus.PLANNING.code)
-                activityIntent.putExtra(Constants.CURRENCY_KEY, group.currency)
                 activityIntent.putExtra(Constants.START_CITY, group.startCity)
-                activityIntent.putExtra(Constants.COORDINATORS_KEY, group.coordinators.toLongArray())
+                activityIntent.putExtra(
+                    Constants.COORDINATORS_KEY,
+                    group.coordinators.toLongArray()
+                )
             }
-            GroupStatus.ONGOING -> {
+            group.groupStatus == GroupStatus.ONGOING && group.endDate?.isAfter(LocalDate.now()) == false -> {
                 activityIntent.putExtra(Constants.STATUS_KEY, GroupStatus.ONGOING.code)
-                activityIntent.putExtra(Constants.CURRENCY_KEY, group.currency)
-                activityIntent.putExtra(Constants.COORDINATORS_KEY, group.coordinators.toLongArray())
+                activityIntent.putExtra(
+                    Constants.COORDINATORS_KEY,
+                    group.coordinators.toLongArray()
+                )
             }
             else -> {
-                return
+                activityIntent.putExtra(Constants.STATUS_KEY, GroupStatus.FINISHED.code)
+                activityIntent.putExtra(
+                    Constants.COORDINATORS_KEY,
+                    group.coordinators.toLongArray()
+                )
             }
-
         }
+        activityIntent.putExtra(Constants.CURRENCY_KEY, group.currency)
         activityIntent.putExtra(Constants.GROUP_ID_KEY, group.id)
         startActivity(activityIntent)
         requireActivity().finish()
     }
 
     override fun onLongClick(group: Group, view: View) {
-        if(isCoordinator(group.coordinators)) {
+        if (isCoordinator(group.coordinators)) {
             popupMenu.setOnPopupButtonClick(R.id.button_edit) {
-                if(group.groupStatus == GroupStatus.ONGOING) {
+                if (group.groupStatus == GroupStatus.ONGOING) {
                     requireContext().toast(R.string.text_cannot_edit_group)
                 } else {
                     onMenuEditClick(group)
@@ -201,7 +214,8 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
         }
     }
 
-    private fun isCoordinator(coordinators: List<Long>) = preferencesHelper.getUserId() in coordinators
+    private fun isCoordinator(coordinators: List<Long>) =
+        preferencesHelper.getUserId() in coordinators
 
     private fun onMenuEditClick(group: Group) {
         findNavController().navigate(

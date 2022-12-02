@@ -48,4 +48,10 @@ interface DayPlanService {
         @Path("dayPlanId") dayPlanId: Long
     ): Response<List<AttractionPlanDto>>
 
+    @PATCH("day-plan/start")
+    suspend fun setStartingPoint(
+        @Query("dayPlanId") dayPlanId: Long,
+        @Query("attractionId") attractionId: Long
+    ): Response<Void>
+
 }

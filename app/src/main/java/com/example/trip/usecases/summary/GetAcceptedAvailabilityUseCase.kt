@@ -5,10 +5,6 @@ import com.example.trip.models.OptimalAvailability
 import com.example.trip.models.Resource
 import com.example.trip.repositories.AvailabilityRepository
 import com.example.trip.repositories.GroupsRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -16,14 +12,15 @@ class GetAcceptedAvailabilityUseCase @Inject constructor(
     private val availabilityRepository: AvailabilityRepository,
     private val groupsRepository: GroupsRepository
 ) {
-    operator fun invoke(groupId: Long): Flow<Resource<OptimalAvailability?>> {
-        return flow {
-            emit(getAcceptedAvailability(groupId))
-        }.catch {
-            it.printStackTrace()
-            emit(Resource.Failure((it.cause as HttpException).code()))
-        }.onStart {
-            emit(Resource.Loading<Resource<OptimalAvailability?>>() as Resource<OptimalAvailability?>)
+    suspend operator fun invoke(groupId: Long): Resource<OptimalAvailability?> {
+        return try {
+            getAcceptedAvailability(groupId)
+        } catch (e: HttpException) {
+            e.printStackTrace()
+            Resource.Failure(e.code())
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Failure(0)
         }
     }
 

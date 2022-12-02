@@ -25,6 +25,7 @@ import com.example.trip.models.Availability
 import com.example.trip.models.Resource
 import com.example.trip.utils.*
 import com.example.trip.viewmodels.SummaryViewModel
+import com.example.trip.views.dialogs.TransportDialog
 import com.example.trip.views.dialogs.accommodation.DeleteAccommodationDialogClickListener
 import com.example.trip.views.dialogs.availability.DeleteAvailabilityDialogClickListener
 import com.example.trip.views.dialogs.summary.DeleteAcceptedAccommodationDialog
@@ -36,6 +37,7 @@ import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -180,7 +182,8 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
     }
 
     private fun setAndShowCalendar() {
-        val calendarConstraints = CalendarConstraints.Builder().setValidator(DateValidatorPointForward.now()).build()
+        val calendarConstraints =
+            CalendarConstraints.Builder().setValidator(DateValidatorPointForward.now()).build()
         val calendar =
             MaterialDatePicker.Builder.dateRangePicker().setCalendarConstraints(calendarConstraints)
                 .setTheme(R.style.ThemeOverlay_App_DatePicker).build()
@@ -244,6 +247,7 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
                 is Resource.Success -> {
                     it.data?.let { availability ->
                         setDate(availability.availability)
+                        viewModel.startDate = availability.availability.startDate
                         viewModel.updateButtonLock(dateAdded = true)
                         availabilityDialog =
                             DeleteAcceptedAvailabilityDialog(this, availability.availability)
@@ -289,7 +293,9 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
             textPrice.text = accommodation.price.toStringFormat(args.currency)
             textDescription.text = accommodation.description
 
-            Glide.with(this@SummaryFragment).load(accommodation.imageUrl).placeholder(R.drawable.ic_baseline_downloading_24).error(R.drawable.ic_baseline_question_mark_24).centerCrop()
+            Glide.with(this@SummaryFragment).load(accommodation.imageUrl)
+                .placeholder(R.drawable.ic_baseline_downloading_24)
+                .error(R.drawable.ic_baseline_question_mark_24).centerCrop()
                 .into(binding.imageAccommodation)
 
             buttonLink.setOnClickListener {
@@ -301,18 +307,36 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
             }
 
             buttonTransport.setOnClickListener {
-                val bundle = Bundle().apply {
-                    putLong(Constants.GROUP_ID_KEY, accommodation.groupId)
-                    putLong(Constants.ACCOMMODATION_ID_KEY, accommodation.id)
-                    putString(Constants.DESTINATION_KEY, accommodation.address)
-                    putString(Constants.START_CITY_KEY, args.startCity)
-                    putString(Constants.CURRENCY_KEY, args.currency)
-                    putLongArray(Constants.COORDINATORS_KEY, args.coordinators)
-                }
-
-                findNavController().navigate(R.id.transport, bundle)
+                onTransportClick(accommodation)
             }
         }
+    }
+
+    private fun onTransportClick(accommodation: Accommodation) {
+        if (viewModel.startDate == null) {
+            showTransportDialog()
+            return
+        }
+        navigateToTransport(accommodation, viewModel.startDate!!)
+    }
+
+    private fun showTransportDialog() {
+        val transportDialog = TransportDialog()
+        transportDialog.show(childFragmentManager, TransportDialog.TAG)
+    }
+
+    private fun navigateToTransport(accommodation: Accommodation, startDate: LocalDate) {
+        val bundle = Bundle().apply {
+            putLong(Constants.GROUP_ID_KEY, accommodation.groupId)
+            putLong(Constants.ACCOMMODATION_ID_KEY, accommodation.id)
+            putString(Constants.DESTINATION_KEY, accommodation.address)
+            putString(Constants.START_CITY_KEY, args.startCity)
+            putString(Constants.CURRENCY_KEY, args.currency)
+            putLong(Constants.START_DATE_KEY, startDate.toMillis())
+            putLong(Constants.ACCOMMODATION_CREATOR_ID_KEY, accommodation.creatorId)
+            putLongArray(Constants.COORDINATORS_KEY, args.coordinators)
+        }
+        findNavController().navigate(R.id.transport, bundle)
     }
 
     private fun hideAccommodation() {
@@ -357,7 +381,8 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
 
         with(pdfBinding) {
             editTextDate.text = binding.editTextDate.text
-            if(binding.cardAccommodation.isVisible) {
+            listParticipants.adapter = adapter
+            if (binding.cardAccommodation.isVisible) {
                 textName.text = binding.textName.text
                 textAddress.text = binding.textAddress.text
                 textVotes.text = binding.textVotes.text
@@ -365,9 +390,8 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
                 textParticipantsNo.text = binding.textParticipantsNo.text
                 imageAccommodation.setImageDrawable(binding.imageAccommodation.drawable)
                 textDescription.text = binding.textDescription.text
-                listParticipants.adapter = adapter
             } else {
-                cardAccommodation.setGone()
+                cardAccommodation.setInvisible()
             }
         }
 

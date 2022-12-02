@@ -24,6 +24,7 @@ import com.example.trip.utils.*
 import com.example.trip.viewmodels.accommodation.AccommodationsListViewModel
 import com.example.trip.views.dialogs.MenuPopupAcceptFactory
 import com.example.trip.views.dialogs.MenuPopupFactory
+import com.example.trip.views.dialogs.TransportDialog
 import com.example.trip.views.dialogs.accommodation.AcceptAccommodationDialog
 import com.example.trip.views.dialogs.accommodation.AcceptAccommodationDialogClickListener
 import com.example.trip.views.dialogs.accommodation.DeleteAccommodationDialog
@@ -31,6 +32,7 @@ import com.example.trip.views.dialogs.accommodation.DeleteAccommodationDialogCli
 import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -155,7 +157,10 @@ class AccommodationListFragment @Inject constructor() :
 
     //list item
     override fun onVoteClick(accommodation: Accommodation, position: Int, button: View) {
-        val operation = if(accommodation.isVoted) viewModel.deleteVoteAsync(accommodation.id) else viewModel.postVoteAsync(accommodation.id)
+        val operation =
+            if (accommodation.isVoted) viewModel.deleteVoteAsync(accommodation.id) else viewModel.postVoteAsync(
+                accommodation.id
+            )
         viewModel.setVoted(position)
         adapter.notifyItemChanged(position)
         button.isEnabled = false
@@ -173,7 +178,7 @@ class AccommodationListFragment @Inject constructor() :
                         R.string.text_post_failure,
                         R.string.text_retry
                     ) {
-                       onVoteClick(accommodation, position, button)
+                        onVoteClick(accommodation, position, button)
                     }
                 }
                 else -> {}
@@ -195,16 +200,47 @@ class AccommodationListFragment @Inject constructor() :
     }
 
     override fun onTransportClick(accommodation: Accommodation) {
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (val result = viewModel.getAcceptedAvailabilityAsync().await()) {
+                is Resource.Success -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    result.data?.let {
+                        navigateToTransport(accommodation, it.availability.startDate)
+                    } ?: showTransportDialog()
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry
+                    ) {
+                        onTransportClick(accommodation)
+                    }
+                }
+                else -> {}
+            }
+        }
+    }
+
+    private fun navigateToTransport(accommodation: Accommodation, startDate: LocalDate) {
         val bundle = Bundle().apply {
             putLong(Constants.GROUP_ID_KEY, accommodation.groupId)
             putLong(Constants.ACCOMMODATION_ID_KEY, accommodation.id)
             putString(Constants.DESTINATION_KEY, accommodation.address)
             putString(Constants.START_CITY_KEY, args.startCity)
             putString(Constants.CURRENCY_KEY, args.currency)
+            putLong(Constants.START_DATE_KEY, startDate.toMillis())
+            putLong(Constants.ACCOMMODATION_CREATOR_ID_KEY, accommodation.creatorId)
             putLongArray(Constants.COORDINATORS_KEY, args.coordinators)
         }
-
         findNavController().navigate(R.id.transport, bundle)
+    }
+
+    private fun showTransportDialog() {
+        val transportDialog = TransportDialog()
+        transportDialog.show(childFragmentManager, TransportDialog.TAG)
     }
 
     override fun onLongClick(accommodation: Accommodation, view: View) {

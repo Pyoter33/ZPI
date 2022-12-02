@@ -20,7 +20,7 @@ import com.example.trip.models.Attraction
 import com.example.trip.models.Resource
 import com.example.trip.utils.*
 import com.example.trip.viewmodels.dayplan.AttractionsViewModel
-import com.example.trip.views.dialogs.MenuPopupFactory
+import com.example.trip.views.dialogs.MenuPopupSetStartFactory
 import com.example.trip.views.dialogs.dayplan.DeleteAttractionDialog
 import com.example.trip.views.dialogs.dayplan.DeleteAttractionDialogClickListener
 import com.skydoves.balloon.balloon
@@ -34,7 +34,7 @@ class AttractionsFragment @Inject constructor() : BaseFragment<FragmentAttractio
     AttractionClickListener,
     DeleteAttractionDialogClickListener {
 
-    private val popupMenu by balloon<MenuPopupFactory>()
+    private val popupMenu by balloon<MenuPopupSetStartFactory>()
 
     private val args: AttractionsFragmentArgs by navArgs()
 
@@ -139,11 +139,39 @@ class AttractionsFragment @Inject constructor() : BaseFragment<FragmentAttractio
             popupMenu.setOnPopupButtonClick(R.id.button_delete) {
                 onMenuDeleteClick(attraction)
             }
+            popupMenu.setOnPopupButtonClick(R.id.button_set_start) {
+                onMenuSetStartClick(attraction)
+            }
             popupMenu.showAlignBottom(view)
         }
     }
 
     private fun isCoordinator() = preferencesHelper.getUserId() in args.coordinators
+
+
+    private fun onMenuSetStartClick(attraction: Attraction) {
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (viewModel.updateStartingPointAsync(attraction.id).await()) {
+                is Resource.Success -> {
+                    viewModel.refresh()
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onMenuSetStartClick(attraction)
+                    }
+                }
+                else -> {
+                    //NO-OP
+                }
+            }
+        }
+    }
 
     private fun onMenuEditClick(attraction: Attraction) {
         findNavController().navigate(

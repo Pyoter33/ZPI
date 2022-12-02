@@ -1,5 +1,6 @@
 package com.example.trip.service
 
+import com.example.trip.dto.AppUserDto
 import com.example.trip.dto.TripGroupPostDto
 import com.example.trip.dto.UserDto
 import com.example.trip.dto.UserGroupDto
@@ -15,6 +16,12 @@ interface TripGroupService {
 
     @PUT("user-group/coordinator")
     suspend fun putCoordinator(
+        @Query("groupId") groupId: Long,
+        @Query("userId") userId: Long
+    ): Response<Void>
+
+    @DELETE("trip-group/user")
+    suspend fun leaveGroup(
         @Query("groupId") groupId: Long,
         @Query("userId") userId: Long
     ): Response<Void>
@@ -58,11 +65,11 @@ interface TripGroupService {
     @GET("user")
     suspend fun getUser(
         @Query("userId") userId: Long
-    ): Response<UserDto>
+    ): Response<AppUserDto>
 
     @PATCH("user")
     suspend fun updateUser(
-        @Query("appUser") appUser: UserDto
+        @Body appUser: AppUserDto
     ): Response<Void>
 
     @DELETE("trip-group/user")

@@ -9,6 +9,8 @@ import com.example.trip.utils.toNullableBodyOrError
 import com.google.maps.DirectionsApi
 import com.google.maps.GeoApiContext
 import com.google.maps.model.DirectionsResult
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class TransportRepository @Inject constructor(private val geoApiContext: GeoApiContext, private val transportService: TransportService) {
@@ -33,8 +35,10 @@ class TransportRepository @Inject constructor(private val geoApiContext: GeoApiC
         origin: String,
         destination: String
     ): Resource<DirectionsResult> {
-        val request = DirectionsApi.getDirections(geoApiContext, origin, destination)
-        return request.awaitIgnoreError()?.let { Resource.Success(it) } ?: Resource.Failure()
+        return withContext(Dispatchers.IO) {
+            val request = DirectionsApi.getDirections(geoApiContext, origin, destination)
+            request.awaitIgnoreError()?.let { Resource.Success(it) } ?: Resource.Failure()
+        }
     }
 
 }

@@ -41,6 +41,9 @@
             <argument
                 android:name="currency"
                 app:argType="string" />
+            <argument
+                android:name="startDate"
+                app:argType="long" />
         </fragment>
         <fragment
             android:id="@+id/transportFragment"
@@ -67,6 +70,12 @@
             <argument
                 android:name="coordinators"
                 app:argType="long[]" />
+            <argument
+                android:name="startDate"
+                app:argType="long" />
+            <argument
+                android:name="accommodationCreatorId"
+                app:argType="long" />
         </fragment>
     </navigation>
     <navigation
@@ -80,7 +89,11 @@
             tools:layout="@layout/fragment_accommodation_list">
             <action
                 android:id="@+id/action_accommodationListFragment_to_createEditAccommodationFragment"
-                app:destination="@id/createEditAccommodationFragment" />
+                app:destination="@id/createEditAccommodationFragment"
+                app:enterAnim="@anim/slide_up"
+                app:exitAnim="@anim/slide_down"
+                app:popEnterAnim="@anim/slide_down_pop"
+                app:popExitAnim="@anim/slide_up_pop" />
             <argument
                 android:name="groupId"
                 app:argType="long" />

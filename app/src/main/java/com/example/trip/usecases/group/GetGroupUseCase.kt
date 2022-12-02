@@ -35,6 +35,8 @@ class GetGroupUseCase @Inject constructor(private val groupsRepository: GroupsRe
             group.minimalNumberOfDays,
             group.description,
             group.participantsNum,
+            group.startDate,
+            group.endDate,
             coordinators
         )
         return Resource.Success(result)

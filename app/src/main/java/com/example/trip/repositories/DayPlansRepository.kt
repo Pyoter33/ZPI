@@ -44,6 +44,8 @@ class DayPlansRepository @Inject constructor(private val dayPlanService: DayPlan
         return dayPlanService.findAttractions(query).toBodyOrError()
     }
 
-    //choose first attraction
+    suspend fun updateStartingPoint(dayPlanId: Long, attractionId: Long) {
+        dayPlanService.setStartingPoint(dayPlanId, attractionId)
+    }
 
 }
