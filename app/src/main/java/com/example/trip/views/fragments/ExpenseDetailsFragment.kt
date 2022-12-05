@@ -15,10 +15,7 @@ import com.example.trip.adapters.ParticipantsPriceAdapter
 import com.example.trip.databinding.FragmentExpenseDetailsBinding
 import com.example.trip.models.Expense
 import com.example.trip.models.Resource
-import com.example.trip.utils.SharedPreferencesHelper
-import com.example.trip.utils.setGone
-import com.example.trip.utils.setVisible
-import com.example.trip.utils.toStringFormat
+import com.example.trip.utils.*
 import com.example.trip.viewmodels.finances.ExpenseDetailsViewModel
 import com.example.trip.views.dialogs.accommodation.DeleteAccommodationDialog
 import com.example.trip.views.dialogs.finances.DeleteExpenseDialog
@@ -113,7 +110,7 @@ class ExpenseDetailsFragment @Inject constructor() : BaseFragment<FragmentExpens
             when (viewModel.deleteExpenseAsync().await()) {
                 is Resource.Success -> {
                     binding.layoutLoading.setGone()
-                    findNavController().popBackStack()
+                    findNavController().popBackStackWithRefresh()
                 }
                 is Resource.Loading -> {
                     binding.layoutLoading.setVisible()

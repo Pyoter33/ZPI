@@ -4,6 +4,7 @@ import com.example.trip.models.Availability
 import com.example.trip.models.OptimalAvailability
 import com.example.trip.models.Resource
 import com.example.trip.repositories.AvailabilityRepository
+import com.example.trip.repositories.GroupsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -11,7 +12,7 @@ import kotlinx.coroutines.flow.onStart
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class GetOptimalDatesUseCase @Inject constructor(private val availabilityRepository: AvailabilityRepository) {
+class GetOptimalDatesUseCase @Inject constructor(private val availabilityRepository: AvailabilityRepository, private val groupsRepository: GroupsRepository) {
 
     suspend operator fun invoke(groupId: Long): Flow<Resource<List<OptimalAvailability>>> {
         return flow {
@@ -28,8 +29,9 @@ class GetOptimalDatesUseCase @Inject constructor(private val availabilityReposit
         }
     }
 
-    private suspend fun getAvailabilities(groupId: Long): Resource<List<OptimalAvailability>> =
-        Resource.Success(availabilityRepository.getOptimalDates(groupId).map {
+    private suspend fun getAvailabilities(groupId: Long): Resource<List<OptimalAvailability>> {
+        val group = groupsRepository.getGroup(groupId)
+        val result = availabilityRepository.getOptimalDates(groupId).map {
             OptimalAvailability(
                 Availability(
                     it.sharedGroupAvailabilityId,
@@ -38,11 +40,13 @@ class GetOptimalDatesUseCase @Inject constructor(private val availabilityReposit
                     it.dateTo
                 ),
                 it.usersList.size,
-                it.numberOfDays
+                it.numberOfDays,
+                it.sharedGroupAvailabilityId == group.selectedSharedAvailability
             )
         }.filter {
             it.users != 0
         }
-        )
+        return Resource.Success(result)
+    }
 
 }

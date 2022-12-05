@@ -152,7 +152,7 @@ class CreateEditGroupFragment @Inject constructor() : BaseFragment<FragmentCreat
     }
 
     private fun setupSpinner() {
-        val items = listOf("USD", "EUR", "PLN", "CZK", "GBP", "UAK")
+        val items = listOf("USD", "EUR", "PLN", "CZK", "GBP", "HRK", "UAH", "JPY")
         val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, items)
         binding.spinnerCurrency.setAdapter(adapter)
 

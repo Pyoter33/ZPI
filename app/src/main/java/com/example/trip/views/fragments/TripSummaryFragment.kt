@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.example.trip.Constants
 import com.example.trip.R
+import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.ParticipantsSummaryAdapter
 import com.example.trip.databinding.FragmentSummaryBinding
 import com.example.trip.databinding.LayoutPdfBinding
@@ -23,6 +24,7 @@ import com.example.trip.utils.*
 import com.example.trip.viewmodels.SummaryViewModel
 import com.gkemon.XMLtoPDF.PdfGenerator
 import com.gkemon.XMLtoPDF.PdfGeneratorListener
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -44,11 +46,10 @@ class TripSummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBi
         super.onViewCreated(view, savedInstanceState)
 
         setAdapter()
-        observeAccommodation()
-        observeAvailability()
-        observeParticipants()
+        observeSummary()
         disableLayout()
         onSaveClick()
+        setupOnDatesClickListener()
         requireActivity().onBackArrowClick(binding.buttonBack)
         observeButtonLock()
     }
@@ -71,6 +72,11 @@ class TripSummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBi
         binding.listParticipants.adapter = adapter
     }
 
+    private fun setupOnDatesClickListener() {
+        binding.editTextDate.setOnClickListener {
+            requireContext().toast(R.string.text_cannot_modify_dates_ongoing)
+        }
+    }
 
     private fun observeButtonLock() {
         viewModel.isButtonUnlocked.observe(viewLifecycleOwner) {
@@ -84,54 +90,38 @@ class TripSummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBi
         }
     }
 
-    private fun observeAccommodation() {
-        viewModel.acceptedAccommodation.observe(viewLifecycleOwner) {
+    private fun observeSummary() {
+        viewModel.summary.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
-                    it.data?.let { accommodation ->
+                    binding.layoutLoading.setGone()
+                    it.data.accommodation?.let { accommodation ->
                         setAccommodation(accommodation)
+                        viewModel.updateButtonLock(accommodationAdded = true)
                     }
-                }
-                is Resource.Loading -> {
 
-                }
-                is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
-                }
-            }
-        }
-    }
-
-    private fun observeAvailability() {
-        viewModel.acceptedAvailability.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Success -> {
-                    it.data?.let { availability ->
+                    it.data.availability?.let { availability ->
                         setDate(availability.availability)
+                        viewModel.startDate = availability.availability.startDate
+                        viewModel.updateButtonLock(dateAdded = true)
                     }
+
+                    adapter.submitList(it.data.participants)
+                    binding.textParticipantsNo.text = it.data.participants.size.toString()
                 }
                 is Resource.Loading -> {
-
+                    binding.layoutLoading.setVisible()
                 }
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
-                }
-            }
-        }
-    }
-
-    private fun observeParticipants() {
-        viewModel.participants.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Success -> {
-                    adapter.submitList(it.data)
-                    binding.textParticipantsNo.text = it.data.size.toString()
-                }
-                is Resource.Loading -> {
-
-                }
-                is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
+                    binding.layoutLoading.setGone()
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry,
+                        Snackbar.LENGTH_INDEFINITE
+                    ) {
+                        viewModel.refresh()
+                    }
                 }
             }
         }

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.trip.Constants
 import com.example.trip.R
 import com.example.trip.activities.HomeActivity
 import com.example.trip.databinding.FragmentRegisterBinding
@@ -118,6 +119,7 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
             override fun afterTextChanged(editable: Editable?) {
                 viewModel.code = editable?.toString()
                 binding.textError.setInvisible()
+                binding.textLabelPhone.setTextColor(resources.getColor(R.color.grey700, null))
             }
         })
     }
@@ -137,6 +139,7 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
                     )
                 )
                 binding.textError.setInvisible()
+                binding.textLabelPhone.setTextColor(resources.getColor(R.color.grey700, null))
             }
         })
     }
@@ -263,6 +266,8 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
 
     private fun isSubmitNotPermitted(): Boolean {
         var showError = false
+        var phoneError = false
+        var codeError = false
 
         with(binding) {
             if (viewModel.email.isNullOrEmpty()) {
@@ -276,25 +281,28 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
                 showError = true
             }
             if(viewModel.surname.isNullOrEmpty()) {
-                textFieldName.error = getString(R.string.text_text_empty)
-                textFieldName.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
+                textFieldSurname.error = getString(R.string.text_text_empty)
+                textFieldSurname.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
             }
-            if(viewModel.code.isNullOrEmpty()) {
+            if(viewModel.code.isNullOrEmpty() || viewModel.code?.length !in 1..4) {
                 textError.setVisible()
-                textError.text = getString(R.string.text_error_multiple)
+                textError.text = getString(R.string.text_error_code) //?
+                textLabelPhone.setTextColor(resources.getColor(R.color.red, null))
                 showError = true
+                codeError = true
             }
-            if(viewModel.phone.isNullOrEmpty()) {
-                textError.setVisible()
-                textError.text = getString(R.string.text_error_multiple)
-                textFieldPhone.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
-                showError = true
-            }
-            if (viewModel.phone?.length != 9) {
+            if (viewModel.phone.isNullOrEmpty() || viewModel.phone?.length !in 5..13) {
                 textError.setVisible()
                 textError.text = getString(R.string.text_error_phone)
                 textFieldPhone.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
+                textLabelPhone.setTextColor(resources.getColor(R.color.red, null))
+                showError = true
+                phoneError = true
+            }
+            if(codeError && phoneError) {
+                textError.setVisible()
+                textError.text = getString(R.string.text_error_code_phone)
                 showError = true
             }
             if(viewModel.birthday == null) {
@@ -304,6 +312,11 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
             }
             if (viewModel.password.isNullOrEmpty()) {
                 textFieldPassword.error = getString(R.string.text_text_empty)
+                textFieldPassword.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
+                showError = true
+            }
+            if (viewModel.password?.matches(Constants.PASSWORD_REGEX.toRegex()) == false) {
+                textFieldPassword.error = getString(R.string.text_password_rules)
                 textFieldPassword.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
             }
@@ -321,6 +334,7 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
         with(binding) {
             textFieldEmail.isEnabled = false
             textFieldName.isEnabled = false
+            textFieldSurname.isEnabled = false
             textFieldDate.isEnabled = false
             textFieldPhone.isEnabled = false
             textFieldCode.isEnabled = false
@@ -336,6 +350,7 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
         with(binding) {
             textFieldEmail.isEnabled = true
             textFieldName.isEnabled = true
+            textFieldSurname.isEnabled = true
             textFieldDate.isEnabled = true
             textFieldPhone.isEnabled = true
             textFieldCode.isEnabled = true

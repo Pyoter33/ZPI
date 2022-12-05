@@ -278,170 +278,180 @@
                                                 app:layout_constraintEnd_toEndOf="parent"
                                                 app:layout_constraintTop_toBottomOf="@+id/card_map" />
 
-
                                         </androidx.constraintlayout.widget.ConstraintLayout>
                                     </androidx.cardview.widget.CardView>
 
-                                    <TextView
-                                        android:id="@+id/text_plane"
-                                        style="@style/TextBigger"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginHorizontal="@dimen/marginM"
-                                        android:layout_marginTop="@dimen/marginXXXL"
-                                        android:text="Plane"
-                                        android:textColor="@color/secondary"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@id/card_car" />
 
-                                    <androidx.viewpager2.widget.ViewPager2
-                                        android:id="@+id/pager_flights"
+                                    <androidx.constraintlayout.widget.ConstraintLayout
+                                        android:id="@+id/layout_plane"
                                         android:layout_width="match_parent"
-                                        android:layout_height="100dp"
-                                        android:layout_marginTop="@dimen/marginS"
+                                        android:layout_height="wrap_content"
                                         app:layout_constraintEnd_toEndOf="parent"
                                         app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@id/text_plane">
+                                        app:layout_constraintTop_toBottomOf="@id/card_car">
 
-                                    </androidx.viewpager2.widget.ViewPager2>
+                                        <TextView
+                                            android:id="@+id/text_plane"
+                                            style="@style/TextBigger"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginHorizontal="@dimen/marginM"
+                                            android:layout_marginTop="@dimen/marginXXXL"
+                                            android:text="Plane"
+                                            android:textColor="@color/secondary"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toTopOf="parent" />
 
-                                    <com.google.android.material.tabs.TabLayout
-                                        android:id="@+id/tab_pager"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="10dp"
-                                        android:layout_marginHorizontal="@dimen/marginL"
-                                        android:layout_marginTop="@dimen/marginM"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/pager_flights"
-                                        app:tabBackground="@drawable/selector_tab_pager"
-                                        app:tabGravity="center"
-                                        app:tabIndicatorHeight="0dp" />
+                                        <androidx.viewpager2.widget.ViewPager2
+                                            android:id="@+id/pager_flights"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="100dp"
+                                            android:layout_marginTop="@dimen/marginS"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toBottomOf="@id/text_plane">
 
+                                        </androidx.viewpager2.widget.ViewPager2>
 
-                                    <ImageView
-                                        android:id="@+id/image_transfers"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/marginXL"
-                                        android:layout_marginTop="@dimen/marginM"
-                                        android:scaleType="fitXY"
-                                        android:src="@drawable/ic_baseline_connecting_airports_24"
-                                        app:layout_constraintHorizontal_bias="0.0"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/tab_pager"
-                                        app:tint="@color/secondary" />
-
-                                    <TextView
-                                        android:id="@+id/text_transfers"
-                                        style="@style/TextSmall"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/marginS"
-                                        android:ellipsize="end"
-                                        app:layout_constraintBottom_toBottomOf="@+id/image_transfers"
-                                        app:layout_constraintStart_toEndOf="@+id/image_transfers"
-                                        app:layout_constraintTop_toTopOf="@+id/image_transfers"
-                                        tools:text="1" />
+                                        <com.google.android.material.tabs.TabLayout
+                                            android:id="@+id/tab_pager"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="10dp"
+                                            android:layout_marginHorizontal="@dimen/marginL"
+                                            android:layout_marginTop="@dimen/marginM"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toBottomOf="@+id/pager_flights"
+                                            app:tabBackground="@drawable/selector_tab_pager"
+                                            app:tabGravity="center"
+                                            app:tabIndicatorHeight="0dp" />
 
 
-                                    <ImageView
-                                        android:id="@+id/image_duration_plane"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/marginXL"
-                                        android:layout_marginTop="@dimen/marginM"
-                                        android:scaleType="fitXY"
-                                        android:src="@drawable/ic_baseline_access_time_24"
-                                        app:layout_constraintStart_toStartOf="parent"
-                                        app:layout_constraintTop_toBottomOf="@+id/image_transfers"
-                                        app:tint="@color/secondary" />
+                                        <ImageView
+                                            android:id="@+id/image_transfers"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="@dimen/marginXL"
+                                            android:layout_marginTop="@dimen/marginM"
+                                            android:scaleType="fitXY"
+                                            android:src="@drawable/ic_baseline_connecting_airports_24"
+                                            app:layout_constraintHorizontal_bias="0.0"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toBottomOf="@+id/tab_pager"
+                                            app:tint="@color/secondary" />
 
-                                    <TextView
-                                        android:id="@+id/text_label_duration_to_air_port"
-                                        style="@style/TextSmall"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="@dimen/marginS"
-                                        android:ellipsize="end"
-                                        android:text="to the airport:"
-                                        android:textColor="@color/grey600"
-                                        app:layout_constraintBottom_toBottomOf="@+id/image_duration_plane"
-                                        app:layout_constraintStart_toEndOf="@+id/image_duration_plane"
-                                        app:layout_constraintTop_toTopOf="@+id/image_duration_plane" />
+                                        <TextView
+                                            android:id="@+id/text_transfers"
+                                            style="@style/TextSmall"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="@dimen/marginS"
+                                            android:ellipsize="end"
+                                            app:layout_constraintBottom_toBottomOf="@+id/image_transfers"
+                                            app:layout_constraintStart_toEndOf="@+id/image_transfers"
+                                            app:layout_constraintTop_toTopOf="@+id/image_transfers"
+                                            tools:text="1" />
 
-                                    <TextView
-                                        android:id="@+id/text_duration_to_airport"
-                                        style="@style/TextSmall"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        app:layout_constraintBottom_toBottomOf="@+id/image_duration_plane"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintStart_toEndOf="@+id/text_label_duration_to_air_port"
-                                        app:layout_constraintTop_toTopOf="@+id/image_duration_plane"
-                                        tools:text="40 min " />
 
-                                    <TextView
-                                        android:id="@+id/text_label_duration_flight"
-                                        style="@style/TextSmall"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:text="flight with transfers:"
-                                        android:textColor="@color/grey600"
-                                        app:layout_constraintStart_toStartOf="@+id/text_label_duration_to_air_port"
-                                        app:layout_constraintTop_toBottomOf="@+id/image_duration_plane" />
+                                        <ImageView
+                                            android:id="@+id/image_duration_plane"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="@dimen/marginXL"
+                                            android:layout_marginTop="@dimen/marginM"
+                                            android:scaleType="fitXY"
+                                            android:src="@drawable/ic_baseline_access_time_24"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toBottomOf="@+id/image_transfers"
+                                            app:tint="@color/secondary" />
 
-                                    <TextView
-                                        android:id="@+id/text_duration_flight"
-                                        style="@style/TextSmall"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintStart_toEndOf="@+id/text_label_duration_to_air_port"
-                                        app:layout_constraintTop_toBottomOf="@+id/image_duration_plane"
-                                        tools:text="2h 40 min " />
+                                        <TextView
+                                            android:id="@+id/text_label_duration_to_air_port"
+                                            style="@style/TextSmall"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="@dimen/marginS"
+                                            android:ellipsize="end"
+                                            android:text="to the airport:"
+                                            android:textColor="@color/grey600"
+                                            app:layout_constraintBottom_toBottomOf="@+id/image_duration_plane"
+                                            app:layout_constraintStart_toEndOf="@+id/image_duration_plane"
+                                            app:layout_constraintTop_toTopOf="@+id/image_duration_plane" />
 
-                                    <TextView
-                                        android:id="@+id/text_label_duration_from_airport"
-                                        style="@style/TextSmall"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:text="from the airport:"
-                                        android:textColor="@color/grey600"
-                                        app:layout_constraintStart_toStartOf="@+id/text_label_duration_to_air_port"
-                                        app:layout_constraintTop_toBottomOf="@+id/text_label_duration_flight" />
+                                        <TextView
+                                            android:id="@+id/text_duration_to_airport"
+                                            style="@style/TextSmall"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            app:layout_constraintBottom_toBottomOf="@+id/image_duration_plane"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintStart_toEndOf="@+id/text_label_duration_to_air_port"
+                                            app:layout_constraintTop_toTopOf="@+id/image_duration_plane"
+                                            tools:text="40 min " />
 
-                                    <TextView
-                                        android:id="@+id/text_duration_from_airport"
-                                        style="@style/TextSmall"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintStart_toEndOf="@+id/text_label_duration_to_air_port"
-                                        app:layout_constraintTop_toBottomOf="@+id/text_label_duration_flight"
-                                        tools:text="30 min " />
+                                        <TextView
+                                            android:id="@+id/text_label_duration_flight"
+                                            style="@style/TextSmall"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:text="flight with transfers:"
+                                            android:textColor="@color/grey600"
+                                            app:layout_constraintStart_toStartOf="@+id/text_label_duration_to_air_port"
+                                            app:layout_constraintTop_toBottomOf="@+id/image_duration_plane" />
 
-                                    <TextView
-                                        android:id="@+id/text_label_duration_total"
-                                        style="@style/TextSmall"
-                                        android:layout_width="0dp"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginBottom="@dimen/marginXXXL"
-                                        android:text="total:"
-                                        android:textColor="@color/grey600"
-                                        app:layout_constraintBottom_toBottomOf="parent"
-                                        app:layout_constraintStart_toStartOf="@+id/text_label_duration_to_air_port"
-                                        app:layout_constraintTop_toBottomOf="@+id/text_label_duration_from_airport" />
+                                        <TextView
+                                            android:id="@+id/text_duration_flight"
+                                            style="@style/TextSmall"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintStart_toEndOf="@+id/text_label_duration_to_air_port"
+                                            app:layout_constraintTop_toBottomOf="@+id/image_duration_plane"
+                                            tools:text="2h 40 min " />
 
-                                    <TextView
-                                        android:id="@+id/text_duration_total"
-                                        style="@style/TextSmall"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        app:layout_constraintEnd_toEndOf="parent"
-                                        app:layout_constraintStart_toEndOf="@+id/text_label_duration_to_air_port"
-                                        app:layout_constraintTop_toBottomOf="@+id/text_label_duration_from_airport"
-                                        tools:text="3h 50 min " />
+                                        <TextView
+                                            android:id="@+id/text_label_duration_from_airport"
+                                            style="@style/TextSmall"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:text="from the airport:"
+                                            android:textColor="@color/grey600"
+                                            app:layout_constraintStart_toStartOf="@+id/text_label_duration_to_air_port"
+                                            app:layout_constraintTop_toBottomOf="@+id/text_label_duration_flight" />
+
+                                        <TextView
+                                            android:id="@+id/text_duration_from_airport"
+                                            style="@style/TextSmall"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintStart_toEndOf="@+id/text_label_duration_to_air_port"
+                                            app:layout_constraintTop_toBottomOf="@+id/text_label_duration_flight"
+                                            tools:text="30 min " />
+
+                                        <TextView
+                                            android:id="@+id/text_label_duration_total"
+                                            style="@style/TextSmall"
+                                            android:layout_width="0dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginBottom="@dimen/marginXXXL"
+                                            android:text="total:"
+                                            android:textColor="@color/grey600"
+                                            app:layout_constraintBottom_toBottomOf="parent"
+                                            app:layout_constraintStart_toStartOf="@+id/text_label_duration_to_air_port"
+                                            app:layout_constraintTop_toBottomOf="@+id/text_label_duration_from_airport" />
+
+                                        <TextView
+                                            android:id="@+id/text_duration_total"
+                                            style="@style/TextSmall"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintStart_toEndOf="@+id/text_label_duration_to_air_port"
+                                            app:layout_constraintTop_toBottomOf="@+id/text_label_duration_from_airport"
+                                            tools:text="3h 50 min " />
+
+                                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                                 </androidx.constraintlayout.widget.ConstraintLayout>
                             </androidx.cardview.widget.CardView>
@@ -469,6 +479,22 @@
                                 app:layout_constraintBottom_toBottomOf="@+id/text_other"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@+id/text_other" />
+
+                            <TextView
+                                android:id="@+id/text_empty_list"
+                                style="@style/TextMedium"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/marginM"
+                                android:layout_marginBottom="@dimen/marginL"
+                                android:text="@string/text_no_transport_ideas_added_yet"
+                                android:textColor="@color/grey600"
+                                android:visibility="gone"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/button_add"
+                                tools:visibility="visible" />
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/list_transports"

@@ -8,9 +8,9 @@ import javax.inject.Inject
 
 class ResolveSettlementUseCase @Inject constructor(private val financesRepository: FinancesRepository) {
 
-    suspend operator fun invoke(settlementId: Long, groupId: Long): Resource<Unit> {
+    suspend operator fun invoke(settlementId: Long): Resource<Unit> {
         return try {
-            financesRepository.resolveSettlement(settlementId, groupId)
+            financesRepository.resolveSettlement(settlementId)
             Resource.Success(Unit)
         } catch (e: HttpException) {
             e.printStackTrace()

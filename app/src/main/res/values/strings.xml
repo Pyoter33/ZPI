@@ -35,8 +35,9 @@
     <string name="text_description_attraction_placeholder">This attraction offers a unique experience…</string>
     <string name="text_link_placeholder">www.booking.com/Share</string>
     <string name="text_link_google_placeholder">https://goo.gl/maps/xAhqpKVUXiQbHbBH7</string>
-    <string name="text_link_helper">Make sure you are using a shortened link!</string>
+    <string name="text_link_helper">Please use shortened link!</string>
     <string name="text_text_empty">This field cannot be empty!</string>
+    <string name="text_password_rules">Password needs to have at least 6 characters, at least one letter and one number!</string>
     <string name="text_plans">Plans</string>
     <string name="text_finances">Finances</string>
     <string name="text_dash">-</string>
@@ -85,6 +86,7 @@
     <string name="text_new_day_plan">New day plan</string>
     <string name="text_edit_day_plan">Edit day plan</string>
     <string name="text_name">Name</string>
+    <string name="text_title">Title</string>
     <string name="text_date">Date</string>
     <string name="text_first_name">First name</string>
     <string name="text_surname">Surname</string>
@@ -141,7 +143,9 @@
     <string name="text_register_successful">Register successful. Logging in…</string>
     <string name="text_you_need_to_choose_at_least_one_contributor">You need to choose at least one contributor!</string>
     <string name="text_error_multiple">This fields cannot be empty!</string>
-    <string name="text_error_phone">Enter a valid 9 digit phone number!</string>
+    <string name="text_error_phone">Enter a valid 5–13 digit phone number!</string>
+    <string name="text_error_code">Enter a valid 1–4 digit code!</string>
+    <string name="text_error_code_phone">Enter valid 1–4 digit code and 5–13 digit phone number!</string>
     <string name="text_error_not_same">Passwords do not match!</string>
     <string name="text_no_accommodations">No accommodations added yet!</string>
     <string name="text_no_groups">No groups added yet!</string>
@@ -151,13 +155,18 @@
     <string name="text_no_day_plans">No day plans added yet!</string>
     <string name="text_no_settlements">No settlements needed yet!</string>
     <string name="text_edit_personal_data">Edit personal data</string>
-    <string name="text_cannot_edit_group">You cannot edit an ongoing group!</string>
+    <string name="text_cannot_edit_group">You cannot edit an ongoing or finished group!</string>
     <string name="text_is_now_coordinator"> %1$s is now a coordinator!  </string>
     <string name="text_accommodation_accepted"> Accommodation accepted! See it in summary. </string>
+    <string name="text_cannot_modify_accommodation">Cannot modify accepted accommodation!</string>
+    <string name="text_cannot_modify_dates_coordinator">Cannot modify dates if you are not a coordinator!</string>
+    <string name="text_cannot_modify_dates_ongoing">Cannot modify dates on an ongoing trip!</string>
     <string name="text_availability_accepted"> Dates accepted! See them in summary. </string>
     <string name="text_edit_user_data">Edit user data</string>
     <string name="text_sign_out">Sign out</string>
     <string name="text_leave_group">Leave group</string>
     <string name="text_groups">Groups</string>
     <string name="text_set_start">Set as start</string>
+    <string name="text_no_dates_fulfill_requirements">No dates fulfill requirements!</string>
+    <string name="text_no_transport_ideas_added_yet">No transport ideas added yet!</string>
 </resources>

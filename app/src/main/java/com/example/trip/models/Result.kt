@@ -11,7 +11,7 @@ sealed class Resource<out T> {
         }
     }
 
-    class Failure<out T>(val errorCode: Int = 404) : Resource<T>() {
+    class Failure<out T>(val errorCode: Int = 404, val message: String? = null) : Resource<T>() {
         override fun equals(other: Any?): Boolean {
             return other is Failure<*> && other.errorCode == errorCode
         }

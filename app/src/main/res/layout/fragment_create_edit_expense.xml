@@ -83,7 +83,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/marginM"
                             android:layout_marginHorizontal="@dimen/marginM"
-                            android:hint="@string/text_name"
+                            android:hint="@string/text_title"
                             app:errorEnabled="true"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +96,8 @@
                                 android:id="@+id/editText_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:inputType="text" />
+                                android:inputType="text"
+                                android:maxLength="100"/>
 
                         </com.google.android.material.textfield.TextInputLayout>
 

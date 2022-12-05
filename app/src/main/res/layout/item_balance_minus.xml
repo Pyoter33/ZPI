@@ -34,12 +34,21 @@
             android:layout_height="wrap_content"
             android:progress="80"
             android:rotation="180"
+            android:layout_marginStart="@dimen/marginS"
             app:indicatorColor="@color/red_transparent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:trackColor="@color/transparent"
             app:trackThickness="40dp" />
+
+        <FrameLayout
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:background="@color/grey900"
+            app:layout_constraintEnd_toEndOf="@+id/indicator"
+            app:layout_constraintBottom_toBottomOf="@+id/indicator"
+            app:layout_constraintTop_toTopOf="@+id/indicator" />
 
         <TextView
             android:id="@+id/text_price"

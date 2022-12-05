@@ -12,7 +12,7 @@
         >
 
         <TextView
-            android:id="@+id/text_debtee"
+            android:id="@+id/text_debtor"
             style="@style/TextBig"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,10 +36,10 @@
             android:layout_marginTop="@dimen/marginXS"
             android:text="owes"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_debtee" />
+            app:layout_constraintTop_toBottomOf="@+id/text_debtor" />
 
         <TextView
-            android:id="@+id/text_debtor"
+            android:id="@+id/text_debtee"
             style="@style/TextBig"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -92,7 +92,15 @@ class DayPlansFragment @Inject constructor() : BaseFragment<FragmentDayPlansBind
                     binding.textEmptyList.setGone()
                 }
                 is Resource.Failure -> {
-                    (requireActivity() as MainActivity).showSnackbar(
+                    it.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) {
+                            viewModel.refresh()
+                        }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
                         R.string.text_retry

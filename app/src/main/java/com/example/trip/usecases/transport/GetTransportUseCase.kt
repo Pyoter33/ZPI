@@ -7,6 +7,7 @@ import com.example.trip.models.*
 import com.example.trip.repositories.AccommodationsRepository
 import com.example.trip.repositories.GroupsRepository
 import com.example.trip.repositories.TransportRepository
+import com.example.trip.utils.getMessage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -26,7 +27,7 @@ class GetTransportUseCase @Inject constructor(
             }.catch {
                 it.printStackTrace()
                 if(it.cause is HttpException){
-                    emit(Resource.Failure((it.cause as HttpException).code()))
+                    emit(Resource.Failure((it.cause as HttpException).code(), (it.cause as HttpException).response()?.getMessage()))
                 } else {
                     emit(Resource.Failure(0))
                 }

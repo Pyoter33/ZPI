@@ -28,6 +28,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.trip.Constants
 import com.example.trip.R
 import com.skydoves.balloon.Balloon
+import org.json.JSONObject
 import retrofit2.HttpException
 import retrofit2.Response
 import java.math.BigDecimal
@@ -158,7 +159,11 @@ fun DialogFragment.setDeleteDialog(action: () -> Unit): Dialog {
 }
 
 fun Duration.toStringTime(): String {
-    return "${toHours()}h ${toMinutesPart()}min"
+    return "${toHours()}h ${toMinutesPartCompat()}min"
+}
+
+fun Duration.toMinutesPartCompat(): Int {
+    return (toMinutes() % 60).toInt()
 }
 
 fun BigDecimal.toStringFormat(currency: String): String {
@@ -185,19 +190,10 @@ private fun isIntegerValue(bd: BigDecimal): Boolean {
 
 fun String.formatPhone(): String {
     val split = split(' ')
-    return "${split[0]} ${split[1].subSequence(0..2)} ${split[1].subSequence(3..5)} ${
-        split[1].subSequence(
-            6..8 ////validate phone number length?
+    return "${split[0]} ${split[1]}"
         //accommodation in summary pdf
-        //block dates in day plan and availability 
-        //move snackbars to  
-        //animations
-        //user edit
-        //leave group
-        //Cannot invoke "java.time.LocalDate.plus(long, java.time.temporal.TemporalUnit)" because the return value of "com.zpi.transportservice.dto.TripDataDto.startDate()" is null
-        )
-    }"
-}
+        //move snackbars to
+    }
 
 fun <T> Response<T>.toBodyOrError(): T {
     return when {
@@ -239,4 +235,9 @@ fun Fragment.refreshIfNewData(action: () -> Unit) {
         action()
         findNavController().currentBackStackEntry?.savedStateHandle?.set(Constants.TO_REFRESH_KEY, null)
     }
+}
+
+fun <T> Response<T>.getMessage(): String? {
+    val jObjError = errorBody()?.string()?.let { JSONObject(it) }
+    return jObjError?.getString("message")
 }

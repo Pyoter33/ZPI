@@ -12,7 +12,6 @@ import com.example.trip.databinding.ItemSettlementHeaderBinding
 import com.example.trip.models.Settlement
 import com.example.trip.models.SettlementStatus
 import com.example.trip.utils.toStringFormat
-import com.skydoves.balloon.Balloon
 import javax.inject.Inject
 
 class SettlementUserAdapter @Inject constructor() :
@@ -24,14 +23,8 @@ class SettlementUserAdapter @Inject constructor() :
 
     private lateinit var settlementClickListener: SettlementClickListener
 
-    private lateinit var popupMenu: Balloon
-
     fun setSettlementClickListener(settlementClickListener: SettlementClickListener) {
         this.settlementClickListener = settlementClickListener
-    }
-
-    fun setPopupMenu(popupMenu: Balloon) {
-        this.popupMenu = popupMenu
     }
 
     fun setCurrency(currency: String) {
@@ -52,8 +45,7 @@ class SettlementUserAdapter @Inject constructor() :
             else -> SettlementViewHolder.create(
                 parent,
                 currency,
-                settlementClickListener,
-                popupMenu
+                settlementClickListener
             )
         }
     }
@@ -68,8 +60,7 @@ class SettlementUserAdapter @Inject constructor() :
     class SettlementViewHolder(
         private val binding: ItemSettlementBinding,
         private val currency: String,
-        private val settlementClickListener: SettlementClickListener,
-        private val popupMenu: Balloon
+        private val settlementClickListener: SettlementClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(settlement: Settlement) {
@@ -97,16 +88,14 @@ class SettlementUserAdapter @Inject constructor() :
             fun create(
                 parent: ViewGroup,
                 currency: String,
-                settlementClickListener: SettlementClickListener,
-                popupMenu: Balloon
+                settlementClickListener: SettlementClickListener
             ): SettlementViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemSettlementBinding.inflate(layoutInflater, parent, false)
                 return SettlementViewHolder(
                     binding,
                     currency,
-                    settlementClickListener,
-                    popupMenu
+                    settlementClickListener
                 )
             }
         }

@@ -17,7 +17,8 @@ import com.example.trip.models.DayPlanIcon
 import com.example.trip.models.Resource
 import com.example.trip.utils.*
 import com.example.trip.viewmodels.dayplan.CreateEditDayPlanViewModel
-import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.datepicker.*
+import com.google.android.material.snackbar.Snackbar
 import com.skydoves.powermenu.CustomPowerMenu
 import com.skydoves.powermenu.OnMenuItemClickListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,6 +65,32 @@ class CreateEditDayPlanFragment @Inject constructor() :
         onLayoutIconClick()
         onSubmitClick()
         onBackArrowClick()
+        getAcceptedDates()
+    }
+
+    private fun getAcceptedDates() {
+        binding.layoutLoading.setVisible()
+        lifecycleScope.launch {
+            when (val result = viewModel.getAcceptedAvailabilityAsync().await()) {
+                is Resource.Success -> {
+                    binding.layoutLoading.setGone()
+                    viewModel.startDate = result.data?.availability?.startDate
+                    viewModel.endDate = result.data?.availability?.endDate
+                }
+                is Resource.Failure -> {
+                    binding.layoutLoading.setGone()
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry,
+                        Snackbar.LENGTH_INDEFINITE
+                    ) {
+                        getAcceptedDates()
+                    }
+                }
+                else -> {}
+            }
+        }
     }
 
     private fun setMenu() {
@@ -154,20 +181,24 @@ class CreateEditDayPlanFragment @Inject constructor() :
     }
 
     private fun setAndShowCalendar() {
-//        val dateValidatorMin: CalendarConstraints.DateValidator =
-//            DateValidatorPointForward.from(min.getTimeInMillis())
-//        val dateValidatorMax: CalendarConstraints.DateValidator =
-//            DateValidatorPointBackward.before(max.getTimeInMillis())
-//
-//        val listValidators = ArrayList<CalendarConstraints.DateValidator>()
-//        listValidators.add(dateValidatorMin)
-//        listValidators.add(dateValidatorMax)
-//        val validators = CompositeDateValidator.allOf(listValidators)
-//        constraintsBuilderRange.setValidator(validators)
+        val listValidators = mutableListOf<CalendarConstraints.DateValidator>()
 
-        val calendar =
-            MaterialDatePicker.Builder.datePicker()
-                .setTheme(R.style.ThemeOverlay_App_DatePicker).build()
+        viewModel.startDate?.let {
+            val dateValidatorMin: CalendarConstraints.DateValidator =
+                DateValidatorPointForward.from(it.toMillis())
+            listValidators.add(dateValidatorMin)
+        }
+        viewModel.endDate?.let {
+            val dateValidatorMax: CalendarConstraints.DateValidator =
+                DateValidatorPointBackward.before(it.toMillis())
+            listValidators.add(dateValidatorMax)
+        }
+        listValidators.add(DateValidatorPointForward.now())
+
+        val validators = CompositeDateValidator.allOf(listValidators)
+        val constraints = CalendarConstraints.Builder().setValidator(validators).build()
+        val calendar = MaterialDatePicker.Builder.datePicker().setCalendarConstraints(constraints)
+            .setTheme(R.style.ThemeOverlay_App_DatePicker).build()
 
         calendar.addOnPositiveButtonClickListener {
             val date = it.toLocalDate()
@@ -209,7 +240,7 @@ class CreateEditDayPlanFragment @Inject constructor() :
         val operation =
             if (viewModel.toPost) viewModel.postDayPlanAsync() else viewModel.updateDayPlanAsync()
         lifecycleScope.launch {
-            when (operation.await()) {
+            when (val result = operation.await()) {
                 is Resource.Success -> {
                     disableLoading()
                     findNavController().popBackStackWithRefresh()
@@ -217,7 +248,15 @@ class CreateEditDayPlanFragment @Inject constructor() :
                 is Resource.Loading -> {}
                 is Resource.Failure -> {
                     disableLoading()
-                    (requireActivity() as MainActivity).showSnackbar(
+                    result.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) {
+                            submit()
+                        }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_post_failure,
                         R.string.text_retry
@@ -243,6 +282,16 @@ class CreateEditDayPlanFragment @Inject constructor() :
                 textFieldDate.error = getString(R.string.text_text_empty)
                 textFieldDate.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
+            }
+            if (viewModel.startDate == null || viewModel.endDate == null) {
+                (requireActivity() as MainActivity).showSnackbar(
+                    requireView(),
+                    R.string.text_fetch_failure,
+                    R.string.text_retry,
+                    Snackbar.LENGTH_INDEFINITE
+                ) {
+                    getAcceptedDates()
+                }
             }
         }
 

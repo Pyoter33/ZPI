@@ -61,7 +61,7 @@ class AttractionListAdapter @Inject constructor() :
                     .into(binding.imageAttraction)
 
                 if (attraction.description.isNullOrEmpty()) {
-                    buttonExpand.setInvisible()
+                    buttonExpand.setGone()
                 } else {
                     buttonExpand.setVisible()
                 }

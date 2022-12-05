@@ -44,10 +44,9 @@ interface FinanceService {
         @Query("userId") userId: Long
     ): Response<List<SettlementDto>>
 
-    @GET("finance-request/accept")
+    @PATCH("finance-request/accept")
     suspend fun resolveSettlement(
-        @Query("requestId") requestId: Long,
-        @Query("groupId") groupId: Long
+        @Query("requestId") requestId: Long
     ): Response<Void>
 
 }

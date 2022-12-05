@@ -73,7 +73,9 @@
                         android:id="@+id/editText_name"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:inputType="text" />
+                        android:inputType="text"
+                        android:maxLength="100"
+                        />
 
                 </com.google.android.material.textfield.TextInputLayout>
 

@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/marginL"
-            android:text="Accept"
+            android:text="@string/text_accept"
             android:textColor="@color/secondary"
             app:icon="@drawable/ic_baseline_check_24"
             app:iconTint="@color/secondary"

@@ -6,10 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.trip.Constants
 import com.example.trip.dto.DayPlanPostDto
 import com.example.trip.models.DayPlan
+import com.example.trip.models.OptimalAvailability
 import com.example.trip.models.Resource
 import com.example.trip.usecases.dayplan.PostDayPlanUseCase
 import com.example.trip.usecases.dayplan.UpdateDayPlanUseCase
-import com.example.trip.usecases.summary.GetAcceptedAvailabilityUseCaseFlow
+import com.example.trip.usecases.summary.GetAcceptedAvailabilityUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -21,13 +22,15 @@ import javax.inject.Inject
 class CreateEditDayPlanViewModel @Inject constructor(
     private val postDayPlanUseCase: PostDayPlanUseCase,
     private val updateDayPlanUseCase: UpdateDayPlanUseCase,
-    private val getAcceptedAvailabilityUseCaseFlow: GetAcceptedAvailabilityUseCaseFlow,
+    private val getAcceptedAvailabilityUseCase: GetAcceptedAvailabilityUseCase,
     state: SavedStateHandle
 ) : ViewModel() {
 
     var name: String? = null
     var date: LocalDate? = null
     var icon: Int = 0
+    var startDate: LocalDate? = null
+    var endDate: LocalDate? = null
 
     val groupId = state.get<Long>(Constants.GROUP_ID_KEY)
     val dayPlan = state.get<DayPlan>(Constants.DAY_PLAN_KEY)
@@ -54,5 +57,12 @@ class CreateEditDayPlanViewModel @Inject constructor(
         return deferred
     }
 
+    fun getAcceptedAvailabilityAsync(): Deferred<Resource<OptimalAvailability?>> {
+        return viewModelScope.async {
+            groupId?.let {
+                getAcceptedAvailabilityUseCase(groupId)
+            }?: Resource.Failure()
+        }
+    }
 
 }

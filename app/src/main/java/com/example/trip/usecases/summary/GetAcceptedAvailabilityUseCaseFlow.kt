@@ -21,7 +21,11 @@ class GetAcceptedAvailabilityUseCaseFlow @Inject constructor(
             emit(getAcceptedAvailability(groupId))
         }.catch {
             it.printStackTrace()
-            emit(Resource.Failure((it.cause as HttpException).code()))
+            if (it.cause is HttpException) {
+                emit(Resource.Failure((it.cause as HttpException).code()))
+            } else {
+                emit(Resource.Failure(0))
+            }
         }.onStart {
             emit(Resource.Loading<Resource<OptimalAvailability?>>() as Resource<OptimalAvailability?>)
         }

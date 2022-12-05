@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -148,7 +149,13 @@ class AccommodationListFragment @Inject constructor() :
                     adapter.submitList(it.data)
                 }
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry
+                    ) {
+                        viewModel.refreshData()
+                    }
                 }
                 else -> {}
             }
@@ -225,6 +232,12 @@ class AccommodationListFragment @Inject constructor() :
     }
 
     private fun navigateToTransport(accommodation: Accommodation, startDate: LocalDate) {
+        val options = NavOptions.Builder()
+            .setEnterAnim(R.anim.fade_in)
+            .setExitAnim(R.anim.fade_out)
+            .setPopEnterAnim(R.anim.fade_in)
+            .setPopExitAnim(R.anim.fade_out)
+            .build()
         val bundle = Bundle().apply {
             putLong(Constants.GROUP_ID_KEY, accommodation.groupId)
             putLong(Constants.ACCOMMODATION_ID_KEY, accommodation.id)
@@ -235,7 +248,7 @@ class AccommodationListFragment @Inject constructor() :
             putLong(Constants.ACCOMMODATION_CREATOR_ID_KEY, accommodation.creatorId)
             putLongArray(Constants.COORDINATORS_KEY, args.coordinators)
         }
-        findNavController().navigate(R.id.transport, bundle)
+        findNavController().navigate(R.id.transport, bundle, options)
     }
 
     private fun showTransportDialog() {
@@ -246,16 +259,26 @@ class AccommodationListFragment @Inject constructor() :
     override fun onLongClick(accommodation: Accommodation, view: View) {
         val popupMenu = when (getUserType(accommodation.creatorId)) {
             UserType.COORDINATOR -> {
-                popupMenuCoordinator.apply {
-                    setOnPopupButtonClick(R.id.button_accept) { onMenuAcceptClick(accommodation) }
-                    setOnPopupButtonClick(R.id.button_edit) { onMenuEditClick(accommodation) }
-                    setOnPopupButtonClick(R.id.button_delete) { onMenuDeleteClick(accommodation) }
+                if(accommodation.isAccepted) {
+                    requireContext().toast(R.string.text_cannot_modify_accommodation)
+                    null
+                } else {
+                    popupMenuCoordinator.apply {
+                        setOnPopupButtonClick(R.id.button_accept) { onMenuAcceptClick(accommodation) }
+                        setOnPopupButtonClick(R.id.button_edit) { onMenuEditClick(accommodation) }
+                        setOnPopupButtonClick(R.id.button_delete) { onMenuDeleteClick(accommodation) }
+                    }
                 }
             }
             UserType.CREATOR -> {
-                popupMenuCreator.apply {
-                    setOnPopupButtonClick(R.id.button_edit) { onMenuEditClick(accommodation) }
-                    setOnPopupButtonClick(R.id.button_delete) { onMenuDeleteClick(accommodation) }
+                if(accommodation.isAccepted) {
+                    requireContext().toast(R.string.text_cannot_modify_accommodation)
+                    null
+                } else {
+                    popupMenuCreator.apply {
+                        setOnPopupButtonClick(R.id.button_edit) { onMenuEditClick(accommodation) }
+                        setOnPopupButtonClick(R.id.button_delete) { onMenuDeleteClick(accommodation) }
+                    }
                 }
             }
             else -> null

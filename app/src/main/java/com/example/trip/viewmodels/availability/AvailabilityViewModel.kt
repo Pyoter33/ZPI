@@ -10,6 +10,7 @@ import com.example.trip.usecases.availability.DeleteAvailabilityUseCase
 import com.example.trip.usecases.availability.GetOptimalDatesUseCase
 import com.example.trip.usecases.availability.GetUserAvailabilitiesUseCase
 import com.example.trip.usecases.availability.PostAvailabilityUseCase
+import com.example.trip.usecases.summary.UpdateAcceptedAvailabilityUseCase
 import com.example.trip.utils.SharedPreferencesHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
@@ -25,6 +26,7 @@ class AvailabilityViewModel @Inject constructor(
     private val postAvailabilityUseCase: PostAvailabilityUseCase,
     private val deleteAvailabilityUseCase: DeleteAvailabilityUseCase,
     private val getOptimalDatesUseCase: GetOptimalDatesUseCase,
+    private val updateAcceptedAvailabilityUseCase: UpdateAcceptedAvailabilityUseCase,
     private val preferencesHelper: SharedPreferencesHelper,
     state: SavedStateHandle
 ) : ViewModel() {
@@ -65,6 +67,12 @@ class AvailabilityViewModel @Inject constructor(
                     )
                 )
             } ?: Resource.Failure()
+        }
+    }
+
+    fun updateAcceptedAvailabilityAsync(id: Long): Deferred<Resource<Unit>> {
+        return viewModelScope.async {
+            updateAcceptedAvailabilityUseCase(id)
         }
     }
 

@@ -42,10 +42,20 @@
                 app:argType="long" />
             <action
                 android:id="@+id/action_attractionsFragment_to_findAttractionFragment"
-                app:destination="@id/findAttractionFragment" />
+                app:destination="@id/findAttractionFragment"
+                app:enterAnim="@anim/fade_in"
+                app:exitAnim="@anim/fade_out"
+                app:popEnterAnim="@anim/fade_in"
+                app:popExitAnim="@anim/fade_out"
+                />
             <action
                 android:id="@+id/action_attractionsFragment_to_createEditAttractionFragment"
-                app:destination="@id/createEditAttractionFragment" />
+                app:destination="@id/createEditAttractionFragment"
+                app:enterAnim="@anim/fade_in"
+                app:exitAnim="@anim/fade_out"
+                app:popEnterAnim="@anim/fade_in"
+                app:popExitAnim="@anim/fade_out"
+                />
             <argument
                 android:name="dayPlan"
                 app:argType="com.example.trip.models.DayPlan" />
@@ -59,7 +69,11 @@
             android:label="FindAttractionFragment">
             <action
                 android:id="@+id/action_findAttractionFragment_to_createEditAttractionFragment"
-                app:destination="@id/createEditAttractionFragment" />
+                app:destination="@id/createEditAttractionFragment"
+                app:enterAnim="@anim/fade_in"
+                app:exitAnim="@anim/fade_out"
+                app:popEnterAnim="@anim/fade_in"
+                app:popExitAnim="@anim/fade_out"/>
             <argument
                 android:name="groupId"
                 app:argType="long" />
@@ -74,13 +88,21 @@
             tools:layout="@layout/fragment_day_plans">
             <action
                 android:id="@+id/action_dayPlansFragment_to_attractionsFragment"
-                app:destination="@id/attractionsFragment" />
+                app:destination="@id/attractionsFragment"
+                app:enterAnim="@anim/fade_in"
+                app:exitAnim="@anim/fade_out"
+                app:popEnterAnim="@anim/fade_in"
+                app:popExitAnim="@anim/fade_out"/>
             <argument
                 android:name="groupId"
                 app:argType="long" />
             <action
                 android:id="@+id/action_dayPlansFragment_to_createEditDayPlanFragment"
-                app:destination="@id/createEditDayPlanFragment" />
+                app:destination="@id/createEditDayPlanFragment"
+                app:enterAnim="@anim/fade_in"
+                app:exitAnim="@anim/fade_out"
+                app:popEnterAnim="@anim/fade_in"
+                app:popExitAnim="@anim/fade_out" />
             <argument
                 android:name="coordinators"
                 app:argType="long[]" />
@@ -142,7 +164,12 @@
             android:label="MoneyPager">
             <action
                 android:id="@+id/action_finances_to_createEditExpenseFragment"
-                app:destination="@id/createEditExpenseFragment" />
+                app:destination="@id/createEditExpenseFragment"
+                app:enterAnim="@anim/fade_in"
+                app:exitAnim="@anim/fade_out"
+                app:popEnterAnim="@anim/fade_in"
+                app:popExitAnim="@anim/fade_out"
+                />
             <argument
                 android:name="groupId"
                 app:argType="long" />
@@ -151,7 +178,12 @@
                 app:argType="string" />
             <action
                 android:id="@+id/action_moneyPager_to_expenseDetailsFragment"
-                app:destination="@id/expenseDetailsFragment" />
+                app:destination="@id/expenseDetailsFragment"
+                app:enterAnim="@anim/fade_in"
+                app:exitAnim="@anim/fade_out"
+                app:popEnterAnim="@anim/fade_in"
+                app:popExitAnim="@anim/fade_out"
+                />
         </fragment>
         <fragment
             android:id="@+id/financesFragment"
@@ -201,7 +233,12 @@
                 app:argType="com.example.trip.models.Expense" />
             <action
                 android:id="@+id/action_expenseDetailsFragment_to_createEditExpenseFragment"
-                app:destination="@id/createEditExpenseFragment" />
+                app:destination="@id/createEditExpenseFragment"
+                app:enterAnim="@anim/fade_in"
+                app:exitAnim="@anim/fade_out"
+                app:popEnterAnim="@anim/fade_in"
+                app:popExitAnim="@anim/fade_out"
+                />
         </fragment>
     </navigation>
 </navigation>

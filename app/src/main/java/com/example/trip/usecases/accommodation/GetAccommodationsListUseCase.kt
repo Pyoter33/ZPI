@@ -3,6 +3,7 @@ package com.example.trip.usecases.accommodation
 import com.example.trip.models.Accommodation
 import com.example.trip.models.Resource
 import com.example.trip.repositories.AccommodationsRepository
+import com.example.trip.repositories.GroupsRepository
 import com.example.trip.utils.SharedPreferencesHelper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -12,7 +13,8 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 class GetAccommodationsListUseCase @Inject constructor(
-    private val repository: AccommodationsRepository,
+    private val accommodationsRepository: AccommodationsRepository,
+    private val groupsRepository: GroupsRepository,
     private val preferencesHelper: SharedPreferencesHelper
 ) {
     suspend operator fun invoke(groupId: Long): Flow<Resource<List<Accommodation>>> {
@@ -30,9 +32,10 @@ class GetAccommodationsListUseCase @Inject constructor(
         }
     }
 
-    private suspend fun getAccommodations(groupId: Long): Resource<List<Accommodation>> =
-        Resource.Success(repository.getAccommodationsList(groupId).map {
-            val votes = repository.getVotes(it.accommodationId)
+    private suspend fun getAccommodations(groupId: Long): Resource<List<Accommodation>> {
+        val group = groupsRepository.getGroup(groupId)
+        val result = accommodationsRepository.getAccommodationsList(groupId).map {
+            val votes = accommodationsRepository.getVotes(it.accommodationId)
                 .map { vote -> vote.id.userId }
             Accommodation(
                 it.accommodationId,
@@ -45,9 +48,10 @@ class GetAccommodationsListUseCase @Inject constructor(
                 it.sourceLink,
                 it.givenVotes,
                 it.price,
-                preferencesHelper.getUserId() in votes
+                preferencesHelper.getUserId() in votes,
+                it.accommodationId == group.selectedAccommodationId
             )
         }
-        )
-
+        return Resource.Success(result)
+    }
 }

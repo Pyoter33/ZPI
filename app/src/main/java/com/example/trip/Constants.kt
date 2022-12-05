@@ -28,4 +28,5 @@ object Constants {
     const val ACCOMMODATION_CREATOR_ID_KEY = "accommodationCreatorId"
     const val TO_REFRESH_KEY = "refresh"
     const val LOCATION_KEY = "Location"
+    const val PASSWORD_REGEX = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{6,}$"
 }

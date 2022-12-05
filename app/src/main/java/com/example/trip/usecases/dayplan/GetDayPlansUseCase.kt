@@ -3,6 +3,7 @@ package com.example.trip.usecases.dayplan
 import com.example.trip.models.DayPlan
 import com.example.trip.models.Resource
 import com.example.trip.repositories.DayPlansRepository
+import com.example.trip.utils.getMessage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -18,7 +19,7 @@ class GetDayPlansUseCase @Inject constructor(private val dayPlansRepository: Day
         }.catch {
             it.printStackTrace()
             if (it.cause is HttpException) {
-                emit(Resource.Failure((it.cause as HttpException).code()))
+                emit(Resource.Failure((it.cause as HttpException).code(), (it.cause as HttpException).response()?.getMessage()))
             } else {
                 emit(Resource.Failure(0))
             }

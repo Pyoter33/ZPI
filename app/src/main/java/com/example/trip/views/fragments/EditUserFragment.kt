@@ -138,10 +138,10 @@ class EditUserFragment @Inject constructor() : BaseFragment<FragmentEditUserBind
             override fun afterTextChanged(editable: Editable?) {
                 viewModel.code = editable?.toString()
                 binding.textError.setInvisible()
+                binding.textLabelPhone.setTextColor(resources.getColor(R.color.grey700, null))
             }
         })
     }
-
     private fun setupOnPhoneTextChangeListener() {
         binding.textFieldPhone.editText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -157,6 +157,7 @@ class EditUserFragment @Inject constructor() : BaseFragment<FragmentEditUserBind
                     )
                 )
                 binding.textError.setInvisible()
+                binding.textLabelPhone.setTextColor(resources.getColor(R.color.grey700, null))
             }
         })
     }
@@ -226,6 +227,8 @@ class EditUserFragment @Inject constructor() : BaseFragment<FragmentEditUserBind
 
     private fun isSubmitNotPermitted(): Boolean {
         var showError = false
+        var codeError = false
+        var phoneError = false
 
         with(binding) {
             if (viewModel.firstName.isNullOrEmpty()) {
@@ -233,26 +236,29 @@ class EditUserFragment @Inject constructor() : BaseFragment<FragmentEditUserBind
                 textFieldName.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
             }
-            if (viewModel.surname.isNullOrEmpty()) {
-                textFieldName.error = getString(R.string.text_text_empty)
-                textFieldName.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
+            if(viewModel.surname.isNullOrEmpty()) {
+                textFieldSurname.error = getString(R.string.text_text_empty)
+                textFieldSurname.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
             }
-            if (viewModel.code.isNullOrEmpty()) {
+            if(viewModel.code.isNullOrEmpty() || viewModel.code?.length !in 1..4) {
                 textError.setVisible()
-                textError.text = getString(R.string.text_error_multiple)
+                textError.text = getString(R.string.text_error_code)
+                textLabelPhone.setTextColor(resources.getColor(R.color.red, null))
                 showError = true
+                codeError = true
             }
-            if (viewModel.phone.isNullOrEmpty()) {
-                textError.setVisible()
-                textError.text = getString(R.string.text_error_multiple)
-                textFieldPhone.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
-                showError = true
-            }
-            if (viewModel.phone?.length != 9) {
+            if (viewModel.phone.isNullOrEmpty() || viewModel.phone?.length !in 5..13) {
                 textError.setVisible()
                 textError.text = getString(R.string.text_error_phone)
                 textFieldPhone.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
+                textLabelPhone.setTextColor(resources.getColor(R.color.red, null))
+                showError = true
+                phoneError = true
+            }
+            if(codeError && phoneError) {
+                textError.setVisible()
+                textError.text = getString(R.string.text_error_code_phone)
                 showError = true
             }
             if (viewModel.birthday == null) {
@@ -261,7 +267,6 @@ class EditUserFragment @Inject constructor() : BaseFragment<FragmentEditUserBind
                 showError = true
             }
         }
-
         return showError
     }
 

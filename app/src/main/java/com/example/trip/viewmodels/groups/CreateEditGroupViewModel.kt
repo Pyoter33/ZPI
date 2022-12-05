@@ -42,8 +42,8 @@ class CreateEditGroupViewModel @Inject constructor(
                    0,
                     startingCity!!,
                     startingCity!!,
-                    participants!!.toInt(),
-                    days!!.toInt()
+                    days!!.toInt(),
+                    participants!!.toInt()
                 )
             )
         }
@@ -62,8 +62,8 @@ class CreateEditGroupViewModel @Inject constructor(
                         0,
                         startingCity!!,
                         startingCity!!,
-                        participants!!.toInt(),
-                        days!!.toInt()
+                        days!!.toInt(),
+                        participants!!.toInt()
                     )
                 )
             } ?: Resource.Failure()

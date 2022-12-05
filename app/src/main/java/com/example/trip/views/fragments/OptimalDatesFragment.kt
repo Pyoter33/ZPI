@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.example.trip.Constants
 import com.example.trip.R
@@ -20,6 +21,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kizitonwose.calendarview.utils.yearMonth
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.time.YearMonth
 import java.time.temporal.WeekFields
 import java.util.*
@@ -41,8 +43,12 @@ class OptimalDatesFragment @Inject constructor() : BaseFragment<FragmentOptimalD
 
     private val viewPagerCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
-            val availability = adapter.currentList[position].availability
-            updateCalendar(availability)
+            if (adapter.currentList.isNotEmpty()) {
+                val availability = adapter.currentList[position].availability
+                updateCalendar(availability)
+            } else {
+                resetCalendar()
+            }
         }
     }
 
@@ -55,15 +61,26 @@ class OptimalDatesFragment @Inject constructor() : BaseFragment<FragmentOptimalD
         super.onViewCreated(view, savedInstanceState)
 
         requireActivity().onBackArrowClick(binding.buttonBack)
+        setSwipeRefreshLayout(binding.layoutRefresh, R.color.secondary) { viewModel.refreshOptimalAvailability() }
         onMyDatesClick()
         setCalendar()
         setPager()
     }
 
+    private fun resetCalendar() {
+        dateValidator = DateValidator(listOf())
+        binding.calendar.setDayBinder(
+            dateValidator,
+            R.color.secondary,
+            R.color.secondary_transparent
+        )
+    }
+
     private fun setPager() {
         binding.pagerDates.adapter = adapter
         adapter.setDatesClickListener(this)
-        adapter.showAccept = requireArguments().getLongArray(Constants.COORDINATORS_KEY)!!.contains(preferencesHelper.getUserId())
+        adapter.showAccept = requireArguments().getLongArray(Constants.COORDINATORS_KEY)!!
+            .contains(preferencesHelper.getUserId())
         TabLayoutMediator(binding.tabPager, binding.pagerDates) { _, _ ->
         }.attach()
 
@@ -99,10 +116,13 @@ class OptimalDatesFragment @Inject constructor() : BaseFragment<FragmentOptimalD
             when (it) {
                 is Resource.Success -> {
                     adapter.submitList(it.data)
+                    if (it.data.isEmpty()) binding.textEmptyList.setVisible() else binding.textEmptyList.setGone()
                     binding.layoutLoading.setGone()
+                    binding.layoutRefresh.isRefreshing = false
                 }
                 is Resource.Loading -> {
-                    binding.layoutLoading.setVisible()
+                    binding.layoutRefresh.isRefreshing = true
+                    //binding.layoutLoading.setVisible()
                 }
                 is Resource.Failure -> {
                     (requireActivity() as MainActivity).showSnackbar(
@@ -114,6 +134,7 @@ class OptimalDatesFragment @Inject constructor() : BaseFragment<FragmentOptimalD
                         viewModel.refreshOptimalAvailability()
                     }
                     binding.layoutLoading.setGone()
+                    binding.layoutRefresh.isRefreshing = false
                 }
             }
         }
@@ -138,7 +159,28 @@ class OptimalDatesFragment @Inject constructor() : BaseFragment<FragmentOptimalD
     }
 
     override fun onAcceptClick(availability: Availability) {
-        requireActivity().toast("accept")
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (viewModel.updateAcceptedAvailabilityAsync(availability.id).await()) {
+                is Resource.Success -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    viewModel.refreshOptimalAvailability()
+                    requireContext().toast(R.string.text_availability_accepted)
+                }
+                is Resource.Loading -> {}
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_post_failure,
+                        R.string.text_retry
+                    ) {
+                        onAcceptClick(availability)
+                    }
+                }
+
+            }
+        }
     }
 
     override fun onDestroyView() {

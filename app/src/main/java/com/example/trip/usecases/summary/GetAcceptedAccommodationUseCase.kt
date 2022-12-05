@@ -18,7 +18,11 @@ class GetAcceptedAccommodationUseCase @Inject constructor(private val accommodat
             emit(getAcceptedAccommodation(groupId))
         }.catch {
             it.printStackTrace()
-            emit(Resource.Failure((it.cause as HttpException).code()))
+            if (it.cause is HttpException) {
+                emit(Resource.Failure((it.cause as HttpException).code()))
+            } else {
+                emit(Resource.Failure(0))
+            }
         }.onStart {
             emit(Resource.Loading<Resource<Accommodation?>>() as Resource<Accommodation?>)
         }
@@ -40,7 +44,8 @@ class GetAcceptedAccommodationUseCase @Inject constructor(private val accommodat
                     result.sourceLink,
                     result.givenVotes,
                     result.price,
-                    false
+                    false,
+                    isAccepted = true
             )
         })
     }

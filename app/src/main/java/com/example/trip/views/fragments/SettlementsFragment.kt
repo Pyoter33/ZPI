@@ -113,7 +113,6 @@ class SettlementsFragment @Inject constructor() : BaseFragment<FragmentSettlemen
         val currency = requireArguments().getString(Constants.CURRENCY_KEY, "?")
         val layoutManager = LinearLayoutManager(context)
         userAdapter.setSettlementClickListener(this)
-        userAdapter.setPopupMenu(popupMenu)
         userAdapter.setCurrency(currency)
         otherAdapter.setCurrency(currency)
 
@@ -135,12 +134,12 @@ class SettlementsFragment @Inject constructor() : BaseFragment<FragmentSettlemen
     }
 
     override fun onLongClick(settlement: Settlement, view: View) {
-        if (settlement.debtee.id == preferencesHelper.getUserId() && settlement.status != SettlementStatus.RESOLVED) {
+        if ((settlement.debtee.id == preferencesHelper.getUserId() || settlement.debtor.id == preferencesHelper.getUserId()) && settlement.status != SettlementStatus.RESOLVED) {
             popupMenu.setOnPopupButtonClick(R.id.button_resolve) {
                 onMenuResolve(settlement)
             }
+            popupMenu.showAlignBottom(view)
         }
-        popupMenu.showAlignBottom(view)
     }
 
     //dialogs

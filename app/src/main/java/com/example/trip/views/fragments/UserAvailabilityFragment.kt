@@ -22,6 +22,7 @@ import com.google.android.material.datepicker.CompositeDateValidator
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendarview.utils.yearMonth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -55,6 +56,7 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
         onOptimalDatesClick()
         onExpandClick()
         requireActivity().onBackArrowClick(binding.buttonBack)
+        setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshAvailability() }
         setCalendar()
     }
 
@@ -86,8 +88,8 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
         dateValidator = DateValidator(listOf())
         binding.calendar.setDayBinder(
             dateValidator,
-            R.color.secondary,
-            R.color.secondary_transparent
+            R.color.primary,
+            R.color.primary_transparent
         )
     }
 
@@ -156,19 +158,23 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
                     dateValidator = DateValidator(it.data)
                     it.data.firstOrNull()?.let { it1 -> updateView(it1) } ?: resetCalendar()
                     binding.layoutLoading.setGone()
+                    binding.layoutRefresh.isRefreshing = false
                 }
                 is Resource.Loading -> {
-                    binding.layoutLoading.setVisible()
+                    binding.layoutRefresh.isRefreshing = true
+                //binding.layoutLoading.setVisible()
                 }
                 is Resource.Failure -> {
                     (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
-                        R.string.text_retry
+                        R.string.text_retry,
+                        Snackbar.LENGTH_INDEFINITE
                     ) {
                         viewModel.refreshAvailability()
                     }
                     binding.layoutLoading.setGone()
+                    binding.layoutRefresh.isRefreshing = false
                 }
             }
         }
@@ -210,23 +216,24 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
     }
 
     private fun addDates(startDate: Long, endDate: Long) {
-        binding.layoutLoading.setVisible()
+        binding.layoutRefresh.isRefreshing = true
         lifecycleScope.launch {
             when (viewModel.postAvailabilityAsync(startDate.toLocalDate(), endDate.toLocalDate())
                 .await()) {
                 is Resource.Success -> {
-                    binding.layoutLoading.setGone()
+                    binding.layoutRefresh.isRefreshing = false
                     viewModel.refreshAvailability()
                 }
                 is Resource.Loading -> {
                     //NO-OP
                 }
                 is Resource.Failure -> {
-                    binding.layoutLoading.setGone()
+                    binding.layoutRefresh.isRefreshing = false
                     (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_post_failure,
-                        R.string.text_retry
+                        R.string.text_retry,
+                        Snackbar.LENGTH_INDEFINITE
                     ) {
                         addDates(startDate, endDate)
                     }
@@ -236,18 +243,18 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
     }
 
     override fun onDeleteClick(id: Long) {
-        binding.layoutLoading.setVisible()
+        binding.layoutRefresh.isRefreshing = true
         lifecycleScope.launch {
             when (viewModel.deleteAvailabilityAsync(id).await()) {
                 is Resource.Success -> {
-                    binding.layoutLoading.setGone()
+                    binding.layoutRefresh.isRefreshing = false
                     viewModel.refreshAvailability()
                 }
                 is Resource.Loading -> {
                     //NO-OP
                 }
                 is Resource.Failure -> {
-                    binding.layoutLoading.setGone()
+                    binding.layoutRefresh.isRefreshing = false
                     (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_delete_failure,

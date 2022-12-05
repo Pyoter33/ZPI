@@ -42,8 +42,7 @@ class ExpenseDetailsViewModel @Inject constructor(
             groupId?.let { groupId ->
                 expense?.let {
                     deleteExpenseUseCase(
-                        groupId,
-                        it.id
+                        it.id, groupId
                     )
                 }
             } ?: Resource.Failure()

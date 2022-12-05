@@ -33,8 +33,8 @@ class GroupsRepository @Inject constructor(private val tripGroupService: TripGro
         tripGroupService.deleteGroup(groupId).toNullableBodyOrError()
     }
 
-    suspend fun leaveGroup(groupId: Long, userId: Long) {
-        tripGroupService.leaveGroup(groupId, userId).toNullableBodyOrError()
+    suspend fun leaveGroup(groupId: Long) {
+        tripGroupService.leaveGroup(groupId).toNullableBodyOrError()
     }
 
     suspend fun changeGroupState(groupId: Long) {

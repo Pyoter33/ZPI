@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
@@ -60,18 +59,11 @@ class ParticipantsTripFragment @Inject constructor() : BaseFragment<FragmentPart
         requireActivity().onBackArrowClick(binding.buttonBack)
         setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
         setOnSearchClickListener()
-        onBackArrowClick()
     }
 
     private fun setAdapter() {
         binding.listParticipants.adapter = adapter
         adapter.setParticipantsClickListener(this)
-    }
-
-    private fun onBackArrowClick() {
-        binding.buttonBack.setOnClickListener {
-            findNavController().popBackStack()
-        }
     }
 
     private fun observeParticipants() {

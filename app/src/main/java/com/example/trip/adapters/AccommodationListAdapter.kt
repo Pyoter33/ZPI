@@ -3,6 +3,7 @@ package com.example.trip.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -54,10 +55,13 @@ class AccommodationListAdapter @Inject constructor() :
                 textVotes.text = accommodation.votes.toString()
                 textPrice.text = accommodation.price.toStringFormat(currency)
                 textDescription.text = accommodation.description
-
                 buttonVote.isSelected = accommodation.isVoted
+                imageAccepted.isVisible = accommodation.isAccepted
 
-                Glide.with(itemView).load(accommodation.imageUrl).placeholder(R.drawable.ic_baseline_downloading_24).error(R.drawable.ic_baseline_question_mark_24).centerCrop().into(binding.imageAccommodation)
+                Glide.with(itemView).load(accommodation.imageUrl)
+                    .placeholder(R.drawable.ic_baseline_downloading_24)
+                    .error(R.drawable.ic_baseline_question_mark_24).centerCrop()
+                    .into(binding.imageAccommodation)
 
                 if (accommodation.description.isNullOrEmpty()) {
                     buttonExpand.setGone()

@@ -58,7 +58,6 @@ class ParticipantsFragment @Inject constructor() : BaseFragment<FragmentParticip
         onInviteClick()
         setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
         setOnSearchClickListener()
-        onBackArrowClick()
     }
 
     private fun onInviteClick() {
@@ -76,12 +75,6 @@ class ParticipantsFragment @Inject constructor() : BaseFragment<FragmentParticip
     private fun setAdapter() {
         binding.listParticipants.adapter = adapter
         adapter.setParticipantsClickListener(this)
-    }
-
-    private fun onBackArrowClick() {
-        binding.buttonBack.setOnClickListener {
-            findNavController().popBackStack()
-        }
     }
 
     private fun observeParticipants() {

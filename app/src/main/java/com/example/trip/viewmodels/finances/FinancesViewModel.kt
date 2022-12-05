@@ -142,12 +142,9 @@ class FinancesViewModel @Inject constructor(
 
     fun resolveSettlementAsync(settlementId: Long): Deferred<Resource<Unit>> {
         return viewModelScope.async {
-            groupId?.let {
                 resolveSettlementUseCase(
-                    settlementId,
-                    it
+                    settlementId
                 )
-            } ?: Resource.Failure()
         }
     }
 }

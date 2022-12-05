@@ -22,8 +22,7 @@ interface TripGroupService {
 
     @DELETE("trip-group/user")
     suspend fun leaveGroup(
-        @Query("groupId") groupId: Long,
-        @Query("userId") userId: Long
+        @Query("groupId") groupId: Long
     ): Response<Void>
 
     @GET("user-group/coordinators")
@@ -72,7 +71,7 @@ interface TripGroupService {
         @Body appUser: AppUserDto
     ): Response<Void>
 
-    @DELETE("trip-group/user")
+    @DELETE("trip-group/coordinator-user")
     suspend fun deleteParticipant(
         @Query("groupId") groupId: Long,
         @Query("userId") userId: Long

@@ -78,7 +78,7 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
         with(binding) {
             textStartLocation.text = args.startCity
             textDestination.text = args.destination
-            if(!canEdit()) binding.buttonAdd.setInvisible()
+            if (!canEdit()) binding.buttonAdd.setInvisible()
         }
     }
 
@@ -130,13 +130,23 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
                     } ?: hideAirTransport()
 
                     adapter.submitList(transport.data.userTransport)
+                    if (transport.data.userTransport.isEmpty()) binding.textEmptyList.setVisible() else binding.textEmptyList.setGone()
                     binding.layoutLoading.setGone()
                 }
                 is Resource.Loading -> {
                     binding.layoutLoading.setVisible()
                 }
                 is Resource.Failure -> {
-                    (requireActivity() as MainActivity).showSnackbar(
+                    transport.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry,
+                            Snackbar.LENGTH_INDEFINITE
+                        ) {
+                            viewModel.refreshData()
+                        }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
                         R.string.text_retry,
@@ -192,11 +202,16 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
         val lng = latLngSplit.last()
 
         val latLng = LatLng(lat.toDouble(), lng.toDouble())
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, getZoom(carTransport.distance)))
+        googleMap.moveCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                latLng,
+                getZoom(carTransport.distance)
+            )
+        )
         viewModel.getRoute(carTransport.sourceLatLng, carTransport.destinationLatLng)
     }
 
-    private fun getZoom(distance: Long) = when(distance / 1000) {
+    private fun getZoom(distance: Long) = when (distance / 1000) {
         in 0..30 -> 10f
         in 31..100 -> 8f
         in 101..400 -> 7f
@@ -239,7 +254,7 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
     }
 
     private fun hideAirTransport() {
-        binding.cardPlane.setGone()
+        binding.layoutPlane.setGone()
     }
 
     private fun onAddClick() {
@@ -256,7 +271,7 @@ class TransportFragment @Inject constructor() : BaseFragment<FragmentTransportBi
     }
 
     override fun onLongClick(userTransport: UserTransport, view: View) {
-        if(!canEdit()) return
+        if (!canEdit()) return
         popupMenu.apply {
             setOnPopupButtonClick(R.id.button_edit) { onMenuEditClick(userTransport) }
             setOnPopupButtonClick(R.id.button_delete) { onMenuDeleteClick(userTransport) }

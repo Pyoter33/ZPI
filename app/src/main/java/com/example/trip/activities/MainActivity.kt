@@ -13,6 +13,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import com.example.trip.Constants
 import com.example.trip.R
@@ -112,19 +113,19 @@ class MainActivity : AppCompatActivity(), LeaveGroupDialogClickListener {
             supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment
         navController = navHostFragment.navController
         bottomNavigationView = findViewById(R.id.bottom_navigation_view)
+
+        val options = NavOptions.Builder().build()
+
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.accommodation -> navController.navigate(R.id.accommodation, intent.extras)
-                R.id.availability -> navController.navigate(R.id.availability, intent.extras)
-                R.id.participants -> navController.navigate(R.id.participants, intent.extras)
-                R.id.dayPlan -> navController.navigate(R.id.dayPlan, intent.extras)
-                R.id.finances -> navController.navigate(R.id.finances, intent.extras)
-                R.id.participantsFragmentTrip -> navController.navigate(
-                    R.id.participantsFragmentTrip,
-                    intent.extras
-                )
-                R.id.summary -> navController.navigate(R.id.summary, intent.extras)
-                R.id.tripSummary -> navController.navigate(R.id.tripSummary, intent.extras)
+                R.id.accommodation -> navController.navigate(R.id.accommodation, intent.extras, options)
+                R.id.availability -> navController.navigate(R.id.availability, intent.extras, options)
+                R.id.participants -> navController.navigate(R.id.participants, intent.extras, options)
+                R.id.dayPlan -> navController.navigate(R.id.dayPlan, intent.extras, options)
+                R.id.finances -> navController.navigate(R.id.finances, intent.extras, options)
+                R.id.participantsFragmentTrip -> navController.navigate(R.id.participantsFragmentTrip, intent.extras, options)
+                R.id.summary -> navController.navigate(R.id.summary, intent.extras, options)
+                R.id.tripSummary -> navController.navigate(R.id.tripSummary, intent.extras, options)
             }
             true
         }
@@ -155,13 +156,33 @@ class MainActivity : AppCompatActivity(), LeaveGroupDialogClickListener {
         @StringRes messageResId: Int,
         @StringRes actionResId: Int,
         length: Int = Snackbar.LENGTH_LONG,
+        anchor: View = bottomNavigationView,
         action: () -> Unit
     ) {
         snackbar = Snackbar.make(view, messageResId, length)
             .setAction(actionResId) {
                 action()
             }
-            .setAnchorView(bottomNavigationView)
+            .setAnchorView(anchor)
+            .setBackgroundTint(resources.getColor(R.color.grey400, null))
+            .setTextColor(resources.getColor(R.color.black, null))
+            .setActionTextColor(resources.getColor(R.color.primary, null))
+        snackbar!!.show()
+    }
+
+    fun showSnackbar(
+        view: View,
+        message: String,
+        @StringRes actionResId: Int,
+        length: Int = Snackbar.LENGTH_LONG,
+        anchor: View = bottomNavigationView,
+        action: () -> Unit
+    ) {
+        snackbar = Snackbar.make(view, message, length)
+            .setAction(actionResId) {
+                action()
+            }
+            .setAnchorView(anchor)
             .setBackgroundTint(resources.getColor(R.color.grey400, null))
             .setTextColor(resources.getColor(R.color.black, null))
             .setActionTextColor(resources.getColor(R.color.primary, null))
@@ -176,7 +197,7 @@ class MainActivity : AppCompatActivity(), LeaveGroupDialogClickListener {
         val layoutLoading = findViewById<FrameLayout>(R.id.layout_loading)
         layoutLoading.setVisible()
         lifecycleScope.launch {
-            when (viewModel.leaveGroupAsync().await()) {
+            when (val result = viewModel.leaveGroupAsync().await()) {
                 is Resource.Success -> {
                     layoutLoading.setGone()
                     val activityIntent = Intent(this@MainActivity, HomeActivity::class.java)
@@ -185,12 +206,20 @@ class MainActivity : AppCompatActivity(), LeaveGroupDialogClickListener {
                 }
                 is Resource.Failure -> {
                     layoutLoading.setGone()
-                    showSnackbar(
+                    result.message?.let {
+                        showSnackbar(
+                            window.decorView.rootView,
+                            it,
+                            R.string.text_retry
+                        ) {
+                            onLeaveClick()
+                        }
+                    } ?: showSnackbar(
                         window.decorView.rootView,
                         R.string.text_leave_failure,
                         R.string.text_retry
                     ) {
-                        showDialog()
+                        onLeaveClick()
                     }
                 }
                 else -> {

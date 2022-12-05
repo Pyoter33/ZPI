@@ -17,5 +17,6 @@ data class Accommodation(
     var votes: Int,
     val price: BigDecimal,
     var isVoted: Boolean,
+    val isAccepted: Boolean = false,
     var isExpanded: Boolean = false
 ): Parcelable
