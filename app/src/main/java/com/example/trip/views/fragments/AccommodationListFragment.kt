@@ -322,6 +322,7 @@ class AccommodationListFragment @Inject constructor() :
             when (viewModel.postAcceptedAccommodationAsync(accommodation.id).await()) {
                 is Resource.Success -> {
                     binding.layoutRefresh.isRefreshing = false
+                    viewModel.refreshData()
                     requireContext().toast(R.string.text_accommodation_accepted)
                 }
                 is Resource.Failure -> {

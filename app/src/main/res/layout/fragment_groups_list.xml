@@ -116,7 +116,7 @@
                         style="@style/TextMedium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/text_no_accommodations"
+                        android:text="@string/text_no_groups"
                         android:textColor="@color/grey600"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="@+id/attractions_list"

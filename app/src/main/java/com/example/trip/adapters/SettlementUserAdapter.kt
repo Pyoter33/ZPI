@@ -137,7 +137,7 @@ class SettlementDiffUtil : DiffUtil.ItemCallback<Settlement>() {
     }
 
     override fun areContentsTheSame(oldItem: Settlement, newItem: Settlement): Boolean {
-        return oldItem.id == newItem.id && oldItem.groupId == newItem.groupId
+        return oldItem.id == newItem.id && oldItem.status == newItem.status
     }
 }
 

@@ -46,7 +46,7 @@ class GroupsListAdapter @Inject constructor() :
                 textStatus.text =
                     when {
                         group.groupStatus == GroupStatus.PLANNING -> itemView.resources.getString(GroupStatus.PLANNING.resourceId)
-                        group.groupStatus ==  GroupStatus.ONGOING && group.endDate?.isAfter(LocalDate.now()) == false -> itemView.resources.getString(GroupStatus.ONGOING.resourceId)
+                        group.groupStatus ==  GroupStatus.ONGOING && group.endDate?.isAfter(LocalDate.now()) == true -> itemView.resources.getString(GroupStatus.ONGOING.resourceId)
                         else -> itemView.resources.getString(GroupStatus.FINISHED.resourceId)
                     }
                 if (group.description == null) {

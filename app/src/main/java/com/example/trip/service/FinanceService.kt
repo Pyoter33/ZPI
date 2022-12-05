@@ -46,7 +46,8 @@ interface FinanceService {
 
     @PATCH("finance-request/accept")
     suspend fun resolveSettlement(
-        @Query("requestId") requestId: Long
+        @Query("requestId") requestId: Long,
+        @Query("groupId") groupId: Long
     ): Response<Void>
 
 }

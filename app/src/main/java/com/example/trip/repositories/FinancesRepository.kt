@@ -35,8 +35,8 @@ class FinancesRepository @Inject constructor(private val financeService: Finance
         financeService.deleteExpense(expenseId, groupId).toNullableBodyOrError()
     }
 
-    suspend fun resolveSettlement(id: Long) {
-        financeService.resolveSettlement(id).toNullableBodyOrError()
+    suspend fun resolveSettlement(id: Long, groupId: Long) {
+        financeService.resolveSettlement(id, groupId).toNullableBodyOrError()
     }
 
 }

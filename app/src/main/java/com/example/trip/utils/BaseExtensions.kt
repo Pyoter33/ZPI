@@ -191,8 +191,9 @@ private fun isIntegerValue(bd: BigDecimal): Boolean {
 fun String.formatPhone(): String {
     val split = split(' ')
     return "${split[0]} ${split[1]}"
-        //accommodation in summary pdf
-        //move snackbars to
+    //proper error in group creation and user creation
+    //proper currency in create edit
+    //change settlement to resolved
     }
 
 fun <T> Response<T>.toBodyOrError(): T {

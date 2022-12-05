@@ -177,7 +177,7 @@ class GroupsListFragment @Inject constructor() : BaseFragment<FragmentGroupsList
                     group.coordinators.toLongArray()
                 )
             }
-            group.groupStatus == GroupStatus.ONGOING && group.endDate?.isAfter(LocalDate.now()) == false -> {
+            group.groupStatus == GroupStatus.ONGOING && group.endDate?.isAfter(LocalDate.now()) == true -> {
                 activityIntent.putExtra(Constants.STATUS_KEY, GroupStatus.ONGOING.code)
                 activityIntent.putExtra(
                     Constants.COORDINATORS_KEY,
