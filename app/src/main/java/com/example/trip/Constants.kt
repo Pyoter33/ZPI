@@ -12,7 +12,7 @@ object Constants {
     const val CURRENCY_KEY = "currency"
     const val START_CITY = "startCity"
     const val SUMMARY_FILE_NAME = "summary.pdf"
-    const val BASE_URL = "http://192.168.137.1:8080/api/v1/"
+    const val BASE_URL = "http://51.132.58.149:8080/api/v1/"
     const val AUTHORIZATION_HEADER = "Authorization"
     const val PREFERENCES_NAME = "AppPreferences"
     const val GOOGLE_API_KEY = "com.google.android.geo.API_KEY"

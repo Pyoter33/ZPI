@@ -49,8 +49,8 @@ class CreateEditTransportViewModel @Inject constructor(
                         Duration.ofHours(durationHours!!.toLong())
                             .plusMinutes(durationMinutes!!.toLong()),
                         BigDecimal.valueOf(price!!.toDouble()),
-                        meetingLocation!!,
-                        destination!!,
+                        meetingLocation!!.trim(),
+                        destination!!.trim(),
                         meetingDate!!,
                         meetingDate!!,
                         meansOfTransport!!,
@@ -71,8 +71,8 @@ class CreateEditTransportViewModel @Inject constructor(
                     Duration.ofHours(durationHours!!.toLong())
                         .plusMinutes(durationMinutes!!.toLong()),
                     BigDecimal.valueOf(price!!.toDouble()),
-                    meetingLocation!!,
-                    destination!!,
+                    meetingLocation!!.trim(),
+                    destination!!.trim(),
                     meetingDate!!,
                     meetingDate!!,
                     meansOfTransport!!,

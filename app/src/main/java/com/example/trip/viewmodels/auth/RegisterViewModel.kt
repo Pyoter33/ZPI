@@ -32,11 +32,11 @@ class RegisterViewModel @Inject constructor(private val registerUseCase: Registe
         val deferred = viewModelScope.async(Dispatchers.IO) {
             registerUseCase(
                 RegisterRequestDto(
-                    email!!,
+                    email!!.trim(),
                     "+$code $phone",
                     password!!,
-                    firstName!!,
-                    surname!!,
+                    firstName!!.trim(),
+                    surname!!.trim(),
                     birthday!!
                 )
             )

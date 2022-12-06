@@ -50,8 +50,8 @@ class EditUserViewModel @Inject constructor(
                         preferencesHelper.getUserId(),
                         "+$code $phone",
                         it.email,
-                        firstName!!,
-                        surname!!,
+                        firstName!!.trim(),
+                        surname!!.trim(),
                         birthday!!,
                         it.registrationDate
                     )

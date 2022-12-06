@@ -192,8 +192,7 @@ fun String.formatPhone(): String {
     val split = split(' ')
     return "${split[0]} ${split[1]}"
     //proper error in group creation and user creation
-    //proper currency in create edit
-    //change settlement to resolved
+    // change settlement to resolved
     }
 
 fun <T> Response<T>.toBodyOrError(): T {

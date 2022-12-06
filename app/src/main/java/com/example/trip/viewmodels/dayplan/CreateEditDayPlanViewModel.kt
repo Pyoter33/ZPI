@@ -39,7 +39,7 @@ class CreateEditDayPlanViewModel @Inject constructor(
     fun postDayPlanAsync(): Deferred<Resource<Unit>> {
         val deferred = viewModelScope.async(Dispatchers.IO) {
             groupId?.let { groupId ->
-                postDayPlanUseCase(DayPlanPostDto(groupId, date!!, name!!, icon))
+                postDayPlanUseCase(DayPlanPostDto(groupId, date!!, name!!.trim(), icon))
             } ?: Resource.Failure()
         }
         return deferred
@@ -49,7 +49,7 @@ class CreateEditDayPlanViewModel @Inject constructor(
         val deferred = viewModelScope.async(Dispatchers.IO) {
             groupId?.let { groupId ->
                 dayPlan?.let { dayPlan ->
-                    val newDayPlan = DayPlanPostDto(groupId, date!!, name!!, icon)
+                    val newDayPlan = DayPlanPostDto(groupId, date!!, name!!.trim(), icon)
                     updateDayPlanUseCase(dayPlan.id, newDayPlan)
                 } ?: Resource.Failure()
             } ?: Resource.Failure()

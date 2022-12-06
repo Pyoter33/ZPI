@@ -67,11 +67,11 @@
                             style="@style/IconButton.Primary"
                             android:layout_width="48dp"
                             android:layout_height="48dp"
-
                             android:src="@drawable/ic_baseline_edit_24"
                             app:layout_constraintBottom_toBottomOf="@+id/text_expense_name"
                             app:layout_constraintEnd_toStartOf="@id/button_delete"
                             app:layout_constraintTop_toTopOf="@+id/text_expense_name"
+                            android:visibility="gone"
                             app:layout_constraintVertical_bias="0.476" />
 
                         <ImageButton
@@ -84,12 +84,13 @@
                             app:tint="@color/red"
                             app:layout_constraintBottom_toBottomOf="@+id/text_expense_name"
                             app:layout_constraintEnd_toEndOf="parent"
+                            android:visibility="gone"
                             app:layout_constraintTop_toTopOf="@+id/text_expense_name" />
 
                         <ImageView
                             android:id="@+id/image_money"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/marginXL"
                             android:src="@drawable/ic_baseline_attach_money_24"
                             android:layout_marginStart="@dimen/marginM"
@@ -101,7 +102,7 @@
 
                         <TextView
                             android:id="@+id/text_price"
-                            style="@style/TextBig"
+                            style="@style/TextMedium"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/marginS"
@@ -112,6 +113,31 @@
                             app:layout_constraintTop_toTopOf="@+id/image_money"
                             tools:text="150 PLN" />
 
+                        <ImageView
+                            android:id="@+id/image_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/marginM"
+                            android:layout_marginStart="@dimen/marginM"
+                            android:src="@drawable/ic_outline_calendar_month_24"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/image_money"
+                            app:tint="@color/primary"
+                            />
+
+                        <TextView
+                            android:id="@+id/text_date"
+                            style="@style/TextMedium"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/marginS"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            app:layout_constraintBottom_toBottomOf="@+id/image_date"
+                            app:layout_constraintStart_toEndOf="@+id/image_date"
+                            app:layout_constraintTop_toTopOf="@+id/image_date"
+                            tools:text="20.06.2023" />
+
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/layout_contributors"
                             android:layout_width="match_parent"
@@ -120,7 +146,7 @@
                             android:background="@color/grey300"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/image_money">
+                            app:layout_constraintTop_toBottomOf="@id/image_date">
 
 
                             <TextView

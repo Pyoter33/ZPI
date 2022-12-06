@@ -4,7 +4,6 @@ import com.example.trip.dto.AccommodationPostDto
 import com.example.trip.models.Resource
 import com.example.trip.repositories.AccommodationsRepository
 import retrofit2.HttpException
-
 import javax.inject.Inject
 
 class PostAccommodationUseCase @Inject constructor(private val accommodationsRepository: AccommodationsRepository) {
@@ -15,7 +14,7 @@ class PostAccommodationUseCase @Inject constructor(private val accommodationsRep
             Resource.Success(Unit)
         } catch (e: HttpException) {
             e.printStackTrace()
-            Resource.Failure(e.code())
+            Resource.Failure(e.code(), e.response()?.errorBody()?.string())
         } catch (e: Exception) {
             e.printStackTrace()
             Resource.Failure(0)

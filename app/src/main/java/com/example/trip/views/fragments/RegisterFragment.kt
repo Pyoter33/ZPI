@@ -229,7 +229,7 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
         enableLoading()
 
         lifecycleScope.launch {
-            when (viewModel.postRegisterAsync().await()) {
+            when (val result = viewModel.postRegisterAsync().await()) {
                 is Resource.Success -> {
                     requireContext().toast(R.string.text_register_successful)
                     login()
@@ -237,10 +237,11 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
                 is Resource.Loading -> {}
                 is Resource.Failure -> {
                     disableLoading()
-                    requireContext().toast(R.string.text_not_register)
+                    result.message?.let {
+                        requireContext().toast(it)
+                    } ?: requireContext().toast(R.string.text_not_register)
                 }
             }
-
         }
     }
 
@@ -260,7 +261,6 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
                     requireContext().toast(R.string.text_not_login)
                 }
             }
-
         }
     }
 

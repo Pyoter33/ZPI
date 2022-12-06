@@ -23,6 +23,7 @@ import com.example.trip.views.dialogs.finances.DeleteExpenseDialogClickListener
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -79,6 +80,8 @@ class ExpenseDetailsFragment @Inject constructor() : BaseFragment<FragmentExpens
                 binding.buttonEdit.setGone()
                 binding.buttonDelete.setGone()
             }
+            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+            binding.textDate.text = expense.creationDate.format(formatter)
             binding.textExpenseName.text = expense.title
             binding.textPrice.text = expense.price.toStringFormat(currency)
             viewModel.setParticipants(expense.debtors, expense.price)

@@ -111,7 +111,7 @@ class CreateEditExpenseViewModel @Inject constructor(
                     groupId,
                     ExpensePostDto(
                         preferencesHelper.getUserId(),
-                        name!!,
+                        name!!.trim(),
                         price!!.toDouble(),
                         participants.filter { it.isChecked }.map { it.participant.id }
                     )
@@ -119,7 +119,6 @@ class CreateEditExpenseViewModel @Inject constructor(
             } ?: Resource.Failure()
 
         }
-
         return deferred
     }
 
@@ -133,7 +132,7 @@ class CreateEditExpenseViewModel @Inject constructor(
                         expense.id,
                         ExpensePostDto(
                             preferencesHelper.getUserId(),
-                            name!!,
+                            name!!.trim(),
                             price!!.toDouble(),
                             participants.filter { it.isChecked }.map { it.participant.id }
                         )

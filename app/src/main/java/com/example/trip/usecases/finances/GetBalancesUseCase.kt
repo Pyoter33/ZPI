@@ -38,6 +38,8 @@ class GetBalancesUseCase @Inject constructor(
         val balancesDto = financesRepository.getBalances(groupId)
         val participants = participantsRepository.getParticipantsForGroup(groupId)
         val maxAmount = balancesDto.values.maxOrNull() ?: BigDecimal.ONE
+        val minAmount = balancesDto.values.minOrNull() ?: BigDecimal.ONE
+        val maxIndicator = maxAmount.max(minAmount.abs())
 
         val balances = participants.map { participant ->
             val balance = balancesDto[participant.userId]
@@ -46,44 +48,24 @@ class GetBalancesUseCase @Inject constructor(
                     Balance(
                         participant.toParticipant(UserRole.UNSPECIFIED),
                         it,
-                        maxAmount,
+                        maxIndicator,
                         BalanceStatus.NEGATIVE
                     )
                 } else {
                     Balance(
                         participant.toParticipant(UserRole.UNSPECIFIED),
                         it,
-                        maxAmount,
+                        maxIndicator,
                         BalanceStatus.POSITIVE
                     )
                 }
             } ?: Balance(
                 participant.toParticipant(UserRole.UNSPECIFIED),
                 BigDecimal.ZERO,
-                maxAmount,
+                maxIndicator,
                 BalanceStatus.NEUTRAL
             )
         }
-
-
-//        val balances = balancesDto.map { entry ->
-//            val participant= participants.find { it.userId == entry.key } ?: return Resource.Failure()
-//            if (entry.value.toDouble() < 0) {
-//                Balance(
-//                    participant.toParticipant(UserRole.UNSPECIFIED),
-//                    entry.value,
-//                    maxAmount!!,
-//                    BalanceStatus.NEGATIVE
-//                )
-//            } else {
-//                Balance(
-//                    participant.toParticipant(UserRole.UNSPECIFIED),
-//                    entry.value,
-//                    maxAmount!!,
-//                    BalanceStatus.POSITIVE
-//                )
-//            }
-//        }
         return Resource.Success(balances)
     }
 

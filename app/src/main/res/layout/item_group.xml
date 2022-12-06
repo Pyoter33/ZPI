@@ -16,29 +16,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/text_group_name"
-                    style="@style/TextBigger"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/marginM"
-                    android:layout_marginHorizontal="@dimen/marginL"
-                    android:ellipsize="end"
-                    android:maxWidth="250dp"
-                    android:maxLines="2"
-                    android:textColor="@color/grey900"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Trip to Barcelona" />
+            <TextView
+                android:id="@+id/text_group_name"
+                style="@style/TextBigger"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/marginL"
+                android:layout_marginTop="@dimen/marginM"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/grey900"
+                app:layout_constraintEnd_toStartOf="@+id/button_info"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Trip to Barcelona" />
 
             <TextView
                 android:id="@+id/text_start_location"
                 style="@style/TextMedium"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/marginL"
                 android:layout_marginTop="@dimen/marginXS"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:textColor="@color/grey700"
+                app:layout_constraintEnd_toStartOf="@+id/button_info"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_group_name"
                 tools:text="from Wrocław" />

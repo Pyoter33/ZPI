@@ -83,7 +83,7 @@ class GetTransportUseCase @Inject constructor(
                             it.transportId,
                             groupId,
                             accommodationId,
-                            it.meanOfTransport.split(','),
+                            it.meanOfTransport.split(',').map { it.trim() },
                             it.duration,
                             it.meetingTime.toLocalDate(),
                             it.meetingTime.toLocalTime(),

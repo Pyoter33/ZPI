@@ -36,12 +36,12 @@ class CreateEditGroupViewModel @Inject constructor(
         val deferred = viewModelScope.async(Dispatchers.IO) {
             postGroupUseCase(
                 TripGroupPostDto(
-                    name!!,
+                    name!!.trim(),
                     Currency.getInstance(currency!!),
                     descriptionText,
                    0,
-                    startingCity!!,
-                    startingCity!!,
+                    startingCity!!.trim(),
+                    startingCity!!.trim(),
                     days!!.toInt(),
                     participants!!.toInt()
                 )
@@ -56,12 +56,12 @@ class CreateEditGroupViewModel @Inject constructor(
                 updateGroupUseCase(
                     it.id,
                     TripGroupPostDto(
-                        name!!,
+                        name!!.trim(),
                         Currency.getInstance(currency!!),
                         descriptionText,
                         0,
-                        startingCity!!,
-                        startingCity!!,
+                        startingCity!!.trim(),
+                        startingCity!!.trim(),
                         days!!.toInt(),
                         participants!!.toInt()
                     )

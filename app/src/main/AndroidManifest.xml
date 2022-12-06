@@ -27,7 +27,6 @@
         <activity
             android:name=".activities.LoginActivity"
             android:exported="true"
-            android:label="@string/title_activity_login"
             android:screenOrientation="portrait">
 
             <intent-filter>

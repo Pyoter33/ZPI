@@ -12,6 +12,7 @@ import com.example.trip.Constants
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.SettlementClickListener
+import com.example.trip.adapters.SettlementHeaderAdapter
 import com.example.trip.adapters.SettlementOtherAdapter
 import com.example.trip.adapters.SettlementUserAdapter
 import com.example.trip.databinding.FragmentSettlementsBinding
@@ -84,8 +85,7 @@ class SettlementsFragment @Inject constructor() : BaseFragment<FragmentSettlemen
                         binding.listSettlements.setVisible()
                     }
                     binding.layoutRefresh.isRefreshing = false
-                    val userSettlements =
-                        settlement.data.filter { it.debtee.id == userId || it.debtor.id == userId }
+                    val userSettlements = settlement.data.filter { it.debtee.id == userId || it.debtor.id == userId }
                     val otherSettlements = settlement.data.minus(userSettlements.toSet())
                     userAdapter.submitList(userSettlements)
                     otherAdapter.submitList(otherSettlements)
@@ -115,8 +115,12 @@ class SettlementsFragment @Inject constructor() : BaseFragment<FragmentSettlemen
         userAdapter.setSettlementClickListener(this)
         userAdapter.setCurrency(currency)
         otherAdapter.setCurrency(currency)
+        val headerAdapterUser = SettlementHeaderAdapter()
+        headerAdapterUser.submitList(listOf(getString(R.string.text_my_settlements)))
+        val headerAdapterOther = SettlementHeaderAdapter()
+        headerAdapterOther.submitList(listOf(getString(R.string.text_other_settlements)))
 
-        val concatAdapter = ConcatAdapter(userAdapter, otherAdapter)
+        val concatAdapter = ConcatAdapter(headerAdapterUser, userAdapter, headerAdapterOther, otherAdapter)
         binding.listSettlements.adapter = concatAdapter
         binding.listSettlements.layoutManager = layoutManager
         binding.listSettlements.addItemDecoration(
@@ -134,7 +138,7 @@ class SettlementsFragment @Inject constructor() : BaseFragment<FragmentSettlemen
     }
 
     override fun onLongClick(settlement: Settlement, view: View) {
-        if ((settlement.debtee.id == preferencesHelper.getUserId() || settlement.debtor.id == preferencesHelper.getUserId()) && settlement.status != SettlementStatus.RESOLVED) {
+        if (settlement.status != SettlementStatus.RESOLVED) {
             popupMenu.setOnPopupButtonClick(R.id.button_resolve) {
                 onMenuResolve(settlement)
             }

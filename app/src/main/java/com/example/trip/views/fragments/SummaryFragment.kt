@@ -386,7 +386,7 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
                 imageAccommodation.setImageDrawable(binding.imageAccommodation.drawable)
                 textDescription.text = binding.textDescription.text
             } else {
-                cardAccommodation.setInvisible()
+                cardAccommodation.setGone()
             }
         }
 
