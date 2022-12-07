@@ -18,8 +18,8 @@ class GetDayPlansUseCase @Inject constructor(private val dayPlansRepository: Day
             emit(getDayPlans(groupId))
         }.catch {
             it.printStackTrace()
-            if (it.cause is HttpException) {
-                emit(Resource.Failure((it.cause as HttpException).code(), (it.cause as HttpException).response()?.getMessage()))
+            if (it is HttpException) {
+                emit(Resource.Failure(it.code(), it.response()?.getMessage()))
             } else {
                 emit(Resource.Failure(0))
             }

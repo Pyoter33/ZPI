@@ -17,8 +17,8 @@ class GetUserUseCase @Inject constructor(private val participantsRepository: Par
             emit(Resource.Success(participantsRepository.getUser(userId)) as Resource<AppUserDto>)
         }.catch {
             it.printStackTrace()
-            if (it.cause is HttpException) {
-                emit(Resource.Failure((it.cause as HttpException).code()))
+            if (it is HttpException) {
+                emit(Resource.Failure(it.code()))
             } else {
                 emit(Resource.Failure(0))
             }

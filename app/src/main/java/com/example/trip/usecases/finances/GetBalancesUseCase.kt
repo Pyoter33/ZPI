@@ -24,8 +24,8 @@ class GetBalancesUseCase @Inject constructor(
             emit(getBalances(groupId))
         }.catch {
             it.printStackTrace()
-            if (it.cause is HttpException) {
-                emit(Resource.Failure((it.cause as HttpException).code()))
+            if (it is HttpException) {
+                emit(Resource.Failure(it.code()))
             } else {
                 emit(Resource.Failure(0))
             }

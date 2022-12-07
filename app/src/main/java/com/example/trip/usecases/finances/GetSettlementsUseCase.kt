@@ -25,8 +25,8 @@ class GetSettlementsUseCase @Inject constructor(
             emit(getSettlements(groupId))
         }.catch {
             it.printStackTrace()
-            if (it.cause is HttpException) {
-                emit(Resource.Failure((it.cause as HttpException).code()))
+            if (it is HttpException) {
+                emit(Resource.Failure(it.code()))
             } else {
                 emit(Resource.Failure(0))
             }
@@ -38,16 +38,16 @@ class GetSettlementsUseCase @Inject constructor(
     private suspend fun getSettlements(groupId: Long): Resource<List<Settlement>> {
         val settlementsDtos = financesRepository.getSettlements(groupId, preferencesHelper.getUserId())
         val participants = participantsRepository.getParticipantsForGroup(groupId)
-        val settlements = settlementsDtos.map { expenseDto ->
+        val settlements = settlementsDtos.map { settlementDto ->
             val participantDebtor =
-                participants.find { it.userId == expenseDto.debtor } ?: return Resource.Failure()
+                participants.find { it.userId == settlementDto.debtor } ?: return Resource.Failure()
             val participantDebtee =
-                participants.find { it.userId == expenseDto.debtee } ?: return Resource.Failure()
+                participants.find { it.userId == settlementDto.debtee } ?: return Resource.Failure()
             Settlement(
-                expenseDto.financialRequestId,
-                expenseDto.groupId,
-                expenseDto.status,
-                expenseDto.amount,
+                settlementDto.financialRequestId,
+                settlementDto.groupId,
+                settlementDto.status,
+                settlementDto.amount,
                 participantDebtor.toParticipant(UserRole.UNSPECIFIED),
                 participantDebtee.toParticipant(UserRole.UNSPECIFIED)
             )

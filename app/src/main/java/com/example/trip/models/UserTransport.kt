@@ -8,7 +8,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 @Parcelize
-class UserTransport(
+data class UserTransport(
     val id: Long,
     val groupId: Long,
     val accommodationId: Long,

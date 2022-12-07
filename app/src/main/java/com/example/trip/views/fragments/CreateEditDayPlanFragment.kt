@@ -47,7 +47,8 @@ class CreateEditDayPlanFragment @Inject constructor() :
         DayPlanIcon.WALK.resId,
         DayPlanIcon.WATER.resId,
         DayPlanIcon.MOUNTAIN.resId,
-        DayPlanIcon.RESTAURANT.resId
+        DayPlanIcon.RESTAURANT.resId,
+        DayPlanIcon.SKI.resId
     )
 
     override fun prepareBinding(
@@ -137,6 +138,7 @@ class CreateEditDayPlanFragment @Inject constructor() :
             DayPlanIcon.MONUMENT.resId -> DayPlanIcon.MONUMENT.code
             DayPlanIcon.MOUNTAIN.resId -> DayPlanIcon.MOUNTAIN.code
             DayPlanIcon.RESTAURANT.resId -> DayPlanIcon.RESTAURANT.code
+            DayPlanIcon.SKI.resId -> DayPlanIcon.SKI.code
             else -> 0
         }
     }
@@ -151,6 +153,7 @@ class CreateEditDayPlanFragment @Inject constructor() :
             DayPlanIcon.MONUMENT.code -> DayPlanIcon.MONUMENT.resId
             DayPlanIcon.MOUNTAIN.code -> DayPlanIcon.MOUNTAIN.resId
             DayPlanIcon.RESTAURANT.code -> DayPlanIcon.RESTAURANT.resId
+            DayPlanIcon.SKI.code -> DayPlanIcon.SKI.resId
             else -> 0
         }
     }

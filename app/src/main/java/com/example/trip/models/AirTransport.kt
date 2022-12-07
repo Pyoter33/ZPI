@@ -2,7 +2,7 @@ package com.example.trip.models
 
 import java.time.Duration
 
-class AirTransport(
+data class AirTransport(
     val transportId: Long,
     val duration: Duration,
     val source: String,

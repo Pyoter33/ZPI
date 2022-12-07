@@ -19,8 +19,8 @@ class GetAttractionsUseCase @Inject constructor(private val dayPlansRepository: 
             emit(getAttractions(dayPlanId))
         }.catch {
             it.printStackTrace()
-            if (it.cause is HttpException) {
-                emit(Resource.Failure((it.cause as HttpException).code()))
+            if (it is HttpException) {
+                emit(Resource.Failure(it.code()))
             } else {
                 emit(Resource.Failure(0))
             }

@@ -27,8 +27,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.trip.Constants
 import com.example.trip.R
+import com.google.gson.JsonParser
 import com.skydoves.balloon.Balloon
-import org.json.JSONObject
 import retrofit2.HttpException
 import retrofit2.Response
 import java.math.BigDecimal
@@ -238,6 +238,6 @@ fun Fragment.refreshIfNewData(action: () -> Unit) {
 }
 
 fun <T> Response<T>.getMessage(): String? {
-    val jObjError = errorBody()?.string()?.let { JSONObject(it) }
-    return jObjError?.getString("message")
+    val json = JsonParser.parseString(errorBody()?.string()).asJsonObject
+    return json.get("message").asString
 }
