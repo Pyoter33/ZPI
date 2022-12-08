@@ -193,7 +193,7 @@ fun String.formatPhone(): String {
     return "${split[0]} ${split[1]}"
     //proper error in group creation and user creation
     // change settlement to resolved
-    }
+}
 
 fun <T> Response<T>.toBodyOrError(): T {
     return when {
@@ -233,11 +233,18 @@ fun NavController.popBackStackWithRefresh(@IdRes destinationId: Int, inclusive: 
 fun Fragment.refreshIfNewData(action: () -> Unit) {
     if (findNavController().currentBackStackEntry?.savedStateHandle?.get<Boolean>(Constants.TO_REFRESH_KEY) == true) {
         action()
-        findNavController().currentBackStackEntry?.savedStateHandle?.set(Constants.TO_REFRESH_KEY, null)
+        findNavController().currentBackStackEntry?.savedStateHandle?.set(
+            Constants.TO_REFRESH_KEY,
+            null
+        )
     }
 }
 
 fun <T> Response<T>.getMessage(): String? {
-    val json = JsonParser.parseString(errorBody()?.string()).asJsonObject
-    return json.get("message").asString
+    return try {
+        val json = JsonParser.parseString(errorBody()?.string())?.asJsonObject
+        json?.get("message")?.asString
+    } catch (e: Exception) {
+        null
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.trip.usecase.participants
+package com.example.trip.usecase.finances
 
 import com.example.trip.dto.UserDto
 import com.example.trip.models.CheckableParticipant

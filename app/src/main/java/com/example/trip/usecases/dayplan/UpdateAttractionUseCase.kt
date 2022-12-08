@@ -15,7 +15,7 @@ class UpdateAttractionUseCase @Inject constructor(private val dayPlansRepository
             Resource.Success(Unit)
         } catch (e: HttpException) {
             e.printStackTrace()
-            Resource.Failure()
+            Resource.Failure(e.code())
         } catch (e: Exception) {
             e.printStackTrace()
             Resource.Failure(0)

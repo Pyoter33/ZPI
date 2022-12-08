@@ -13,7 +13,7 @@ class UpdateStartingPointUseCase @Inject constructor(private val dayPlansReposit
             Resource.Success(Unit)
         } catch (e: HttpException) {
             e.printStackTrace()
-            Resource.Failure()
+            Resource.Failure(e.code())
         } catch (e: Exception) {
             e.printStackTrace()
             Resource.Failure(0)
