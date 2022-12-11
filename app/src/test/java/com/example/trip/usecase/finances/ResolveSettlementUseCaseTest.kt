@@ -34,7 +34,7 @@ class ResolveSettlementUseCaseTest {
     }
 
     @Test
-    fun `verify vote correctly posted`() = scope.runTest {
+    fun `verify settlement correctly resolved`() = scope.runTest {
         //given
         coEvery { financesRepository.resolveSettlement(any(), any()) } returns Unit
 

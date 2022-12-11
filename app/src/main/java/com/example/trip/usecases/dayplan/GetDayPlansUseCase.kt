@@ -4,10 +4,8 @@ import com.example.trip.models.DayPlan
 import com.example.trip.models.Resource
 import com.example.trip.repositories.DayPlansRepository
 import com.example.trip.utils.getMessage
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -25,7 +23,7 @@ class GetDayPlansUseCase @Inject constructor(private val dayPlansRepository: Day
             }
         }.onStart {
             emit(Resource.Loading())
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     private suspend fun getDayPlans(groupId: Long): Resource<List<DayPlan>> =

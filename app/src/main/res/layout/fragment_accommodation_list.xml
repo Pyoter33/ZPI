@@ -79,12 +79,16 @@
                 <TextView
                     android:id="@+id/text_header"
                     style="@style/TextMega"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/marginS"
+                    android:layout_marginEnd="@dimen/marginS"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:text="Accommodations"
                     android:textColor="@color/primary"
                     app:layout_constraintBottom_toBottomOf="@+id/image_attractions"
+                    app:layout_constraintEnd_toStartOf="@+id/button_add"
                     app:layout_constraintStart_toEndOf="@+id/image_attractions"
                     app:layout_constraintTop_toTopOf="@+id/image_attractions" />
 
@@ -153,7 +157,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:paddingBottom="@dimen/marginM"
-                        android:scrollbars="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"

@@ -6,11 +6,10 @@ import com.example.trip.models.UserRole
 import com.example.trip.repositories.FinancesRepository
 import com.example.trip.repositories.ParticipantsRepository
 import com.example.trip.utils.SharedPreferencesHelper
+import com.example.trip.utils.getMessage
 import com.example.trip.utils.toParticipant
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -26,31 +25,31 @@ class GetSettlementsUseCase @Inject constructor(
         }.catch {
             it.printStackTrace()
             if (it is HttpException) {
-                emit(Resource.Failure(it.code()))
+                emit(Resource.Failure(it.code(), it.response()?.getMessage()))
             } else {
                 emit(Resource.Failure(0))
             }
         }.onStart {
             emit(Resource.Loading())
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     private suspend fun getSettlements(groupId: Long): Resource<List<Settlement>> {
         val settlementsDtos = financesRepository.getSettlements(groupId, preferencesHelper.getUserId())
         val participants = participantsRepository.getParticipantsForGroup(groupId)
-        val settlements = settlementsDtos.map { settlementDto ->
-            val participantDebtor =
-                participants.find { it.userId == settlementDto.debtor } ?: return Resource.Failure()
-            val participantDebtee =
-                participants.find { it.userId == settlementDto.debtee } ?: return Resource.Failure()
-            Settlement(
-                settlementDto.financialRequestId,
-                settlementDto.groupId,
-                settlementDto.status,
-                settlementDto.amount,
-                participantDebtor.toParticipant(UserRole.UNSPECIFIED),
-                participantDebtee.toParticipant(UserRole.UNSPECIFIED)
-            )
+        val settlements = settlementsDtos.mapNotNull { settlementDto ->
+                participants.find { it.userId == settlementDto.debtor }?.let { participantDebtor ->
+                   participants.find { it.userId == settlementDto.debtee }?.let { participantDebtee ->
+                            Settlement(
+                                settlementDto.financialRequestId,
+                                settlementDto.groupId,
+                                settlementDto.status,
+                                settlementDto.amount,
+                                participantDebtor.toParticipant(UserRole.UNSPECIFIED),
+                                participantDebtee.toParticipant(UserRole.UNSPECIFIED)
+                            )
+                        }
+                }
         }
         return Resource.Success(settlements)
     }

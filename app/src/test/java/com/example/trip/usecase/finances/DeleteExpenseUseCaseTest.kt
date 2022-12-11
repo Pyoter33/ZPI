@@ -34,7 +34,7 @@ class DeleteExpenseUseCaseTest {
     }
 
     @Test
-    fun `verify vote correctly posted`() = scope.runTest {
+    fun `verify expense correctly deleted`() = scope.runTest {
         //given
         coEvery { financesRepository.deleteExpense(any(), any()) } returns Unit
 

@@ -5,10 +5,9 @@ import com.example.trip.models.Resource
 import com.example.trip.repositories.AccommodationsRepository
 import com.example.trip.repositories.GroupsRepository
 import com.example.trip.utils.SharedPreferencesHelper
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
+import com.example.trip.utils.getMessage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -23,13 +22,13 @@ class GetAccommodationsListUseCase @Inject constructor(
         }.catch {
             it.printStackTrace()
             if (it is HttpException) {
-                emit(Resource.Failure(it.code()))
+                emit(Resource.Failure(it.code(), it.response()?.getMessage()))
             } else {
                 emit(Resource.Failure(0))
             }
         }.onStart {
             emit(Resource.Loading())
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     private suspend fun getAccommodations(groupId: Long): Resource<List<Accommodation>> {

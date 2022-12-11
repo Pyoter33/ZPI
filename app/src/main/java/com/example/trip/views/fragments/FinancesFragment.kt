@@ -68,7 +68,7 @@ class FinancesFragment @Inject constructor() : BaseFragment<FragmentFinancesBind
                     binding.layoutRefresh.isRefreshing = false
                 }
                 is Resource.Loading -> {
-                    //NO-OP
+                    binding.layoutRefresh.isRefreshing = true
                 }
                 is Resource.Failure -> {
                     binding.layoutRefresh.isRefreshing = false

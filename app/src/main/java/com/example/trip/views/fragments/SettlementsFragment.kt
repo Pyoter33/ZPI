@@ -25,7 +25,6 @@ import com.example.trip.views.dialogs.MenuPopupResolveFactory
 import com.example.trip.views.dialogs.finances.ResolveSettlementDialog
 import com.example.trip.views.dialogs.finances.ResolveSettlementDialogClickListener
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import com.google.android.material.snackbar.Snackbar
 import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -95,11 +94,18 @@ class SettlementsFragment @Inject constructor() : BaseFragment<FragmentSettlemen
                 }
                 is Resource.Failure -> {
                     binding.layoutRefresh.isRefreshing = false
-                    (requireActivity() as MainActivity).showSnackbar(
+                    settlement.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) {
+                            viewModel.refreshDataSettlements()
+                        }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
-                        R.string.text_retry,
-                        Snackbar.LENGTH_INDEFINITE
+                        R.string.text_retry
                     ) {
                         viewModel.refreshDataSettlements()
                     }

@@ -8,6 +8,7 @@ import com.example.trip.usecases.dayplan.DeleteDayPlanUseCase
 import com.example.trip.usecases.dayplan.GetDayPlansUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -43,7 +44,7 @@ class DayPlansViewModel @Inject constructor(
     }
 
     fun deleteDayPlanAsync(dayPlanId: Long): Deferred<Resource<Unit>> {
-        return viewModelScope.async {
+        return viewModelScope.async(Dispatchers.IO) {
                 deleteDayPlanUseCase(dayPlanId)
             }
     }

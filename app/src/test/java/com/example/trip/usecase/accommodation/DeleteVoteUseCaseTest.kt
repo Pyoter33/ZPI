@@ -37,7 +37,7 @@ class DeleteVoteUseCaseTest {
     }
 
     @Test
-    fun `verify vote correctly posted`() = scope.runTest {
+    fun `verify vote correctly deleted`() = scope.runTest {
         //given
         coEvery { accommodationsRepository.deleteVote(any()) } returns Unit
 

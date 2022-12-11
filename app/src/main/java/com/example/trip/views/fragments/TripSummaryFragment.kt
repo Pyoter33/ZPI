@@ -24,7 +24,6 @@ import com.example.trip.utils.*
 import com.example.trip.viewmodels.SummaryViewModel
 import com.gkemon.XMLtoPDF.PdfGenerator
 import com.gkemon.XMLtoPDF.PdfGeneratorListener
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -114,14 +113,17 @@ class TripSummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBi
                 }
                 is Resource.Failure -> {
                     binding.layoutLoading.setGone()
-                    (requireActivity() as MainActivity).showSnackbar(
+                    it.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) { viewModel.refresh() }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
-                        R.string.text_retry,
-                        Snackbar.LENGTH_INDEFINITE
-                    ) {
-                        viewModel.refresh()
-                    }
+                        R.string.text_retry
+                    ) { viewModel.refresh() }
                 }
             }
         }

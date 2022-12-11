@@ -37,7 +37,7 @@ class PostDayPlanUseCaseTest {
     }
 
     @Test
-    fun `verify vote correctly posted`() = scope.runTest {
+    fun `verify day plan correctly posted`() = scope.runTest {
         //given
         coEvery { dayPlansRepository.postDayPlan(any()) } returns Unit
 

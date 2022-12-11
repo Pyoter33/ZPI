@@ -88,13 +88,17 @@ class ParticipantsFragment @Inject constructor() : BaseFragment<FragmentParticip
                     binding.layoutRefresh.isRefreshing = true
                 }
                 is Resource.Failure -> {
-                    (requireActivity() as MainActivity).showSnackbar(
+                    it.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) { viewModel.refreshData() }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
                         R.string.text_retry
-                    ) {
-                        viewModel.refreshData()
-                    }
+                    ) { viewModel.refreshData() }
                     binding.layoutRefresh.isRefreshing = false
                 }
             }

@@ -37,7 +37,7 @@ class PostAvailabilityUseCaseTest {
     }
 
     @Test
-    fun `verify vote correctly posted`() = scope.runTest {
+    fun `verify availability correctly posted`() = scope.runTest {
         //given
         coEvery { availabilityRepository.postAvailability(any()) } returns Unit
 

@@ -37,7 +37,7 @@ class UpdateAttractionUseCaseTest {
     }
 
     @Test
-    fun `verify vote correctly posted`() = scope.runTest {
+    fun `verify attraction correctly updated`() = scope.runTest {
         //given
         coEvery { dayPlansRepository.updateAttraction(any()) } returns Unit
 

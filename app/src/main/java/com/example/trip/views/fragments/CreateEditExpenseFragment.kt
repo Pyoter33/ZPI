@@ -175,7 +175,6 @@ class CreateEditExpenseFragment @Inject constructor() : BaseFragment<FragmentCre
         }
     }
 
-
     private fun submit() {
         if (isSubmitNotPermitted()) return
         enableLoading()

@@ -10,6 +10,7 @@ import com.example.trip.usecases.group.DeleteGroupUseCase
 import com.example.trip.usecases.group.GetGroupsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -40,7 +41,7 @@ class GroupsListViewModel @Inject constructor(
     }
 
     fun deleteGroupAsync(groupId: Long): Deferred<Resource<Unit>> {
-        return viewModelScope.async {
+        return viewModelScope.async(Dispatchers.IO) {
             deleteGroupUseCase(
                 groupId
             )

@@ -45,7 +45,7 @@ class DayPlansRepository @Inject constructor(private val dayPlanService: DayPlan
     }
 
     suspend fun updateStartingPoint(dayPlanId: Long, attractionId: Long) {
-        dayPlanService.setStartingPoint(dayPlanId, attractionId)
+        dayPlanService.setStartingPoint(dayPlanId, attractionId).toNullableBodyOrError()
     }
 
 }

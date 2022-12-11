@@ -11,6 +11,7 @@ import com.example.trip.databinding.ItemBalancePlusBinding
 import com.example.trip.models.Balance
 import com.example.trip.models.BalanceStatus
 import com.example.trip.utils.toStringFormat
+import java.math.BigDecimal
 import javax.inject.Inject
 import kotlin.math.absoluteValue
 
@@ -60,8 +61,8 @@ class BalancesAdapter @Inject constructor() :
                             R.string.format_plus, balance.amount.toStringFormat(currency)
                         )
                     }
-                indicator.max = balance.maxAmount.toInt()
-                indicator.progress = balance.amount.toInt()
+                indicator.max = balance.maxAmount.times(BigDecimal.valueOf(100)).toInt()
+                indicator.progress = balance.amount.times(BigDecimal.valueOf(100)).toInt()
             }
         }
 
@@ -89,8 +90,8 @@ class BalancesAdapter @Inject constructor() :
             with(binding) {
                 textName.text = balance.participant.fullName
                 textPrice.text = balance.amount.toStringFormat(currency)
-                indicator.max = balance.maxAmount.toInt().absoluteValue
-                indicator.progress = balance.amount.toInt().absoluteValue
+                indicator.max = balance.maxAmount.times(BigDecimal.valueOf(100)).toInt().absoluteValue
+                indicator.progress = balance.amount.times(BigDecimal.valueOf(100)).toInt().absoluteValue
             }
         }
 

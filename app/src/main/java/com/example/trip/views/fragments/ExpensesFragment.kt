@@ -24,7 +24,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ExpensesFragment @Inject constructor() : BaseFragment<FragmentExpensesBinding>(), ExpenseClickListener {
+class ExpensesFragment @Inject constructor() : BaseFragment<FragmentExpensesBinding>(),
+    ExpenseClickListener {
 
     @Inject
     lateinit var adapter: ExpensesAdapter
@@ -48,25 +49,32 @@ class ExpensesFragment @Inject constructor() : BaseFragment<FragmentExpensesBind
     }
 
     private fun observeExpensesList() {
-        viewModel.expensesList.observe(viewLifecycleOwner) {
-            when (it) {
+        viewModel.expensesList.observe(viewLifecycleOwner) { resourceExpenses ->
+            when (resourceExpenses) {
                 is Resource.Success -> {
-                    if(it.data.isEmpty()) binding.textEmptyList.setVisible() else binding.textEmptyList.setGone()
-                    adapter.submitList(it.data)
+                    if (resourceExpenses.data.isEmpty()) {
+                        binding.textEmptyList.setVisible()
+                    } else {
+                        binding.textEmptyList.setGone()
+                    }
+                    adapter.submitList(resourceExpenses.data)
                     binding.chipGroup.clearCheck()
                 }
                 is Resource.Loading -> {
-                    binding.textEmptyList.setGone()
+                    //NO-OP
                 }
                 is Resource.Failure -> {
-                    (requireActivity() as MainActivity).showSnackbar(
+                    resourceExpenses.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) { viewModel.refreshDataExpense() }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
-                        R.string.text_retry,
-                        Snackbar.LENGTH_INDEFINITE
-                    ) {
-                        viewModel.refreshDataExpense()
-                    }
+                        R.string.text_retry
+                    ) { viewModel.refreshDataExpense() }
                     binding.textEmptyList.setGone()
                 }
             }

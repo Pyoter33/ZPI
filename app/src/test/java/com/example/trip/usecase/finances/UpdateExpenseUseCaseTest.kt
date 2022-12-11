@@ -37,7 +37,7 @@ class UpdateExpenseUseCaseTest {
     }
 
     @Test
-    fun `verify vote correctly posted`() = scope.runTest {
+    fun `verify expense correctly updated`() = scope.runTest {
         //given
         coEvery { financesRepository.updateExpense(any(), any(), any()) } returns Unit
 

@@ -4,10 +4,8 @@ import com.example.trip.Constants
 import com.example.trip.models.AttractionPreview
 import com.example.trip.models.Resource
 import com.example.trip.repositories.DayPlansRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import javax.inject.Inject
 import javax.inject.Named
@@ -29,7 +27,7 @@ class GetAttractionPreviewUseCase @Inject constructor(
             }
         }.onStart {
             emit(Resource.Loading())
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     private suspend fun getAttractions(query: String): Resource<List<AttractionPreview>> =

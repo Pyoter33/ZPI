@@ -5,10 +5,8 @@ import com.example.trip.models.Resource
 import com.example.trip.repositories.GroupsRepository
 import com.example.trip.utils.SharedPreferencesHelper
 import com.example.trip.utils.toGroupStatus
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -29,7 +27,7 @@ class GetGroupsUseCase @Inject constructor(
             }
         }.onStart {
             emit(Resource.Loading())
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     private suspend fun getGroups(): Resource<List<Group>> =
@@ -39,7 +37,7 @@ class GetGroupsUseCase @Inject constructor(
                 it.groupId,
                 it.name,
                 it.groupStage.toGroupStatus(),
-                it.startCity,
+                it.startLocation,
                 it.currency.currencyCode,
                 it.minimalNumberOfParticipants,
                 it.minimalNumberOfDays,

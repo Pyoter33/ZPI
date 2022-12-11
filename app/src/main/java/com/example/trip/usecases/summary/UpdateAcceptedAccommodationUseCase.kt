@@ -10,7 +10,7 @@ class UpdateAcceptedAccommodationUseCase @Inject constructor(private val accommo
 
     suspend operator fun invoke(accommodationId: Long): Resource<Unit> {
         return try{
-            accommodationsRepository.postAcceptedAccommodation(accommodationId)
+            accommodationsRepository.updateAcceptedAccommodation(accommodationId)
             Resource.Success(Unit)
         } catch (e: HttpException) {
             e.printStackTrace()

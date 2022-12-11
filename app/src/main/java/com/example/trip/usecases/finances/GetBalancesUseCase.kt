@@ -6,11 +6,10 @@ import com.example.trip.models.Resource
 import com.example.trip.models.UserRole
 import com.example.trip.repositories.FinancesRepository
 import com.example.trip.repositories.ParticipantsRepository
+import com.example.trip.utils.getMessage
 import com.example.trip.utils.toParticipant
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -25,13 +24,13 @@ class GetBalancesUseCase @Inject constructor(
         }.catch {
             it.printStackTrace()
             if (it is HttpException) {
-                emit(Resource.Failure(it.code()))
+                emit(Resource.Failure(it.code(), it.response()?.getMessage()))
             } else {
                 emit(Resource.Failure(0))
             }
         }.onStart {
             emit(Resource.Loading())
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     private suspend fun getBalances(groupId: Long): Resource<List<Balance>> {

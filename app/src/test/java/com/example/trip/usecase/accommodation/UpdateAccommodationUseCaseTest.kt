@@ -37,7 +37,7 @@ class UpdateAccommodationUseCaseTest {
     }
 
     @Test
-    fun `verify vote correctly posted`() = scope.runTest {
+    fun `verify accommodation correctly updated`() = scope.runTest {
         //given
         coEvery { accommodationsRepository.updateAccommodation(any(), any(), any()) } returns Unit
 

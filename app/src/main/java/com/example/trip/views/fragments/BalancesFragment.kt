@@ -14,7 +14,6 @@ import com.example.trip.databinding.FragmentBalancesBinding
 import com.example.trip.models.Resource
 import com.example.trip.viewmodels.finances.FinancesViewModel
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -61,15 +60,17 @@ class BalancesFragment @Inject constructor() : BaseFragment<FragmentBalancesBind
                     //NO-OP
                 }
                 is Resource.Failure -> {
-
-                    (requireActivity() as MainActivity).showSnackbar(
+                    it.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) { viewModel.refreshDataExpense() }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
-                        R.string.text_retry,
-                        Snackbar.LENGTH_INDEFINITE
-                    ) {
-                        viewModel.refreshDataBalances()
-                    }
+                        R.string.text_retry
+                    ) { viewModel.refreshDataBalances() }
                 }
             }
         }

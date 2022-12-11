@@ -37,7 +37,7 @@ class PostAccommodationUseCaseTest {
     }
 
     @Test
-    fun `verify vote correctly posted`() = scope.runTest {
+    fun `verify accommodation correctly posted`() = scope.runTest {
         //given
         coEvery { accommodationsRepository.postAccommodation(any()) } returns Unit
 

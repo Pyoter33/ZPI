@@ -93,7 +93,7 @@ class CreateEditAttractionFragment @Inject constructor() : BaseFragment<Fragment
 
         enableLoading()
         lifecycleScope.launch {
-            when (operation.await()) {
+            when (val result = operation.await()) {
                 is Resource.Success -> {
                     disableLoading()
                     findNavController().popBackStackWithRefresh(R.id.attractionsFragment, false)
@@ -103,7 +103,15 @@ class CreateEditAttractionFragment @Inject constructor() : BaseFragment<Fragment
                 }
                 is Resource.Failure -> {
                     disableLoading()
-                    (requireActivity() as MainActivity).showSnackbar(
+                    result.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) {
+                            submit()
+                        }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_post_failure,
                         R.string.text_retry

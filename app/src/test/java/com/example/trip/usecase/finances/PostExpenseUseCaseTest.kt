@@ -37,7 +37,7 @@ class PostExpenseUseCaseTest {
     }
 
     @Test
-    fun `verify vote correctly posted`() = scope.runTest {
+    fun `verify expense correctly posted`() = scope.runTest {
         //given
         coEvery { financesRepository.postExpense(any(), any()) } returns Unit
 

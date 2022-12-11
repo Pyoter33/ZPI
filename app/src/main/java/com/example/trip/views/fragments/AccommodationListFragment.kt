@@ -96,13 +96,17 @@ class AccommodationListFragment @Inject constructor() :
                     binding.textEmptyList.setGone()
                 }
                 is Resource.Failure -> {
-                    (requireActivity() as MainActivity).showSnackbar(
+                    it.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) { viewModel.refreshData() }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
                         R.string.text_retry
-                    ) {
-                        viewModel.refreshData()
-                    }
+                    ) { viewModel.refreshData() }
                     binding.layoutRefresh.isRefreshing = false
                     binding.textEmptyList.setGone()
                 }
@@ -168,7 +172,7 @@ class AccommodationListFragment @Inject constructor() :
             if (accommodation.isVoted) viewModel.deleteVoteAsync(accommodation.id) else viewModel.postVoteAsync(
                 accommodation.id
             )
-        viewModel.setVoted(position)
+        viewModel.setVoted(accommodation.id)
         adapter.notifyItemChanged(position)
         button.isEnabled = false
         lifecycleScope.launch {
@@ -177,7 +181,7 @@ class AccommodationListFragment @Inject constructor() :
                     button.isEnabled = true
                 }
                 is Resource.Failure -> {
-                    viewModel.setVoted(position)
+                    viewModel.setVoted(accommodation.id)
                     adapter.notifyItemChanged(position)
                     button.isEnabled = true
                     (requireActivity() as MainActivity).showSnackbar(

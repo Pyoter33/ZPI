@@ -98,7 +98,7 @@ class GetSummaryUseCaseTest {
     }
 
     @Test
-    fun `verify accommodation correctly mapped voted`() = scope.runTest {
+    fun `verify summary correctly mapped`() = scope.runTest {
         //given
         coEvery { groupsRepository.getGroup(any()) } returns groupDto
         coEvery { accommodationsRepository.getAccommodation(any()) } returns accommodationDto

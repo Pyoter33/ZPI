@@ -37,7 +37,7 @@ class PostAttractionUseCaseTest {
     }
 
     @Test
-    fun `verify vote correctly posted`() = scope.runTest {
+    fun `verify attraction correctly posted`() = scope.runTest {
         //given
         coEvery { dayPlansRepository.postAttraction(any(), any()) } returns Unit
 

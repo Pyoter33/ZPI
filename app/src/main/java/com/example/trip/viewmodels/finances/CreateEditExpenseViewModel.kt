@@ -58,7 +58,7 @@ class CreateEditExpenseViewModel @Inject constructor(
 
     fun checkAll(isChecked: Boolean) {
         if (participantsList.value !is Resource.Success) return
-        val currentPrice = if (price.isNullOrEmpty()) BigDecimal.ZERO else price!!.toBigDecimal()
+        val currentPrice = if (price.isNullOrEmpty() || price == ".") BigDecimal.ZERO else price!!.toBigDecimal()
         val size = (participantsList.value as Resource.Success).data.size
         (participantsList.value as Resource.Success).data.forEach {
             it.isChecked = isChecked
@@ -82,7 +82,7 @@ class CreateEditExpenseViewModel @Inject constructor(
         isChecked: Boolean
     ): List<Int> {
         val positionsToUpdate = mutableListOf<Int>()
-        val currentPrice = if (price.isNullOrEmpty()) BigDecimal.ZERO else price!!.toBigDecimal()
+        val currentPrice = if (price.isNullOrEmpty() || price == ".") BigDecimal.ZERO else price!!.toBigDecimal()
         if (!isChecked) {
             (participantsList.value as Resource.Success).data[position].amount = BigDecimal.ZERO
         }

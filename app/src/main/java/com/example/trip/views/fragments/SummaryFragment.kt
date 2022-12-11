@@ -36,7 +36,6 @@ import com.gkemon.XMLtoPDF.PdfGeneratorListener
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -157,14 +156,17 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
                 }
                 is Resource.Failure -> {
                     binding.layoutLoading.setGone()
-                    (requireActivity() as MainActivity).showSnackbar(
+                    it.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) { viewModel.refresh() }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
-                        R.string.text_retry,
-                        Snackbar.LENGTH_INDEFINITE
-                    ) {
-                        viewModel.refresh()
-                    }
+                        R.string.text_retry
+                    ) { viewModel.refresh() }
                 }
             }
         }

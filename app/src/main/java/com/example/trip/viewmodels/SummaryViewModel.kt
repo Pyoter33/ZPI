@@ -10,6 +10,7 @@ import com.example.trip.usecases.group.GetGroupUseCase
 import com.example.trip.usecases.summary.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -43,7 +44,7 @@ class SummaryViewModel @Inject constructor(
     val isButtonUnlocked: LiveData<Boolean> = _isButtonUnlocked
 
     fun changeGroupStatusAsync(): Deferred<Resource<Unit>> {
-        return viewModelScope.async {
+        return viewModelScope.async(Dispatchers.IO) {
             groupId?.let {
                 changeGroupStatusUseCase(it)
             } ?: Resource.Failure()
@@ -51,7 +52,7 @@ class SummaryViewModel @Inject constructor(
     }
 
     fun getGroupAsync(): Deferred<Resource<Group>> {
-        return viewModelScope.async {
+        return viewModelScope.async(Dispatchers.IO) {
             groupId?.let {
                 getGroupUseCase(it)
             } ?: Resource.Failure()
@@ -59,7 +60,7 @@ class SummaryViewModel @Inject constructor(
     }
 
     fun setNewAcceptedAvailabilityAsync(availability: Availability): Deferred<Resource<Unit>> {
-        return viewModelScope.async {
+        return viewModelScope.async(Dispatchers.IO) {
             groupId?.let {
                 postAcceptedAvailabilityUseCase(it, availability)
             } ?: Resource.Failure()

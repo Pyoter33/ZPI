@@ -40,7 +40,7 @@ class GetSettlementsUseCaseTest {
     private val preferencesHelper: SharedPreferencesHelper = mockk()
     private val settlementDto = SettlementDto(
         1L,
-        LocalDateTime.of(2020, 10, 15, 0, 0),
+        LocalDateTime.now(),
         SettlementStatus.PENDING,
         BigDecimal.ONE,
         2L,
@@ -55,7 +55,7 @@ class GetSettlementsUseCaseTest {
     }
 
     @Test
-    fun `verify expenses correctly mapped`() = scope.runTest {
+    fun `assert settlements correctly mapped`() = scope.runTest {
         //given
         coEvery { financesRepository.getSettlements(any(), any()) } returns listOf(settlementDto)
         coEvery { participantsRepository.getParticipantsForGroup(any()) } returns listOf(

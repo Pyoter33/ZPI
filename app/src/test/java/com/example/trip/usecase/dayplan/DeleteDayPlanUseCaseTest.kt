@@ -34,7 +34,7 @@ class DeleteDayPlanUseCaseTest {
     }
 
     @Test
-    fun `verify vote correctly posted`() = scope.runTest {
+    fun `verify day plan correctly deleted`() = scope.runTest {
         //given
         coEvery { dayPlansRepository.deleteDayPlan(any()) } returns Unit
 

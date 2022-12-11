@@ -8,10 +8,8 @@ import com.example.trip.repositories.AccommodationsRepository
 import com.example.trip.repositories.GroupsRepository
 import com.example.trip.repositories.TransportRepository
 import com.example.trip.utils.getMessage
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -33,7 +31,7 @@ class GetTransportUseCase @Inject constructor(
                 }
             }.onStart {
                 emit(Resource.Loading())
-            }
+            }.flowOn(Dispatchers.IO)
     }
 
     private suspend fun getTransport(accommodationId: Long, groupId: Long): Resource<Transport> {

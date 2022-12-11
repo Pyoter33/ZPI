@@ -34,7 +34,7 @@ class DeleteAccommodationUseCaseTest {
     }
 
     @Test
-    fun `verify vote correctly posted`() = scope.runTest {
+    fun `verify accommodation correctly deleted`() = scope.runTest {
         //given
         coEvery { accommodationsRepository.deleteAccommodation(any()) } returns Unit
 

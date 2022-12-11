@@ -41,7 +41,7 @@ class GetCheckableParticipantsUseCaseTest {
     }
 
     @Test
-    fun `verify expenses correctly mapped`() = scope.runTest {
+    fun `verify checkable participants correctly mapped`() = scope.runTest {
         //given
         coEvery { participantsRepository.getParticipantsForGroup(any()) } returns listOf(
             UserDto(1, "", "1 1", "a", "a")

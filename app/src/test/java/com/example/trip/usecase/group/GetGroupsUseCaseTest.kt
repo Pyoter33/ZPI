@@ -65,7 +65,7 @@ class GetGroupsUseCaseTest {
     }
 
     @Test
-    fun `verify day plan correctly mapped`() = scope.runTest {
+    fun `verify groups correctly mapped`() = scope.runTest {
         //given
         coEvery { groupsRepository.getGroups(any()) } returns listOf(groupDto)
         coEvery { groupsRepository.getCoordinators(any()) } returns listOf(UserDto(1, "", "1 1", "a", "a"))

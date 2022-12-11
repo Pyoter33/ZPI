@@ -3,10 +3,9 @@ package com.example.trip.usecases.availability
 import com.example.trip.models.Availability
 import com.example.trip.models.Resource
 import com.example.trip.repositories.AvailabilityRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
+import com.example.trip.utils.getMessage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -18,13 +17,13 @@ class GetUserAvailabilitiesUseCase @Inject constructor(private val availabilityR
         }.catch {
             it.printStackTrace()
             if (it is HttpException) {
-                emit(Resource.Failure(it.code()))
+                emit(Resource.Failure(it.code(), it.response()?.getMessage()))
             } else {
                 emit(Resource.Failure(0))
             }
         }.onStart {
             emit(Resource.Loading())
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     private suspend fun getAvailabilities(

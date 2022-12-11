@@ -34,7 +34,7 @@ class DeleteAvailabilityUseCaseTest {
     }
 
     @Test
-    fun `verify vote correctly posted`() = scope.runTest {
+    fun `verify availability correctly deleted`() = scope.runTest {
         //given
         coEvery { availabilityRepository.deleteAvailability(any(), any()) } returns Unit
 

@@ -16,6 +16,7 @@ import com.example.trip.usecases.summary.UpdateAcceptedAccommodationUseCase
 import com.example.trip.utils.SharedPreferencesHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -42,9 +43,9 @@ class AccommodationsListViewModel @Inject constructor(
     }
     val accommodationsList: LiveData<Resource<List<Accommodation>>> = _accommodationsList
 
-    fun setVoted(position: Int) {
+    fun setVoted(id: Long) {
         if (accommodationsList.value is Resource.Success) {
-            val accommodation = (accommodationsList.value!! as Resource.Success).data[position]
+            val accommodation = (accommodationsList.value!! as Resource.Success).data.find { it.id == id } ?: return
             accommodation.isVoted = !accommodation.isVoted
             accommodation.isVoted.let {
                 if (it) accommodation.votes += 1 else accommodation.votes -= 1
@@ -104,7 +105,7 @@ class AccommodationsListViewModel @Inject constructor(
     }
 
     fun postVoteAsync(accommodationId: Long): Deferred<Resource<Unit>> {
-        return viewModelScope.async {
+        return viewModelScope.async(Dispatchers.IO) {
             groupId?.let {
                 postVoteUseCase(
                     AccommodationVotePostDto(
@@ -118,7 +119,7 @@ class AccommodationsListViewModel @Inject constructor(
     }
 
     fun deleteVoteAsync(accommodationId: Long): Deferred<Resource<Unit>> {
-        return viewModelScope.async {
+        return viewModelScope.async(Dispatchers.IO) {
             groupId?.let {
                 deleteVoteUseCase(
                     AccommodationVoteId(
@@ -131,7 +132,7 @@ class AccommodationsListViewModel @Inject constructor(
     }
 
     fun deleteAccommodationAsync(accommodationId: Long): Deferred<Resource<Unit>> {
-        return viewModelScope.async {
+        return viewModelScope.async(Dispatchers.IO) {
             deleteAccommodationUseCase(
                 accommodationId
             )
@@ -139,7 +140,7 @@ class AccommodationsListViewModel @Inject constructor(
     }
 
     fun postAcceptedAccommodationAsync(accommodationId: Long): Deferred<Resource<Unit>> {
-        return viewModelScope.async {
+        return viewModelScope.async(Dispatchers.IO) {
             postAcceptedAccommodationUseCase(
                 accommodationId
             )
@@ -158,7 +159,7 @@ class AccommodationsListViewModel @Inject constructor(
     }
 
     fun getAcceptedAvailabilityAsync(): Deferred<Resource<OptimalAvailability?>> {
-        return viewModelScope.async {
+        return viewModelScope.async(Dispatchers.IO) {
             groupId?.let {
                 getAcceptedAvailabilityUseCase(groupId)
             }?: Resource.Failure()

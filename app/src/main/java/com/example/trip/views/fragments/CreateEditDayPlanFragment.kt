@@ -80,11 +80,18 @@ class CreateEditDayPlanFragment @Inject constructor() :
                 }
                 is Resource.Failure -> {
                     binding.layoutLoading.setGone()
-                    (requireActivity() as MainActivity).showSnackbar(
+                    result.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) {
+                            getAcceptedDates()
+                        }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
-                        R.string.text_fetch_failure,
-                        R.string.text_retry,
-                        Snackbar.LENGTH_INDEFINITE
+                        R.string.text_post_failure,
+                        R.string.text_retry
                     ) {
                         getAcceptedDates()
                     }

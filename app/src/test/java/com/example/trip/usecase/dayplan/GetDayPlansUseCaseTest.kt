@@ -1,7 +1,6 @@
 package com.example.trip.usecase.dayplan
 
 import com.example.trip.dto.DayPlanDto
-import com.example.trip.models.Accommodation
 import com.example.trip.models.DayPlan
 import com.example.trip.models.Resource
 import com.example.trip.repositories.DayPlansRepository
@@ -30,8 +29,6 @@ class GetDayPlansUseCaseTest {
 
     private val dispatcher = StandardTestDispatcher()
     private val scope = TestScope(dispatcher)
-   // private val error = {"message":"We cannot find your starting location. Please check or change starting point.","status":"BAD_REQUEST","timestamp":"2022-12-07T19:19:05.23506439+01:00"}
-
 
     private lateinit var useCase: GetDayPlansUseCase
     private val dayPlansRepository: DayPlansRepository = mockk()
@@ -69,7 +66,7 @@ class GetDayPlansUseCaseTest {
         runCurrent()
 
         //then
-        assertEquals(Resource.Loading<List<Accommodation>>(), result.first())
+        assertEquals(Resource.Loading<List<*>>(), result.first())
         assertEquals(Resource.Success(listOf(dayPlan)), result.last())
     }
 

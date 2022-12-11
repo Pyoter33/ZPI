@@ -46,7 +46,7 @@ class AccommodationsRepository @Inject constructor(private val accommodationServ
         accommodationService.deleteVote(accommodationVoteId).toNullableBodyOrError()
     }
 
-    suspend fun postAcceptedAccommodation(accommodationId: Long) {
+    suspend fun updateAcceptedAccommodation(accommodationId: Long) {
         accommodationService.acceptAccommodation(accommodationId).toNullableBodyOrError()
     }
 

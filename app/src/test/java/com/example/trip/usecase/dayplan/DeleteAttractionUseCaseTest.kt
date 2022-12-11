@@ -34,7 +34,7 @@ class DeleteAttractionUseCaseTest {
     }
 
     @Test
-    fun `verify vote correctly posted`() = scope.runTest {
+    fun `verify attraction correctly deleted`() = scope.runTest {
         //given
         coEvery { dayPlansRepository.deleteAttraction(any(), any()) } returns Unit
 

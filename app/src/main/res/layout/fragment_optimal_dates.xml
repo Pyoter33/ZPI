@@ -206,7 +206,7 @@
                                     android:id="@+id/calendar"
                                     style="@style/ThemeOverlay.MaterialComponents.MaterialCalendar"
                                     android:layout_width="match_parent"
-                                    android:layout_height="370dp"
+                                    android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/marginXL"
                                     android:dateTextAppearance="@style/CalenderViewDateCustomText"
                                     android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"

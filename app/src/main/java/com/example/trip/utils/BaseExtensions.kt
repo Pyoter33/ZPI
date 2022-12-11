@@ -191,8 +191,6 @@ private fun isIntegerValue(bd: BigDecimal): Boolean {
 fun String.formatPhone(): String {
     val split = split(' ')
     return "${split[0]} ${split[1]}"
-    //proper error in group creation and user creation
-    // change settlement to resolved
 }
 
 fun <T> Response<T>.toBodyOrError(): T {
@@ -226,8 +224,12 @@ fun NavController.popBackStackWithRefresh() {
 }
 
 fun NavController.popBackStackWithRefresh(@IdRes destinationId: Int, inclusive: Boolean) {
-    getBackStackEntry(destinationId).savedStateHandle[Constants.TO_REFRESH_KEY] = true
-    popBackStack(destinationId, inclusive)
+    try {
+        getBackStackEntry(destinationId).savedStateHandle[Constants.TO_REFRESH_KEY] = true
+        popBackStack(destinationId, inclusive)
+    } catch (e: Exception) {
+        popBackStack()
+    }
 }
 
 fun Fragment.refreshIfNewData(action: () -> Unit) {

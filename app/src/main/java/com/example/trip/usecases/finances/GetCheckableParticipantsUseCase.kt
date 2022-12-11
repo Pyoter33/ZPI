@@ -5,10 +5,8 @@ import com.example.trip.models.Participant
 import com.example.trip.models.Resource
 import com.example.trip.models.UserRole
 import com.example.trip.repositories.ParticipantsRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import retrofit2.HttpException
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -29,7 +27,7 @@ class GetCheckableParticipantsUseCase @Inject constructor(
             }
         }.onStart {
             emit(Resource.Loading())
-        }
+        }.flowOn(Dispatchers.IO)
     }
 
     private suspend fun getParticipants(groupId: Long): Resource<List<CheckableParticipant>> {

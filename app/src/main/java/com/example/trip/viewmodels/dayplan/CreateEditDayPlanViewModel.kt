@@ -58,7 +58,7 @@ class CreateEditDayPlanViewModel @Inject constructor(
     }
 
     fun getAcceptedAvailabilityAsync(): Deferred<Resource<OptimalAvailability?>> {
-        return viewModelScope.async {
+        return viewModelScope.async(Dispatchers.IO) {
             groupId?.let {
                 getAcceptedAvailabilityUseCase(groupId)
             }?: Resource.Failure()

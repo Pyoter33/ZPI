@@ -17,7 +17,6 @@ import com.example.trip.models.Availability
 import com.example.trip.models.Resource
 import com.example.trip.utils.*
 import com.example.trip.viewmodels.availability.AvailabilityViewModel
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import com.kizitonwose.calendarview.utils.yearMonth
 import dagger.hilt.android.AndroidEntryPoint
@@ -125,14 +124,17 @@ class OptimalDatesFragment @Inject constructor() : BaseFragment<FragmentOptimalD
                     //binding.layoutLoading.setVisible()
                 }
                 is Resource.Failure -> {
-                    (requireActivity() as MainActivity).showSnackbar(
+                    it.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) { viewModel.refreshOptimalAvailability() }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
-                        R.string.text_retry,
-                        Snackbar.LENGTH_INDEFINITE
-                    ) {
-                        viewModel.refreshOptimalAvailability()
-                    }
+                        R.string.text_retry
+                    ) { viewModel.refreshOptimalAvailability() }
                     binding.layoutLoading.setGone()
                     binding.layoutRefresh.isRefreshing = false
                 }

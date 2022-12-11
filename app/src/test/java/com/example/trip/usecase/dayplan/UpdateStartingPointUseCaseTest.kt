@@ -34,7 +34,7 @@ class UpdateStartingPointUseCaseTest {
     }
 
     @Test
-    fun `verify vote correctly posted`() = scope.runTest {
+    fun `verify starting point correctly updated`() = scope.runTest {
         //given
         coEvery { dayPlansRepository.updateStartingPoint(any(), any()) } returns Unit
 

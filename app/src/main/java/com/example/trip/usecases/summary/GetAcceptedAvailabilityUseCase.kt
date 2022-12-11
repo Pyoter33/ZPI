@@ -37,7 +37,8 @@ class GetAcceptedAvailabilityUseCase @Inject constructor(
                     result.dateTo
                 ),
                 result.usersList.size,
-                result.numberOfDays
+                result.numberOfDays,
+                true
             )
         })
     }

@@ -162,17 +162,19 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
                 }
                 is Resource.Loading -> {
                     binding.layoutRefresh.isRefreshing = true
-                //binding.layoutLoading.setVisible()
                 }
                 is Resource.Failure -> {
-                    (requireActivity() as MainActivity).showSnackbar(
+                    it.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) { viewModel.refreshAvailability() }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
-                        R.string.text_retry,
-                        Snackbar.LENGTH_INDEFINITE
-                    ) {
-                        viewModel.refreshAvailability()
-                    }
+                        R.string.text_retry
+                    ) { viewModel.refreshAvailability() }
                     binding.layoutLoading.setGone()
                     binding.layoutRefresh.isRefreshing = false
                 }

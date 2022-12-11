@@ -29,7 +29,7 @@ class GetGroupUseCase @Inject constructor(private val groupsRepository: GroupsRe
             groupId,
             group.name,
             group.groupStage.toGroupStatus(),
-            group.startCity,
+            group.startLocation,
             group.currency.currencyCode,
             group.minimalNumberOfParticipants,
             group.minimalNumberOfDays,

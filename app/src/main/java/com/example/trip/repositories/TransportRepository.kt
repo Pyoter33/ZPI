@@ -2,7 +2,6 @@ package com.example.trip.repositories
 
 import com.example.trip.dto.TransportDto
 import com.example.trip.dto.UserTransportPostDto
-import com.example.trip.models.Resource
 import com.example.trip.service.TransportService
 import com.example.trip.utils.toBodyOrError
 import com.example.trip.utils.toNullableBodyOrError
@@ -28,16 +27,16 @@ class TransportRepository @Inject constructor(private val geoApiContext: GeoApiC
     }
 
     suspend fun deleteUserTransport(accommodationId: Long, transportId: Long) {
-        transportService.deleteUserTransport(accommodationId, transportId)
+        transportService.deleteUserTransport(accommodationId, transportId).toNullableBodyOrError()
     }
 
     suspend fun getRoute(
         origin: String,
         destination: String
-    ): Resource<DirectionsResult> {
+    ): DirectionsResult? {
         return withContext(Dispatchers.IO) {
             val request = DirectionsApi.getDirections(geoApiContext, origin, destination)
-            request.awaitIgnoreError()?.let { Resource.Success(it) } ?: Resource.Failure()
+            request.awaitIgnoreError()
         }
     }
 

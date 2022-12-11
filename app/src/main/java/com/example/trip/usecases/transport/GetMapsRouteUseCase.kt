@@ -12,14 +12,13 @@ class GetMapsRouteUseCase @Inject constructor(private val transportRepository: T
         origin: String,
         destination: String
     ): Resource<PolylineOptions> {
-        val result = transportRepository.getRoute(origin, destination)
-        val resultSuccess = (result.takeIf { it is Resource.Success } as? Resource.Success)?.data
-
-        return resultSuccess?.let {
-            val convertedList = it.routes.first().overviewPolyline.decodePath().map { latLang ->
+        return transportRepository.getRoute(origin, destination)?.let {
+            val convertedList = it.routes.firstOrNull()?.overviewPolyline?.decodePath()?.map { latLang ->
                 LatLng(latLang.lat, latLang.lng)
             }
-            Resource.Success(PolylineOptions().apply { addAll(convertedList) })
+            convertedList?.let {
+                Resource.Success(PolylineOptions().apply { addAll(it) })
+            } ?: Resource.Failure()
         } ?: Resource.Failure()
     }
 
