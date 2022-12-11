@@ -1,15 +1,100 @@
 package com.example.trip.usecases.transport
 
-import com.example.trip.models.Resource
-import com.example.trip.models.Transport
+import com.example.trip.dto.AirTransportDto
+import com.example.trip.dto.CarTransportDto
+import com.example.trip.dto.UserTransportDto
+import com.example.trip.models.*
+import com.example.trip.repositories.AccommodationsRepository
+import com.example.trip.repositories.GroupsRepository
 import com.example.trip.repositories.TransportRepository
-import kotlinx.coroutines.flow.Flow
+import com.example.trip.utils.getMessage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import retrofit2.HttpException
 import javax.inject.Inject
 
-class GetTransportUseCase @Inject constructor(private val transportRepository: TransportRepository) {
+class GetTransportUseCase @Inject constructor(
+    private val transportRepository: TransportRepository,
+    private val groupsRepository: GroupsRepository,
+    private val accommodationsRepository: AccommodationsRepository
+) {
 
-    operator fun invoke(accommodationId: Long): Flow<Resource<Transport>> {
-        return transportRepository.getTransport(accommodationId)
+    suspend operator fun invoke(accommodationId: Long, groupId: Long): Flow<Resource<Transport>> {
+        return flow {
+                emit(getTransport(accommodationId, groupId))
+            }.catch {
+                it.printStackTrace()
+                if(it is HttpException){
+                    emit(Resource.Failure(it.code(), it.response()?.getMessage()))
+                } else {
+                    emit(Resource.Failure(0))
+                }
+            }.onStart {
+                emit(Resource.Loading())
+            }.flowOn(Dispatchers.IO)
+    }
+
+    private suspend fun getTransport(accommodationId: Long, groupId: Long): Resource<Transport> {
+        var airTransport: AirTransport? = null
+        var carTransport: CarTransport? = null
+        val userTransports = mutableListOf<UserTransport>()
+        val accommodation = accommodationsRepository.getAccommodation(accommodationId)
+        val group = groupsRepository.getGroup(groupId)
+        val sourceLatLng = "${group.latitude},${group.longitude}"
+        val destinationLatLng = "${accommodation.latitude},${accommodation.longitude}"
+
+        transportRepository.getTransport(accommodationId).forEach {
+            when (it) {
+                is AirTransportDto -> {
+                    airTransport = AirTransport(
+                        it.transportId,
+                        it.duration,
+                        it.source,
+                        it.destination,
+                        it.link,
+                        it.flight.map { flight ->
+                            Flight(
+                                flight.flightId,
+                                flight.flightNumber,
+                                flight.departureAirport,
+                                flight.arrivalAirport,
+                                flight.departureTime.toLocalTime(),
+                                flight.arrivalTime.toLocalTime(),
+                                flight.flightDuration,
+                                flight.travelToAirportDuration,
+                                flight.travelToAccommodationDuration
+                            )
+                        })
+                }
+                is CarTransportDto -> {
+                    carTransport = CarTransport(
+                        it.transportId,
+                        it.duration,
+                        sourceLatLng,
+                        destinationLatLng,
+                        it.distanceInKm
+                    )
+                }
+                is UserTransportDto -> {
+                    userTransports.add(
+                        UserTransport(
+                            it.transportId,
+                            groupId,
+                            accommodationId,
+                            it.meanOfTransport.split(',').map { it.trim() },
+                            it.duration,
+                            it.meetingTime.toLocalDate(),
+                            it.meetingTime.toLocalTime(),
+                            it.price,
+                            it.source,
+                            it.destination,
+                            it.description
+                        )
+                    )
+                }
+            }
+        }
+        return Resource.Success(Transport(carTransport, airTransport, userTransports))
     }
 
 }

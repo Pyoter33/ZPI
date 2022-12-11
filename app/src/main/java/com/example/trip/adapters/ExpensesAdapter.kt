@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trip.databinding.ItemExpenseBinding
 import com.example.trip.models.Expense
+import com.example.trip.utils.SharedPreferencesHelper
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
 import com.example.trip.utils.toStringFormat
@@ -17,6 +18,9 @@ class ExpensesAdapter @Inject constructor() :
     ListAdapter<Expense, ExpensesAdapter.ExpenseViewHolder>(
         ExpenseDiffUtil()
     ) {
+
+    @Inject
+    lateinit var preferencesHelper: SharedPreferencesHelper
 
     private lateinit var expenseClickListener: ExpenseClickListener
 
@@ -31,7 +35,7 @@ class ExpensesAdapter @Inject constructor() :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseViewHolder {
-        return ExpenseViewHolder.create(parent, currency, expenseClickListener)
+        return ExpenseViewHolder.create(parent, currency, preferencesHelper, expenseClickListener)
     }
 
     override fun onBindViewHolder(holder: ExpenseViewHolder, position: Int) {
@@ -41,18 +45,18 @@ class ExpensesAdapter @Inject constructor() :
     class ExpenseViewHolder(
         private val binding: ItemExpenseBinding,
         private val currency: String,
+        private val preferencesHelper: SharedPreferencesHelper,
         private val expenseClickListener: ExpenseClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(expense: Expense) {
-            val userId = 1L
             val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
             with(binding) {
                 textName.text = expense.title
                 textBuyer.text = expense.creator.fullName
                 textPrice.text = expense.price.toStringFormat(currency)
                 textDate.text = expense.creationDate.format(formatter)
-                expense.debtors.find { it.id == userId }?.let {
+                expense.debtors.find { it.id ==  preferencesHelper.getUserId()}?.let {
                     layoutContribution.setVisible()
                 }?: layoutContribution.setGone()
             }
@@ -70,6 +74,7 @@ class ExpensesAdapter @Inject constructor() :
             fun create(
                 parent: ViewGroup,
                 currency: String,
+                preferencesHelper: SharedPreferencesHelper,
                 expenseClickListener: ExpenseClickListener
             ): ExpenseViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
@@ -77,6 +82,7 @@ class ExpensesAdapter @Inject constructor() :
                 return ExpenseViewHolder(
                     binding,
                     currency,
+                    preferencesHelper,
                     expenseClickListener
                 )
             }

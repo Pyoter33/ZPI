@@ -15,10 +15,7 @@ import com.example.trip.adapters.ParticipantsPriceAdapter
 import com.example.trip.databinding.FragmentExpenseDetailsBinding
 import com.example.trip.models.Expense
 import com.example.trip.models.Resource
-import com.example.trip.utils.SharedPreferencesHelper
-import com.example.trip.utils.setGone
-import com.example.trip.utils.setVisible
-import com.example.trip.utils.toStringFormat
+import com.example.trip.utils.*
 import com.example.trip.viewmodels.finances.ExpenseDetailsViewModel
 import com.example.trip.views.dialogs.accommodation.DeleteAccommodationDialog
 import com.example.trip.views.dialogs.finances.DeleteExpenseDialog
@@ -26,6 +23,7 @@ import com.example.trip.views.dialogs.finances.DeleteExpenseDialogClickListener
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -82,6 +80,8 @@ class ExpenseDetailsFragment @Inject constructor() : BaseFragment<FragmentExpens
                 binding.buttonEdit.setGone()
                 binding.buttonDelete.setGone()
             }
+            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+            binding.textDate.text = expense.creationDate.format(formatter)
             binding.textExpenseName.text = expense.title
             binding.textPrice.text = expense.price.toStringFormat(currency)
             viewModel.setParticipants(expense.debtors, expense.price)
@@ -113,7 +113,7 @@ class ExpenseDetailsFragment @Inject constructor() : BaseFragment<FragmentExpens
             when (viewModel.deleteExpenseAsync().await()) {
                 is Resource.Success -> {
                     binding.layoutLoading.setGone()
-                    findNavController().popBackStack()
+                    findNavController().popBackStackWithRefresh()
                 }
                 is Resource.Loading -> {
                     binding.layoutLoading.setVisible()

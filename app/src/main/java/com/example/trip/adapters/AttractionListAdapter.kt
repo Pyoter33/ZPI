@@ -50,18 +50,18 @@ class AttractionListAdapter @Inject constructor() :
 
                 if (attraction.distanceToNext != null) {
                     textDistance.text =
-                        itemView.resources.getString(R.string.format_km, attraction.distanceToNext)
+                        itemView.resources.getString(R.string.format_km, attraction.distanceToNext / 1000)
                     imageLine.setVisible()
                 } else {
                     textDistance.text = ""
                     imageLine.setInvisible()
                 }
 
-                Glide.with(itemView).load(attraction.imageUrl).centerCrop()
+                Glide.with(itemView).load(attraction.imageUrl).placeholder(R.drawable.ic_baseline_downloading_24).error(R.drawable.ic_baseline_question_mark_24).centerCrop()
                     .into(binding.imageAttraction)
 
                 if (attraction.description.isNullOrEmpty()) {
-                    buttonExpand.setInvisible()
+                    buttonExpand.setGone()
                 } else {
                     buttonExpand.setVisible()
                 }
@@ -146,7 +146,7 @@ class AttractionDiffUtil : DiffUtil.ItemCallback<Attraction>() {
     }
 
     override fun areContentsTheSame(oldItem: Attraction, newItem: Attraction): Boolean {
-        return oldItem.id == newItem.id && oldItem.groupId == newItem.groupId
+        return oldItem.id == newItem.id
     }
 }
 

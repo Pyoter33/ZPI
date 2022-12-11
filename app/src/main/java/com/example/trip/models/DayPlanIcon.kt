@@ -12,4 +12,5 @@ enum class DayPlanIcon(val code: Int, @DrawableRes val resId: Int) {
     CASTLE(5, R.drawable.ic_baseline_castle_24),
     BOAT(6, R.drawable.ic_baseline_sailing_24),
     WATER(7, R.drawable.ic_baseline_water_24),
+    SKI(8, R.drawable.ic_baseline_downhill_skiing_24)
 }

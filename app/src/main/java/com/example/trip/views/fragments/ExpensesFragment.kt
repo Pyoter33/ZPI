@@ -14,6 +14,7 @@ import com.example.trip.adapters.ExpensesAdapter
 import com.example.trip.databinding.FragmentExpensesBinding
 import com.example.trip.models.Expense
 import com.example.trip.models.Resource
+import com.example.trip.utils.SharedPreferencesHelper
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
 import com.example.trip.viewmodels.finances.FinancesViewModel
@@ -23,10 +24,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ExpensesFragment @Inject constructor() : BaseFragment<FragmentExpensesBinding>(), ExpenseClickListener {
+class ExpensesFragment @Inject constructor() : BaseFragment<FragmentExpensesBinding>(),
+    ExpenseClickListener {
 
     @Inject
     lateinit var adapter: ExpensesAdapter
+
+    @Inject
+    lateinit var preferencesHelper: SharedPreferencesHelper
 
     private val viewModel: FinancesViewModel by hiltNavGraphViewModels(R.id.finances)
 
@@ -44,25 +49,32 @@ class ExpensesFragment @Inject constructor() : BaseFragment<FragmentExpensesBind
     }
 
     private fun observeExpensesList() {
-        viewModel.expensesList.observe(viewLifecycleOwner) {
-            when (it) {
+        viewModel.expensesList.observe(viewLifecycleOwner) { resourceExpenses ->
+            when (resourceExpenses) {
                 is Resource.Success -> {
-                    if(it.data.isEmpty()) binding.textEmptyList.setVisible() else binding.textEmptyList.setGone()
-                    adapter.submitList(it.data)
+                    if (resourceExpenses.data.isEmpty()) {
+                        binding.textEmptyList.setVisible()
+                    } else {
+                        binding.textEmptyList.setGone()
+                    }
+                    adapter.submitList(resourceExpenses.data)
                     binding.chipGroup.clearCheck()
                 }
                 is Resource.Loading -> {
-                    binding.textEmptyList.setGone()
+                    //NO-OP
                 }
                 is Resource.Failure -> {
-                    (requireActivity() as MainActivity).showSnackbar(
+                    resourceExpenses.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) { viewModel.refreshDataExpense() }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
-                        R.string.text_retry,
-                        Snackbar.LENGTH_INDEFINITE
-                    ) {
-                        viewModel.refreshDataExpense()
-                    }
+                        R.string.text_retry
+                    ) { viewModel.refreshDataExpense() }
                     binding.textEmptyList.setGone()
                 }
             }
@@ -92,15 +104,15 @@ class ExpensesFragment @Inject constructor() : BaseFragment<FragmentExpensesBind
                 1 -> {
                     when (checkedIds.first()) {
                         R.id.chip_expenses -> {
-                            applyFilter(viewModel.filterMyExpenses(PLACEHOLDER_USERID))
+                            applyFilter(viewModel.filterMyExpenses(preferencesHelper.getUserId()))
                         }
                         R.id.chip_contributions -> {
-                            applyFilter(viewModel.filterContributions(PLACEHOLDER_USERID))
+                            applyFilter(viewModel.filterContributions(preferencesHelper.getUserId()))
                         }
                     }
                 }
                 2 -> {
-                    applyFilter(viewModel.filterMyExpensesContributions(PLACEHOLDER_USERID))
+                    applyFilter(viewModel.filterMyExpensesContributions(preferencesHelper.getUserId()))
                 }
             }
         }
@@ -130,12 +142,6 @@ class ExpensesFragment @Inject constructor() : BaseFragment<FragmentExpensesBind
     //list item
     override fun onClick(expense: Expense) {
         (requireParentFragment() as FinancesFragment).onExpenseClick(expense)
-    }
-
-
-    companion object {
-        private const val PLACEHOLDER_USERID = 1L
-        private const val GROUP_ID_ARG = "groupId"
     }
 
 }

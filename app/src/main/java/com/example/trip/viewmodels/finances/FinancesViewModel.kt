@@ -9,7 +9,10 @@ import com.example.trip.models.Settlement
 import com.example.trip.usecases.finances.GetBalancesUseCase
 import com.example.trip.usecases.finances.GetExpensesUseCase
 import com.example.trip.usecases.finances.GetSettlementsUseCase
+import com.example.trip.usecases.finances.ResolveSettlementUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,6 +21,7 @@ class FinancesViewModel @Inject constructor(
     private val getExpensesUseCase: GetExpensesUseCase,
     private val getBalancesUseCase: GetBalancesUseCase,
     private val getSettlementsUseCase: GetSettlementsUseCase,
+    private val resolveSettlementUseCase: ResolveSettlementUseCase,
     state: SavedStateHandle
 ) : ViewModel() {
 
@@ -108,8 +112,8 @@ class FinancesViewModel @Inject constructor(
 
     private fun getDataExpense(mutableLiveData: MutableLiveData<Resource<List<Expense>>>) {
         viewModelScope.launch {
-            groupId?.let {
-                getExpensesUseCase(it).collect {
+            if (groupId != null) {
+                getExpensesUseCase(groupId).collect {
                     mutableLiveData.value = it
                 }
             }
@@ -128,11 +132,22 @@ class FinancesViewModel @Inject constructor(
 
     private fun getDataSettlements(mutableLiveData: MutableLiveData<Resource<List<Settlement>>>) {
         viewModelScope.launch {
-            groupId?.let {
-                getSettlementsUseCase(it).collect {
+            if (groupId != null) {
+                getSettlementsUseCase(groupId).collect {
                     mutableLiveData.value = it
                 }
             }
+        }
+    }
+
+    fun resolveSettlementAsync(settlementId: Long): Deferred<Resource<Unit>> {
+        return viewModelScope.async {
+            groupId?.let {
+                resolveSettlementUseCase(
+                    settlementId,
+                    it
+                )
+            } ?: Resource.Failure()
         }
     }
 }

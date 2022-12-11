@@ -8,15 +8,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.trip.R
 import com.example.trip.databinding.ItemSettlementBinding
-import com.example.trip.databinding.ItemSettlementHeaderBinding
 import com.example.trip.models.Settlement
 import com.example.trip.models.SettlementStatus
 import com.example.trip.utils.toStringFormat
-import com.skydoves.balloon.Balloon
 import javax.inject.Inject
 
 class SettlementUserAdapter @Inject constructor() :
-    ListAdapter<Settlement, RecyclerView.ViewHolder>(
+    ListAdapter<Settlement, SettlementUserAdapter.SettlementViewHolder>(
         SettlementDiffUtil()
     ) {
 
@@ -24,52 +22,30 @@ class SettlementUserAdapter @Inject constructor() :
 
     private lateinit var settlementClickListener: SettlementClickListener
 
-    private lateinit var popupMenu: Balloon
-
     fun setSettlementClickListener(settlementClickListener: SettlementClickListener) {
         this.settlementClickListener = settlementClickListener
-    }
-
-    fun setPopupMenu(popupMenu: Balloon) {
-        this.popupMenu = popupMenu
     }
 
     fun setCurrency(currency: String) {
         this.currency = currency
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return if (position == HEADER) 0 else 1
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettlementViewHolder {
+        return SettlementViewHolder.create(
+            parent,
+            currency,
+            settlementClickListener
+        )
     }
 
-    override fun getItemCount(): Int {
-        return currentList.size + 1
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            HEADER -> SettlementHeaderViewHolder.create(parent)
-            else -> SettlementViewHolder.create(
-                parent,
-                currency,
-                settlementClickListener,
-                popupMenu
-            )
-        }
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder) {
-            is SettlementHeaderViewHolder -> holder.bind()
-            is SettlementViewHolder -> holder.bind(getItem(position - 1))
-        }
+    override fun onBindViewHolder(holder: SettlementViewHolder, position: Int) {
+        holder.bind(getItem(position))
     }
 
     class SettlementViewHolder(
         private val binding: ItemSettlementBinding,
         private val currency: String,
-        private val settlementClickListener: SettlementClickListener,
-        private val popupMenu: Balloon
+        private val settlementClickListener: SettlementClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(settlement: Settlement) {
@@ -97,47 +73,17 @@ class SettlementUserAdapter @Inject constructor() :
             fun create(
                 parent: ViewGroup,
                 currency: String,
-                settlementClickListener: SettlementClickListener,
-                popupMenu: Balloon
+                settlementClickListener: SettlementClickListener
             ): SettlementViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ItemSettlementBinding.inflate(layoutInflater, parent, false)
                 return SettlementViewHolder(
                     binding,
                     currency,
-                    settlementClickListener,
-                    popupMenu
+                    settlementClickListener
                 )
             }
         }
-    }
-
-
-    class SettlementHeaderViewHolder(
-        private val binding: ItemSettlementHeaderBinding,
-    ) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind() {
-            binding.textHeader.text = itemView.resources.getString(R.string.text_my_settlements)
-        }
-
-        companion object {
-            fun create(
-                parent: ViewGroup,
-            ): SettlementHeaderViewHolder {
-                val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ItemSettlementHeaderBinding.inflate(layoutInflater, parent, false)
-                return SettlementHeaderViewHolder(
-                    binding
-                )
-            }
-        }
-    }
-
-
-    companion object {
-        const val HEADER = 0
-        const val SETTLEMENT = 1
     }
 
 }
@@ -148,7 +94,7 @@ class SettlementDiffUtil : DiffUtil.ItemCallback<Settlement>() {
     }
 
     override fun areContentsTheSame(oldItem: Settlement, newItem: Settlement): Boolean {
-        return oldItem.id == newItem.id && oldItem.groupId == newItem.groupId
+        return oldItem.id == newItem.id && oldItem.status == newItem.status
     }
 }
 

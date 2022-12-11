@@ -13,6 +13,7 @@ import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.databinding.FragmentCreateEditAttractionBinding
 import com.example.trip.models.Resource
+import com.example.trip.utils.popBackStackWithRefresh
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
 import com.example.trip.viewmodels.dayplan.CreateEditAttractionViewModel
@@ -48,13 +49,24 @@ class CreateEditAttractionFragment @Inject constructor() : BaseFragment<Fragment
     }
 
     private fun setupFields() {
-        viewModel.toPost = args.attraction.id == 0L
-        if(!viewModel.toPost) {
-            binding.textNewAttraction.text = getString(R.string.text_edit_attraction)
+        args.attraction?.let { attraction ->
+            viewModel.toPost = false
+            if (!viewModel.toPost) {
+                binding.textNewAttraction.text = getString(R.string.text_edit_attraction)
+            }
+            binding.editTextName.setText(attraction.name)
+            binding.editTextName.isEnabled = false
+            binding.editTextDescription.setText(attraction.description)
         }
-        binding.editTextName.setText(args.attraction.name)
-        binding.editTextName.isEnabled = false
-        binding.editTextDescription.setText(args.attraction.description)
+
+        args.attractionPreview?.let { attraction ->
+            viewModel.toPost = true
+            if (!viewModel.toPost) {
+                binding.textNewAttraction.text = getString(R.string.text_edit_attraction)
+            }
+            binding.editTextName.setText(attraction.name)
+            binding.editTextName.isEnabled = false
+        }
     }
 
     private fun setupOnDescriptionTextChangeListener() {
@@ -81,17 +93,25 @@ class CreateEditAttractionFragment @Inject constructor() : BaseFragment<Fragment
 
         enableLoading()
         lifecycleScope.launch {
-            when (operation.await()) {
+            when (val result = operation.await()) {
                 is Resource.Success -> {
                     disableLoading()
-                    findNavController().popBackStack(R.id.attractionsFragment, false)
+                    findNavController().popBackStackWithRefresh(R.id.attractionsFragment, false)
                 }
                 is Resource.Loading -> {
 
                 }
                 is Resource.Failure -> {
                     disableLoading()
-                    (requireActivity() as MainActivity).showSnackbar(
+                    result.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) {
+                            submit()
+                        }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_post_failure,
                         R.string.text_retry

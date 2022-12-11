@@ -6,13 +6,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trip.models.Group
 import com.example.trip.models.Resource
+import com.example.trip.usecases.group.DeleteGroupUseCase
 import com.example.trip.usecases.group.GetGroupsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GroupsListViewModel @Inject constructor(private val getGroupsUseCase: GetGroupsUseCase): ViewModel() {
+class GroupsListViewModel @Inject constructor(
+    private val getGroupsUseCase: GetGroupsUseCase,
+    private val deleteGroupUseCase: DeleteGroupUseCase
+) : ViewModel() {
 
     private val _groupsList by lazy {
         val mutableLiveData = MutableLiveData<Resource<List<Group>>>()
@@ -27,9 +34,17 @@ class GroupsListViewModel @Inject constructor(private val getGroupsUseCase: GetG
 
     private fun getData(mutableLiveData: MutableLiveData<Resource<List<Group>>>) {
         viewModelScope.launch {
-            getGroupsUseCase(1).collect { //from args
+            getGroupsUseCase().collect {
                 mutableLiveData.value = it
             }
+        }
+    }
+
+    fun deleteGroupAsync(groupId: Long): Deferred<Resource<Unit>> {
+        return viewModelScope.async(Dispatchers.IO) {
+            deleteGroupUseCase(
+                groupId
+            )
         }
     }
 

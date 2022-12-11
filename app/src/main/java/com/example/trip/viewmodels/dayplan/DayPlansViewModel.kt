@@ -4,14 +4,19 @@ import androidx.lifecycle.*
 import com.example.trip.Constants
 import com.example.trip.models.DayPlan
 import com.example.trip.models.Resource
+import com.example.trip.usecases.dayplan.DeleteDayPlanUseCase
 import com.example.trip.usecases.dayplan.GetDayPlansUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DayPlansViewModel @Inject constructor(
     private val getDayPlansUseCase: GetDayPlansUseCase,
+    private val deleteDayPlanUseCase: DeleteDayPlanUseCase,
     state: SavedStateHandle
 ) : ViewModel() {
 
@@ -24,7 +29,7 @@ class DayPlansViewModel @Inject constructor(
     }
     val dayPlans: LiveData<Resource<List<DayPlan>>> = _dayPlans
 
-    fun refreshData() {
+    fun refresh() {
         getData(_dayPlans)
     }
 
@@ -38,4 +43,9 @@ class DayPlansViewModel @Inject constructor(
         }
     }
 
+    fun deleteDayPlanAsync(dayPlanId: Long): Deferred<Resource<Unit>> {
+        return viewModelScope.async(Dispatchers.IO) {
+                deleteDayPlanUseCase(dayPlanId)
+            }
+    }
 }

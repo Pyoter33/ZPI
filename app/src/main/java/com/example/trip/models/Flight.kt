@@ -3,7 +3,7 @@ package com.example.trip.models
 import java.time.Duration
 import java.time.LocalTime
 
-class Flight(
+data class Flight(
     val id: Long,
     val flightNumber: String,
     val departureAirport: String,

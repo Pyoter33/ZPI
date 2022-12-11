@@ -10,10 +10,18 @@
         android:label="GroupsListFragment" >
         <action
             android:id="@+id/action_groupsListFragment_to_createEditGroupFragment"
-            app:destination="@id/createEditGroupFragment" />
+            app:destination="@id/createEditGroupFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
         <action
             android:id="@+id/action_groupsListFragment_to_editUserFragment"
-            app:destination="@id/editUserFragment" />
+            app:destination="@id/editUserFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
     </fragment>
     <fragment
         android:id="@+id/createEditGroupFragment"

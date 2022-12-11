@@ -13,7 +13,7 @@
             style="@style/CardWhite"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/marginL"
+            android:layout_marginEnd="@dimen/marginM"
             android:layout_marginBottom="@dimen/marginL"
             app:cardCornerRadius="@dimen/cornerSizeHalf"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -32,10 +32,12 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView_image"
                     style="@style/CardLight"
-                    app:cardCornerRadius="@dimen/cornerSizeHalf"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
+                    android:layout_marginBottom="@dimen/marginM"
+                    app:cardCornerRadius="@dimen/cornerSizeHalf"
                     app:cardElevation="4dp"
+                    app:layout_constraintBottom_toTopOf="@+id/button_expand"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -54,14 +56,14 @@
                     style="@style/TextMedium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/marginM"
+                    android:layout_marginHorizontal="@dimen/marginM"
                     android:ellipsize="end"
                     android:maxLines="2"
                     app:layout_constraintEnd_toStartOf="@+id/cardView_image"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Super restaurant" />
+                    tools:text="Super restaurant aqgfweag wag wag  aweg  wgwagwagw g" />
 
                 <TextView
                     android:id="@+id/text_address"
@@ -71,11 +73,11 @@
                     android:layout_marginHorizontal="@dimen/marginM"
                     android:layout_marginTop="@dimen/marginS"
                     android:ellipsize="end"
-                    android:maxLines="3"
+                    android:maxLines="2"
                     app:layout_constraintEnd_toStartOf="@+id/cardView_image"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/text_name"
-                    tools:text="Super city super street lkewj;jg ;kjewg;k jw;kejg" />
+                    tools:text="Super city super street lkew wfaqf wafaf awfawf wafj;jg ;kjewg;k jw;kejg" />
 
 
                 <Button
@@ -85,6 +87,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/marginM"
                     android:layout_marginStart="@dimen/marginS"
+                    android:layout_marginTop="@dimen/marginS"
+                    android:layout_marginBottom="@dimen/marginXS"
                     android:text="@string/text_see_in_maps"
                     app:icon="@drawable/ic_baseline_map_24"
                     app:layout_constraintBottom_toTopOf="@+id/button_expand"
@@ -97,13 +101,11 @@
                     android:layout_width="0dp"
                     android:layout_height="20dp"
                     android:layout_marginHorizontal="@dimen/marginS"
-                    android:layout_marginTop="@dimen/marginM"
                     android:layout_marginBottom="@dimen/marginXS"
                     android:src="@drawable/selector_expand"
                     app:layout_constraintBottom_toTopOf="@id/extra_layout"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cardView_image" />
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/extra_layout"

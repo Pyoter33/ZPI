@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,7 @@ import com.example.trip.utils.*
 import com.example.trip.viewmodels.accommodation.AccommodationsListViewModel
 import com.example.trip.views.dialogs.MenuPopupAcceptFactory
 import com.example.trip.views.dialogs.MenuPopupFactory
+import com.example.trip.views.dialogs.TransportDialog
 import com.example.trip.views.dialogs.accommodation.AcceptAccommodationDialog
 import com.example.trip.views.dialogs.accommodation.AcceptAccommodationDialogClickListener
 import com.example.trip.views.dialogs.accommodation.DeleteAccommodationDialog
@@ -31,6 +33,7 @@ import com.example.trip.views.dialogs.accommodation.DeleteAccommodationDialogCli
 import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -64,6 +67,7 @@ class AccommodationListFragment @Inject constructor() :
         observeAccommodationsList()
         setOnCheckedChipsListener()
         setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
+        refreshIfNewData { viewModel.refreshData() }
         onAddClick()
     }
 
@@ -92,13 +96,17 @@ class AccommodationListFragment @Inject constructor() :
                     binding.textEmptyList.setGone()
                 }
                 is Resource.Failure -> {
-                    (requireActivity() as MainActivity).showSnackbar(
+                    it.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) { viewModel.refreshData() }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
                         R.string.text_retry
-                    ) {
-                        viewModel.refreshData()
-                    }
+                    ) { viewModel.refreshData() }
                     binding.layoutRefresh.isRefreshing = false
                     binding.textEmptyList.setGone()
                 }
@@ -145,7 +153,13 @@ class AccommodationListFragment @Inject constructor() :
                     adapter.submitList(it.data)
                 }
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry
+                    ) {
+                        viewModel.refreshData()
+                    }
                 }
                 else -> {}
             }
@@ -153,17 +167,30 @@ class AccommodationListFragment @Inject constructor() :
     }
 
     //list item
-    override fun onVoteClick(position: Int, button: View) {
-        viewModel.setVoted(position)
+    override fun onVoteClick(accommodation: Accommodation, position: Int, button: View) {
+        val operation =
+            if (accommodation.isVoted) viewModel.deleteVoteAsync(accommodation.id) else viewModel.postVoteAsync(
+                accommodation.id
+            )
+        viewModel.setVoted(accommodation.id)
         adapter.notifyItemChanged(position)
         button.isEnabled = false
         lifecycleScope.launch {
-            when (viewModel.waitForDelay()) { //wait for response from backend
+            when (operation.await()) {
                 is Resource.Success -> {
                     button.isEnabled = true
                 }
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_post_failure)
+                    viewModel.setVoted(accommodation.id)
+                    adapter.notifyItemChanged(position)
+                    button.isEnabled = true
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_post_failure,
+                        R.string.text_retry
+                    ) {
+                        onVoteClick(accommodation, position, button)
+                    }
                 }
                 else -> {}
             }
@@ -184,31 +211,78 @@ class AccommodationListFragment @Inject constructor() :
     }
 
     override fun onTransportClick(accommodation: Accommodation) {
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (val result = viewModel.getAcceptedAvailabilityAsync().await()) {
+                is Resource.Success -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    result.data?.let {
+                        navigateToTransport(accommodation, it.availability.startDate)
+                    } ?: showTransportDialog()
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry
+                    ) {
+                        onTransportClick(accommodation)
+                    }
+                }
+                else -> {}
+            }
+        }
+    }
+
+    private fun navigateToTransport(accommodation: Accommodation, startDate: LocalDate) {
+        val options = NavOptions.Builder()
+            .setEnterAnim(R.anim.fade_in)
+            .setExitAnim(R.anim.fade_out)
+            .setPopEnterAnim(R.anim.fade_in)
+            .setPopExitAnim(R.anim.fade_out)
+            .build()
         val bundle = Bundle().apply {
             putLong(Constants.GROUP_ID_KEY, accommodation.groupId)
             putLong(Constants.ACCOMMODATION_ID_KEY, accommodation.id)
             putString(Constants.DESTINATION_KEY, accommodation.address)
             putString(Constants.START_CITY_KEY, args.startCity)
             putString(Constants.CURRENCY_KEY, args.currency)
+            putLong(Constants.START_DATE_KEY, startDate.toMillis())
+            putLong(Constants.ACCOMMODATION_CREATOR_ID_KEY, accommodation.creatorId)
             putLongArray(Constants.COORDINATORS_KEY, args.coordinators)
         }
+        findNavController().navigate(R.id.transport, bundle, options)
+    }
 
-        findNavController().navigate(R.id.transport, bundle)
+    private fun showTransportDialog() {
+        val transportDialog = TransportDialog()
+        transportDialog.show(childFragmentManager, TransportDialog.TAG)
     }
 
     override fun onLongClick(accommodation: Accommodation, view: View) {
         val popupMenu = when (getUserType(accommodation.creatorId)) {
             UserType.COORDINATOR -> {
-                popupMenuCoordinator.apply {
-                    setOnPopupButtonClick(R.id.button_accept) { onMenuAcceptClick(accommodation) }
-                    setOnPopupButtonClick(R.id.button_edit) { onMenuEditClick(accommodation) }
-                    setOnPopupButtonClick(R.id.button_delete) { onMenuDeleteClick(accommodation) }
+                if(accommodation.isAccepted) {
+                    requireContext().toast(R.string.text_cannot_modify_accommodation)
+                    null
+                } else {
+                    popupMenuCoordinator.apply {
+                        setOnPopupButtonClick(R.id.button_accept) { onMenuAcceptClick(accommodation) }
+                        setOnPopupButtonClick(R.id.button_edit) { onMenuEditClick(accommodation) }
+                        setOnPopupButtonClick(R.id.button_delete) { onMenuDeleteClick(accommodation) }
+                    }
                 }
             }
             UserType.CREATOR -> {
-                popupMenuCreator.apply {
-                    setOnPopupButtonClick(R.id.button_edit) { onMenuEditClick(accommodation) }
-                    setOnPopupButtonClick(R.id.button_delete) { onMenuDeleteClick(accommodation) }
+                if(accommodation.isAccepted) {
+                    requireContext().toast(R.string.text_cannot_modify_accommodation)
+                    null
+                } else {
+                    popupMenuCreator.apply {
+                        setOnPopupButtonClick(R.id.button_edit) { onMenuEditClick(accommodation) }
+                        setOnPopupButtonClick(R.id.button_delete) { onMenuDeleteClick(accommodation) }
+                    }
                 }
             }
             else -> null
@@ -247,10 +321,53 @@ class AccommodationListFragment @Inject constructor() :
 
     //dialogs
     override fun onAcceptClick(accommodation: Accommodation) {
-        requireContext().toast("accept")
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (viewModel.postAcceptedAccommodationAsync(accommodation.id).await()) {
+                is Resource.Success -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    viewModel.refreshData()
+                    requireContext().toast(R.string.text_accommodation_accepted)
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onMenuDeleteClick(accommodation)
+                    }
+                }
+                else -> {
+                    //NO-OP
+                }
+            }
+        }
     }
 
     override fun onDeleteClick(accommodation: Accommodation) {
-        requireContext().toast("delete")
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (viewModel.deleteAccommodationAsync(accommodation.id).await()) {
+                is Resource.Success -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    viewModel.refreshData()
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onMenuDeleteClick(accommodation)
+                    }
+                }
+                else -> {
+                    //NO-OP
+                }
+            }
+        }
     }
 }

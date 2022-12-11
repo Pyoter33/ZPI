@@ -25,12 +25,17 @@
                 app:layout_constraintTop_toTopOf="parent">
             </FrameLayout>
 
-            <ImageButton
+            <Button
+                style="@style/Button.Text"
                 android:id="@+id/button_back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@color/transparent"
-                android:src="@drawable/ic_baseline_arrow_back_24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="@dimen/textVerySmall"
+                android:text="@string/text_groups"
+                android:textColor="@color/white"
+                app:icon="@drawable/ic_baseline_arrow_back_24"
+                app:iconTint="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -74,12 +79,16 @@
                 <TextView
                     android:id="@+id/text_header"
                     style="@style/TextMega"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/marginS"
+                    android:layout_marginEnd="@dimen/marginS"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:text="Accommodations"
                     android:textColor="@color/primary"
                     app:layout_constraintBottom_toBottomOf="@+id/image_attractions"
+                    app:layout_constraintEnd_toStartOf="@+id/button_add"
                     app:layout_constraintStart_toEndOf="@+id/image_attractions"
                     app:layout_constraintTop_toTopOf="@+id/image_attractions" />
 
@@ -148,7 +157,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:paddingBottom="@dimen/marginM"
-                        android:scrollbars="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"

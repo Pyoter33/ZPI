@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/edit_user_data"
+        android:enabled="true"
+        android:title="@string/text_edit_user_data"/>
+    <item
+        android:id="@+id/sign_out"
+        android:enabled="true"
+        android:title="@string/text_sign_out"/>
+</menu>

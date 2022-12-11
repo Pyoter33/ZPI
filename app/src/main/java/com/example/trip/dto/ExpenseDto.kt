@@ -1,11 +1,11 @@
 package com.example.trip.dto
 
 import java.math.BigDecimal
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 data class ExpenseDto(
     val expenditureId: Long,
-    val generationDate: LocalDate,
+    val generationDate: LocalDateTime,
     val title: String,
     val price: BigDecimal,
     val groupId: Long,

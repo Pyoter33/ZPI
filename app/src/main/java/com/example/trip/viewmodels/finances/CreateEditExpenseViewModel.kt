@@ -2,12 +2,14 @@ package com.example.trip.viewmodels.finances
 
 import androidx.lifecycle.*
 import com.example.trip.Constants
+import com.example.trip.dto.ExpensePostDto
 import com.example.trip.models.CheckableParticipant
 import com.example.trip.models.Expense
 import com.example.trip.models.Resource
 import com.example.trip.usecases.finances.GetCheckableParticipantsUseCase
 import com.example.trip.usecases.finances.PostExpenseUseCase
 import com.example.trip.usecases.finances.UpdateExpenseUseCase
+import com.example.trip.utils.SharedPreferencesHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +17,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,6 +24,7 @@ class CreateEditExpenseViewModel @Inject constructor(
     private val getCheckableParticipantsUseCase: GetCheckableParticipantsUseCase,
     private val postExpenseUseCase: PostExpenseUseCase,
     private val updateExpenseUseCase: UpdateExpenseUseCase,
+    private val preferencesHelper: SharedPreferencesHelper,
     state: SavedStateHandle
 ) : ViewModel() {
 
@@ -56,12 +58,16 @@ class CreateEditExpenseViewModel @Inject constructor(
 
     fun checkAll(isChecked: Boolean) {
         if (participantsList.value !is Resource.Success) return
-        val currentPrice =  if(price.isNullOrEmpty()) BigDecimal.ZERO else price!!.toBigDecimal()
+        val currentPrice = if (price.isNullOrEmpty() || price == ".") BigDecimal.ZERO else price!!.toBigDecimal()
         val size = (participantsList.value as Resource.Success).data.size
         (participantsList.value as Resource.Success).data.forEach {
             it.isChecked = isChecked
             it.amount =
-                if (isChecked) currentPrice.divide(BigDecimal.valueOf(size.toDouble()), 3, RoundingMode.DOWN) else BigDecimal.ZERO
+                if (isChecked) currentPrice.divide(
+                    BigDecimal.valueOf(size.toDouble()),
+                    3,
+                    RoundingMode.DOWN
+                ) else BigDecimal.ZERO
         }
     }
 
@@ -76,7 +82,7 @@ class CreateEditExpenseViewModel @Inject constructor(
         isChecked: Boolean
     ): List<Int> {
         val positionsToUpdate = mutableListOf<Int>()
-        val currentPrice =  if(price.isNullOrEmpty()) BigDecimal.ZERO else price!!.toBigDecimal()
+        val currentPrice = if (price.isNullOrEmpty() || price == ".") BigDecimal.ZERO else price!!.toBigDecimal()
         if (!isChecked) {
             (participantsList.value as Resource.Success).data[position].amount = BigDecimal.ZERO
         }
@@ -86,7 +92,11 @@ class CreateEditExpenseViewModel @Inject constructor(
         (participantsList.value as Resource.Success).data.forEachIndexed { index, it ->
             if (it.isChecked) {
                 positionsToUpdate.add(index)
-                it.amount = currentPrice.divide(BigDecimal.valueOf(checkedSize.toDouble()),3, RoundingMode.DOWN)
+                it.amount = currentPrice.divide(
+                    BigDecimal.valueOf(checkedSize.toDouble()),
+                    3,
+                    RoundingMode.DOWN
+                )
             }
         }
 
@@ -94,47 +104,41 @@ class CreateEditExpenseViewModel @Inject constructor(
     }
 
     fun postExpenseAsync(): Deferred<Resource<Unit>> {
-        val userId = 1L
         val participants = (participantsList.value as Resource.Success).data
         val deferred = viewModelScope.async(Dispatchers.IO) {
             groupId?.let { groupId ->
-            postExpenseUseCase(
-                Expense(
-                    0,
+                postExpenseUseCase(
                     groupId,
-                    participants.find { it.participant.id == userId }!!.participant,
-                    LocalDate.now(),
-                    name!!,
-                    BigDecimal.valueOf(price!!.toDouble()),
-                    participants.filter { it.isChecked }.map { it.participant }
+                    ExpensePostDto(
+                        preferencesHelper.getUserId(),
+                        name!!.trim(),
+                        price!!.toDouble(),
+                        participants.filter { it.isChecked }.map { it.participant.id }
+                    )
                 )
-            )
-            }?: Resource.Failure()
+            } ?: Resource.Failure()
 
         }
-
         return deferred
     }
 
     fun updateExpenseAsync(): Deferred<Resource<Unit>> {
-        val userId = 1L
         val participants = (participantsList.value as Resource.Success).data
         val deferred = viewModelScope.async(Dispatchers.IO) {
             groupId?.let { groupId ->
                 expense?.let { expense ->
                     updateExpenseUseCase(
-                        Expense(
-                            expense.groupId,
-                            groupId,
-                            expense.creator,
-                            expense.creationDate,
-                            name!!,
-                            BigDecimal.valueOf(price!!.toDouble()),
-                            participants.filter { it.isChecked }.map { it.participant }
+                        groupId,
+                        expense.id,
+                        ExpensePostDto(
+                            preferencesHelper.getUserId(),
+                            name!!.trim(),
+                            price!!.toDouble(),
+                            participants.filter { it.isChecked }.map { it.participant.id }
                         )
                     )
-                }?: Resource.Failure()
-            }?: Resource.Failure()
+                } ?: Resource.Failure()
+            } ?: Resource.Failure()
         }
         return deferred
     }
@@ -142,7 +146,11 @@ class CreateEditExpenseViewModel @Inject constructor(
     fun setCheckedParticipants(expense: Expense): List<Int> {
         val positionsToUpdate = mutableListOf<Int>()
         val participantsIds = expense.debtors.map { it.id }
-        val amount = expense.price.divide(BigDecimal.valueOf(participantsIds.size.toDouble()), 3, RoundingMode.DOWN)
+        val amount = expense.price.divide(
+            BigDecimal.valueOf(participantsIds.size.toDouble()),
+            3,
+            RoundingMode.DOWN
+        )
         (participantsList.value as Resource.Success).data.forEachIndexed { index, it ->
             if (it.participant.id in participantsIds) {
                 it.isChecked = true

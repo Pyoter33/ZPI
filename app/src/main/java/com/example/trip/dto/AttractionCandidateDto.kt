@@ -7,7 +7,7 @@ data class AttractionCandidateDto(
     val latitude: Double,
     val longitude: Double,
     val placeId: String,
-    val photoLink: String,
+    val photoLink: String?,
     val url: String,
     val description: String?
 )

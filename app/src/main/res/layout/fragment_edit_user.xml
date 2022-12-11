@@ -60,24 +60,51 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/marginL"
                     android:layout_marginTop="@dimen/marginL"
-                    android:hint="@string/text_full_name"
+                    android:hint="@string/text_first_name"
                     app:errorEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/text_edit_user"
                     app:placeholderText="John Doe"
-                    app:startIconDrawable="@drawable/ic_baseline_person_24"
+                    app:startIconDrawable="@drawable/ic_baseline_perm_identity_24"
                     app:startIconTint="@color/primary">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editText_name"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:inputType="text" />
+                        android:inputType="text"
+                        android:maxLength="50"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textField_surname"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/marginL"
+                    android:layout_marginTop="@dimen/marginS"
+                    android:hint="@string/text_surname"
+                    app:errorEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textField_name"
+                    app:placeholderText="John Doe"
+                    app:startIconDrawable="@drawable/ic_baseline_person_24"
+                    app:startIconTint="@color/primary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editText_surname"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="text"
+                        android:maxLength="50"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
+                    style="@style/TextSmall"
                     android:id="@+id/text_label_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -85,7 +112,8 @@
                     android:layout_marginTop="@dimen/marginXS"
                     android:text="@string/text_phone_number"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textField_name" />
+                    app:layout_constraintTop_toBottomOf="@+id/textField_surname" />
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textField_code"
@@ -136,12 +164,13 @@
                     style="@style/TextVerySmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/text_error_multiple"
+                    android:layout_marginStart="@dimen/marginXL"
                     android:textColor="@color/red"
                     android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/textField_code"
                     app:layout_constraintTop_toBottomOf="@+id/textField_code" />
-
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textField_date"

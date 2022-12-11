@@ -2,18 +2,34 @@ package com.example.trip.viewmodels.accommodation
 
 import androidx.lifecycle.*
 import com.example.trip.Constants
+import com.example.trip.dto.AccommodationVoteId
+import com.example.trip.dto.AccommodationVotePostDto
 import com.example.trip.models.Accommodation
+import com.example.trip.models.OptimalAvailability
 import com.example.trip.models.Resource
+import com.example.trip.usecases.accommodation.DeleteAccommodationUseCase
+import com.example.trip.usecases.accommodation.DeleteVoteUseCase
 import com.example.trip.usecases.accommodation.GetAccommodationsListUseCase
+import com.example.trip.usecases.accommodation.PostVoteUseCase
+import com.example.trip.usecases.summary.GetAcceptedAvailabilityUseCase
+import com.example.trip.usecases.summary.UpdateAcceptedAccommodationUseCase
+import com.example.trip.utils.SharedPreferencesHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AccommodationsListViewModel @Inject constructor(
     private val getAccommodationsListUseCase: GetAccommodationsListUseCase,
+    private val deleteAccommodationUseCase: DeleteAccommodationUseCase,
+    private val postVoteUseCase: PostVoteUseCase,
+    private val deleteVoteUseCase: DeleteVoteUseCase,
+    private val postAcceptedAccommodationUseCase: UpdateAcceptedAccommodationUseCase,
+    private val getAcceptedAvailabilityUseCase: GetAcceptedAvailabilityUseCase,
+    private val preferencesHelper: SharedPreferencesHelper,
     state: SavedStateHandle
 ) :
     ViewModel() {
@@ -27,9 +43,9 @@ class AccommodationsListViewModel @Inject constructor(
     }
     val accommodationsList: LiveData<Resource<List<Accommodation>>> = _accommodationsList
 
-    fun setVoted(position: Int) {
+    fun setVoted(id: Long) {
         if (accommodationsList.value is Resource.Success) {
-            val accommodation = (accommodationsList.value!! as Resource.Success).data[position]
+            val accommodation = (accommodationsList.value!! as Resource.Success).data.find { it.id == id } ?: return
             accommodation.isVoted = !accommodation.isVoted
             accommodation.isVoted.let {
                 if (it) accommodation.votes += 1 else accommodation.votes -= 1
@@ -88,13 +104,49 @@ class AccommodationsListViewModel @Inject constructor(
         }
     }
 
-    suspend fun waitForDelay(): Resource<Unit> {
-        val job = viewModelScope.async {
-            delay(1000)
-            Resource.Success(Unit)
+    fun postVoteAsync(accommodationId: Long): Deferred<Resource<Unit>> {
+        return viewModelScope.async(Dispatchers.IO) {
+            groupId?.let {
+                postVoteUseCase(
+                    AccommodationVotePostDto(
+                        preferencesHelper.getUserId(),
+                        accommodationId,
+                        it
+                    )
+                )
+            } ?: Resource.Failure()
         }
-        return job.await()
     }
+
+    fun deleteVoteAsync(accommodationId: Long): Deferred<Resource<Unit>> {
+        return viewModelScope.async(Dispatchers.IO) {
+            groupId?.let {
+                deleteVoteUseCase(
+                    AccommodationVoteId(
+                        preferencesHelper.getUserId(),
+                        accommodationId,
+                    )
+                )
+            } ?: Resource.Failure()
+        }
+    }
+
+    fun deleteAccommodationAsync(accommodationId: Long): Deferred<Resource<Unit>> {
+        return viewModelScope.async(Dispatchers.IO) {
+            deleteAccommodationUseCase(
+                accommodationId
+            )
+        }
+    }
+
+    fun postAcceptedAccommodationAsync(accommodationId: Long): Deferred<Resource<Unit>> {
+        return viewModelScope.async(Dispatchers.IO) {
+            postAcceptedAccommodationUseCase(
+                accommodationId
+            )
+        }
+    }
+
 
     private fun getData(mutableLiveData: MutableLiveData<Resource<List<Accommodation>>>) {
         viewModelScope.launch {
@@ -103,6 +155,14 @@ class AccommodationsListViewModel @Inject constructor(
                     mutableLiveData.value = it
                 }
             }
+        }
+    }
+
+    fun getAcceptedAvailabilityAsync(): Deferred<Resource<OptimalAvailability?>> {
+        return viewModelScope.async(Dispatchers.IO) {
+            groupId?.let {
+                getAcceptedAvailabilityUseCase(groupId)
+            }?: Resource.Failure()
         }
     }
 }

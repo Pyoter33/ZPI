@@ -14,7 +14,8 @@ class HeaderInterceptor(private val context: Context): Interceptor {
         val token = preferences.getString(Constants.AUTHORIZATION_HEADER, "")!!
 
         val newRequest = originalRequest.newBuilder()
-            .header(Constants.AUTHORIZATION_HEADER, token)
+            .header(Constants.AUTHORIZATION_HEADER, "Bearer $token")
+            .header("Content-Type", "application/json")
             .build()
 
         return chain.proceed(newRequest)

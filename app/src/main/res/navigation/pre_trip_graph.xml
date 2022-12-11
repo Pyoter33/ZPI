@@ -41,6 +41,9 @@
             <argument
                 android:name="currency"
                 app:argType="string" />
+            <argument
+                android:name="startDate"
+                app:argType="long" />
         </fragment>
         <fragment
             android:id="@+id/transportFragment"
@@ -63,10 +66,21 @@
                 app:argType="string" />
             <action
                 android:id="@+id/action_transportFragment_to_createEditTransportFragment"
-                app:destination="@id/createEditTransportFragment" />
+                app:destination="@id/createEditTransportFragment"
+                app:enterAnim="@anim/fade_in"
+                app:exitAnim="@anim/fade_out"
+                app:popEnterAnim="@anim/fade_in"
+                app:popExitAnim="@anim/fade_out"
+                />
             <argument
                 android:name="coordinators"
                 app:argType="long[]" />
+            <argument
+                android:name="startDate"
+                app:argType="long" />
+            <argument
+                android:name="accommodationCreatorId"
+                app:argType="long" />
         </fragment>
     </navigation>
     <navigation
@@ -80,7 +94,12 @@
             tools:layout="@layout/fragment_accommodation_list">
             <action
                 android:id="@+id/action_accommodationListFragment_to_createEditAccommodationFragment"
-                app:destination="@id/createEditAccommodationFragment" />
+                app:destination="@id/createEditAccommodationFragment"
+                app:enterAnim="@anim/fade_in"
+                app:exitAnim="@anim/fade_out"
+                app:popEnterAnim="@anim/fade_in"
+                app:popExitAnim="@anim/fade_out"
+                />
             <argument
                 android:name="groupId"
                 app:argType="long" />
@@ -127,7 +146,11 @@
             tools:layout="@layout/fragment_participants">
             <action
                 android:id="@+id/action_participantsFragmentPreTrip_to_participantsAvailabilityFragment"
-                app:destination="@id/participantsAvailabilityFragment" />
+                app:destination="@id/participantsAvailabilityFragment"
+                app:enterAnim="@anim/fade_in"
+                app:exitAnim="@anim/fade_out"
+                app:popEnterAnim="@anim/fade_in"
+                app:popExitAnim="@anim/fade_out" />
             <argument
                 android:name="groupId"
                 app:argType="long" />

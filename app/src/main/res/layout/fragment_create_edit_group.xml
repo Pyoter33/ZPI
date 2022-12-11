@@ -80,7 +80,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:inputType="text"
-                            android:maxLength="100" />
+                            android:maxLength="50" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -104,7 +104,8 @@
                             android:id="@+id/editText_starting_city"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:inputType="text" />
+                            android:inputType="text"
+                            android:maxLength="100"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -149,9 +150,12 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editText_min_participants"
-                            android:layout_width="300dp"
+                            android:layout_width="350dp"
                             android:layout_height="match_parent"
-                            android:inputType="number" />
+                            android:inputType="number"
+                            app:digitsBeforeZero="@{4}"
+                            app:digitsAfterZero="@{0}"
+                            />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -173,9 +177,12 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editText_min_days"
-                            android:layout_width="220dp"
+                            android:layout_width="300dp"
                             android:layout_height="match_parent"
-                            android:inputType="number" />
+                            android:inputType="number"
+                            app:digitsBeforeZero="@{4}"
+                            app:digitsAfterZero="@{0}"
+                            />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -189,7 +196,7 @@
                         android:layout_marginTop="@dimen/marginL"
                         android:hint="@string/text_description"
                         app:counterEnabled="true"
-                        app:counterMaxLength="255"
+                        app:counterMaxLength="120"
                         app:counterOverflowTextColor="@color/red"
                         app:errorEnabled="true"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -203,7 +210,7 @@
                             android:layout_height="180dp"
                             android:gravity="start"
                             android:inputType="textMultiLine"
-                            android:maxLength="255" />
+                            android:maxLength="120" />
                     </com.google.android.material.textfield.TextInputLayout>
 
 

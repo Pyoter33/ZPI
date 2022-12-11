@@ -6,19 +6,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.trip.R
 import com.example.trip.databinding.ItemAttractionPreviewBinding
 import com.example.trip.models.AttractionPreview
-import com.skydoves.balloon.Balloon
 import javax.inject.Inject
 
 
 class AttractionPreviewAdapter @Inject constructor() :
     ListAdapter<AttractionPreview, AttractionPreviewAdapter.AttractionPreviewViewHolder>(AttractionPreviewDiffUtil()) {
 
-
     private lateinit var attractionPreviewClickListener: AttractionPreviewClickListener
-
-    private lateinit var popupMenu: Balloon
 
     fun setAttractionClickListener(attractionPreviewClickListener: AttractionPreviewClickListener) {
         this.attractionPreviewClickListener = attractionPreviewClickListener
@@ -41,7 +38,7 @@ class AttractionPreviewAdapter @Inject constructor() :
             with(binding) {
                 textName.text = attraction.name
                 textAddress.text = attraction.address
-                Glide.with(itemView).load(attraction.imageUrl).centerCrop().into(binding.imageAccommodation)
+                Glide.with(itemView).load(attraction.imageUrl).placeholder(R.drawable.ic_baseline_downloading_24).error(R.drawable.ic_baseline_question_mark_24).centerCrop().into(binding.imageAccommodation)
 
             }
             onClick(attraction)
@@ -82,7 +79,7 @@ class AttractionPreviewDiffUtil : DiffUtil.ItemCallback<AttractionPreview>() {
     }
 
     override fun areContentsTheSame(oldItem: AttractionPreview, newItem: AttractionPreview): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem == newItem
     }
 }
 

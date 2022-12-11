@@ -52,6 +52,7 @@ class DayPlansAdapter @Inject constructor() :
                     DayPlanIcon.MONUMENT.code -> binding.imageIcon.setImageResource(DayPlanIcon.MONUMENT.resId)
                     DayPlanIcon.MOUNTAIN.code -> binding.imageIcon.setImageResource(DayPlanIcon.MOUNTAIN.resId)
                     DayPlanIcon.RESTAURANT.code -> binding.imageIcon.setImageResource(DayPlanIcon.RESTAURANT.resId)
+                    DayPlanIcon.SKI.code -> binding.imageIcon.setImageResource(DayPlanIcon.SKI.resId)
                 }
 
                 setOnLongClick(this)

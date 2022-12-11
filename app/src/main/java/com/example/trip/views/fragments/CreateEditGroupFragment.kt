@@ -12,13 +12,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.trip.R
+import com.example.trip.activities.HomeActivity
 import com.example.trip.databinding.FragmentCreateEditGroupBinding
 import com.example.trip.models.Resource
 import com.example.trip.utils.onBackArrowClick
+import com.example.trip.utils.popBackStackWithRefresh
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
 import com.example.trip.viewmodels.groups.CreateEditGroupViewModel
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -151,7 +152,7 @@ class CreateEditGroupFragment @Inject constructor() : BaseFragment<FragmentCreat
     }
 
     private fun setupSpinner() {
-        val items = listOf("USD", "EUR", "PLN", "CZK", "GBP", "UAK")
+        val items = listOf("USD", "EUR", "PLN", "CZK", "GBP", "HRK", "UAH", "JPY")
         val adapter = ArrayAdapter(requireContext(), R.layout.item_spinner, items)
         binding.spinnerCurrency.setAdapter(adapter)
 
@@ -194,26 +195,31 @@ class CreateEditGroupFragment @Inject constructor() : BaseFragment<FragmentCreat
 
         enableLoading()
         lifecycleScope.launch {
-            when (operation.await()) {
+            when (val result = operation.await()) {
                 is Resource.Success -> {
                     disableLoading()
-                    findNavController().popBackStack()
+                    findNavController().popBackStackWithRefresh()
                 }
                 is Resource.Loading -> {
 
                 }
                 is Resource.Failure -> {
                     disableLoading()
-                    Snackbar.make(
+                    result.message?.let {
+                        (requireActivity() as HomeActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) {
+                            submit()
+                        }
+                    } ?: (requireActivity() as HomeActivity).showSnackbar(
                         requireView(),
                         R.string.text_post_failure,
-                        Snackbar.LENGTH_LONG
-                    ).setBackgroundTint(resources.getColor(R.color.grey400, null))
-                        .setTextColor(resources.getColor(R.color.black, null))
-                        .setActionTextColor(resources.getColor(R.color.primary, null))
-                        .setAction(R.string.text_retry) {
-                            submit()
-                        }.show()
+                        R.string.text_retry
+                    ) {
+                        submit()
+                    }
                 }
             }
         }

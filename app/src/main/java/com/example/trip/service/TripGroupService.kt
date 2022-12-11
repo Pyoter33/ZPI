@@ -1,8 +1,9 @@
 package com.example.trip.service
 
-import com.example.trip.dto.TripGroupDto
+import com.example.trip.dto.AppUserDto
 import com.example.trip.dto.TripGroupPostDto
 import com.example.trip.dto.UserDto
+import com.example.trip.dto.UserGroupDto
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -11,12 +12,17 @@ interface TripGroupService {
     @GET("invitation")
     suspend fun getInvitation(
         @Query("group") groupId: Long
-    ): Response<String>
+    ): Response<Void>
 
     @PUT("user-group/coordinator")
-    suspend fun postCoordinator(
+    suspend fun putCoordinator(
         @Query("groupId") groupId: Long,
         @Query("userId") userId: Long
+    ): Response<Void>
+
+    @DELETE("trip-group/user")
+    suspend fun leaveGroup(
+        @Query("groupId") groupId: Long
     ): Response<Void>
 
     @GET("user-group/coordinators")
@@ -27,10 +33,12 @@ interface TripGroupService {
     @GET("trip-group/data")
     suspend fun getGroupById(
         @Query("groupId") groupId: Long
-    ): Response<TripGroupDto>
+    ): Response<UserGroupDto>
 
-    @GET("trip-group/groups")
-    suspend fun getGroups(): Response<List<TripGroupDto>>
+    @GET("trip-group/groups/{userId}")
+    suspend fun getGroups(
+        @Path("userId") userId: Long
+    ): Response<List<UserGroupDto>>
 
     @POST("trip-group/group")
     suspend fun postGroup(
@@ -47,4 +55,41 @@ interface TripGroupService {
     suspend fun deleteGroup(
         @Query("groupId") groupId: Long
     ): Response<Void>
+
+    @GET("user-group/participants")
+    suspend fun getParticipants(
+        @Query("groupId") groupId: Long
+    ): Response<List<UserDto>>
+
+    @GET("user")
+    suspend fun getUser(
+        @Query("userId") userId: Long
+    ): Response<AppUserDto>
+
+    @PATCH("user")
+    suspend fun updateUser(
+        @Body appUser: AppUserDto
+    ): Response<Void>
+
+    @DELETE("trip-group/coordinator-user")
+    suspend fun deleteParticipant(
+        @Query("groupId") groupId: Long,
+        @Query("userId") userId: Long
+    ): Response<Void>
+
+    @PUT("trip-group/selected-accommodation")
+    suspend fun deleteAcceptedAccommodation(
+        @Query("groupId") groupId: Long
+    ): Response<Void>
+
+    @PUT("trip-group/selected-availability")
+    suspend fun deleteAcceptedAvailability(
+        @Query("groupId") groupId: Long
+    ): Response<Void>
+
+    @PUT("trip-group")
+    suspend fun changeGroupStage(
+        @Query("groupId") groupId: Long
+    ): Response<Void>
+
 }

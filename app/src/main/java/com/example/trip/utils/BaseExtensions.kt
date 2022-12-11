@@ -22,11 +22,12 @@ import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.trip.Constants
 import com.example.trip.R
-import com.example.trip.models.Attraction
-import com.example.trip.models.AttractionPreview
+import com.google.gson.JsonParser
 import com.skydoves.balloon.Balloon
 import retrofit2.HttpException
 import retrofit2.Response
@@ -157,20 +158,12 @@ fun DialogFragment.setDeleteDialog(action: () -> Unit): Dialog {
         .create()
 }
 
-fun AttractionPreview.toAttraction(groupId: Long, dayPlanId: Long) = Attraction(
-    0,
-    groupId,
-    dayPlanId,
-    name,
-    address,
-    "",
-    imageUrl,
-    link,
-    null
-)
-
 fun Duration.toStringTime(): String {
-    return "${toHours()}h ${toMinutesPart()}min"
+    return "${toHours()}h ${toMinutesPartCompat()}min"
+}
+
+fun Duration.toMinutesPartCompat(): Int {
+    return (toMinutes() % 60).toInt()
 }
 
 fun BigDecimal.toStringFormat(currency: String): String {
@@ -197,17 +190,22 @@ private fun isIntegerValue(bd: BigDecimal): Boolean {
 
 fun String.formatPhone(): String {
     val split = split(' ')
-    return "${split[0]} ${split[1].subSequence(0..2)} ${split[1].subSequence(3..5)} ${
-        split[1].subSequence(
-            6..8
-        )
-    }"
+    return "${split[0]} ${split[1]}"
 }
 
 fun <T> Response<T>.toBodyOrError(): T {
     return when {
-        isSuccessful && body() != null -> {
+        isSuccessful -> {
             body()!!
+        }
+        else -> throw HttpException(this)
+    }
+}
+
+fun <T> Response<T>.toNullableBodyOrError(): T? {
+    return when {
+        isSuccessful -> {
+            body()
         }
         else -> throw HttpException(this)
     }
@@ -217,5 +215,38 @@ fun Balloon.setOnPopupButtonClick(@IdRes id: Int, action: () -> Unit) {
     getContentView().findViewById<Button>(id).setOnClickListener {
         action()
         dismiss()
+    }
+}
+
+fun NavController.popBackStackWithRefresh() {
+    previousBackStackEntry?.savedStateHandle?.set(Constants.TO_REFRESH_KEY, true)
+    popBackStack()
+}
+
+fun NavController.popBackStackWithRefresh(@IdRes destinationId: Int, inclusive: Boolean) {
+    try {
+        getBackStackEntry(destinationId).savedStateHandle[Constants.TO_REFRESH_KEY] = true
+        popBackStack(destinationId, inclusive)
+    } catch (e: Exception) {
+        popBackStack()
+    }
+}
+
+fun Fragment.refreshIfNewData(action: () -> Unit) {
+    if (findNavController().currentBackStackEntry?.savedStateHandle?.get<Boolean>(Constants.TO_REFRESH_KEY) == true) {
+        action()
+        findNavController().currentBackStackEntry?.savedStateHandle?.set(
+            Constants.TO_REFRESH_KEY,
+            null
+        )
+    }
+}
+
+fun <T> Response<T>.getMessage(): String? {
+    return try {
+        val json = JsonParser.parseString(errorBody()?.string())?.asJsonObject
+        json?.get("message")?.asString
+    } catch (e: Exception) {
+        null
     }
 }

@@ -68,7 +68,7 @@ class FinancesFragment @Inject constructor() : BaseFragment<FragmentFinancesBind
                     binding.layoutRefresh.isRefreshing = false
                 }
                 is Resource.Loading -> {
-                    //NO-OP
+                    binding.layoutRefresh.isRefreshing = true
                 }
                 is Resource.Failure -> {
                     binding.layoutRefresh.isRefreshing = false
@@ -115,10 +115,4 @@ class FinancesFragment @Inject constructor() : BaseFragment<FragmentFinancesBind
             }
         }.attach()
     }
-
-    companion object {
-        private const val PLACEHOLDER_USERID = 1L
-        private const val GROUP_ID_ARG = "groupId"
-    }
-
 }

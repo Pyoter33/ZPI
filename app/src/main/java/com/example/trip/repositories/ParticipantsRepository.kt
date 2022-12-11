@@ -1,49 +1,39 @@
 package com.example.trip.repositories
 
-import com.example.trip.models.Participant
-import com.example.trip.models.Resource
-import com.example.trip.models.UserRole
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import com.example.trip.Constants
+import com.example.trip.dto.AppUserDto
+import com.example.trip.dto.UserDto
+import com.example.trip.service.TripGroupService
+import com.example.trip.utils.toBodyOrError
+import com.example.trip.utils.toNullableBodyOrError
+import retrofit2.HttpException
 import javax.inject.Inject
 
-class ParticipantsRepository @Inject constructor() {
+class ParticipantsRepository @Inject constructor(private val tripGroupService: TripGroupService) {
 
-    fun getInviteLink(groupId: Long): Flow<Resource<String>> {
-        return flow {
-            emit(
-                Resource.Success(
-                    "https://travelnow/invite?token=aegewg3425yhg30gh4rahrah4563yhea-3gh"
-                )
-            )
-        }
+    suspend fun getInviteLink(groupId: Long): String {
+        val result = tripGroupService.getInvitation(groupId)
+        return result.headers()[Constants.LOCATION_KEY] ?: throw HttpException(result)
     }
 
-    fun getParticipantsForGroup(groupId: Long): Flow<Resource<List<Participant>>> {
-        return flow {
-            emit(
-                Resource.Success(
-                    listOf(
-                        Participant(3, 0, "Kajetan Boba", "bo-ba7312@onet.pl", "+48 542853803", UserRole.COORDINATOR),
-                        Participant(4, 0, "Piotr Marian", "piterm44@gmail.com","+48 532828055", UserRole.COORDINATOR),
-                        Participant(1, 0, "Dorian Olisadebe", "olisadebe@gmail.com","+48 795325145", UserRole.BASIC_USER),
-                        Participant(2, 0, "Krzysztof Siedem", "krzysztof77@gmail.com","+48 895274249", UserRole.BASIC_USER),
-                        Participant(5, 0, "Kajetan Boba", "bo-ba7312@onet.pl", "+48 542853803", UserRole.COORDINATOR),
-                        Participant(6, 0, "Piotr Marian", "piterm44@gmail.com","+48 532828055", UserRole.COORDINATOR),
-                        Participant(7, 0, "Dorian Olisadebe", "olisadebe@gmail.com","+48 795325145", UserRole.BASIC_USER),
-                        Participant(8, 0, "Krzysztof Siedem", "krzysztof77@gmail.com","+48 895274249", UserRole.BASIC_USER)
-                    )
-                )
-            )
-        }
+    suspend fun updateParticipant(appUserDto: AppUserDto) {
+        tripGroupService.updateUser(appUserDto).toNullableBodyOrError()
     }
 
-    suspend fun updateParticipant(participant: Participant): Resource<Unit> {
-        return Resource.Failure()
+    suspend fun getUser(userId: Long): AppUserDto {
+        return tripGroupService.getUser(userId).toBodyOrError()
     }
 
-    suspend fun deleteParticipant(id: Long, groupId: Long): Resource<Unit> {
-        return Resource.Failure()
+    suspend fun getParticipantsForGroup(groupId: Long): List<UserDto> {
+        return tripGroupService.getParticipants(groupId).toBodyOrError()
+    }
+
+    suspend fun postCoordinator(groupId: Long, userId: Long) {
+        tripGroupService.putCoordinator(groupId, userId).toNullableBodyOrError()
+    }
+
+    suspend fun deleteParticipant(groupId: Long, userId: Long) {
+        tripGroupService.deleteParticipant(groupId, userId).toNullableBodyOrError()
     }
 
 }

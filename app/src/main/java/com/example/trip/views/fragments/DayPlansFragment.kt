@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.trip.R
@@ -21,6 +22,7 @@ import com.example.trip.views.dialogs.dayplan.DeleteDayPlanDialog
 import com.example.trip.views.dialogs.dayplan.DeleteDayPlanDialogClickListener
 import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -53,12 +55,13 @@ class DayPlansFragment @Inject constructor() : BaseFragment<FragmentDayPlansBind
         observeDayPlansList()
         setSwipeRefreshLayout()
         onAddClick()
+        refreshIfNewData { viewModel.refresh() }
     }
 
     private fun setSwipeRefreshLayout() {
         binding.layoutRefresh.setColorSchemeResources(R.color.primary)
         binding.layoutRefresh.setOnRefreshListener {
-            viewModel.refreshData()
+            viewModel.refresh()
         }
     }
 
@@ -70,7 +73,7 @@ class DayPlansFragment @Inject constructor() : BaseFragment<FragmentDayPlansBind
         binding.buttonAdd.setOnClickListener {
             findNavController().navigate(
                 DayPlansFragmentDirections.actionDayPlansFragmentToCreateEditDayPlanFragment(
-                    0
+                    args.groupId
                 )
             )
         }
@@ -89,12 +92,20 @@ class DayPlansFragment @Inject constructor() : BaseFragment<FragmentDayPlansBind
                     binding.textEmptyList.setGone()
                 }
                 is Resource.Failure -> {
-                    (requireActivity() as MainActivity).showSnackbar(
+                    it.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) {
+                            viewModel.refresh()
+                        }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
                         R.string.text_retry
                     ) {
-                        viewModel.refreshData()
+                        viewModel.refresh()
                     }
                     binding.layoutRefresh.isRefreshing = false
                     binding.textEmptyList.setGone()
@@ -136,7 +147,7 @@ class DayPlansFragment @Inject constructor() : BaseFragment<FragmentDayPlansBind
     private fun onMenuEditClick(dayPlan: DayPlan) {
         findNavController().navigate(
             DayPlansFragmentDirections.actionDayPlansFragmentToCreateEditDayPlanFragment(
-                0, dayPlan
+                args.groupId, dayPlan
             )
         )
     }
@@ -148,10 +159,26 @@ class DayPlansFragment @Inject constructor() : BaseFragment<FragmentDayPlansBind
 
     //dialogs
     override fun onDeleteClick(dayPlan: DayPlan) {
-        requireContext().toast("delete")
-    }
-
-    companion object {
-        private const val PLACEHOLDER_USERID = 1
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (viewModel.deleteDayPlanAsync(dayPlan.id).await()) {
+                is Resource.Success -> {
+                    viewModel.refresh()
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onMenuDeleteClick(dayPlan)
+                    }
+                }
+                else -> {
+                    //NO-OP
+                }
+            }
+        }
     }
 }

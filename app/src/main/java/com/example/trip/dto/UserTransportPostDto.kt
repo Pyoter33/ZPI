@@ -1,9 +1,9 @@
 package com.example.trip.dto
 
 import java.math.BigDecimal
+import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
-import kotlin.time.Duration
 
 data class UserTransportPostDto(
     val duration: Duration,

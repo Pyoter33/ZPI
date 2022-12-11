@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.trip.dto.LoginRequestDto
 import com.example.trip.dto.UserDto
 import com.example.trip.models.Resource
-import com.example.trip.usecases.login.LoginUseCase
+import com.example.trip.usecases.auth.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers

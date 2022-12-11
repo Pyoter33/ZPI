@@ -89,7 +89,7 @@ class ParticipantsDiffUtil : DiffUtil.ItemCallback<Participant>() {
     }
 
     override fun areContentsTheSame(oldItem: Participant, newItem: Participant): Boolean {
-        return oldItem.id == newItem.id && oldItem.groupId == newItem.groupId
+        return oldItem.id == newItem.id && oldItem == newItem
     }
 }
 

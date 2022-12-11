@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trip.Constants
+import com.example.trip.dto.TripGroupPostDto
 import com.example.trip.models.Group
-import com.example.trip.models.GroupStatus
 import com.example.trip.models.Resource
 import com.example.trip.usecases.group.PostGroupUseCase
 import com.example.trip.usecases.group.UpdateGroupUseCase
@@ -13,6 +13,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,24 +29,21 @@ class CreateEditGroupViewModel @Inject constructor(
     var participants: String? = null
     var days: String? = null
     var descriptionText: String? = null
-    var toPost = false
+    var toPost = true
     private val groupToUpdate = state.get<Group>(Constants.GROUP_KEY)
 
     fun postGroupAsync(): Deferred<Resource<Unit>> {
         val deferred = viewModelScope.async(Dispatchers.IO) {
             postGroupUseCase(
-                0,
-                Group(
-                    0,
-                    name!!,
-                    GroupStatus.PLANNING,
-                    startingCity!!,
-                    currency!!,
-                    participants!!.toInt(),
-                    days!!.toInt(),
+                TripGroupPostDto(
+                    name!!.trim(),
+                    Currency.getInstance(currency!!),
                     descriptionText,
-                    0,
-                    listOf()
+                   0,
+                    startingCity!!.trim(),
+                    startingCity!!.trim(),
+                    days!!.toInt(),
+                    participants!!.toInt()
                 )
             )
         }
@@ -56,17 +54,16 @@ class CreateEditGroupViewModel @Inject constructor(
         val deferred = viewModelScope.async(Dispatchers.IO) {
             groupToUpdate?.let {
                 updateGroupUseCase(
-                    Group(
-                        it.id,
-                        name!!,
-                        it.groupStatus,
-                        startingCity!!,
-                        currency!!,
-                        participants!!.toInt(),
-                        days!!.toInt(),
+                    it.id,
+                    TripGroupPostDto(
+                        name!!.trim(),
+                        Currency.getInstance(currency!!),
                         descriptionText,
-                        it.participantsNo,
-                        listOf()
+                        0,
+                        startingCity!!.trim(),
+                        startingCity!!.trim(),
+                        days!!.toInt(),
+                        participants!!.toInt()
                     )
                 )
             } ?: Resource.Failure()

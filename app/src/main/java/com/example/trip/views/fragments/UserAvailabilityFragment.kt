@@ -18,8 +18,11 @@ import com.example.trip.models.Resource
 import com.example.trip.utils.*
 import com.example.trip.viewmodels.availability.AvailabilityViewModel
 import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.CompositeDateValidator
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendarview.utils.yearMonth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -30,7 +33,8 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvailabilityBinding>(), DatesClickListener {
+class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvailabilityBinding>(),
+    DatesClickListener {
 
     private val viewModel: AvailabilityViewModel by hiltNavGraphViewModels(R.id.availability)
 
@@ -52,6 +56,7 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
         onOptimalDatesClick()
         onExpandClick()
         requireActivity().onBackArrowClick(binding.buttonBack)
+        setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshAvailability() }
         setCalendar()
     }
 
@@ -77,6 +82,15 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
                 R.color.secondary_transparent
             )
         }
+    }
+
+    private fun resetCalendar() {
+        dateValidator = DateValidator(listOf())
+        binding.calendar.setDayBinder(
+            dateValidator,
+            R.color.primary,
+            R.color.primary_transparent
+        )
     }
 
     private fun setAdapter() {
@@ -137,27 +151,32 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
     }
 
     private fun observeAvailabilityList() {
-        viewModel.refreshAvailability()
         viewModel.availabilityList.observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Success -> {
                     adapter.submitList(it.data)
                     dateValidator = DateValidator(it.data)
-                    updateView(it.data.first())
+                    it.data.firstOrNull()?.let { it1 -> updateView(it1) } ?: resetCalendar()
                     binding.layoutLoading.setGone()
+                    binding.layoutRefresh.isRefreshing = false
                 }
                 is Resource.Loading -> {
-                    binding.layoutLoading.setVisible()
+                    binding.layoutRefresh.isRefreshing = true
                 }
                 is Resource.Failure -> {
-                    (requireActivity() as MainActivity).showSnackbar(
+                    it.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) { viewModel.refreshAvailability() }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
                         R.string.text_retry
-                    ) {
-                        viewModel.refreshAvailability()
-                    }
+                    ) { viewModel.refreshAvailability() }
                     binding.layoutLoading.setGone()
+                    binding.layoutRefresh.isRefreshing = false
                 }
             }
         }
@@ -175,7 +194,11 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
     }
 
     private fun setAndShowCalendar() {
-        val calendarConstraints = CalendarConstraints.Builder().setValidator(dateValidator).build()
+        val dateValidatorForward = DateValidatorPointForward.now()
+        val listValidators = listOf(dateValidatorForward, dateValidator)
+        val validators = CompositeDateValidator.allOf(listValidators)
+
+        val calendarConstraints = CalendarConstraints.Builder().setValidator(validators).build()
         val calendar =
             MaterialDatePicker.Builder.dateRangePicker().setCalendarConstraints(calendarConstraints)
                 .setTheme(R.style.ThemeOverlay_App_DatePicker).build()
@@ -195,26 +218,24 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
     }
 
     private fun addDates(startDate: Long, endDate: Long) {
-        val availability = Availability(
-            0,
-            1,
-            startDate.toLocalDate(),
-            endDate.toLocalDate()
-        )
-
+        binding.layoutRefresh.isRefreshing = true
         lifecycleScope.launch {
-            when (viewModel.postAvailability(availability)) {
+            when (viewModel.postAvailabilityAsync(startDate.toLocalDate(), endDate.toLocalDate())
+                .await()) {
                 is Resource.Success -> {
+                    binding.layoutRefresh.isRefreshing = false
                     viewModel.refreshAvailability()
                 }
                 is Resource.Loading -> {
-
+                    //NO-OP
                 }
                 is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
                     (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_post_failure,
-                        R.string.text_retry
+                        R.string.text_retry,
+                        Snackbar.LENGTH_INDEFINITE
                     ) {
                         addDates(startDate, endDate)
                     }
@@ -223,15 +244,33 @@ class UserAvailabilityFragment @Inject constructor() : BaseFragment<FragmentAvai
         }
     }
 
+    override fun onDeleteClick(id: Long) {
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (viewModel.deleteAvailabilityAsync(id).await()) {
+                is Resource.Success -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    viewModel.refreshAvailability()
+                }
+                is Resource.Loading -> {
+                    //NO-OP
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onDeleteClick(id)
+                    }
+                }
+            }
+        }
+    }
+
     companion object {
-        private const val PLACEHOLDER_USERID = 1
-        private const val GROUP_ID_ARG = "groupId"
         private const val MONTH_RANGE = 1200L
         private const val ANIM_DURATION = 600L
     }
-
-    override fun onDeleteClick(id: Long) {
-
-    }
-
 }

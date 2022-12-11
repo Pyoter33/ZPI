@@ -1,6 +1,5 @@
 package com.example.trip.views.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -18,6 +17,8 @@ import com.example.trip.databinding.FragmentRegisterBinding
 import com.example.trip.models.Resource
 import com.example.trip.utils.*
 import com.example.trip.viewmodels.auth.RegisterViewModel
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -28,6 +29,9 @@ import javax.inject.Inject
 class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBinding>() {
 
     private val viewModel: RegisterViewModel by viewModels()
+
+    @Inject
+    lateinit var preferencesHelper: SharedPreferencesHelper
 
     override fun prepareBinding(
         inflater: LayoutInflater,
@@ -43,6 +47,7 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
         setupOnDateTextChangeListener()
         setupOnPhoneTextChangeListener()
         setupOnCodeTextChangeListener()
+        setupOnSurnameTextChangeListener()
         setupOnEmailTextChangeListener()
         setupOnPasswordTextChangeListener()
         onSignInClick()
@@ -74,7 +79,7 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun afterTextChanged(editable: Editable?) {
-                viewModel.fullName = editable?.toString()
+                viewModel.firstName = editable?.toString()
                 binding.textFieldName.startIconDrawable?.setTint(
                     resources.getColor(
                         R.color.primary,
@@ -82,6 +87,25 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
                     )
                 )
                 binding.textFieldName.error = null
+            }
+        })
+    }
+
+    private fun setupOnSurnameTextChangeListener() {
+        binding.textFieldSurname.editText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun afterTextChanged(editable: Editable?) {
+                viewModel.surname = editable?.toString()
+                binding.textFieldSurname.startIconDrawable?.setTint(
+                    resources.getColor(
+                        R.color.primary,
+                        null
+                    )
+                )
+                binding.textFieldSurname.error = null
             }
         })
     }
@@ -95,6 +119,7 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
             override fun afterTextChanged(editable: Editable?) {
                 viewModel.code = editable?.toString()
                 binding.textError.setInvisible()
+                binding.textLabelPhone.setTextColor(resources.getColor(R.color.grey700, null))
             }
         })
     }
@@ -114,6 +139,7 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
                     )
                 )
                 binding.textError.setInvisible()
+                binding.textLabelPhone.setTextColor(resources.getColor(R.color.grey700, null))
             }
         })
     }
@@ -164,8 +190,10 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
 
     private fun setAndShowCalendar() {
         val dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+        val calendarConstraints = CalendarConstraints.Builder().setValidator(
+            DateValidatorPointBackward.now()).build()
         val calendar =
-            MaterialDatePicker.Builder.datePicker()
+            MaterialDatePicker.Builder.datePicker().setCalendarConstraints(calendarConstraints)
                 .setTheme(R.style.ThemeOverlay_App_DatePicker).build()
 
         calendar.addOnPositiveButtonClickListener {
@@ -203,17 +231,17 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
         lifecycleScope.launch {
             when (val result = viewModel.postRegisterAsync().await()) {
                 is Resource.Success -> {
-                    val preferences = requireContext().getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE)
-                    preferences.edit().putString(Constants.AUTHORIZATION_HEADER, result.data).apply()
                     requireContext().toast(R.string.text_register_successful)
                     login()
                 }
                 is Resource.Loading -> {}
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_not_register)
+                    disableLoading()
+                    result.message?.let {
+                        requireContext().toast(it)
+                    } ?: requireContext().toast(R.string.text_not_register)
                 }
             }
-
         }
     }
 
@@ -222,9 +250,8 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
             when (val result = viewModel.postLoginAsync().await()) {
                 is Resource.Success -> {
                     disableLoading()
-                    val preferences = requireContext().getSharedPreferences(Constants.PREFERENCES_NAME, Context.MODE_PRIVATE)
-                    preferences.edit().putLong(Constants.USER_ID_KEY, result.data.first.userId).apply()
-                    preferences.edit().putString(Constants.AUTHORIZATION_HEADER, result.data.second).apply()
+                    preferencesHelper.setToken(result.data.second)
+                    preferencesHelper.setUserId(result.data.first.userId)
                     val activityIntent = Intent(requireContext(), HomeActivity::class.java)
                     startActivity(activityIntent)
                 }
@@ -234,13 +261,13 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
                     requireContext().toast(R.string.text_not_login)
                 }
             }
-
         }
     }
 
-
     private fun isSubmitNotPermitted(): Boolean {
         var showError = false
+        var phoneError = false
+        var codeError = false
 
         with(binding) {
             if (viewModel.email.isNullOrEmpty()) {
@@ -248,18 +275,34 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
                 textFieldEmail.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
             }
-            if(viewModel.fullName.isNullOrEmpty()) {
+            if(viewModel.firstName.isNullOrEmpty()) {
                 textFieldName.error = getString(R.string.text_text_empty)
                 textFieldName.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
             }
-            if(viewModel.code.isNullOrEmpty()) {
-                textError.setVisible()
+            if(viewModel.surname.isNullOrEmpty()) {
+                textFieldSurname.error = getString(R.string.text_text_empty)
+                textFieldSurname.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
             }
-            if(viewModel.phone.isNullOrEmpty()) {
+            if(viewModel.code.isNullOrEmpty() || viewModel.code?.length !in 1..4) {
                 textError.setVisible()
+                textError.text = getString(R.string.text_error_code) //?
+                textLabelPhone.setTextColor(resources.getColor(R.color.red, null))
+                showError = true
+                codeError = true
+            }
+            if (viewModel.phone.isNullOrEmpty() || viewModel.phone?.length !in 5..13) {
+                textError.setVisible()
+                textError.text = getString(R.string.text_error_phone)
                 textFieldPhone.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
+                textLabelPhone.setTextColor(resources.getColor(R.color.red, null))
+                showError = true
+                phoneError = true
+            }
+            if(codeError && phoneError) {
+                textError.setVisible()
+                textError.text = getString(R.string.text_error_code_phone)
                 showError = true
             }
             if(viewModel.birthday == null) {
@@ -269,6 +312,11 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
             }
             if (viewModel.password.isNullOrEmpty()) {
                 textFieldPassword.error = getString(R.string.text_text_empty)
+                textFieldPassword.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
+                showError = true
+            }
+            if (viewModel.password?.matches(Constants.PASSWORD_REGEX.toRegex()) == false) {
+                textFieldPassword.error = getString(R.string.text_password_rules)
                 textFieldPassword.startIconDrawable?.setTint(resources.getColor(R.color.red, null))
                 showError = true
             }
@@ -285,12 +333,15 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
     private fun enableLoading() {
         with(binding) {
             textFieldEmail.isEnabled = false
+            textFieldName.isEnabled = false
+            textFieldSurname.isEnabled = false
             textFieldDate.isEnabled = false
             textFieldPhone.isEnabled = false
             textFieldCode.isEnabled = false
             textFieldRepeatPassword.isEnabled = false
             textFieldPassword.isEnabled = false
             buttonSignUp.isEnabled = false
+            buttonLogin.isEnabled = false
             layoutLoading.setVisible()
         }
     }
@@ -298,12 +349,15 @@ class RegisterFragment @Inject constructor(): BaseFragment<FragmentRegisterBindi
     private fun disableLoading() {
         with(binding) {
             textFieldEmail.isEnabled = true
+            textFieldName.isEnabled = true
+            textFieldSurname.isEnabled = true
             textFieldDate.isEnabled = true
             textFieldPhone.isEnabled = true
             textFieldCode.isEnabled = true
             textFieldRepeatPassword.isEnabled = true
             textFieldPassword.isEnabled = true
             buttonSignUp.isEnabled = true
+            buttonLogin.isEnabled = true
             layoutLoading.setGone()
         }
     }

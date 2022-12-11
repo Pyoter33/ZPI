@@ -1,95 +1,50 @@
 package com.example.trip.repositories
 
+import com.example.trip.dto.AvailabilityDto
+import com.example.trip.dto.AvailabilityPostDto
+import com.example.trip.dto.SharedGroupAvailabilityDto
 import com.example.trip.models.Availability
-import com.example.trip.models.OptimalAvailability
-import com.example.trip.models.Resource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import java.time.LocalDate
+import com.example.trip.service.AvailabilityService
+import com.example.trip.service.TripGroupService
+import com.example.trip.utils.toBodyOrError
+import com.example.trip.utils.toNullableBodyOrError
 import javax.inject.Inject
 
-class AvailabilityRepository @Inject constructor() {
+class AvailabilityRepository @Inject constructor(private val availabilityService: AvailabilityService, private val tripGroupService: TripGroupService) {
 
-    fun getAcceptedAvailability(groupId: Long): Flow<Resource<Availability?>> {
-        return flow {
-            emit(
-                Resource.Success(
-                    Availability(
-                        1,
-                        -1,
-                        LocalDate.of(2022, 11, 18),
-                        LocalDate.of(2022, 11, 20)
-                    )
-                )
-            )
-        }
+    suspend fun getAcceptedAvailability(sharedAvailabilityId: Long): SharedGroupAvailabilityDto {
+        return availabilityService.getAcceptedAvailability(sharedAvailabilityId).toBodyOrError()
     }
 
-    suspend fun deleteAcceptedAvailability(availability: Availability): Resource<Unit> {
-        return Resource.Failure()
+    suspend fun postAcceptedAvailability(groupId: Long, availability: Availability) {
+        availabilityService.postAcceptedAvailability(
+            availability.startDate,
+            availability.endDate,
+            groupId
+        ).toNullableBodyOrError()
     }
 
-    fun getUserAvailabilities(userId: Long, groupId: Long): Flow<Resource<List<Availability>>> {
-        return flow {
-            emit(
-                Resource.Success(
-                    listOf(
-                        Availability(
-                            1,
-                            userId,
-                            LocalDate.of(2022, 11, 17),
-                            LocalDate.of(2022, 11, 20)
-                        ),
-                        Availability(
-                            2,
-                            userId,
-                            LocalDate.of(2022, 11, 24),
-                            LocalDate.of(2022, 11, 27)
-                        )
-                    )
-                )
-            )
-        }.flowOn(Dispatchers.IO)
+    suspend fun acceptAvailability(sharedGroupAvailabilityId: Long) {
+        availabilityService.acceptAvailability(sharedGroupAvailabilityId).toNullableBodyOrError()
     }
 
-    suspend fun postAvailability(availability: Availability): Resource<Unit> {
-        return Resource.Failure()
+    suspend fun deleteAcceptedAvailability(groupId: Long) {
+        tripGroupService.deleteAcceptedAvailability(groupId).toNullableBodyOrError()
     }
 
-    suspend fun postAcceptedAvailability(availability: Availability): Resource<Unit> {
-        return Resource.Success(Unit)
+    suspend fun getUserAvailabilities(userId: Long, groupId: Long): List<AvailabilityDto> {
+        return availabilityService.getAvailabilitiesForUser(userId, groupId).toBodyOrError()
     }
 
-    suspend fun deleteAvailability(id: Long): Resource<Unit> {
-        return Resource.Failure()
+    suspend fun postAvailability(availabilityPostDto: AvailabilityPostDto) {
+        availabilityService.postAvailability(availabilityPostDto).toNullableBodyOrError()
     }
 
-    fun getOptimalDates(groupId: Long): Flow<Resource<List<OptimalAvailability>>> {
-        return flow {
-            emit(
-                Resource.Success(
-                    listOf(
-                       OptimalAvailability(
-                            Availability(
-                                1,
-                                -1,
-                                LocalDate.of(2022, 11, 18),
-                                LocalDate.of(2022, 11, 20)
-                            ), 4, 3
-                        ),
-                        OptimalAvailability(
-                            Availability(
-                                2,
-                                -1,
-                                LocalDate.of(2022, 11, 24),
-                                LocalDate.of(2022, 11, 27)
-                            ), 3, 4
-                        )
-                    )
-                )
-            )
-        }.flowOn(Dispatchers.IO)
+    suspend fun deleteAvailability(availabilityId: Long, groupId: Long) {
+        availabilityService.deleteAvailability(availabilityId, groupId).toNullableBodyOrError()
+    }
+
+    suspend fun getOptimalDates(groupId: Long): List<SharedGroupAvailabilityDto> {
+        return availabilityService.getAvailabilitiesForGroup(groupId).toBodyOrError()
     }
 }

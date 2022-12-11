@@ -114,7 +114,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_duration"
             app:tint="@color/primary"
-            tools:text="2h 15 min"
             />
 
         <TextView

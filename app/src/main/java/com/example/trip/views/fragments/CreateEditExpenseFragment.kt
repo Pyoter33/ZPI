@@ -110,6 +110,7 @@ class CreateEditExpenseFragment @Inject constructor() : BaseFragment<FragmentCre
     }
 
     private fun setupOnPriceTextChangeListener() {
+        binding.textFieldPrice.suffixText = args.currency
         binding.textFieldPrice.editText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
@@ -174,7 +175,6 @@ class CreateEditExpenseFragment @Inject constructor() : BaseFragment<FragmentCre
         }
     }
 
-
     private fun submit() {
         if (isSubmitNotPermitted()) return
         enableLoading()
@@ -185,7 +185,7 @@ class CreateEditExpenseFragment @Inject constructor() : BaseFragment<FragmentCre
             when (operation.await()) {
                 is Resource.Success -> {
                     disableLoading()
-                    findNavController().popBackStack()
+                    findNavController().popBackStackWithRefresh(R.id.moneyPager, false)
                 }
                 is Resource.Loading -> {}
                 is Resource.Failure -> {

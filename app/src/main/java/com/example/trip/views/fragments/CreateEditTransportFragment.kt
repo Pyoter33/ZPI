@@ -14,11 +14,10 @@ import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.databinding.FragmentCreateEditTransportBinding
 import com.example.trip.models.Resource
-import com.example.trip.utils.onBackArrowClick
-import com.example.trip.utils.setGone
-import com.example.trip.utils.setVisible
-import com.example.trip.utils.toLocalDate
+import com.example.trip.utils.*
 import com.example.trip.viewmodels.transport.CreateEditTransportViewModel
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import dagger.hilt.android.AndroidEntryPoint
@@ -204,8 +203,10 @@ class CreateEditTransportFragment @Inject constructor() : BaseFragment<FragmentC
     }
 
     private fun setAndShowCalendar() {
+        val calendarConstraints = CalendarConstraints.Builder().setValidator(
+            DateValidatorPointBackward.before(args.startDate)).build()
         val calendar =
-            MaterialDatePicker.Builder.datePicker()
+            MaterialDatePicker.Builder.datePicker().setCalendarConstraints(calendarConstraints)
                 .setTheme(R.style.ThemeOverlay_App_DatePicker).build()
 
         calendar.addOnPositiveButtonClickListener {
@@ -290,16 +291,24 @@ class CreateEditTransportFragment @Inject constructor() : BaseFragment<FragmentC
 
         enableLoading()
         lifecycleScope.launch {
-            when (operation.await()) {
+            when (val result = operation.await()) {
                 is Resource.Success -> {
                     disableLoading()
-                    findNavController().popBackStack()
+                    findNavController().popBackStackWithRefresh()
                 }
                 is Resource.Loading -> {
                 }
                 is Resource.Failure -> {
                     disableLoading()
-                    (requireActivity() as MainActivity).showSnackbar(
+                    result.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) {
+                            submit()
+                        }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_post_failure,
                         R.string.text_retry

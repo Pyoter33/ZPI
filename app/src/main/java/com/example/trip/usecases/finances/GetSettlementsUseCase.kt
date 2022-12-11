@@ -2,40 +2,56 @@ package com.example.trip.usecases.finances
 
 import com.example.trip.models.Resource
 import com.example.trip.models.Settlement
+import com.example.trip.models.UserRole
 import com.example.trip.repositories.FinancesRepository
 import com.example.trip.repositories.ParticipantsRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
+import com.example.trip.utils.SharedPreferencesHelper
+import com.example.trip.utils.getMessage
+import com.example.trip.utils.toParticipant
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class GetSettlementsUseCase @Inject constructor(
     private val financesRepository: FinancesRepository,
-    private val participantsRepository: ParticipantsRepository
+    private val participantsRepository: ParticipantsRepository,
+    private val preferencesHelper: SharedPreferencesHelper
 ) {
 
     operator fun invoke(groupId: Long): Flow<Resource<List<Settlement>>> {
-        val result = combine(
-            financesRepository.getSettlements(groupId),
-            participantsRepository.getParticipantsForGroup(groupId)
-        ) { settlementsDtos, participants ->
-            if (settlementsDtos is Resource.Failure || participants is Resource.Failure) return@combine Resource.Failure<List<Settlement>>()
-            if (settlementsDtos is Resource.Loading || participants is Resource.Loading) return@combine Resource.Loading()
-
-            val settlements = (settlementsDtos as Resource.Success).data.map { expenseDto ->
-                val participantDebtor = (participants as Resource.Success).data.find { it.id == expenseDto.debtor } ?: return@combine Resource.Failure<List<Settlement>>()
-                val participantDebtee = participants.data.find { it.id == expenseDto.debtee } ?: return@combine Resource.Failure<List<Settlement>>()
-                Settlement(
-                    expenseDto.financialRequestId,
-                    expenseDto.groupId,
-                    expenseDto.status,
-                    expenseDto.amount,
-                    participantDebtor,
-                    participantDebtee
-                )
+        return flow {
+            emit(getSettlements(groupId))
+        }.catch {
+            it.printStackTrace()
+            if (it is HttpException) {
+                emit(Resource.Failure(it.code(), it.response()?.getMessage()))
+            } else {
+                emit(Resource.Failure(0))
             }
-            Resource.Success(settlements)
+        }.onStart {
+            emit(Resource.Loading())
+        }.flowOn(Dispatchers.IO)
+    }
+
+    private suspend fun getSettlements(groupId: Long): Resource<List<Settlement>> {
+        val settlementsDtos = financesRepository.getSettlements(groupId, preferencesHelper.getUserId())
+        val participants = participantsRepository.getParticipantsForGroup(groupId)
+        val settlements = settlementsDtos.mapNotNull { settlementDto ->
+                participants.find { it.userId == settlementDto.debtor }?.let { participantDebtor ->
+                   participants.find { it.userId == settlementDto.debtee }?.let { participantDebtee ->
+                            Settlement(
+                                settlementDto.financialRequestId,
+                                settlementDto.groupId,
+                                settlementDto.status,
+                                settlementDto.amount,
+                                participantDebtor.toParticipant(UserRole.UNSPECIFIED),
+                                participantDebtee.toParticipant(UserRole.UNSPECIFIED)
+                            )
+                        }
+                }
         }
-        return result
+        return Resource.Success(settlements)
     }
 
 }

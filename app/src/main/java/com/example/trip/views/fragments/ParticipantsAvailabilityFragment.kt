@@ -128,7 +128,7 @@ class ParticipantsAvailabilityFragment @Inject constructor() : BaseFragment<Frag
                 is Resource.Success -> {
                     adapter.submitList(it.data)
                     dateValidator = DateValidator(it.data)
-                    updateView(it.data.first())
+                    if(it.data.isNotEmpty()) updateView(it.data.first())
                     binding.layoutRefresh.isRefreshing = false
                     binding.layoutLoading.setGone()
                 }

@@ -14,6 +14,7 @@ import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.databinding.FragmentCreateEditAccommodationBinding
 import com.example.trip.models.Resource
+import com.example.trip.utils.popBackStackWithRefresh
 import com.example.trip.utils.setGone
 import com.example.trip.utils.setVisible
 import com.example.trip.utils.toStringFormat
@@ -53,7 +54,10 @@ class CreateEditAccommodationFragment @Inject constructor() : BaseFragment<Fragm
 
     private fun setupArgs() {
         args.accommodation?.let {
+            binding.textNewAccommodation.text = getString(R.string.text_edit_accommodation)
+            viewModel.toPost = false
             binding.textFieldLink.editText!!.setText(it.sourceUrl)
+            binding.textFieldLink.isEnabled = false
             binding.textFieldPrice.editText!!.setText(it.price.toStringFormat())
             binding.textFieldDescription.editText!!.setText(it.description)
             viewModel.descriptionText = it.description
@@ -120,20 +124,30 @@ class CreateEditAccommodationFragment @Inject constructor() : BaseFragment<Fragm
 
     private fun submit() {
         if (isSubmitNotPermitted()) return
+        val operation =
+            if (viewModel.toPost) viewModel.postAccommodationAsync() else viewModel.updateAccommodationAsync()
 
         enableLoading()
         lifecycleScope.launch {
-            when (viewModel.postAccommodation()) {
+            when (val result = operation.await()) {
                 is Resource.Success -> {
                     disableLoading()
-                    findNavController().popBackStack()
+                    findNavController().popBackStackWithRefresh()
                 }
                 is Resource.Loading -> {
 
                 }
                 is Resource.Failure -> {
                     disableLoading()
-                    (requireActivity() as MainActivity).showSnackbar(
+                    result.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) {
+                            submit()
+                        }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_post_failure,
                         R.string.text_retry

@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trip.Constants
 import com.example.trip.R
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.SettlementClickListener
+import com.example.trip.adapters.SettlementHeaderAdapter
 import com.example.trip.adapters.SettlementOtherAdapter
 import com.example.trip.adapters.SettlementUserAdapter
 import com.example.trip.databinding.FragmentSettlementsBinding
@@ -23,9 +25,9 @@ import com.example.trip.views.dialogs.MenuPopupResolveFactory
 import com.example.trip.views.dialogs.finances.ResolveSettlementDialog
 import com.example.trip.views.dialogs.finances.ResolveSettlementDialogClickListener
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import com.google.android.material.snackbar.Snackbar
 import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -76,10 +78,13 @@ class SettlementsFragment @Inject constructor() : BaseFragment<FragmentSettlemen
                 is Resource.Success -> {
                     if (settlement.data.isEmpty()) {
                         binding.textEmptyList.setVisible()
-                    } else binding.textEmptyList.setGone()
+                        binding.listSettlements.setInvisible()
+                    } else {
+                        binding.textEmptyList.setGone()
+                        binding.listSettlements.setVisible()
+                    }
                     binding.layoutRefresh.isRefreshing = false
-                    val userSettlements =
-                        settlement.data.filter { it.debtee.id == userId || it.debtor.id == userId }
+                    val userSettlements = settlement.data.filter { it.debtee.id == userId || it.debtor.id == userId }
                     val otherSettlements = settlement.data.minus(userSettlements.toSet())
                     userAdapter.submitList(userSettlements)
                     otherAdapter.submitList(otherSettlements)
@@ -89,11 +94,18 @@ class SettlementsFragment @Inject constructor() : BaseFragment<FragmentSettlemen
                 }
                 is Resource.Failure -> {
                     binding.layoutRefresh.isRefreshing = false
-                    (requireActivity() as MainActivity).showSnackbar(
+                    settlement.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) {
+                            viewModel.refreshDataSettlements()
+                        }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
                         requireView(),
                         R.string.text_fetch_failure,
-                        R.string.text_retry,
-                        Snackbar.LENGTH_INDEFINITE
+                        R.string.text_retry
                     ) {
                         viewModel.refreshDataSettlements()
                     }
@@ -107,11 +119,14 @@ class SettlementsFragment @Inject constructor() : BaseFragment<FragmentSettlemen
         val currency = requireArguments().getString(Constants.CURRENCY_KEY, "?")
         val layoutManager = LinearLayoutManager(context)
         userAdapter.setSettlementClickListener(this)
-        userAdapter.setPopupMenu(popupMenu)
         userAdapter.setCurrency(currency)
         otherAdapter.setCurrency(currency)
+        val headerAdapterUser = SettlementHeaderAdapter()
+        headerAdapterUser.submitList(listOf(getString(R.string.text_my_settlements)))
+        val headerAdapterOther = SettlementHeaderAdapter()
+        headerAdapterOther.submitList(listOf(getString(R.string.text_other_settlements)))
 
-        val concatAdapter = ConcatAdapter(userAdapter, otherAdapter)
+        val concatAdapter = ConcatAdapter(headerAdapterUser, userAdapter, headerAdapterOther, otherAdapter)
         binding.listSettlements.adapter = concatAdapter
         binding.listSettlements.layoutManager = layoutManager
         binding.listSettlements.addItemDecoration(
@@ -129,17 +144,37 @@ class SettlementsFragment @Inject constructor() : BaseFragment<FragmentSettlemen
     }
 
     override fun onLongClick(settlement: Settlement, view: View) {
-        if (settlement.debtee.id == preferencesHelper.getUserId() && settlement.status != SettlementStatus.RESOLVED) {
+        if (settlement.status != SettlementStatus.RESOLVED) {
             popupMenu.setOnPopupButtonClick(R.id.button_resolve) {
                 onMenuResolve(settlement)
             }
+            popupMenu.showAlignBottom(view)
         }
-        popupMenu.showAlignBottom(view)
     }
 
     //dialogs
     override fun onResolveClick(settlement: Settlement) {
-        requireContext().toast("resolve")
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (viewModel.resolveSettlementAsync(settlement.id).await()) {
+                is Resource.Success -> {
+                    viewModel.refreshDataSettlements()
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onMenuResolve(settlement)
+                    }
+                }
+                else -> {
+                    //NO-OP
+                }
+            }
+        }
     }
 
 }

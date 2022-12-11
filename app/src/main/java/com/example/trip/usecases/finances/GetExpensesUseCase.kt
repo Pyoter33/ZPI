@@ -2,10 +2,16 @@ package com.example.trip.usecases.finances
 
 import com.example.trip.models.Expense
 import com.example.trip.models.Resource
+import com.example.trip.models.UserRole
 import com.example.trip.repositories.FinancesRepository
 import com.example.trip.repositories.ParticipantsRepository
+import com.example.trip.utils.getMessage
+import com.example.trip.utils.toParticipant
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onStart
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class GetExpensesUseCase @Inject constructor(
@@ -14,33 +20,42 @@ class GetExpensesUseCase @Inject constructor(
 ) {
 
     operator fun invoke(groupId: Long): Flow<Resource<List<Expense>>> {
-        val result = combine(
-            financesRepository.getExpenses(groupId),
-            participantsRepository.getParticipantsForGroup(groupId)
-        ) { expensesDtos, participants ->
-            if (expensesDtos is Resource.Failure || participants is Resource.Failure) return@combine Resource.Failure<List<Expense>>()
-            if (expensesDtos is Resource.Loading || participants is Resource.Loading) return@combine Resource.Loading()
-
-             val expenses = (expensesDtos as Resource.Success).data.map { expenseDto ->
-                val participantsDebtors = expenseDto.expenseDebtors.map { debtorId ->
-                    val participant = (participants as Resource.Success).data.find { it.id == debtorId }
-                        ?: return@combine Resource.Failure<List<Expense>>()
-                    participant
-                }
-                 val participantCreator = (participants as Resource.Success).data.find { it.id == expenseDto.creatorId } ?: return@combine Resource.Failure<List<Expense>>()
-                    Expense(
-                        expenseDto.expenditureId,
-                        expenseDto.groupId,
-                        participantCreator,
-                        expenseDto.generationDate,
-                        expenseDto.title,
-                        expenseDto.price,
-                        participantsDebtors
-                    )
+        return flow {
+            emit(getExpenses(groupId))
+        }.catch {
+            it.printStackTrace()
+            if (it is HttpException) {
+                emit(Resource.Failure(it.code(), it.response()?.getMessage()))
+            } else {
+                emit(Resource.Failure(0))
             }
-            Resource.Success(expenses)
+        }.onStart {
+            emit(Resource.Loading())
         }
-        return result
+    }
+
+    private suspend fun getExpenses(groupId: Long): Resource<List<Expense>> {
+        val expensesDtos = financesRepository.getExpenses(groupId)
+        val participants = participantsRepository.getParticipantsForGroup(groupId)
+        val expenses = expensesDtos.mapNotNull { expenseDto ->
+            val participantsDebtors = expenseDto.expenseDebtors.mapNotNull { debtorId ->
+                participants.find { it.userId == debtorId }?.let { participant ->
+                    participant.toParticipant(UserRole.UNSPECIFIED)
+                }
+            }
+            participants.find { it.userId == expenseDto.creatorId }?.let { participantCreator ->
+                Expense(
+                    expenseDto.expenditureId,
+                    expenseDto.groupId,
+                    participantCreator.toParticipant(UserRole.UNSPECIFIED),
+                    expenseDto.generationDate.toLocalDate(),
+                    expenseDto.title,
+                    expenseDto.price,
+                    participantsDebtors
+                )
+            }
+        }
+        return Resource.Success(expenses)
     }
 
 }

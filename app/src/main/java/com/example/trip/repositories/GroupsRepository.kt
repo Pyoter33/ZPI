@@ -1,55 +1,44 @@
 package com.example.trip.repositories
-
-import com.example.trip.models.Group
-import com.example.trip.models.GroupStatus
-import com.example.trip.models.Resource
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import com.example.trip.dto.TripGroupPostDto
+import com.example.trip.dto.UserDto
+import com.example.trip.dto.UserGroupDto
+import com.example.trip.service.TripGroupService
+import com.example.trip.utils.toBodyOrError
+import com.example.trip.utils.toNullableBodyOrError
 import javax.inject.Inject
 
-class GroupsRepository @Inject constructor() {
+class GroupsRepository @Inject constructor(private val tripGroupService: TripGroupService) {
 
-    fun getGroups(userId: Long): Flow<Resource<List<Group>>> {
-        return flow {
-            emit(
-                Resource.Success(
-                    listOf(
-                        Group(
-                            1,
-                            "Weekend trip to Prague",
-                            GroupStatus.PLANNING,
-                            "Wroclaw",
-                            "USD",
-                            3,
-                            2,
-                            "Weekend in Prague, sightseeing, knedlicky eating, beer drinking and chill!",
-                            4,
-                            listOf(1L)
-                        ),
-                        Group(
-                            2,
-                            "Holidays in Spain",
-                            GroupStatus.ONGOING,
-                            "Warsaw",
-                            "PLN",
-                            6,
-                            7,
-                            "We start in Madrid, than Barcelona, Valencia, Malaga. A lot of sightseeing and lying on the beach. Bring your suncream!",
-                            10,
-                            listOf()
-                        )
-                    )
-                )
-            )
-        }
+    suspend fun getGroups(userId: Long): List<UserGroupDto> {
+        return tripGroupService.getGroups(userId).toBodyOrError()
     }
 
-    suspend fun postGroup(userId: Long, group: Group): Resource<Unit> {
-        return Resource.Failure()
+    suspend fun getGroup(groupId: Long): UserGroupDto {
+        return tripGroupService.getGroupById(groupId).toBodyOrError()
     }
 
-    suspend fun updateGroup(group: Group): Resource<Unit> {
-        return Resource.Failure()
+    suspend fun getCoordinators(groupId: Long): List<UserDto> {
+        return tripGroupService.getCoordinators(groupId).toBodyOrError()
+    }
+
+    suspend fun postGroup(tripGroupPostDto: TripGroupPostDto) {
+        tripGroupService.postGroup(tripGroupPostDto).toNullableBodyOrError()
+    }
+
+    suspend fun updateGroup(groupId: Long, tripGroupPostDto: TripGroupPostDto) {
+        tripGroupService.updateGroup(groupId, tripGroupPostDto).toNullableBodyOrError()
+    }
+
+    suspend fun deleteGroup(groupId: Long) {
+        tripGroupService.deleteGroup(groupId).toNullableBodyOrError()
+    }
+
+    suspend fun leaveGroup(groupId: Long) {
+        tripGroupService.leaveGroup(groupId).toNullableBodyOrError()
+    }
+
+    suspend fun changeGroupState(groupId: Long) {
+        tripGroupService.changeGroupStage(groupId).toNullableBodyOrError()
     }
 
 }

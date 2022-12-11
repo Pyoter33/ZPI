@@ -6,8 +6,8 @@ import com.example.trip.dto.LoginRequestDto
 import com.example.trip.dto.RegisterRequestDto
 import com.example.trip.dto.UserDto
 import com.example.trip.models.Resource
-import com.example.trip.usecases.login.LoginUseCase
-import com.example.trip.usecases.login.RegisterUseCase
+import com.example.trip.usecases.auth.LoginUseCase
+import com.example.trip.usecases.auth.RegisterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -20,24 +20,23 @@ class RegisterViewModel @Inject constructor(private val registerUseCase: Registe
     ViewModel() {
 
     var email: String? = null
-    var fullName: String? = null
+    var firstName: String? = null
+    var surname: String? = null
     var code: String? = null
     var phone: String? = null
     var birthday: LocalDate? = null
     var password: String? = null
     var repeatPassword: String? = null
 
-    fun postRegisterAsync(): Deferred<Resource<String>> {
+    fun postRegisterAsync(): Deferred<Resource<Unit>> {
         val deferred = viewModelScope.async(Dispatchers.IO) {
-            val firstName = fullName!!.split(' ')[0]
-            val surname = fullName!!.substringAfter(' ')
             registerUseCase(
                 RegisterRequestDto(
-                    email!!,
+                    email!!.trim(),
                     "+$code $phone",
                     password!!,
-                    firstName,
-                    surname,
+                    firstName!!.trim(),
+                    surname!!.trim(),
                     birthday!!
                 )
             )

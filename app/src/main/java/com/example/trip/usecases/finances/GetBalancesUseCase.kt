@@ -3,47 +3,69 @@ package com.example.trip.usecases.finances
 import com.example.trip.models.Balance
 import com.example.trip.models.BalanceStatus
 import com.example.trip.models.Resource
+import com.example.trip.models.UserRole
 import com.example.trip.repositories.FinancesRepository
 import com.example.trip.repositories.ParticipantsRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
+import com.example.trip.utils.getMessage
+import com.example.trip.utils.toParticipant
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import retrofit2.HttpException
+import java.math.BigDecimal
 import javax.inject.Inject
 
 class GetBalancesUseCase @Inject constructor(
     private val financesRepository: FinancesRepository,
     private val participantsRepository: ParticipantsRepository
 ) {
-    operator fun invoke(groupId: Long): Flow<Resource<List<Balance>>> {
-        val result = combine(
-            financesRepository.getBalances(groupId),
-            participantsRepository.getParticipantsForGroup(groupId)
-        ) { balancesDto, participants ->
-            if (balancesDto is Resource.Failure || participants is Resource.Failure) return@combine Resource.Failure<List<Balance>>()
-            if (balancesDto is Resource.Loading || participants is Resource.Loading) return@combine Resource.Loading()
+    suspend operator fun invoke(groupId: Long): Flow<Resource<List<Balance>>> {
+        return flow {
+            emit(getBalances(groupId))
+        }.catch {
+            it.printStackTrace()
+            if (it is HttpException) {
+                emit(Resource.Failure(it.code(), it.response()?.getMessage()))
+            } else {
+                emit(Resource.Failure(0))
+            }
+        }.onStart {
+            emit(Resource.Loading())
+        }.flowOn(Dispatchers.IO)
+    }
 
-            val maxAmount = (balancesDto as Resource.Success).data.values.max()
+    private suspend fun getBalances(groupId: Long): Resource<List<Balance>> {
+        val balancesDto = financesRepository.getBalances(groupId)
+        val participants = participantsRepository.getParticipantsForGroup(groupId)
+        val maxAmount = balancesDto.values.maxOrNull() ?: BigDecimal.ONE
+        val minAmount = balancesDto.values.minOrNull() ?: BigDecimal.ONE
+        val maxIndicator = maxAmount.max(minAmount.abs())
 
-            val balances = balancesDto.data.map { entry ->
-                val participant= (participants as Resource.Success).data.find { it.id == entry.key } ?: return@combine Resource.Failure<List<Balance>>()
-                if (entry.value.toDouble() < 0) {
+        val balances = participants.map { participant ->
+            val balance = balancesDto[participant.userId]
+            balance?.let {
+                if (it.toDouble() < 0) {
                     Balance(
-                        participant,
-                        entry.value,
-                        maxAmount,
+                        participant.toParticipant(UserRole.UNSPECIFIED),
+                        it,
+                        maxIndicator,
                         BalanceStatus.NEGATIVE
                     )
                 } else {
                     Balance(
-                        participant,
-                        entry.value,
-                        maxAmount,
+                        participant.toParticipant(UserRole.UNSPECIFIED),
+                        it,
+                        maxIndicator,
                         BalanceStatus.POSITIVE
                     )
                 }
-            }
-            Resource.Success(balances)
+            } ?: Balance(
+                participant.toParticipant(UserRole.UNSPECIFIED),
+                BigDecimal.ZERO,
+                maxIndicator,
+                BalanceStatus.NEUTRAL
+            )
         }
-        return result
+        return Resource.Success(balances)
     }
 
 }

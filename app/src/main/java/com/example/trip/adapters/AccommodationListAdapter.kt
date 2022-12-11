@@ -3,10 +3,12 @@ package com.example.trip.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.trip.R
 import com.example.trip.databinding.ItemAccommodationBinding
 import com.example.trip.models.Accommodation
 import com.example.trip.utils.setGone
@@ -53,10 +55,13 @@ class AccommodationListAdapter @Inject constructor() :
                 textVotes.text = accommodation.votes.toString()
                 textPrice.text = accommodation.price.toStringFormat(currency)
                 textDescription.text = accommodation.description
-
                 buttonVote.isSelected = accommodation.isVoted
+                imageAccepted.isVisible = accommodation.isAccepted
 
-                Glide.with(itemView).load(accommodation.imageUrl).centerCrop().into(binding.imageAccommodation)
+                Glide.with(itemView).load(accommodation.imageUrl)
+                    .placeholder(R.drawable.ic_baseline_downloading_24)
+                    .error(R.drawable.ic_baseline_question_mark_24).centerCrop()
+                    .into(binding.imageAccommodation)
 
                 if (accommodation.description.isNullOrEmpty()) {
                     buttonExpand.setGone()
@@ -74,15 +79,15 @@ class AccommodationListAdapter @Inject constructor() :
 
             }
             setOnExpandClick()
-            setOnVoteClick(binding.buttonVote)
+            setOnVoteClick(accommodation)
             setOnLinkClick(accommodation)
             setOnTransportClick(accommodation)
             setOnLongClick(accommodation)
         }
 
-        private fun setOnVoteClick(button: View) {
+        private fun setOnVoteClick(accommodation: Accommodation) {
             binding.buttonVote.setOnClickListener {
-                accommodationClickListener.onVoteClick(bindingAdapterPosition, button)
+                accommodationClickListener.onVoteClick(accommodation, bindingAdapterPosition, it)
             }
         }
 
@@ -141,7 +146,7 @@ class AccommodationDiffUtil : DiffUtil.ItemCallback<Accommodation>() {
 
 interface AccommodationClickListener {
     fun onExpandClick(position: Int)
-    fun onVoteClick(position: Int, button: View)
+    fun onVoteClick(accommodation: Accommodation, position: Int, button: View)
     fun onLinkClick(accommodation: Accommodation)
     fun onTransportClick(accommodation: Accommodation)
     fun onLongClick(accommodation: Accommodation, view: View)

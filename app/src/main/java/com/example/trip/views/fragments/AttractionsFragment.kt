@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,11 +20,12 @@ import com.example.trip.models.Attraction
 import com.example.trip.models.Resource
 import com.example.trip.utils.*
 import com.example.trip.viewmodels.dayplan.AttractionsViewModel
-import com.example.trip.views.dialogs.MenuPopupFactory
+import com.example.trip.views.dialogs.MenuPopupSetStartFactory
 import com.example.trip.views.dialogs.dayplan.DeleteAttractionDialog
 import com.example.trip.views.dialogs.dayplan.DeleteAttractionDialogClickListener
 import com.skydoves.balloon.balloon
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -32,7 +34,7 @@ class AttractionsFragment @Inject constructor() : BaseFragment<FragmentAttractio
     AttractionClickListener,
     DeleteAttractionDialogClickListener {
 
-    private val popupMenu by balloon<MenuPopupFactory>()
+    private val popupMenu by balloon<MenuPopupSetStartFactory>()
 
     private val args: AttractionsFragmentArgs by navArgs()
 
@@ -55,9 +57,10 @@ class AttractionsFragment @Inject constructor() : BaseFragment<FragmentAttractio
         setAdapter()
         setupArgs()
         observeAccommodationsList()
-        setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refreshData() }
+        setSwipeRefreshLayout(binding.layoutRefresh, R.color.primary) { viewModel.refresh() }
         onAddClick()
         onBackArrowClick(binding.buttonBack)
+        refreshIfNewData { viewModel.refresh() }
     }
 
     private fun setupArgs() {
@@ -84,7 +87,7 @@ class AttractionsFragment @Inject constructor() : BaseFragment<FragmentAttractio
                         R.string.text_fetch_failure,
                         R.string.text_retry
                     ) {
-                        viewModel.refreshData()
+                        viewModel.refresh()
                     }
                     binding.layoutRefresh.isRefreshing = false
                     binding.textEmptyList.setGone()
@@ -136,15 +139,44 @@ class AttractionsFragment @Inject constructor() : BaseFragment<FragmentAttractio
             popupMenu.setOnPopupButtonClick(R.id.button_delete) {
                 onMenuDeleteClick(attraction)
             }
+            popupMenu.setOnPopupButtonClick(R.id.button_set_start) {
+                onMenuSetStartClick(attraction)
+            }
             popupMenu.showAlignBottom(view)
         }
     }
 
     private fun isCoordinator() = preferencesHelper.getUserId() in args.coordinators
 
+
+    private fun onMenuSetStartClick(attraction: Attraction) {
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (viewModel.updateStartingPointAsync(attraction.id).await()) {
+                is Resource.Success -> {
+                    viewModel.refresh()
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onMenuSetStartClick(attraction)
+                    }
+                }
+                else -> {
+                    //NO-OP
+                }
+            }
+        }
+    }
+
     private fun onMenuEditClick(attraction: Attraction) {
         findNavController().navigate(
             AttractionsFragmentDirections.actionAttractionsFragmentToCreateEditAttractionFragment(
+                args.dayPlan.id,
                 attraction
             )
         )
@@ -166,10 +198,26 @@ class AttractionsFragment @Inject constructor() : BaseFragment<FragmentAttractio
 
     //dialogs
     override fun onDeleteClick(attraction: Attraction) {
-        requireContext().toast("delete")
-    }
-
-    companion object {
-        private const val PLACEHOLDER_USERID = 1
+        binding.layoutRefresh.isRefreshing = true
+        lifecycleScope.launch {
+            when (viewModel.deleteAttractionAsync(attraction.id).await()) {
+                is Resource.Success -> {
+                    viewModel.refresh()
+                }
+                is Resource.Failure -> {
+                    binding.layoutRefresh.isRefreshing = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_delete_failure,
+                        R.string.text_retry
+                    ) {
+                        onMenuDeleteClick(attraction)
+                    }
+                }
+                else -> {
+                    //NO-OP
+                }
+            }
+        }
     }
 }

@@ -6,14 +6,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.trip.Constants
 import com.example.trip.Constants.SUMMARY_FILE_NAME
 import com.example.trip.R
+import com.example.trip.activities.HomeActivity
 import com.example.trip.activities.MainActivity
 import com.example.trip.adapters.ParticipantsSummaryAdapter
 import com.example.trip.databinding.FragmentSummaryBinding
@@ -23,20 +26,26 @@ import com.example.trip.models.Availability
 import com.example.trip.models.Resource
 import com.example.trip.utils.*
 import com.example.trip.viewmodels.SummaryViewModel
+import com.example.trip.views.dialogs.TransportDialog
 import com.example.trip.views.dialogs.accommodation.DeleteAccommodationDialogClickListener
 import com.example.trip.views.dialogs.availability.DeleteAvailabilityDialogClickListener
 import com.example.trip.views.dialogs.summary.DeleteAcceptedAccommodationDialog
 import com.example.trip.views.dialogs.summary.DeleteAcceptedAvailabilityDialog
 import com.gkemon.XMLtoPDF.PdfGenerator
 import com.gkemon.XMLtoPDF.PdfGeneratorListener
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
-class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBinding>(), DeleteAccommodationDialogClickListener,
+class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBinding>(),
+    DeleteAccommodationDialogClickListener,
     DeleteAvailabilityDialogClickListener {
 
     private lateinit var accommodationDialog: DeleteAcceptedAccommodationDialog
@@ -60,16 +69,14 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setAdapter()
-        observeAccommodation()
-        observeAvailability()
-        observeParticipants()
+        observeSummary()
         requireActivity().onBackArrowClick(binding.buttonBack)
         onListLockClick()
         onUncheckDateClick()
         onStartTripButtonClick()
         observeButtonLock()
         onUncheckAccommodationClick()
-        setupOnDateTextChangeListener()
+        setupOnDatesClickListener()
         onSaveClick()
     }
 
@@ -96,9 +103,12 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
         }
     }
 
-    private fun setupOnDateTextChangeListener() {
-        if(!isCoordinator()) return
+    private fun setupOnDatesClickListener() {
         binding.editTextDate.setOnClickListener {
+            if (!isCoordinator()) {
+                requireContext().toast(R.string.text_cannot_modify_dates_coordinator)
+                return@setOnClickListener
+            }
             setAndShowCalendar()
         }
     }
@@ -110,12 +120,103 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
     }
 
     private fun onStartTripButtonClick() {
-        if(!isCoordinator()) {
+        if (!isCoordinator()) {
             binding.buttonStartTrip.setGone()
             return
         }
         binding.buttonStartTrip.setOnClickListener {
+            startTrip()
+        }
+    }
 
+    private fun observeSummary() {
+        viewModel.summary.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Success -> {
+                    binding.layoutLoading.setGone()
+                    it.data.accommodation?.let { accommodation ->
+                        setAccommodation(accommodation)
+                        viewModel.updateButtonLock(accommodationAdded = true)
+                        accommodationDialog = DeleteAcceptedAccommodationDialog(this, accommodation)
+                    } ?: hideAccommodation()
+
+                    it.data.availability?.let { availability ->
+                        setDate(availability.availability)
+                        viewModel.startDate = availability.availability.startDate
+                        viewModel.updateButtonLock(dateAdded = true)
+                        availabilityDialog =
+                            DeleteAcceptedAvailabilityDialog(this, availability.availability)
+                    } ?: hideDate()
+
+                    adapter.submitList(it.data.participants)
+                    binding.textParticipantsNo.text = it.data.participants.size.toString()
+                }
+                is Resource.Loading -> {
+                    binding.layoutLoading.setVisible()
+                }
+                is Resource.Failure -> {
+                    binding.layoutLoading.setGone()
+                    it.message?.let {
+                        (requireActivity() as MainActivity).showSnackbar(
+                            requireView(),
+                            it,
+                            R.string.text_retry
+                        ) { viewModel.refresh() }
+                    } ?: (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_fetch_failure,
+                        R.string.text_retry
+                    ) { viewModel.refresh() }
+                }
+            }
+        }
+    }
+
+    private fun startTrip() {
+        binding.layoutLoading.setVisible()
+        lifecycleScope.launch {
+            when (viewModel.changeGroupStatusAsync().await()) {
+                is Resource.Success -> {
+                    startActivityWithGroup()
+                }
+                is Resource.Loading -> {}
+                is Resource.Failure -> {
+                    binding.layoutLoading.isVisible = false
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_start_trip_failure,
+                        R.string.text_retry
+                    ) {
+                        startTrip()
+                    }
+                }
+
+            }
+        }
+    }
+
+    private fun startActivityWithGroup() {
+        lifecycleScope.launch {
+            when (val result = viewModel.getGroupAsync().await()) {
+                is Resource.Success -> {
+                    binding.layoutLoading.setGone()
+                    val activityIntent = Intent(requireContext(), HomeActivity::class.java)
+                    activityIntent.putExtra(Constants.GROUP_KEY, result.data)
+                    startActivity(activityIntent)
+                    requireActivity().finish()
+                }
+                is Resource.Loading -> {}
+                is Resource.Failure -> {
+                    binding.layoutLoading.setGone()
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_start_trip_failure,
+                        R.string.text_retry
+                    ) {
+                        startTrip()
+                    }
+                }
+            }
         }
     }
 
@@ -126,8 +227,10 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
     }
 
     private fun setAndShowCalendar() {
+        val calendarConstraints =
+            CalendarConstraints.Builder().setValidator(DateValidatorPointForward.now()).build()
         val calendar =
-            MaterialDatePicker.Builder.dateRangePicker()
+            MaterialDatePicker.Builder.dateRangePicker().setCalendarConstraints(calendarConstraints)
                 .setTheme(R.style.ThemeOverlay_App_DatePicker).build()
 
         calendar.addOnPositiveButtonClickListener {
@@ -139,7 +242,7 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
     private fun addDates(startDate: Long, endDate: Long) {
         val availability = Availability(
             0,
-            1,
+            -1,
             startDate.toLocalDate(),
             endDate.toLocalDate()
         )
@@ -148,82 +251,32 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
             when (viewModel.setNewAcceptedAvailabilityAsync(availability).await()) {
                 is Resource.Success -> {
                     setDate(availability)
+                    availabilityDialog =
+                        DeleteAcceptedAvailabilityDialog(this@SummaryFragment, availability)
                 }
                 is Resource.Loading -> {}
                 is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
+                    (requireActivity() as MainActivity).showSnackbar(
+                        requireView(),
+                        R.string.text_post_failure,
+                        R.string.text_retry
+                    ) {
+                        viewModel.refresh()
+                    }
                 }
 
-            }
-        }
-    }
-
-    private fun observeAccommodation() {
-        viewModel.acceptedAccommodation.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Success -> {
-                    it.data?.let { accommodation ->
-                        setAccommodation(accommodation)
-                        viewModel.updateButtonLock(accommodationAdded = true)
-                        accommodationDialog = DeleteAcceptedAccommodationDialog(this, accommodation)
-                    } ?: hideAccommodation()
-
-                }
-                is Resource.Loading -> {
-
-                }
-                is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
-                }
             }
         }
     }
 
     private fun isCoordinator() = preferencesHelper.getUserId() in args.coordinators
 
-    private fun observeAvailability() {
-        viewModel.acceptedAvailability.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Success -> {
-                    it.data?.let { availability ->
-                        setDate(availability)
-                        viewModel.updateButtonLock(dateAdded = true)
-                        availabilityDialog = DeleteAcceptedAvailabilityDialog(this, availability)
-                    } ?: hideDate()
-                }
-                is Resource.Loading -> {
-
-                }
-                is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
-                }
-            }
-        }
-    }
-
-    private fun observeParticipants() {
-        viewModel.participants.observe(viewLifecycleOwner) {
-            when (it) {
-                is Resource.Success -> {
-                    adapter.submitList(it.data)
-                    binding.textParticipantsNo.text = it.data.size.toString()
-                }
-                is Resource.Loading -> {
-
-                }
-                is Resource.Failure -> {
-                    requireContext().toast(R.string.text_fetch_failure)
-                }
-            }
-        }
-    }
-
     private fun setAccommodation(accommodation: Accommodation) {
         with(binding) {
             textAccommodationNotAccepted.setGone()
             cardAccommodation.setVisible()
-            imageAccommodationStatus.isSelected = true
-            if(isCoordinator()) buttonUncheckAccommodation.setVisible()
+            imageAccommodationStatus.setVisible()
+            if (isCoordinator()) buttonUncheckAccommodation.setVisible()
 
             textName.text = accommodation.name
             textAddress.text = accommodation.address
@@ -231,7 +284,9 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
             textPrice.text = accommodation.price.toStringFormat(args.currency)
             textDescription.text = accommodation.description
 
-            Glide.with(this@SummaryFragment).load(accommodation.imageUrl).centerCrop()
+            Glide.with(this@SummaryFragment).load(accommodation.imageUrl)
+                .placeholder(R.drawable.ic_baseline_downloading_24)
+                .error(R.drawable.ic_baseline_question_mark_24).centerCrop()
                 .into(binding.imageAccommodation)
 
             buttonLink.setOnClickListener {
@@ -243,25 +298,49 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
             }
 
             buttonTransport.setOnClickListener {
-                val bundle = Bundle().apply {
-                    putLong(Constants.GROUP_ID_KEY, accommodation.groupId)
-                    putLong(Constants.ACCOMMODATION_ID_KEY, accommodation.id)
-                    putString(Constants.DESTINATION_KEY, accommodation.address)
-                    putString(Constants.START_CITY_KEY, args.startCity)
-                    putString(Constants.CURRENCY_KEY, args.currency)
-                    putLongArray(Constants.COORDINATORS_KEY, args.coordinators)
-                }
-
-                findNavController().navigate(R.id.transport, bundle)
+                onTransportClick(accommodation)
             }
         }
+    }
+
+    private fun onTransportClick(accommodation: Accommodation) {
+        if (viewModel.startDate == null) {
+            showTransportDialog()
+            return
+        }
+        navigateToTransport(accommodation, viewModel.startDate!!)
+    }
+
+    private fun showTransportDialog() {
+        val transportDialog = TransportDialog()
+        transportDialog.show(childFragmentManager, TransportDialog.TAG)
+    }
+
+    private fun navigateToTransport(accommodation: Accommodation, startDate: LocalDate) {
+        val options = NavOptions.Builder()
+            .setEnterAnim(R.anim.fade_in)
+            .setExitAnim(R.anim.fade_out)
+            .setPopEnterAnim(R.anim.fade_in)
+            .setPopExitAnim(R.anim.fade_out)
+            .build()
+        val bundle = Bundle().apply {
+            putLong(Constants.GROUP_ID_KEY, accommodation.groupId)
+            putLong(Constants.ACCOMMODATION_ID_KEY, accommodation.id)
+            putString(Constants.DESTINATION_KEY, accommodation.address)
+            putString(Constants.START_CITY_KEY, args.startCity)
+            putString(Constants.CURRENCY_KEY, args.currency)
+            putLong(Constants.START_DATE_KEY, startDate.toMillis())
+            putLong(Constants.ACCOMMODATION_CREATOR_ID_KEY, accommodation.creatorId)
+            putLongArray(Constants.COORDINATORS_KEY, args.coordinators)
+        }
+        findNavController().navigate(R.id.transport, bundle, options)
     }
 
     private fun hideAccommodation() {
         with(binding) {
             textAccommodationNotAccepted.setVisible()
             cardAccommodation.setGone()
-            imageAccommodationStatus.isSelected = false
+            imageAccommodationStatus.setGone()
             buttonUncheckAccommodation.setGone()
             binding.buttonStartTrip.isEnabled = false
         }
@@ -271,7 +350,7 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
         with(binding) {
             textDatesNotAccepted.setGone()
-            imageDatesStatus.isSelected = true
+            imageDatesStatus.setVisible()
             editTextDate.setText(
                 getString(
                     R.string.format_dash,
@@ -279,7 +358,7 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
                     availability.endDate.format(formatter)
                 )
             )
-            if(isCoordinator()) buttonUncheckDates.setVisible()
+            if (isCoordinator()) buttonUncheckDates.setVisible()
         }
         viewModel.updateButtonLock(dateAdded = true)
     }
@@ -287,7 +366,7 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
     private fun hideDate() {
         with(binding) {
             textDatesNotAccepted.setVisible()
-            imageDatesStatus.isSelected = false
+            imageDatesStatus.setGone()
             buttonUncheckDates.setGone()
             editTextDate.setText("")
             binding.buttonStartTrip.isEnabled = false
@@ -299,14 +378,18 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
 
         with(pdfBinding) {
             editTextDate.text = binding.editTextDate.text
-            textName.text = binding.textName.text
-            textAddress.text = binding.textAddress.text
-            textVotes.text = binding.textVotes.text
-            textPrice.text = binding.textPrice.text
-            textParticipantsNo.text = binding.textParticipantsNo.text
-            imageAccommodation.setImageDrawable(binding.imageAccommodation.drawable)
-            textDescription.text = binding.textDescription.text
             listParticipants.adapter = adapter
+            if (binding.cardAccommodation.isVisible) {
+                textName.text = binding.textName.text
+                textAddress.text = binding.textAddress.text
+                textVotes.text = binding.textVotes.text
+                textPrice.text = binding.textPrice.text
+                textParticipantsNo.text = binding.textParticipantsNo.text
+                imageAccommodation.setImageDrawable(binding.imageAccommodation.drawable)
+                textDescription.text = binding.textDescription.text
+            } else {
+                cardAccommodation.setGone()
+            }
         }
 
         PdfGenerator.getBuilder()
@@ -329,7 +412,7 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
 
     override fun onDeleteClick(accommodation: Accommodation) {
         lifecycleScope.launch {
-            when (viewModel.deleteAcceptedAccommodationAsync(accommodation).await()) {
+            when (viewModel.deleteAcceptedAccommodationAsync().await()) {
                 is Resource.Success -> {
                     hideAccommodation()
                     viewModel.updateButtonLock(accommodationAdded = false)
@@ -351,7 +434,7 @@ class SummaryFragment @Inject constructor() : BaseFragment<FragmentSummaryBindin
 
     override fun onDeleteClick(availability: Availability) {
         lifecycleScope.launch {
-            when (viewModel.deleteAcceptedAvailabilityAsync(availability).await()) {
+            when (viewModel.deleteAcceptedAvailabilityAsync().await()) {
                 is Resource.Success -> {
                     hideDate()
                     viewModel.updateButtonLock(dateAdded = false)

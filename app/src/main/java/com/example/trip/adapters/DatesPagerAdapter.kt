@@ -2,6 +2,7 @@ package com.example.trip.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -9,8 +10,7 @@ import com.example.trip.R
 import com.example.trip.databinding.ItemOptimalAvailabilityBinding
 import com.example.trip.models.Availability
 import com.example.trip.models.OptimalAvailability
-import com.example.trip.utils.setGone
-import com.example.trip.utils.setVisible
+import com.google.android.material.button.MaterialButton
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
@@ -50,7 +50,15 @@ class DatesPagerAdapter @Inject constructor() :
                 )
                 textParticipantsNo.text = availability.users.toString()
                 textDaysNo.text = itemView.resources.getString(R.string.format_days, availability.days)
-                if(showAccept) buttonAcceptDates.setVisible() else buttonAcceptDates.setGone()
+                buttonAcceptDates.isVisible = showAccept
+                buttonAcceptDates.isEnabled = !availability.isAccepted
+                if(!availability.isAccepted) {
+                    (buttonAcceptDates as MaterialButton).setIconTintResource(R.color.secondary)
+                    buttonAcceptDates.setTextColor(itemView.resources.getColor(R.color.secondary, null))
+                } else {
+                    (buttonAcceptDates as MaterialButton).setIconTintResource(R.color.grey400)
+                    buttonAcceptDates.setTextColor(itemView.resources.getColor(R.color.grey400, null))
+                }
             }
 
             setOnAcceptClickListener(availability.availability)

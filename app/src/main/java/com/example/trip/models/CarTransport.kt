@@ -7,5 +7,5 @@ data class CarTransport(
     val duration: Duration,
     val sourceLatLng: String,
     val destinationLatLng: String,
-    val distance: Int
+    val distance: Long
 )
